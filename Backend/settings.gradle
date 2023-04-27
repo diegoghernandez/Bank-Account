@@ -1,0 +1,3 @@
+rootProject.name = 'BankAccount'
+
+include 'Security-bank-account', 'Oauth-authorization-bankaccount', 'Oauth-resource-bankaccount'
