@@ -9,7 +9,7 @@ allprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
-    version = '0.0.1-SNAPSHOT'
+    version = 'SNAPSHOT'
     sourceCompatibility = '1.8'
 
     configurations {
@@ -18,75 +18,57 @@ allprojects {
         }
     }
 
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+        compileOnly 'org.projectlombok:lombok'
+        runtimeOnly 'com.h2database:h2'
+        runtimeOnly 'org.postgresql:postgresql'
+
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.security:spring-security-test'
+    }
+
     repositories {
         mavenCentral()
     }
-
 
     tasks.named('test') {
         useJUnitPlatform()
     }
 }
 
-configure(project(':Security-bank-account')) {
+configure(project(':Security-bankaccount')) {
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
         implementation 'org.springframework:spring-webflux'
         implementation 'io.projectreactor.netty:reactor-netty'
-
-        compileOnly 'org.projectlombok:lombok'
-        runtimeOnly 'com.h2database:h2'
-        runtimeOnly 'org.postgresql:postgresql:42.5.1'
-
-
-        annotationProcessor 'org.projectlombok:lombok'
-
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testImplementation 'org.springframework.security:spring-security-test'
     }
 }
 
 configure(project(':Oauth-authorization-bankaccount')) {
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation "org.springframework.security:spring-security-oauth2-authorization-server:0.2.3"
-
-        compileOnly 'org.projectlombok:lombok'
-        runtimeOnly 'org.postgresql:postgresql'
-        runtimeOnly 'com.h2database:h2'
-
-        annotationProcessor 'org.projectlombok:lombok'
-
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testImplementation 'org.springframework.security:spring-security-test'
     }
 }
 
 configure(project(':Oauth-resource-bankaccount')) {
     dependencies {
+        //implementation 'org.mapstruct:mapstruct:1.5.3.Final'
         implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        //implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-        implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-
-        compileOnly 'org.projectlombok:lombok'
-        runtimeOnly 'org.postgresql:postgresql'
-        runtimeOnly 'com.h2database:h2'
-
-        annotationProcessor 'org.projectlombok:lombok'
-        annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testImplementation 'org.springframework.security:spring-security-test'
     }
 }
+
+bootJar {
+    enabled = false
+}
+
+bootBuildImage{
+    enabled = false
+}
+

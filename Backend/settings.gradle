@@ -1,3 +1,3 @@
-rootProject.name = 'BankAccount'
+rootProject.name = 'Backend'
 
-include 'Security-bank-account', 'Oauth-authorization-bankaccount', 'Oauth-resource-bankaccount'
+include 'Security-bankaccount', 'Oauth-authorization-bankaccount', 'Oauth-resource-bankaccount'

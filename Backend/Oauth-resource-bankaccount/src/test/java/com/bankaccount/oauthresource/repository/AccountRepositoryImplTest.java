@@ -8,7 +8,6 @@ import com.bankaccount.oauthresource.persistence.mapper.AccountMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,19 +39,19 @@ class AccountRepositoryImplTest {
     @BeforeEach
     void setUp() {
         AccountEntity accountEntity1 = AccountEntity.builder()
-                .idAccount(432l)
+                .idAccount(432L)
                 .accountName("Random1")
                 .email("random@names.com")
                 .password("1234567")
-                .currentBalance(new BigDecimal(8765.00))
+                .currentBalance(new BigDecimal("8765.00"))
                 .build();
 
         AccountEntity accountEntity2 = AccountEntity.builder()
-                .idAccount(958l)
+                .idAccount(958L)
                 .accountName("Random2")
                 .email("user@names.com")
+                .currentBalance(new BigDecimal("65476.00"))
                 .password("1234567")
-                .currentBalance(new BigDecimal(65476.00))
                 .build();
 
         accountEntityList = Arrays.asList(accountEntity1, accountEntity2);
@@ -61,12 +60,12 @@ class AccountRepositoryImplTest {
     @Test
     @DisplayName("Should return one accountEntity with the specific id of the database and the mapper should transform to accountDomain")
     void getAccountById() {
-        Mockito.when(accountCrudRepository.findById(958l))
+        Mockito.when(accountCrudRepository.findById(958L))
                 .thenReturn(Optional.of(accountEntityList.get(1)));
 
-        AccountDomain accountDomain = accountRepository.getAccountById(958l).get();
+        AccountDomain accountDomain = accountRepository.getAccountById(958L).get();
 
-        assertEquals(958l, accountDomain.getIdAccount());
+        assertEquals(958L, accountDomain.getIdAccount());
     }
 
     @Test
@@ -85,8 +84,8 @@ class AccountRepositoryImplTest {
     void updateBalance() {
         Mockito.doNothing().when(accountCrudRepository).updateBalanceById(Mockito.isA(BigDecimal.class), Mockito.isA(Long.class));
 
-        accountRepository.updateBalance(new BigDecimal(535435), 1l);
+        accountRepository.updateBalance(new BigDecimal(535435), 1L);
 
-        Mockito.verify(accountCrudRepository, Mockito.times(1)).updateBalanceById(new BigDecimal(535435), 1l);
+        Mockito.verify(accountCrudRepository, Mockito.times(1)).updateBalanceById(new BigDecimal(535435), 1L);
     }
 }

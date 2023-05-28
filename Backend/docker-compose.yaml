@@ -1,0 +1,66 @@
+version: '3.9'
+
+services:
+  security:
+    container_name: security
+    build:
+      context: .
+      dockerfile: ./Security-bankaccount/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - oauth-authorization
+    restart: on-failure
+    environment:
+      - POSTGRES_DB=bankaccount
+    networks:
+      bankaccount:
+
+  oauth-resource:
+    container_name: oauth-resource
+    build:
+      context: .
+      dockerfile: ./Oauth-resource-bankaccount/Dockerfile
+    ports:
+      - "8090:8090"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_DB=bankaccount
+      - SPRING_SECURITY_OAUTH2_RESOURCE-SERVER_JWT_ISSUER-URI=http://auth-server:9000
+    networks:
+      bankaccount:
+
+  oauth-authorization:
+    container_name: oauth-authorization
+    build:
+      context: .
+      dockerfile: ./Oauth-authorization-bankaccount/Dockerfile
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_DB=bankaccount
+    networks:
+      bankaccount:
+
+  db:
+    container_name: db
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - bankaccount
+    environment:
+      POSTGRES_DB: bankaccount
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:
+networks:
+  bankaccount:

@@ -2,22 +2,41 @@ package com.bankaccount.oauthresource.persistence.mapper;
 
 import com.bankaccount.oauthresource.domain.AccountDomain;
 import com.bankaccount.oauthresource.persistence.entity.AccountEntity;
-import org.mapstruct.InheritInverseConfiguration;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface AccountMapper {
+@Component
+public class AccountMapper {
 
-    AccountDomain toAccountDomain(AccountEntity accountEntity);
+    public AccountDomain toAccountDomain(AccountEntity accountEntity) {
+        if ( accountEntity == null ) {
+            return null;
+        }
 
-    @InheritInverseConfiguration
-    @Mappings({
-            @Mapping(target = "password", ignore = true),
-            @Mapping(target = "role", ignore = true),
-            @Mapping(target = "enabled", ignore = true),
-            @Mapping(target = "transactionEntities", ignore = true)
-    })
-    AccountEntity toAccountEntity(AccountDomain accountDomain);
+        AccountDomain.AccountDomainBuilder accountDomain = AccountDomain.builder();
+
+        accountDomain.accountName( accountEntity.getAccountName() );
+        accountDomain.currentBalance( accountEntity.getCurrentBalance() );
+        accountDomain.email( accountEntity.getEmail() );
+        if ( accountEntity.getIdAccount() != null ) {
+            accountDomain.idAccount( accountEntity.getIdAccount() );
+        }
+
+        return accountDomain.build();
+    }
+
+
+    public AccountEntity toAccountEntity(AccountDomain accountDomain) {
+        if ( accountDomain == null ) {
+            return null;
+        }
+
+        AccountEntity.AccountEntityBuilder accountEntity = AccountEntity.builder();
+
+        accountEntity.accountName( accountDomain.getAccountName() );
+        accountEntity.currentBalance( accountDomain.getCurrentBalance() );
+        accountEntity.email( accountDomain.getEmail() );
+        accountEntity.idAccount( accountDomain.getIdAccount() );
+
+        return accountEntity.build();
+    }
 }

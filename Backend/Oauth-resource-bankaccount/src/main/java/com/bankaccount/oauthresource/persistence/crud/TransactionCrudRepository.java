@@ -1,12 +1,12 @@
 package com.bankaccount.oauthresource.persistence.crud;
 
 import com.bankaccount.oauthresource.persistence.entity.TransactionEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.Instant;
 import java.util.List;
 
-public interface TransactionCrudRepository extends CrudRepository<TransactionEntity, Long> {
+public interface TransactionCrudRepository extends JpaRepository<TransactionEntity, Long> {
 
     List<TransactionEntity> findByIdAccount(long idAccount);
 

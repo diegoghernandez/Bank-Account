@@ -18,7 +18,7 @@ spring:
       path: /h2-console
   datasource:
     url: jdbc:h2:mem:webapp
-    username: sa
+    username: as
     password:
     driver-class-name: org.h2.Driver
 
@@ -35,9 +35,9 @@ spring:
 
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/bank-account
+    url: jdbc:postgresql://localhost:5432/bankaccount
     username: postgres
-    password: root
+    password: password
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
