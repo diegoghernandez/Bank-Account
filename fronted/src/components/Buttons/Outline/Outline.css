@@ -1,0 +1,7 @@
+.outline--state:hover {
+   background-color: rgb(37 99 235 / 8%);
+}
+
+.outline--state:focus {
+   background-color: rgb(37 99 235 / 12%);
+}

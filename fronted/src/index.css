@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+   --onSurface: 27 28 31;
+   --onSurface-variant: 69 69 78;
+}

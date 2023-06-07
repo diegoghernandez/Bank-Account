@@ -41,9 +41,9 @@ spring:
 
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/bank-account?createDatabaseIfNotExist=true
+    url: jdbc:postgresql://localhost:5432/bankaccount?createDatabaseIfNotExist=true
     username: postgres
-    password: root
+    password: password
     driver-class-name: org.postgresql.Driver
 
   jpa:
