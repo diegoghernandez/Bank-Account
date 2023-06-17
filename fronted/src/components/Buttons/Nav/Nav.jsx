@@ -52,7 +52,6 @@ const BASE_INDICATOR_CLASSES = "flex justify-center items-center w-16 h-8 rounde
 export const Nav = ({
    active = false,
    page = Page.Home,
-   ...props 
 }) => {
    const svgContainer = getActive(active)[0];
    const stateLayer = getActive(active)[1];
@@ -62,7 +61,7 @@ export const Nav = ({
    const pageElements = getPage(page, svgColor);
 
    return (
-      <button type="button" className={BASE_BUTTON_CLASSES} {...props}>
+      <button type="button" className={BASE_BUTTON_CLASSES}>
          <div className={`${BASE_INDICATOR_CLASSES} ${svgContainer} mb-1`}>
             <div className={`${BASE_INDICATOR_CLASSES} ${stateLayer}`}>
                {pageElements.svg}

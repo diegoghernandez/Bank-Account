@@ -1,0 +1,7 @@
+.card--state:hover {
+   background-color: rgb(27 28 32 / 8%);
+}
+
+.card--state:focus {
+   background-color: rgb(27 28 32 / 12%);
+}

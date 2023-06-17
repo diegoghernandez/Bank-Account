@@ -18,8 +18,8 @@ export default {
       "secondary-container" : "#DEE4F8",
       "onSecondary-container" : "#191B2B",
       
-      "outline" : "#191B2B",
-      "outline-variant" : "#191B2B",
+      "outline" : "#74757E",
+      "outline-variant" : "#C4C4C7",
 
       "surface-container" : "#EDF0F7",
       "onSurface" : "#1B1C1F",
