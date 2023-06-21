@@ -1,0 +1,11 @@
+.label--position--base {
+   transform: translate(38px, 32px) scale(1);
+   transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, max-width 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+}
+
+.label--position--click {
+   padding: 0 1px;
+   background-color: white;
+   transform: translate(22px, 2px) scale(1);
+   transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, max-width 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+}

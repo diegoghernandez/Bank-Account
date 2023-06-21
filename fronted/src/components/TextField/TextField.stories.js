@@ -1,9 +1,23 @@
+import { InputTypes } from "../../constants/InputTypes";
+import { TextFieldTypes } from "../../constants/TextFieldTypes";
 import { TextField } from "./TextField";
 
 export default {
    title: "TextField",
    component: TextField,
-   tags: ['autodocs']
+   tags: ['autodocs'],
+   argTypes: {
+      type: {
+         options: Object.keys(TextFieldTypes),
+         mapping: TextFieldTypes,
+         control: "radio"
+      },
+      inputType: {
+         options: Object.keys(InputTypes),
+         mapping: InputTypes,
+         control: "radio"
+      }
+   }
 };
 
 const Template = ({ label, ...args }) => {
@@ -12,5 +26,5 @@ const Template = ({ label, ...args }) => {
 
 export const Default  = Template.bind({});
 Default.args = {
-   type: "Default"
+   forWhat: "Base",
 };
