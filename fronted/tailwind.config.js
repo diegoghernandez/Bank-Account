@@ -10,6 +10,8 @@ export default {
       "120" : "120"
     },
     colors: {
+      "transparent" : "transparent",
+
       "primary" : "#2563EB",
       "onPrimary" : "#EFF6FF",
       "primary-container" : "#DBEAFE",

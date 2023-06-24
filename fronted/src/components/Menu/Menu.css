@@ -1,0 +1,7 @@
+.menu--state:hover {
+   background-color: rgb(var(--onSurface) / 8%);
+}
+
+.menu--state:focus {
+   background-color: rgb(var(--onSurface) / 12%);
+}

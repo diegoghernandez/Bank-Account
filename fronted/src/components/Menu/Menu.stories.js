@@ -3,7 +3,7 @@ import { Menu } from "./Menu";
 export default {
    title: "Menu",
    component: Menu,
-   tags: ['autodocs']
+   tags: ["autodocs"]
 };
 
 const Template = ({ label, ...args }) => { 
@@ -11,4 +11,7 @@ const Template = ({ label, ...args }) => {
 };
 
 export const Default  = Template.bind({});
-Default.args = {};
+Default.args = {
+   text: "",
+   transactions: ["Deposit", "Online payment", "Wire Transfer"],
+};
