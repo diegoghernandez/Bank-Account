@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  bank:
+    container_name: bank
+    build:
+      context: .
+    ports:
+      - "8090:8090"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bankaccount?createDatabaseIfNotExist=true
+      - POSTGRES_DB=bankaccount
+    networks:
+      bankaccount:
+
+  db:
+    container_name: db
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - bankaccount
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=bankaccount
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:
+networks:
+  bankaccount:
