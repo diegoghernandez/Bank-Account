@@ -1,0 +1,92 @@
+[
+    {
+        "idTransaction": 4,
+        "idTransferAccount": 419670285,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-05T22:06:28.730928",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 6,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:45.547045",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 7,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:49.872865",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 8,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:50.259028",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 9,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:55.069654",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 10,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:56.119",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 11,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:56.870751",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 12,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:57.537409",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 13,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:58.192525",
+        "isAutomated": false
+    },
+    {
+        "idTransaction": 14,
+        "idTransferAccount": 0,
+        "receiverName": "test",
+        "transactionAmount": 1400.00,
+        "transactionType": "DEPOSIT",
+        "transactionTimestamp": "2023-07-08T20:32:58.849011",
+        "isAutomated": false
+    }
+]
