@@ -1,7 +1,7 @@
 import { rest } from "msw";
 import transactions from "../fixtures/transactions.json";
 
-export const handlerTransaction = [
+export const transactionHandler = [
    rest.get("http://localhost:8090/transactions/account", (req, res, ctx) => {
       const idAccount = req.url.searchParams.get("id");
 
