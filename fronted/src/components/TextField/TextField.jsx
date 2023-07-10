@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { useOutsideClick } from "../../utils/useOutsideClick";
-import "./TextField.css";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { InputTypes } from "../../constants/InputType";
 import { Menu } from "../Menu/Menu";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
+import "./TextField.css";
 
 export const TextField = ({
    forWhat,
@@ -35,8 +35,8 @@ export const TextField = ({
    const notMenu = type !== TextFieldTypes.Menu;
    
    return (
-      <div ref={ref} className="inline-flex flex-col">
-         <label htmlFor={forWhat} className={`bg-transparent  max-w-[calc(100%-24px)] block absolute z-10 top-0 left-0 origin-top-left font-sans font-normal text-base cursor-text
+      <div ref={ref} className="inline-flex flex-col w-full">
+         <label htmlFor={forWhat} className={`bg-transparent w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
          ${isClicked ? "label--position--click text-primary" : `label--position--base ${type === TextFieldTypes.Search && !hasText ? "ml-6" : "ml-0"}`}
          ${hasText ? "label--position--click text-onSurface" : "text-onSurface-variant"}`}>
             {forWhat}
@@ -106,5 +106,5 @@ export const TextField = ({
             setIsClicked={setIsClicked}
          />}
       </div>
-   )
-}
+   );
+};
