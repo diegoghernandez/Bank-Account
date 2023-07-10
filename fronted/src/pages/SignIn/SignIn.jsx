@@ -21,9 +21,7 @@ export const SignIn = () => {
                needSupportive={false}
                />
          </div>
-         <Filled
-            label="Sign In"
-         />
+         <Filled label="Sign In" />
       </section>
    );
 }

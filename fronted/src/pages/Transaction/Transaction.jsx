@@ -1,39 +1,36 @@
 import { Filled } from "../../components/Buttons/Filled/Filled";
+import { Outline } from "../../components/Buttons/Outline/Outline";
 import { TextField } from "../../components/TextField/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 
-export const SignUp = () => {
+export const Transaction = () => {
    return (
       <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
-         <h1 className="text-4xl font-bold font-sans">Sign Up</h1>
+         <h1 className="text-4xl font-bold font-sans">Transaction</h1>
          <div className="flex flex-col items-center gap-3 w-full">
             <TextField
-               forWhat="Name"
-               type={TextFieldTypes.Default}
+               forWhat="Transaction Type"
+               type={TextFieldTypes.Menu}
                inputType={InputTypes.Text}
                needSupportive={false}
-               />
+            />
             <TextField
-               forWhat="Email"
+               forWhat="Amount"
                type={TextFieldTypes.Default}
-               inputType={InputTypes.Email}
+               inputType={InputTypes.Number}
                needSupportive={false}
-               />
+            />
             <TextField
-               forWhat="Password"
+               forWhat="Account to transfer"
                type={TextFieldTypes.Default}
-               inputType={InputTypes.Password}
-               needSupportive={false}
-               />
-            <TextField
-               forWhat="Confirmation"
-               type={TextFieldTypes.Default}
-               inputType={InputTypes.Password}
-               needSupportive={false}
-               />
+               inputType={InputTypes.Number}
+               needSupportive={true}
+               supportiveText="Add the nine account numbers"
+            />
          </div>
-         <Filled label="Sign Up" />
+         <Filled label="Make transaction" />
+         <Outline label="Cancel" />
       </section>
    );
 }

@@ -14,7 +14,7 @@ export const Menu = ({
          transaction.toLowerCase().includes(text.toLowerCase())).map((type) => 
             <button 
                key={type} 
-               className="menu--state flex items-center w-full h-12 pl-3 text-onSurface text-sm font-sans font-medium"
+               className="menu--state flex items-center w-auto h-12 px-3 text-onSurface text-sm font-sans font-medium"
                onClick={() => { 
                   setValue(type); 
                }}
@@ -24,7 +24,7 @@ export const Menu = ({
 
       return (
          <div 
-            className="relative -bottom-[0.14rem] flex flex-col w-full bg-surface-container rounded"
+            className="absolute w-[calc(100%-2rem)] z-20 translate-y-[3.7rem] flex flex-col bg-surface-container bg rounded"
             onClick={() => { 
                setIsClicked(false)
                setHasText(true);
@@ -33,7 +33,7 @@ export const Menu = ({
             onFocus={() => setIsClicked(true)}
          >
             {buttons}
-            <button className="h-0 text-xl text-onPrimary bg-onSurface focus:h-auto " onBlur={() => setIsClicked(false)}>Tab for exit</button>
+            <button className="h-0 text-transparent focus:text-xl focus:text-onPrimary focus:bg-onSurface focus:h-auto" onBlur={() => setIsClicked(false)}>Tab for exit</button>
          </div>
       );
    }

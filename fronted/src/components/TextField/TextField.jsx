@@ -10,7 +10,8 @@ export const TextField = ({
    forWhat,
    type = TextFieldTypes.Default,
    inputType = InputTypes.Text,
-   needSupportive = true
+   needSupportive = true,
+   supportiveText = ""
 }) => {
 
    const [isClicked, setIsClicked] = useState(false);
@@ -95,7 +96,7 @@ export const TextField = ({
                </svg>
             </div>}
          </div>
-         {(needSupportive && notMenu) && <p className="ml-4 mt-1 text-onSurface-variant text-sm">Supporting text</p>}
+         {(needSupportive && notMenu) && <p className="ml-4 mt-1 text-onSurface-variant text-sm">{supportiveText}</p>}
          
          {(type === TextFieldTypes.Menu && isClicked)  && <Menu 
             text={value} 
