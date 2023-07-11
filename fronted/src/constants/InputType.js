@@ -4,4 +4,5 @@ export const InputTypes = Object.freeze({
    Password: Symbol("password"),
    Search: Symbol("search"),
    Text: Symbol("text"),
+   Date: Symbol("date"),
 })

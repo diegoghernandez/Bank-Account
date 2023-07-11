@@ -3,5 +3,6 @@
 }
 
 .outline--state:focus {
+   outline: none;
    background-color: rgb(37 99 235 / 12%);
 }

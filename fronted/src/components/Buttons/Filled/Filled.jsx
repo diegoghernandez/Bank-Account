@@ -2,20 +2,19 @@
 import "./Filled.css";
 
 const BASE_BUTTON_CLASSES =
-  "flex flex-col justify-center items-center cursor-pointer bg-primary h-10 w-auto rounded-3xl min-w-full";
+  "flex flex-col justify-center items-center cursor-pointer bg-primary h-10 w-auto rounded-3xl w-full";
 
 /**
 * Primary UI component for user interaction
 */
 export const Filled = ({
-      label, 
-      ...props 
+      label
    }) => {
    return (
-      <button type="button" className={`${BASE_BUTTON_CLASSES}`} {...props}>
-         <div className={`${BASE_BUTTON_CLASSES} filled--state px-3 text-onPrimary text-sm font-medium`}>
+      <div className={`${BASE_BUTTON_CLASSES}`}>
+         <button type="button" className={`${BASE_BUTTON_CLASSES} filled--state px-3 text-onPrimary text-sm font-medium`} >
             {label}
-         </div>
-      </button>
+         </button>
+      </div>
    );
 };

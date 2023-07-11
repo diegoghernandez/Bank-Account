@@ -8,14 +8,11 @@ const BASE_BUTTON_CLASSES =
 * Primary UI component for user interaction
 */
 export const Outline = ({ 
-      label, 
-      ...props 
+      label
    }) => {
    return (
-      <button type="button" className={`${BASE_BUTTON_CLASSES} border focus:border-primary`} {...props}>
-         <div className={`${BASE_BUTTON_CLASSES} outline--state text-primary px-3 text-sm font-medium`}>
-            {label}
-         </div>
+      <button type="button" className={`${BASE_BUTTON_CLASSES} outline--state border focus:border-primary text-primary px-3 text-sm font-medium`}>
+         {label}
       </button>
    );
 };

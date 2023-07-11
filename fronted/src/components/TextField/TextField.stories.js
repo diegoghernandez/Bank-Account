@@ -16,8 +16,7 @@ export default {
          options: Object.keys(InputTypes),
          mapping: InputTypes,
          control: "radio"
-      },
-      needSupportive:  { control: "boolean" }
+      }
    }
 };
 
@@ -28,5 +27,5 @@ const Template = ({ label, ...args }) => {
 export const Default  = Template.bind({});
 Default.args = {
    forWhat: "Base",
-   needSupportive: true
+   supportiveText: "Text"
 };
