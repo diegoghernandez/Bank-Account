@@ -11,12 +11,10 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.within;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -141,7 +139,7 @@ public class AutomationCrudRepositoryTest {
     @DisplayName("Should update the lastExecution date from a specific automationEntity with a specific id of the data.sql")
     public void updateLastExecutionById() {
         LocalDateTime timeStamp = LocalDateTime.now();
-        automationCrudRepository.updateLastExecutionById(1, timeStamp);
+        automationCrudRepository.updateLastExecutionById(timeStamp, 1);
 
         AutomationEntity automationEntity = automationCrudRepository.findById(1L).get();
 
@@ -160,7 +158,7 @@ public class AutomationCrudRepositoryTest {
     @Sql("/db/bankaccount_data.sql")
     @DisplayName("Should update the status from a specific automationEntity with a specific id of the data.sql")
     public void updateStatusById() {
-        automationCrudRepository.updateStatusById(7, false);
+        automationCrudRepository.updateStatusById(false, 7);
 
         AutomationEntity automationEntity = automationCrudRepository.findById(7L).get();
 

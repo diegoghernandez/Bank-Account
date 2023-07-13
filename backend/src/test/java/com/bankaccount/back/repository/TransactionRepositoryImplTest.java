@@ -90,9 +90,7 @@ public class TransactionRepositoryImplTest {
 
         Page<TransactionEntity> transactionList = transactionRepository.getByIdAccount(343, 0).get();
 
-        assertAll(
-                () -> assertEquals(Arrays.asList(432L, 342L), transactionList.stream().map(TransactionEntity::getIdTransaction).toList())
-        );
+        assertEquals(Arrays.asList(432L, 342L), transactionList.stream().map(TransactionEntity::getIdTransaction).toList());
     }
 
     @Test

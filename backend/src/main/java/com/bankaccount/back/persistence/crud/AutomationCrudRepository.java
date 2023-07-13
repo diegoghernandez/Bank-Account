@@ -21,10 +21,10 @@ public interface AutomationCrudRepository extends CrudRepository<AutomationEntit
     @Modifying
     @Transactional
     @Query("UPDATE AutomationEntity AS aut SET aut.lastExecution = :new WHERE aut.idAutomation = :id")
-    void updateLastExecutionById(long id, @Param("new") LocalDateTime newExecutionTime);
+    void updateLastExecutionById(@Param("new") LocalDateTime newExecutionTime, long id);
 
     @Modifying
     @Transactional
     @Query("UPDATE AutomationEntity AS aut SET aut.status = :status WHERE aut.idAutomation = :id")
-    void updateStatusById(long id, boolean status);
+    void updateStatusById(boolean status, long id);
 }
