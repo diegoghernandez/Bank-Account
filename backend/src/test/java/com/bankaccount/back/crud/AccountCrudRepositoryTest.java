@@ -65,28 +65,6 @@ public class AccountCrudRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should save an account in the database")
-    public void saveAccount() {
-        AccountEntity accountEntity = AccountEntity.builder()
-                .idAccount(12423144)
-                .accountName("Random6")
-                .email("random6@names.com")
-                .password("1234567")
-                .build();
-
-        AccountEntity accountSave = accountCrudRepository.save(accountEntity);
-
-        assertAll(
-                () -> assertEquals(accountEntity.getIdAccount(), accountSave.getIdAccount()),
-                () -> assertEquals(accountEntity.getAccountName(), accountSave.getAccountName()),
-                () -> assertEquals(accountEntity.getEmail(), accountSave.getEmail()),
-                () -> assertEquals(accountEntity.getPassword(), accountSave.getPassword()),
-                () -> assertEquals(accountEntity.getCurrentBalance(), accountSave.getCurrentBalance()),
-                () -> assertThat(accountEntity.getEnabled()).isEqualTo(false)
-        );
-    }
-
-    @Test
     @Sql("/db/bankaccount_data.sql")
     @DisplayName("Should update the balance of a specific account with its id in the database")
     public void updateBalance() {
@@ -128,6 +106,28 @@ public class AccountCrudRepositoryTest {
         assertAll(
                 () -> Assertions.assertThat(accountEntity.getIdAccount()).isEqualTo(5),
                 () -> Assertions.assertThat(accountEntity.getEnabled()).isEqualTo(true)
+        );
+    }
+
+    @Test
+    @DisplayName("Should save an account in the database")
+    public void saveAccount() {
+        AccountEntity accountEntity = AccountEntity.builder()
+                .idAccount(12423144)
+                .accountName("Random6")
+                .email("random6@names.com")
+                .password("1234567")
+                .build();
+
+        AccountEntity accountSave = accountCrudRepository.save(accountEntity);
+
+        assertAll(
+                () -> assertEquals(accountEntity.getIdAccount(), accountSave.getIdAccount()),
+                () -> assertEquals(accountEntity.getAccountName(), accountSave.getAccountName()),
+                () -> assertEquals(accountEntity.getEmail(), accountSave.getEmail()),
+                () -> assertEquals(accountEntity.getPassword(), accountSave.getPassword()),
+                () -> assertEquals(accountEntity.getCurrentBalance(), accountSave.getCurrentBalance()),
+                () -> assertThat(accountEntity.getEnabled()).isEqualTo(false)
         );
     }
 }

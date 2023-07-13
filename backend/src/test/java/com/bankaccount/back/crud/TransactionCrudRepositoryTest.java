@@ -172,7 +172,7 @@ public class TransactionCrudRepositoryTest {
 
     @Test
     @DisplayName("Should save a transaction in the database")
-    public void saveAccount() {
+    public void saveTransaction() {
         TransactionEntity transactionEntity = TransactionEntity.builder()
                 .idAccount(5)
                 .idTransferAccount(2)
