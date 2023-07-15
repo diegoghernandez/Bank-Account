@@ -3,8 +3,6 @@ package com.bankaccount.back.repository;
 import com.bankaccount.back.domain.repository.AutomationRepository;
 import com.bankaccount.back.persistence.crud.AutomationCrudRepository;
 import com.bankaccount.back.persistence.entity.AutomationEntity;
-import com.bankaccount.back.persistence.entity.TransactionEntity;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +42,7 @@ public class AutomationRepositoryImplTest {
                 .name("For testing")
                 .idTransferAccount(12)
                 .hoursToNextExecution(4)
-                .lastExecution(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
+                .executionTime(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
                 .status(true)
                 .build();
 
@@ -54,7 +52,7 @@ public class AutomationRepositoryImplTest {
                 .name("For testing")
                 .idTransferAccount(12)
                 .hoursToNextExecution(4)
-                .lastExecution(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
+                .executionTime(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
                 .status(false)
                 .build();
 
@@ -64,7 +62,7 @@ public class AutomationRepositoryImplTest {
                 .name("For testing")
                 .idTransferAccount(12)
                 .hoursToNextExecution(4)
-                .lastExecution(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
+                .executionTime(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
                 .status(false)
                 .build();
 
@@ -74,7 +72,7 @@ public class AutomationRepositoryImplTest {
                 .name("For testing")
                 .idTransferAccount(12)
                 .hoursToNextExecution(4)
-                .lastExecution(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
+                .executionTime(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
                 .status(true)
                 .build();
 
@@ -84,7 +82,7 @@ public class AutomationRepositoryImplTest {
     @Test
     @DisplayName("Should return one automationEntity with the specific id of the database")
     void getAutomationById() {
-        Mockito.when(automationRepository.getAutomationById(23L))
+        Mockito.when(automationCrudRepository.findById(23L))
                 .thenReturn(Optional.of(automationEntityList.get(2)));
 
         AutomationEntity automationEntity = automationRepository.getAutomationById(23L).get();
@@ -95,7 +93,7 @@ public class AutomationRepositoryImplTest {
     @Test
     @DisplayName("Should return all automationEntity with the specific idAccount of the database")
     void getByIdAccount() {
-        Mockito.when(automationRepository.getByIdAccount(32))
+        Mockito.when(automationCrudRepository.findByIdAccount(32))
                 .thenReturn(List.of(automationEntityList.get(0), automationEntityList.get(1), automationEntityList.get(2)));
 
         List<AutomationEntity> automationEntityByAccount = automationRepository.getByIdAccount(32);
@@ -110,10 +108,10 @@ public class AutomationRepositoryImplTest {
     @Test
     @DisplayName("Should return all automationEntity by status of the database")
     void getByStatus() {
-        Mockito.when(automationRepository.getByStatus(true))
+        Mockito.when(automationCrudRepository.findByStatus(true))
                 .thenReturn(List.of(automationEntityList.get(0), automationEntityList.get(3)));
 
-        Mockito.when(automationRepository.getByStatus(false))
+        Mockito.when(automationCrudRepository.findByStatus(false))
                 .thenReturn(List.of(automationEntityList.get(1), automationEntityList.get(2)));
 
         List<AutomationEntity> automationEntityTrue = automationRepository.getByStatus(true);
@@ -131,7 +129,7 @@ public class AutomationRepositoryImplTest {
     @Test
     @DisplayName("Should return all automationEntity by idAccount and status of the database")
     void getByIdAccountAndStatus() {
-        Mockito.when(automationRepository.getByIdAccountAndStatus(32, false))
+        Mockito.when(automationCrudRepository.findByIdAccountAndStatus(32, false))
                 .thenReturn(List.of(automationEntityList.get(1), automationEntityList.get(2)));
 
         List<AutomationEntity> automationEntities = automationRepository.getByIdAccountAndStatus(32, false);
@@ -145,15 +143,15 @@ public class AutomationRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should update the lastExecution of an automationEntity by id in the database")
-    void updateLastExecutionById() {
+    @DisplayName("Should update the executionTime of an automationEntity by id in the database")
+    void updateExecutionTimeById() {
         LocalDateTime time = LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0);
 
-        Mockito.doNothing().when(automationCrudRepository).updateLastExecutionById(Mockito.isA(LocalDateTime.class), Mockito.isA(Long.class));
+        Mockito.doNothing().when(automationCrudRepository).updateExecutionTimeById(Mockito.isA(LocalDateTime.class), Mockito.isA(Long.class));
 
-        automationCrudRepository.updateLastExecutionById(time, 76L);
+        automationRepository.updateExecutionTimeById(time, 76L);
 
-        Mockito.verify(automationCrudRepository, Mockito.times(1)).updateLastExecutionById(time, 76L);
+        Mockito.verify(automationCrudRepository, Mockito.times(1)).updateExecutionTimeById(time, 76L);
     }
 
     @Test
@@ -161,7 +159,7 @@ public class AutomationRepositoryImplTest {
     void updateStatusById() {
         Mockito.doNothing().when(automationCrudRepository).updateStatusById(Mockito.isA(Boolean.class), Mockito.isA(Long.class));
 
-        automationCrudRepository.updateStatusById(false, 76L);
+        automationRepository.updateStatusById(false, 76L);
 
         Mockito.verify(automationCrudRepository, Mockito.times(1)).updateStatusById(false, 76L);
     }
@@ -173,9 +171,10 @@ public class AutomationRepositoryImplTest {
                 .idAutomation(3123L)
                 .idAccount(54)
                 .name("For testing")
+                .amount(new BigDecimal("4324.43"))
                 .idTransferAccount(321)
                 .hoursToNextExecution(213)
-                .lastExecution(LocalDateTime.of(2023, Month.DECEMBER, 11, 13, 12, 0))
+                .executionTime(LocalDateTime.of(2023, Month.DECEMBER, 11, 13, 12, 0))
                 .status(true)
                 .build();
 
@@ -187,9 +186,10 @@ public class AutomationRepositoryImplTest {
                 () -> assertThat(automationSave.getIdAutomation()).isEqualTo(automationEntity.getIdAutomation()),
                 () -> assertThat(automationSave.getIdAccount()).isEqualTo(automationEntity.getIdAccount()),
                 () -> assertThat(automationSave.getName()).isEqualTo(automationEntity.getName()),
+                () -> assertThat(automationSave.getAmount()).isEqualTo(automationEntity.getAmount()),
                 () -> assertThat(automationSave.getIdTransferAccount()).isEqualTo(automationEntity.getIdTransferAccount()),
                 () -> assertThat(automationSave.getHoursToNextExecution()).isEqualTo(automationEntity.getHoursToNextExecution()),
-                () -> assertThat(automationSave.getLastExecution()).isEqualTo(automationEntity.getLastExecution()),
+                () -> assertThat(automationSave.getExecutionTime()).isEqualTo(automationEntity.getExecutionTime()),
                 () -> assertThat(automationSave.getStatus()).isEqualTo(automationEntity.getStatus())
         );
     }

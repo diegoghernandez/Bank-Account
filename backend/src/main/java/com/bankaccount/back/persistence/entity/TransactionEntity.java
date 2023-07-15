@@ -33,7 +33,7 @@ public class TransactionEntity {
     @Column(name = "receiver_name", nullable = false)
     private String receiverName;
 
-    @Column(name = "transaction_amount", nullable = false, columnDefinition = "DECIMAL(10,2)")
+    @Column(name = "transaction_amount", nullable = false, columnDefinition = "DECIMAL(14,2)")
     private BigDecimal transactionAmount;
 
     @Enumerated(EnumType.STRING)
@@ -44,7 +44,6 @@ public class TransactionEntity {
     @Column(name = "transaction_timestamp", nullable = false)
     private LocalDateTime transactionTimestamp = LocalDateTime.now();
 
-    @Builder.Default
     @Column(name = "is_automated")
-    private Boolean isAutomated = false;
+    private Boolean isAutomated;
 }

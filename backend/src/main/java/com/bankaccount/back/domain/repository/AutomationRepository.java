@@ -16,7 +16,7 @@ public interface AutomationRepository {
 
     List<AutomationEntity> getByIdAccountAndStatus(int idAccount, boolean status);
 
-    void updateLastExecutionById(LocalDateTime newTime, long id);
+    void updateExecutionTimeById(LocalDateTime newTime, long id);
 
     void updateStatusById(boolean status, long id);
 

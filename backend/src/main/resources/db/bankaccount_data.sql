@@ -9,14 +9,14 @@ INSERT INTO `verification_token` (id_token, token, expiration_time, id_account) 
 (1, 'er143ge8-9b58-41ae-8723-29d7ff675a30', {ts '2021-12-25 13:47:05.602'}, 4),
 (2, '7f1a71e8-9b58-41ae-8723-29d7ff675a30', {ts '2022-12-25 14:10:05.602'}, 5);
 
-INSERT INTO `automation` (id_automation, id_account, name, id_transfer_account, hours_to_next_execution, last_execution, status) VALUES
-(1, 3, 'Automation', 43, 12, {ts '2023-10-09 20:10:12'}, TRUE),
-(2, 2, 'Automation', 43, 12, {ts '2023-10-09 20:10:12'}, TRUE),
-(3, 2, 'Automation', 43, 32, {ts '2023-10-09 20:10:12'}, TRUE),
-(4, 2, 'Automation', 43, 2, {ts '2023-10-09 20:10:12'}, FALSE),
-(5, 3, 'Automation', 43, 52, {ts '2023-10-09 20:10:12'}, TRUE),
-(6, 3, 'Automation', 43, 12, {ts '2023-10-09 20:10:12'}, FALSE),
-(7, 2, 'Automation', 43, 62, {ts '2023-10-09 20:10:12'}, TRUE);
+INSERT INTO `automation` (id_automation, id_account, name, amount, id_transfer_account, hours_to_next_execution, execution_time, status) VALUES
+(1, 3, 'Automation', 2000.00, 43, 12, {ts '2023-10-09 20:10:12'}, TRUE),
+(2, 2, 'Automation', 2000.00, 43, 12, {ts '2023-10-09 20:10:12'}, TRUE),
+(3, 2, 'Automation', 2000.00, 43, 32, {ts '2023-10-09 20:10:12'}, TRUE),
+(4, 2, 'Automation', 2000.00, 43, 2, {ts '2023-10-09 20:10:12'}, FALSE),
+(5, 3, 'Automation', 2000.00, 43, 52, {ts '2023-10-09 20:10:12'}, TRUE),
+(6, 3, 'Automation', 2000.00, 43, 12, {ts '2023-10-09 20:10:12'}, FALSE),
+(7, 2, 'Automation', 2000.00, 43, 62, {ts '2023-10-09 20:10:12'}, TRUE);
 
 INSERT INTO `transaction` (id_transaction, id_account, id_transfer_account, receiver_name, transaction_amount, transaction_type, transaction_timestamp) VALUES
 (1, 1, 2, 'Maria', 6000.00, 'WIRE_TRANSFER', {ts '2022-10-09 20:10:12'}),

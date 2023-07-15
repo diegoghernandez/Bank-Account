@@ -86,7 +86,7 @@ public class TransactionTypeServiceTest {
                 TransactionType.ONLINE_PAYMENT);
 
         Exception exception = assertThrows(Exception.class, () ->
-                transactionTypeService.saveTransaction(transactionError));
+                transactionTypeService.saveTransaction(transactionError, false));
 
         String expectedMessage = "Not enough balance";
         String actualMessage = exception.getMessage();
@@ -109,7 +109,7 @@ public class TransactionTypeServiceTest {
 
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("30000.45"), 87658);
 
-        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto);
+        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto, false);
         System.out.println(transactionSave.toString());
 
         assertAll(
@@ -137,7 +137,7 @@ public class TransactionTypeServiceTest {
 
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("9999.55"), 87658);
 
-        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto);
+        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto, false);
 
         assertAll(
                 () -> assertEquals(transactionDto.idAccount(), transactionSave.getIdAccount()),
@@ -164,7 +164,7 @@ public class TransactionTypeServiceTest {
 
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("9999.55"), 87658);
 
-        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto);
+        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto, false);
 
         assertAll(
                 () -> assertEquals(transactionDto.idAccount(), transactionSave.getIdAccount()),

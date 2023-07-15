@@ -21,7 +21,7 @@ public class TransactionTypeService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public TransactionEntity saveTransaction(TransactionDto transactionDto) throws Exception {
+    public TransactionEntity saveTransaction(TransactionDto transactionDto, boolean isAutomated) throws Exception {
         int id = transactionDto.idAccount();
         int idTransfer = transactionDto.idTransferAccount();
         BigDecimal amount = transactionDto.amount();
@@ -44,6 +44,7 @@ public class TransactionTypeService {
         transactionEntity.receiverName(name);
         transactionEntity.transactionAmount(amount);
         transactionEntity.transactionType(type);
+        transactionEntity.isAutomated(isAutomated);
 
         switch (type) {
             case DEPOSIT -> {
@@ -64,7 +65,7 @@ public class TransactionTypeService {
                     accountRepository.updateBalance(currentBalance, id);
 
                     saveTransaction(new TransactionDto(
-                            idTransfer, id, amount, TransactionType.DEPOSIT));
+                            idTransfer, id, amount, TransactionType.DEPOSIT), false);
                 }
             }
             default -> throw new Exception("Transaction not supported");

@@ -37,8 +37,8 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     }
 
     @Override
-    public void updateLastExecutionById(LocalDateTime newTime, long id) {
-        automationCrudRepository.updateLastExecutionById(newTime, id);
+    public void updateExecutionTimeById(LocalDateTime newTime, long id) {
+        automationCrudRepository.updateExecutionTimeById(newTime, id);
     }
 
     @Override

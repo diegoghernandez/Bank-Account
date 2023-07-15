@@ -49,7 +49,7 @@ public class TransactionController {
     @PostMapping(value = "/save", consumes = {"application/json"})
     public ResponseEntity<?> saveDepositTransaction(@RequestBody TransactionDto transactionDto) throws Exception {
         try {
-            return new ResponseEntity<>(transactionTypeService.saveTransaction(transactionDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(transactionTypeService.saveTransaction(transactionDto, false), HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

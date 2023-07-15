@@ -54,7 +54,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    @DisplayName("Should return one accountDomain with the specific id' using the repository")
+    @DisplayName("Should return one accountDomain with the specific id using the repository")
     void getAccountById() {
         Mockito.when(accountRepository.getAccountById(687452786))
                 .thenReturn(Optional.of(accountEntityList.get(0)));

@@ -4,6 +4,7 @@ import com.bankaccount.back.constants.AccountRoles;
 import com.bankaccount.back.constants.TransactionType;
 import com.bankaccount.back.domain.service.TransactionService;
 import com.bankaccount.back.domain.service.TransactionTypeService;
+import com.bankaccount.back.persistence.entity.TransactionEntity;
 import com.bankaccount.back.web.TransactionController;
 import com.bankaccount.back.web.config.JwtUtil;
 import com.bankaccount.back.web.dto.TransactionDto;
@@ -51,8 +52,14 @@ public class TransactionControllerForTypesTest {
 
     private List<TransactionDto> transactionDtoList;
 
+    private final TransactionEntity.TransactionEntityBuilder transactionEntity = TransactionEntity.builder();
+
     @BeforeEach
     void setUp() {
+        transactionEntity.idTransaction(564326L)
+                .idTransferAccount(312421)
+                .transactionAmount(new BigDecimal("87523.45"));
+
         TransactionDto transactionDto1 = new TransactionDto(
                 564326,
                 312421,
@@ -84,7 +91,7 @@ public class TransactionControllerForTypesTest {
                 TransactionType.DEPOSIT
         );
 
-        Mockito.when(transactionTypeService.saveTransaction(transactionDto))
+        Mockito.when(transactionTypeService.saveTransaction(transactionDto, false))
                 .thenThrow(new Exception());
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -102,10 +109,10 @@ public class TransactionControllerForTypesTest {
     }
 
     @Test
-    @DisplayName("Should save one transactionDomain in json format using the service or return a bad request if is authorized")
+    @DisplayName("Should save one DEPOSIT transactionDomain in json format using the service or return an unauthorized if doesn't have permission")
     void saveDepositTransaction() throws Exception {
-        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(0)))
-                .thenReturn(ArgumentMatchers.any());
+        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(0), false))
+                .thenReturn(transactionEntity.build());
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -128,10 +135,10 @@ public class TransactionControllerForTypesTest {
     }
 
     @Test
-    @DisplayName("Should save one transactionDomain in json format using the service or return a bad request if is authorized")
+    @DisplayName("Should save one ONLINE_PAYMENT transactionDomain in json format using the service or return an unauthorized if doesn't have permission")
     void saveOnlinePaymentTransaction() throws Exception {
-        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(1)))
-                .thenReturn(ArgumentMatchers.any());
+        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(1), false))
+                .thenReturn(transactionEntity.build());
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -154,10 +161,10 @@ public class TransactionControllerForTypesTest {
     }
 
     @Test
-    @DisplayName("Should save one transactionDomain in json format using the service or return a bad request if is authorized")
+    @DisplayName("Should save one WIRE_TRANSFER transactionDomain in json format using the service or return an unauthorized if doesn't have permission")
     void saveWireTransferTransaction() throws Exception {
-        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(2)))
-                .thenReturn(ArgumentMatchers.any());
+        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(2), false))
+                .thenReturn(transactionEntity.build());
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
