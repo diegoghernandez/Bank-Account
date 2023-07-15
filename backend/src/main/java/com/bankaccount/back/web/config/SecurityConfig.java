@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/transactions/**").hasAnyRole(USER, ADMIN)
                 .antMatchers("/transactions/{id}").hasAnyRole(ADMIN)
+                .antMatchers("/automations/**").hasAnyRole(USER, ADMIN)
+                .antMatchers("/automations/{id}").hasAnyRole(ADMIN)
                 .antMatchers("/api/accounts/**").hasRole(ADMIN)
                 .anyRequest()
                 .authenticated()

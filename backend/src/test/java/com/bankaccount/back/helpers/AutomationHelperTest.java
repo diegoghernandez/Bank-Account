@@ -33,7 +33,7 @@ public class AutomationHelperTest {
 
     @Test
     @DisplayName("Should receive a list of automationEntities, and check one by one if satisfy the condition to execute the logic")
-    public void useAutomations() throws Exception {
+    void useAutomations() throws Exception {
         AutomationEntity automationEntity1 = AutomationEntity.builder()
                 .idAutomation(43L)
                 .idAccount(32)

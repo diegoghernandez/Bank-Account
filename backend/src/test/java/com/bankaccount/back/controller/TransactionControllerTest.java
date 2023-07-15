@@ -93,7 +93,7 @@ public class TransactionControllerTest {
     }
 
     @Test
-    @DisplayName("Should return one transactionEntity in json format with a specific id using the service or return a not found if is authorized")
+    @DisplayName("Should return one transactionEntity in json format with a specific id using the service or return a not found if authorized")
     void getTransactionById() {
         Mockito.when(transactionService.getTransactionById(67582L))
                 .thenReturn(Optional.of(transactionEntityList.get(3)));
@@ -124,7 +124,7 @@ public class TransactionControllerTest {
     }
 
     @Test
-    @DisplayName("Should return all transactionEntities in json format with a specific idAccount using the service or return a not found if is authorized")
+    @DisplayName("Should return all transactionEntities in json format with a specific idAccount using the service or return a not found if authorized")
     void getByIdAccount() {
         Mockito.when(transactionService.getByIdAccount(885748, 0))
                 .thenReturn(Optional.of(new PageImpl<>(
@@ -181,7 +181,7 @@ public class TransactionControllerTest {
     }
 
     @Test
-    @DisplayName("Should return all transactionEntities in json format with a specific idAccount and with the timestamp condition using the service or return a not found if is authorized")
+    @DisplayName("Should return all transactionEntities in json format with a specific idAccount and with the timestamp condition using the service or return a not found if authorized")
     void getByYearAndIdAccount() {
         Mockito.when(transactionService.getByIdAccountAndYear(54365, 2021))
                 .thenReturn(Collections.singletonList(transactionEntityList.get(1)));

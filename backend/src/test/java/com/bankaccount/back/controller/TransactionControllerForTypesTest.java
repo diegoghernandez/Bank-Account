@@ -109,7 +109,7 @@ public class TransactionControllerForTypesTest {
     }
 
     @Test
-    @DisplayName("Should save one DEPOSIT transactionDomain in json format using the service or return an unauthorized if doesn't have permission")
+    @DisplayName("Should save one DEPOSIT transactionDto in json format using the service or return an unauthorized if doesn't have permission")
     void saveDepositTransaction() throws Exception {
         Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(0), false))
                 .thenReturn(transactionEntity.build());
@@ -135,7 +135,7 @@ public class TransactionControllerForTypesTest {
     }
 
     @Test
-    @DisplayName("Should save one ONLINE_PAYMENT transactionDomain in json format using the service or return an unauthorized if doesn't have permission")
+    @DisplayName("Should save one ONLINE_PAYMENT transactionDto in json format using the service or return an unauthorized if doesn't have permission")
     void saveOnlinePaymentTransaction() throws Exception {
         Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(1), false))
                 .thenReturn(transactionEntity.build());
@@ -161,7 +161,7 @@ public class TransactionControllerForTypesTest {
     }
 
     @Test
-    @DisplayName("Should save one WIRE_TRANSFER transactionDomain in json format using the service or return an unauthorized if doesn't have permission")
+    @DisplayName("Should save one WIRE_TRANSFER transactionDto in json format using the service or return an unauthorized if doesn't have permission")
     void saveWireTransferTransaction() throws Exception {
         Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(2), false))
                 .thenReturn(transactionEntity.build());
