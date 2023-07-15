@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { getTransactions, getTransactionsByYear } from "../../pages/services/transactions";
+import { getTransactions, getTransactionsByYear, saveTransaction } from "../../pages/_services/transactions";
 import transactions from "../../mocks/fixtures/transactions.json"
 
 const transaction = [{
@@ -51,6 +51,31 @@ describe("Transactions tests", () => {
       it("Should give the right content by year", async () => {
          const content = await getTransactionsByYear(1, 2023);
          expect(content).toStrictEqual(transactions);
+      });
+   });
+
+   describe("saveTransaction test", () => {
+      it("Should be a function", () => {
+         expect(typeof saveTransaction).toBe("function");
+      });
+
+      it("Should save the right content", async () => {
+         const content = await saveTransaction({
+            "idAccount" : 1,
+            "idTransferAccount": 432,
+            "amount": 1400.00,
+            "transactionType": "ONLINE_PAYMENT"
+         });
+         
+         expect(content).toStrictEqual({
+            "idTransaction": 1,
+            "idTransferAccount": 432,
+            "receiverName": "juan",
+            "transactionAmount": 1400.00,
+            "transactionType": "ONLINE_PAYMENT",
+            "transactionTimestamp": "2023-07-15T19:13:13.295080043",
+            "isAutomated": false
+         });
       });
    });
 });

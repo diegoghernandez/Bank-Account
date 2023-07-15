@@ -1,8 +1,10 @@
 import { rest } from "msw";
 import transactions from "../fixtures/transactions.json";
 
+const API = "http://localhost:8090/transactions";
+
 export const transactionHandler = [
-   rest.get("http://localhost:8090/transactions/account", (req, res, ctx) => {
+   rest.get(`${API}/account`, (req, res, ctx) => {
       const idAccount = req.url.searchParams.get("id");
 
       if (idAccount == 1) {
@@ -49,7 +51,7 @@ export const transactionHandler = [
       return res(ctx.status(404));
    }),
 
-   rest.get("http://localhost:8090/transactions/year", (req, res, ctx) => {
+   rest.get(`${API}/year`, (req, res, ctx) => {
       const idAccount = req.url.searchParams.get("id");
 
       if (idAccount == 1) {
@@ -58,4 +60,16 @@ export const transactionHandler = [
 
       return res(ctx.status(404));
    }),
+
+   rest.post(`${API}/save`, (req, res, ctx) => {
+      return res(ctx.status(200), ctx.json({
+         "idTransaction": 1,
+         "idTransferAccount": 432,
+         "receiverName": "juan",
+         "transactionAmount": 1400.00,
+         "transactionType": "ONLINE_PAYMENT",
+         "transactionTimestamp": "2023-07-15T19:13:13.295080043",
+         "isAutomated": false
+      }));
+   })
 ]

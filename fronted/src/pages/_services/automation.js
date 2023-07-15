@@ -1,34 +1,10 @@
 import { StatusError } from "../../errors/StatusError";
 
-const API = "http://localhost:8090/transactions";
+const API = "http://localhost:8090/automations";
 
-export const getTransactions = async (id, page) => {
+export const getAutomations = async (id) => {
    try {
-      const response = await fetch(`${API}/account?id=${id}&page=${page}`, {
-         method: "GET",
-         mode: "no-cors",
-         headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer {token}"
-         },
-      });
-   
-      if (response.ok) {
-         const { content } = await response.json();
-
-         return content;
-      } else {
-         throw new StatusError("No transactions found", 404);
-      }
-   
-   } catch (error) {
-      return error;
-   }
-}
-
-export const getTransactionsByYear = async (id, year) => {
-   try {
-      const response = await fetch(`${API}/year?id=${id}&year=${year}`, {
+      const response = await fetch(`${API}/account?id=${id}`, {
          method: "GET",
          mode: "no-cors",
          headers: {
@@ -40,7 +16,7 @@ export const getTransactionsByYear = async (id, year) => {
       if (response.ok) {
          return await response.json();
       } else {
-         throw new StatusError(`No transactions found by ${year}`, 404);
+         throw new StatusError("No automations found", 404);
       }
    
    } catch (error) {
@@ -48,14 +24,35 @@ export const getTransactionsByYear = async (id, year) => {
    }
 }
 
-export const saveTransaction = async (transaction) => {
+export const updateStatus = async (id, status) => {
+   try {
+      const response = await fetch(`${API}/status?id=${id}&status=${status}`, {
+         method: "PUT",
+         headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer {token}"
+         },
+      });
+   
+      if (response.ok) {
+         return "Update correctly";
+      } else {
+         throw new StatusError("No automations found", 404);
+      }
+   
+   } catch (error) {
+      return error;
+   }
+}
+
+export const saveAutomation = async (automation) => {
    const response = await fetch(`${API}/save`, {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
          "Authorization": "Bearer {token}"
       },
-      body: JSON.stringify(transaction)
+      body: JSON.stringify(automation)
    });
    return await response.json();
 }

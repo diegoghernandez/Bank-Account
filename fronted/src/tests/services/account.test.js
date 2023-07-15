@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { getAccountData } from "../../pages/services/account";
+import { getAccountData } from "../../pages/_services/account";
 
 const account = {
    "idAccount": 1,
