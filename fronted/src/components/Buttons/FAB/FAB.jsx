@@ -2,17 +2,14 @@
 import "./FAB.css"
 
 const BASE_BUTTON_CLASSES =
-  "flex flex-row justify-center items-center cursor-pointer w-auto h-14 rounded-2xl shadow";
+  "flex flex-row justify-center items-center cursor-pointer w-fit h-14 rounded-2xl shadow";
 
 /**
 * Primary UI component for user interaction
 */
-export const Fab = ({
-    label, 
-    ...props 
-  }) => {
+export const Fab = ({ label }) => {
   return (
-    <button type="button" className={`${BASE_BUTTON_CLASSES} bg-primary-container`} {...props}>
+    <button type="button" className={`absolute bottom-24 right-4 ${BASE_BUTTON_CLASSES} bg-primary-container`}>
       <div className={`${BASE_BUTTON_CLASSES} gap-2 px-3 fab--state`}>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="24" height="24" fill="none"/>

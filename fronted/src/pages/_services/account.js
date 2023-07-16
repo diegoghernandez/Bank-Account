@@ -12,7 +12,7 @@ export const getAccountData = async (email) => {
             "Authorization": "Bearer {token}"
          },
       });
-   
+
       if (response.ok) {
          return await response.json();
       } else {
@@ -20,6 +20,7 @@ export const getAccountData = async (email) => {
       }
    
    } catch (error) {
+      console.log(error);
       return error;
    }
 }

@@ -1,9 +1,17 @@
+import { Page } from "../../constants/Page";
 import { Navbar } from "./Navbar";
 
 export default {
    title: "Navbar",
    component: Navbar,
-   tags: ['autodocs']
+   tags: ['autodocs'],
+   argTypes: {
+      page: {
+         options: Object.keys(Page),
+         mapping: Page,
+         control: "radio"
+      }
+   }
 };
 
 const Template = ({ label, ...args }) => {
@@ -11,6 +19,4 @@ const Template = ({ label, ...args }) => {
 };
 
 export const Default  = Template.bind({});
-Default.args = {
-   active: false,
-};
+Default.args = {};

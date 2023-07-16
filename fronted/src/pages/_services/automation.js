@@ -10,7 +10,7 @@ export const getAutomations = async (id) => {
          headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer {token}"
-         },
+         }
       });
    
       if (response.ok) {

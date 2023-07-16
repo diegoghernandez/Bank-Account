@@ -7,10 +7,12 @@ export const Card = ({
    period
 }) => {
    return (
-      <article>
-         <div className="card--state grid grid-cols-2 grid-rows-1 w-full h-28 pt-1 outline outline-1 rounded-xl outline-outline">
-            <h2 className="text-3xl font-sans font-bold pl-4 col-start-1 col-end-2 row-start-1 row-end-2">{name}</h2>
-            <p className="text-base font-sans font-semibold pl-4 mb-1 col-start-1 col-end-2 row-start-2 row-end-3">${money}</p>
+      <article className="w-full h-full">
+         <div className="card--state grid grid-cols-1 grid-rows-1 w-full h-28 pt-1 outline outline-1 rounded-xl outline-outline">
+            <div className="w-full col-start-1 col-end-2 row-start-1 row-end-2 flex flex-col pl-4 pb-1 justify-end items-start">
+               <h2 className="w-full text-2xl font-sans font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">{name}</h2>
+               <p className="text-base font-sans font-semibold mt-auto">${money}</p>
+            </div>
             <div className="col-start-2 col-end-3 row-start-1 row-end-3 w-auto h-auto flex justify-end items-start mt-2 pr-4">
                <figure className="flex justify-center items-center w-12 h-12 bg-primary-container rounded-full">
                   <svg className="fill-onPrimary-container" width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
