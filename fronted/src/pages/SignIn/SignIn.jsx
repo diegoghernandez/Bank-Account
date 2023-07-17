@@ -2,26 +2,36 @@ import { Filled } from "../../components/Buttons/Filled/Filled";
 import { TextField } from "../../components/TextField/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
+import { login } from "../_services/auth";
 
 export const SignIn = () => {
+   const handleSubmit = async (event) => {
+      event.preventDefault();
+      const email = event.target[0].value;
+      const password = event.target[1].value;
+      const token = await login(email, password);
+      localStorage.setItem("token", token);
+   }
+
    return (
       <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
          <h1 className="text-4xl font-bold font-sans">Sign In</h1>
-         <div className="flex flex-col items-center gap-3 w-full">
+         <form 
+            className="flex flex-col items-center gap-3 w-full"
+            onSubmit={handleSubmit}   
+         >
             <TextField
-               forWhat="Email"
+               label="Email"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Email}
-               needSupportive={false}
                />
             <TextField
-               forWhat="Password"
+               label="Password"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Password}
-               needSupportive={false}
                />
-         </div>
-         <Filled label="Sign In" />
+            <Filled label="Sign In" />
+         </form>
       </section>
    );
 }

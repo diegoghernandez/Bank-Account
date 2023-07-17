@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useId, useState } from "react";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { InputTypes } from "../../constants/InputType";
 import { Menu } from "../Menu/Menu";
@@ -7,15 +7,16 @@ import { useOutsideClick } from "../../hooks/useOutsideClick";
 import "./TextField.css";
 
 export const TextField = ({
-   forWhat,
+   label,
    type = TextFieldTypes.Default,
    inputType = InputTypes.Text,
-   supportiveText = ""
+   supportiveText = "",
 }) => {
 
    const [isClicked, setIsClicked] = useState(false);
    const [hasText, setHasText] = useState(false);
    const [value, setValue] = useState("");
+   const textFieldId = useId();
    
    const handleClick = () => {
       setIsClicked(true);
@@ -34,10 +35,10 @@ export const TextField = ({
    
    return (
       <div ref={ref} className="inline-flex flex-col w-full">
-         <label htmlFor={forWhat} className={`bg-transparent w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
+         <label htmlFor={textFieldId} className={`bg-transparent w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
          ${isClicked ? "label--position--click text-primary" : `label--position--base ${(type === TextFieldTypes.Search && !hasText) && "ml-6"}`}
          ${(hasText || inputType === InputTypes.Date) ? "label--position--click text-onSurface" : "text-onSurface-variant"}`}>
-            {forWhat}
+            {label}
          </label>
             
          <div className={`inline-flex relative items-center rounded outline font-sans font-normal text-base cursor-text caret-primary
@@ -48,7 +49,7 @@ export const TextField = ({
             </svg>}
 
             <input 
-               id={forWhat}
+               id={textFieldId}
                value={value}
                className={`w-full h-14 p-4 bg-transparent outline-none text-onSurface`}
                type={inputType.description}

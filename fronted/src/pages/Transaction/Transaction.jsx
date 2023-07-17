@@ -10,19 +10,19 @@ export const Transaction = () => {
          <h1 className="text-4xl font-bold font-sans">Transaction</h1>
          <div className="flex flex-col items-center gap-3 w-full">
             <TextField
-               forWhat="Transaction Type"
+               label="Transaction Type"
                type={TextFieldTypes.Menu}
                inputType={InputTypes.Text}
                needSupportive={false}
             />
             <TextField
-               forWhat="Amount"
+               label="Amount"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Number}
                needSupportive={false}
             />
             <TextField
-               forWhat="Account to transfer"
+               label="Account to transfer"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Number}
                needSupportive={true}

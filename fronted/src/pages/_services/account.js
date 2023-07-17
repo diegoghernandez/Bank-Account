@@ -20,7 +20,6 @@ export const getAccountData = async (email) => {
       }
    
    } catch (error) {
-      console.log(error);
       return error;
    }
 }

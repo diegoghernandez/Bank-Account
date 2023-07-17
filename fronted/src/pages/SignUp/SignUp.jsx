@@ -9,25 +9,25 @@ export const SignUp = () => {
          <h1 className="text-4xl font-bold font-sans">Sign Up</h1>
          <div className="flex flex-col items-center gap-3 w-full">
             <TextField
-               forWhat="Name"
+               label="Name"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Text}
                needSupportive={false}
                />
             <TextField
-               forWhat="Email"
+               label="Email"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Email}
                needSupportive={false}
                />
             <TextField
-               forWhat="Password"
+               label="Password"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Password}
                needSupportive={false}
                />
             <TextField
-               forWhat="Confirmation"
+               label="Confirmation"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Password}
                needSupportive={false}

@@ -12,7 +12,7 @@ export const Filled = ({
    }) => {
    return (
       <div className={`${BASE_BUTTON_CLASSES}`}>
-         <button type="button" className={`${BASE_BUTTON_CLASSES} filled--state px-3 text-onPrimary text-sm font-medium`} >
+         <button className={`${BASE_BUTTON_CLASSES} filled--state px-3 text-onPrimary text-sm font-medium`} >
             {label}
          </button>
       </div>

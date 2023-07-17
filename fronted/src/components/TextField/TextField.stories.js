@@ -26,6 +26,6 @@ const Template = ({ label, ...args }) => {
 
 export const Default  = Template.bind({});
 Default.args = {
-   forWhat: "Base",
+   label: "Base",
    supportiveText: "Text"
 };

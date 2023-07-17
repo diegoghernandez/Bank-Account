@@ -10,26 +10,26 @@ export const Automation = () => {
          <h1 className="text-4xl font-bold font-sans">Automation</h1>
          <div className="flex flex-col items-center gap-3 w-full">
             <TextField
-               forWhat="Name"
+               label="Name"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Text}
                needSupportive={false}
             />
             <TextField
-               forWhat="Amount"
+               label="Amount"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Number}
                needSupportive={false}
             />
             <TextField
-               forWhat="Account to transfer"
+               label="Account to transfer"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Number}
                needSupportive={true}
                supportiveText="Add the nine account numbers"
             />
             <TextField
-               forWhat="Period of time"
+               label="Period of time"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Date}
                needSupportive={false}

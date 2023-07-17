@@ -44,13 +44,13 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginDto loginDto) {
+    @PostMapping(value = "/login", consumes = {"application/json"})
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password());
         Authentication authentication = authenticationManager.authenticate(login);
         String jwt = jwtUtil.create(loginDto.email());
 
-        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+        return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 
     @PostMapping(value = "/register", consumes = {"application/json"})
