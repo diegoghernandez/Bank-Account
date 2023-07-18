@@ -1,25 +1,17 @@
-import { StatusError } from "../../errors/StatusError";
-
 const API = "http://localhost:8090/api/accounts";
 
 export const getAccountData = async (email) => {
-   try {
-      const response = await fetch(`${API}/email/${email}`, {
-         method: "GET",
-         mode: "no-cors",
-         headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer {token}"
-         },
-      });
+   const token = localStorage.getItem("token");
+   console.log(token);
 
-      if (response.ok) {
-         return await response.json();
-      } else {
-         throw new StatusError("No account found", 404);
-      }
-   
-   } catch (error) {
-      return error;
-   }
+   const response = await fetch(`${API}/email/${email}`, {
+      method: "GET",
+      headers: {
+         "Content-Type": "application/json",
+         "Authorization": token
+      },
+   });
+
+   const account = await response.json();
+   localStorage.setItem("account", JSON.stringify(account));
 }

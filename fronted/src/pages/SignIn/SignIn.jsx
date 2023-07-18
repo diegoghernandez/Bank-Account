@@ -2,6 +2,7 @@ import { Filled } from "../../components/Buttons/Filled/Filled";
 import { TextField } from "../../components/TextField/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
+import { getAccountData } from "../_services/account";
 import { login } from "../_services/auth";
 
 export const SignIn = () => {
@@ -10,7 +11,8 @@ export const SignIn = () => {
       const email = event.target[0].value;
       const password = event.target[1].value;
       const token = await login(email, password);
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", "Bearer " + token);
+      getAccountData(email);
    }
 
    return (
