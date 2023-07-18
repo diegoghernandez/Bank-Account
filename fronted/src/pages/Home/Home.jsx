@@ -37,7 +37,7 @@ export const Home = () => {
          <p className="text-base font-semibold font-sans mb-3">Automatic payments active:</p>
          <div className="flex flex-col w-full gap-2">
             {notFound && <p>No automations found</p>}
-            {automations.map((automation) => (
+            {automations?.map((automation) => (
                <Card 
                   key={automation.idAutomation}
                   name={automation.name}

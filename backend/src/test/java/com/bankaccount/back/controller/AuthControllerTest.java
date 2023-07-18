@@ -76,8 +76,8 @@ public class AuthControllerTest {
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
-                        .andExpect(header().string("Authorization",
-                                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkhvbGEiLCJpYXQiOjE1MTYyMzkwMjJ9.UIk97TCf753QX9TqT2XXh9KOykFM9bLhmccWKuMAQzs"))
+                        .andExpect(content()
+                                .string("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkhvbGEiLCJpYXQiOjE1MTYyMzkwMjJ9.UIk97TCf753QX9TqT2XXh9KOykFM9bLhmccWKuMAQzs"))
         );
     }
 
