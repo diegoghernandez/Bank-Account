@@ -1,5 +1,7 @@
 import { DividerCard } from "../../components/DividerCard/DividerCard";
+import { Navbar } from "../../components/Navbar/Navbar";
 import { TextField } from "../../components/TextField/TextField";
+import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 
 export const Transactions = () => {
@@ -53,6 +55,8 @@ export const Transactions = () => {
             time={transaction.transactionTimestamp}
             automated={!transaction.isAutomated}
          />
+
+         <Navbar page={Page.Transactions} />
       </main>
    );
 }
