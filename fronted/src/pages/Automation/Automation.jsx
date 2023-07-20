@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled/Filled";
 import { Outline } from "../../components/Buttons/Outline/Outline";
 import { TextField } from "../../components/TextField/TextField";
@@ -36,7 +37,9 @@ export const Automation = () => {
             />
          </div>
          <Filled label="Make automation" />
-         <Outline label="Cancel" />
+         <Link className="w-full" to="/automations">
+            <Outline label="Cancel" />
+         </Link>
       </section>
    );
 }

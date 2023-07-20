@@ -13,6 +13,7 @@ export default {
       "120" : "120%"
     },
     colors: {
+      "white": "#FFF",
       "transparent" : "transparent",
 
       "primary" : "#2563EB",

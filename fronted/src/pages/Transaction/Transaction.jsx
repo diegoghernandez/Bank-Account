@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled/Filled";
 import { Outline } from "../../components/Buttons/Outline/Outline";
 import { TextField } from "../../components/TextField/TextField";
@@ -30,7 +31,10 @@ export const Transaction = () => {
             />
          </div>
          <Filled label="Make transaction" />
-         <Outline label="Cancel" />
+
+         <Link className="w-full" to="/">
+            <Outline label="Cancel" />
+         </Link>
       </section>
    );
 }

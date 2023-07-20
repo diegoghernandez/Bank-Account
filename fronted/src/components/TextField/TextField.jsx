@@ -35,7 +35,7 @@ export const TextField = ({
    
    return (
       <div ref={ref} className="inline-flex flex-col w-full">
-         <label htmlFor={textFieldId} className={`bg-transparent w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
+         <label htmlFor={textFieldId} className={`bg-white w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
          ${isClicked ? "label--position--click text-primary" : `label--position--base ${(type === TextFieldTypes.Search && !hasText) && "ml-6"}`}
          ${(hasText || inputType === InputTypes.Date) ? "label--position--click text-onSurface" : "text-onSurface-variant"}`}>
             {label}

@@ -1,11 +1,16 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled/Filled";
 import { TextField } from "../../components/TextField/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
+import { useAuth } from "../../hooks/useAuth";
 import { getAccountData } from "../_services/account";
-import { login } from "../_services/auth";
 
 export const SignIn = () => {
+   const { login } = useAuth();
+   const navigate = useNavigate();
+   const { state } = useLocation();
+
    const handleSubmit = async (event) => {
       event.preventDefault();
       const email = event.target[0].value;
@@ -13,6 +18,8 @@ export const SignIn = () => {
       const token = await login(email, password);
       localStorage.setItem("token", "Bearer " + token);
       getAccountData(email);
+      login();
+      navigate(state?.location?.pathname ?? "/");
    }
 
    return (

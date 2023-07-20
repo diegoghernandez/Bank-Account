@@ -6,6 +6,7 @@ import { Switch } from "../../components/Switch/Switch";
 import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
+import { Link } from "react-router-dom";
 
 export const Automations = () => {
    const [status, setStatus] = useState("disabled");
@@ -68,7 +69,9 @@ export const Automations = () => {
             period={automation.executionTime}
          />
 
-         <Fab label="Automation" />
+         <Link to="/automation">
+            <Fab label="Automation" />
+         </Link>
          <Navbar page={Page.Automation} />
       </main>
    );

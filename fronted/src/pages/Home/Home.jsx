@@ -5,6 +5,7 @@ import { Page } from "../../constants/Page";
 import { getAutomations } from "../_services/automation";
 import { StatusError } from "../../errors/StatusError";
 import { Fab } from "../../components/Buttons/FAB/FAB";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
    const [automations, setAutomations] = useState([{
@@ -47,7 +48,9 @@ export const Home = () => {
             ))}
          </div>
 
-         <Fab label="Transaction" />
+         <Link to="/transaction">
+            <Fab label="Transaction" />
+         </Link>
          <Navbar page={Page.Home} />
       </main>
    );

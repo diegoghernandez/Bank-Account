@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { Link } from "react-router-dom";
 import { Page } from "../../constants/Page";
 import { Nav } from "../Buttons/Nav/Nav"
 
@@ -9,28 +10,36 @@ export const Navbar = ({
       <nav className="fixed flex justify-center items-center left-0 bottom-0 w-full h-20 bg-surface-container pt-3 pb-4">
          <ul className="flex flex-row gap-2 justify-center items-center">
             <li>
-               <Nav
-                  active={page === Page.Home}
-                  page={Page.Home}
-               />
+               <Link to="/">
+                  <Nav
+                     active={page === Page.Home}
+                     page={Page.Home}
+                  />
+               </Link>
             </li>
             <li>
-               <Nav
-                  active={page === Page.Transactions}
-                  page={Page.Transactions}
-               />
+               <Link to="/transactions">
+                  <Nav
+                     active={page === Page.Transactions}
+                     page={Page.Transactions}
+                  />
+               </Link>
             </li>
             <li>
-               <Nav
-                  active={page === Page.Automation}
-                  page={Page.Automation}
-               />
+               <Link to="/automations">
+                  <Nav
+                     active={page === Page.Automation}
+                     page={Page.Automation}
+                  />
+               </Link>
             </li>
             <li>
-               <Nav
-                  active={page === Page.Account}
-                  page={Page.Account}
-               />
+               <Link to="/account">
+                  <Nav
+                     active={page === Page.Account}
+                     page={Page.Account}
+                  />
+               </Link>
             </li>
          </ul>
       </nav>

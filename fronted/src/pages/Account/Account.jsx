@@ -1,5 +1,7 @@
 import { DividerField } from "../../components/Divider/DividerField/DividerField";
+import { Navbar } from "../../components/Navbar/Navbar";
 import { Switch } from "../../components/Switch/Switch";
+import { Page } from "../../constants/Page";
 
 export const Account = () => {
    return (
@@ -18,6 +20,8 @@ export const Account = () => {
          <DividerField label="Change email" />
          <DividerField label="Change name" />
          <DividerField label="Logout" />
+
+         <Navbar page={Page.Account} />
       </main>
    );
 }
