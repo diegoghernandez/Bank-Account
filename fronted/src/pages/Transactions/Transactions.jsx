@@ -1,4 +1,4 @@
-import { DividerCard } from "../../components/DividerCard/DividerCard";
+import { DividerCard } from "../../components/Divider/DividerCard";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";

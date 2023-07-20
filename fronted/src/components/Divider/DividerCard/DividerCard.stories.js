@@ -1,7 +1,7 @@
 import { DividerCard } from "./DividerCard";
 
 export default {
-   title: "DividerCard",
+   title: "Divider/DividerCard",
    component: DividerCard,
    tags: ['autodocs']
 };
