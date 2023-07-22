@@ -12,11 +12,11 @@ export const login = async (email, password) => {
          },
          body: JSON.stringify({email, password})
       });
-
+      
       if (response.ok) {
          return await response.text();
       } else {
-         throw new StatusError("Unauthorized", 403);
+         throw new StatusError("Incorrect authentication credentials", 403);
       }
    
    } catch (error) {

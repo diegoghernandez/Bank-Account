@@ -11,7 +11,7 @@ describe("Auth tests", () => {
          const exception = await login("error@user.com", "1234");
 
          expect(exception).toBeInstanceOf(StatusError);
-         expect(exception.message).toStrictEqual("Unauthorized");
+         expect(exception.message).toStrictEqual("Incorrect authentication credentials");
          expect(exception.status).toStrictEqual(403);
       });
 

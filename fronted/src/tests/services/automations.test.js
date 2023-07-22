@@ -25,7 +25,7 @@ const automations = [{
    "hoursToNextExecution": 5,
    "executionTime": "2023-07-15T17:51:36.986827",
    "status": true
-}]
+}];
 
 describe("Automations tests", () => {
 
@@ -34,7 +34,7 @@ describe("Automations tests", () => {
          expect(typeof getAutomations).toBe("function");
       });
 
-      it("Should throw an StatusError if there is no element", async () => {
+      it("Should throw an StatusError if there is no element", async () => {         
          const exception = await getAutomations(21);
 
          expect(exception).toBeInstanceOf(StatusError);

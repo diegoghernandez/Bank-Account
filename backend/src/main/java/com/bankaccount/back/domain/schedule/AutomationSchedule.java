@@ -18,9 +18,11 @@ public class AutomationSchedule {
     @Autowired
     private TransactionTypeService transactionTypeService;
 
+    @Autowired
+    private AutomationHelper automationHelper;
+
     @Scheduled(fixedRateString = "PT1H")
     public void executeAutomationHelper() throws Exception {
-        AutomationHelper automationHelper = new AutomationHelper();
         automationHelper.useAutomations(automationRepository.getByStatus(true));
     }
 }

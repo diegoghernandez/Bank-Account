@@ -9,7 +9,7 @@ export const Automation = () => {
    return (
       <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
          <h1 className="text-4xl font-bold font-sans">Automation</h1>
-         <div className="flex flex-col items-center gap-3 w-full">
+         <form className="flex flex-col items-center gap-3 w-full">
             <TextField
                label="Name"
                type={TextFieldTypes.Default}
@@ -35,8 +35,8 @@ export const Automation = () => {
                inputType={InputTypes.Date}
                needSupportive={false}
             />
-         </div>
-         <Filled label="Make automation" />
+            <Filled label="Make automation" />
+         </form>
          <Link className="w-full" to="/automations">
             <Outline label="Cancel" />
          </Link>

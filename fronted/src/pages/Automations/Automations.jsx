@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Fab } from "../../components/Buttons/FAB/FAB";
 import { Card } from "../../components/Card/Card";
 import { Navbar } from "../../components/Navbar/Navbar";
@@ -7,19 +7,23 @@ import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Link } from "react-router-dom";
+import { StatusError } from "../../errors/StatusError";
+import { getAutomations } from "../_services/automation";
 
 export const Automations = () => {
    const [status, setStatus] = useState("disabled");
+   const [automations, setAutomations] = useState([]);
+   const [notFound, setNotFound] = useState(false); 
 
-   const automation = {
-      "idAutomation": 1,
-      "name": "New automation",
-      "amount": 2000.00,
-      "idTransferAccount": 419670285,
-      "hoursToNextExecution": 6,
-      "executionTime": "2023-07-15T17:51:36.986827",
-      "status": true
-   }
+   const { idAccount, email } = JSON.parse(localStorage.getItem("account"));
+
+   useEffect(() => {
+      getAutomations(idAccount, email)
+         .then((data) => {
+            if (data instanceof StatusError) setNotFound(true);
+            else setAutomations(data, ...automations);
+         });
+   }, []);
 
    const handleSubmit = (event) => {
       event.preventDefault();
@@ -48,31 +52,26 @@ export const Automations = () => {
             />
          </form>
 
-         <Card 
-            name={automation.name}
-            money={automation.amount}
-            period={automation.executionTime}
-         />
-         <Card 
-            name={automation.name}
-            money={automation.amount}
-            period={automation.executionTime}
-         />
-         <Card 
-            name={automation.name}
-            money={automation.amount}
-            period={automation.executionTime}
-         />
-         <Card 
-            name={automation.name}
-            money={automation.amount}
-            period={automation.executionTime}
-         />
+         <div className="flex flex-col w-full gap-2">
+            {notFound && <p>No automations found</p>}
+            {automations?.map((automation) => {
+               return (
+                  <Card 
+                     key={automation.idAutomation}
+                     name={automation.name}
+                     money={automation.amount}
+                     period={automation.executionTime}
+                  />
+               );
+            })}
+         </div>
 
          <Link to="/automation">
             <Fab label="Automation" />
          </Link>
-         <Navbar page={Page.Automation} />
+         <div className="w-full h-20">
+            <Navbar page={Page.Automation} />
+         </div>
       </main>
    );
 }

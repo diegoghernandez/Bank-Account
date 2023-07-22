@@ -7,7 +7,7 @@ export const useAuth = () => {
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-   const isJWT = localStorage.getItem("jwt")?.length > 1;
+   const isJWT = localStorage.getItem("token")?.length > 1;
    const [isAuthenticated, setIsAuthenticated] = useState(isJWT);
 
    const login = () => {

@@ -30,7 +30,7 @@ export const TextField = ({
 
    const onClear = () => setValue("");
 
-   const transactionTypes = ["Deposit", "Online payment", "Wire Transfer"];
+   const transactionTypes = ["DEPOSIT", "ONLINE_PAYMENT", "WIRE_TRANSFER"];
    const notMenu = type !== TextFieldTypes.Menu;
    
    return (

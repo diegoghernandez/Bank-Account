@@ -1,22 +1,22 @@
 import { StatusError } from "../../errors/StatusError";
+import { getAccountData } from "./account";
 
 const API = "http://localhost:8090/transactions";
+const TOKEN = localStorage.getItem("token");
 
 export const getTransactions = async (id, page) => {
    try {
       const response = await fetch(`${API}/account?id=${id}&page=${page}`, {
          method: "GET",
-         mode: "no-cors",
          headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer {token}"
+            "Authorization": TOKEN
          },
       });
    
       if (response.ok) {
-         const { content } = await response.json();
-
-         return content;
+         const data = await response.json();
+         return data;
       } else {
          throw new StatusError("No transactions found", 404);
       }
@@ -33,7 +33,7 @@ export const getTransactionsByYear = async (id, year) => {
          mode: "no-cors",
          headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer {token}"
+            "Authorization": TOKEN
          },
       });
    
@@ -48,14 +48,16 @@ export const getTransactionsByYear = async (id, year) => {
    }
 }
 
-export const saveTransaction = async (transaction) => {
+export const saveTransaction = async (transaction, email) => {
    const response = await fetch(`${API}/save`, {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
-         "Authorization": "Bearer {token}"
+         "Authorization": TOKEN
       },
       body: JSON.stringify(transaction)
    });
+
+   getAccountData(email);
    return await response.json();
 }

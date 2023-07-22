@@ -17,12 +17,14 @@ public class AutomationService {
     @Autowired
     private AutomationRepository automationRepository;
 
+    @Autowired
+    private AutomationHelper automationHelper;
+
     public Optional<AutomationEntity> getAutomationById(long id) {
         return automationRepository.getAutomationById(id);
     }
 
     public List<AutomationEntity> getByIdAccount(int idAccount) throws Exception {
-        AutomationHelper automationHelper = new AutomationHelper();
         automationHelper.useAutomations(automationRepository.getByIdAccountAndStatus(idAccount, true));
 
         return automationRepository.getByIdAccount(idAccount);

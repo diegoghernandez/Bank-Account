@@ -5,6 +5,8 @@ import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { useAuth } from "../../hooks/useAuth";
 import { getAccountData } from "../_services/account";
+import { login as logUser } from "../_services/auth";
+import { StatusError } from "../../errors/StatusError";
 
 export const SignIn = () => {
    const { login } = useAuth();
@@ -15,12 +17,17 @@ export const SignIn = () => {
       event.preventDefault();
       const email = event.target[0].value;
       const password = event.target[1].value;
-      const token = await login(email, password);
-      localStorage.setItem("token", "Bearer " + token);
-      getAccountData(email);
-      login();
-      navigate(state?.location?.pathname ?? "/");
-   }
+      
+      logUser(email, password)
+         .then((token) => {
+            if (!(token instanceof StatusError)) {
+               localStorage.setItem("token", "Bearer " + token);
+               getAccountData(email);
+               login();
+               navigate(state?.location?.pathname ?? "/");
+            }
+         });
+   };
 
    return (
       <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
