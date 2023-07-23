@@ -27,5 +27,6 @@ const Template = ({ label, ...args }) => {
 export const Default  = Template.bind({});
 Default.args = {
    label: "Base",
-   supportiveText: "Text"
+   supportiveText: "Text",
+   isError: true
 };

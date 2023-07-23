@@ -32,6 +32,9 @@ export default {
       "surface-container-highest": "#E0E1E9",
       "onSurface" : "#1B1C1F",
       "onSurface-variant" : "#45454E",
+
+      "error": "#B3261E",
+      "on-error-container": "#410E0B"
     },
     extend: {},
   },

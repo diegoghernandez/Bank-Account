@@ -22,7 +22,7 @@ public class AutomationSchedule {
     private AutomationHelper automationHelper;
 
     @Scheduled(fixedRateString = "PT1H")
-    public void executeAutomationHelper() throws Exception {
+    public void executeAutomationHelper() {
         automationHelper.useAutomations(automationRepository.getByStatus(true));
     }
 }

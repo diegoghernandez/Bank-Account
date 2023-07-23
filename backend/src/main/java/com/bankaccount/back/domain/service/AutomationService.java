@@ -30,7 +30,7 @@ public class AutomationService {
         return automationRepository.getAutomationById(id);
     }
 
-    public List<AutomationEntity> getByIdAccount(int idAccount) throws Exception {
+    public List<AutomationEntity> getByIdAccount(int idAccount) {
         automationHelper.useAutomations(automationRepository.getByIdAccountAndStatus(idAccount, true));
 
         return automationRepository.getByIdAccount(idAccount);

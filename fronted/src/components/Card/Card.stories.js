@@ -14,5 +14,6 @@ export const Default  = Template.bind({});
 Default.args = {
    name: "Name",
    money: "43254.00",
-   period: "Missing 7 days/14 hours/32 minutes"
+   period: "Missing 7 days/14 hours/32 minutes",
+   disable: true
 };

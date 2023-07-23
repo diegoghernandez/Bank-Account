@@ -11,6 +11,7 @@ export const TextField = ({
    type = TextFieldTypes.Default,
    inputType = InputTypes.Text,
    supportiveText = "",
+   isError = false
 }) => {
 
    const [isClicked, setIsClicked] = useState(false);
@@ -32,17 +33,22 @@ export const TextField = ({
 
    const transactionTypes = ["DEPOSIT", "ONLINE_PAYMENT", "WIRE_TRANSFER"];
    const notMenu = type !== TextFieldTypes.Menu;
+
+   const textLabelColor = (isError) ? ["text-error", "text-error", "text-error", "text-on-error-container"] : ["text-primary", "text-onSurface", "text-onSurface-variant", "text-onSurface"];
+   const outlineColor = (isError) ? ["outline-error", "outline-error", "outline-on-error-container"] : ["outline-outline", "outline-primary", "outline-onSurface"];
+   console.log(outlineColor[2]);
    
    return (
-      <div ref={ref} className="inline-flex flex-col w-full">
+      <div ref={ref} className="inline-flex flex-col w-full group">
          <label htmlFor={textFieldId} className={`bg-white w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
-         ${isClicked ? "label--position--click text-primary" : `label--position--base ${(type === TextFieldTypes.Search && !hasText) && "ml-6"}`}
-         ${(hasText || inputType === InputTypes.Date) ? "label--position--click text-onSurface" : "text-onSurface-variant"}`}>
+         ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base group-hover:${textLabelColor[3]} ${(type === TextFieldTypes.Search && !hasText) && "ml-6"}`}
+         ${(hasText || inputType === InputTypes.Date) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
             {label}
          </label>
             
-         <div className={`inline-flex relative items-center rounded outline font-sans font-normal text-base cursor-text caret-primary
-         ${isClicked ? "outline-2 outline-primary"  : "outline-1 outline-outline hover:outline-onSurface"}`}>
+         <div className={`inline-flex relative items-center rounded outline font-sans font-normal text-base cursor-text 
+         ${isError ? "caret-error" : "caret-primary"}
+         ${isClicked ? `outline-2 ${outlineColor[1]}` : `outline-1 ${outlineColor[0]} group-hover:${outlineColor[2]}`}`}>
 
             {type === TextFieldTypes.Search && <svg className="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                <path d="M19.6 21L13.3 14.7C12.8 15.1 12.225 15.4167 11.575 15.65C10.925 15.8833 10.2333 16 9.5 16C7.68333 16 6.14583 15.3708 4.8875 14.1125C3.62917 12.8542 3 11.3167 3 9.5C3 7.68333 3.62917 6.14583 4.8875 4.8875C6.14583 3.62917 7.68333 3 9.5 3C11.3167 3 12.8542 3.62917 14.1125 4.8875C15.3708 6.14583 16 7.68333 16 9.5C16 10.2333 15.8833 10.925 15.65 11.575C15.4167 12.225 15.1 12.8 14.7 13.3L21 19.6L19.6 21ZM9.5 14C10.75 14 11.8125 13.5625 12.6875 12.6875C13.5625 11.8125 14 10.75 14 9.5C14 8.25 13.5625 7.1875 12.6875 6.3125C11.8125 5.4375 10.75 5 9.5 5C8.25 5 7.1875 5.4375 6.3125 6.3125C5.4375 7.1875 5 8.25 5 9.5C5 10.75 5.4375 11.8125 6.3125 12.6875C7.1875 13.5625 8.25 14 9.5 14Z" fill="#45454E"/>
@@ -99,7 +105,7 @@ export const TextField = ({
                </svg>
             </div>}
          </div>
-         {(supportiveText && notMenu) && <p className="ml-4 mt-1 text-onSurface-variant text-sm">{supportiveText}</p>}
+         {(supportiveText && notMenu) && <p className={`ml-4 mt-1 text-onSurface-variant text-sm ${isError ? "text-error" : ""}`}>{supportiveText}</p>}
          
          {(type === TextFieldTypes.Menu && isClicked)  && <Menu 
             text={value} 
