@@ -3,6 +3,7 @@ package com.bankaccount.back.web;
 import com.bankaccount.back.domain.event.RegistrationCompleteEvent;
 import com.bankaccount.back.domain.service.AccountService;
 import com.bankaccount.back.domain.service.TokenService;
+import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.VerificationToken;
 import com.bankaccount.back.web.config.JwtUtil;
@@ -18,9 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,7 +48,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping(value = "/login", consumes = {"application/json"})
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password());
         Authentication authentication = authenticationManager.authenticate(login);
         String jwt = jwtUtil.create(loginDto.email());
@@ -54,7 +57,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register", consumes = {"application/json"})
-    public ResponseEntity<String> registerAccount(@RequestBody AccountDto accountDto, final HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> registerAccount(@RequestBody @Valid AccountDto accountDto, final HttpServletRequest request) throws NotAllowedException {
         if (!accountDto.password().equals(accountDto.matchingPassword())) {
             return new ResponseEntity<>("Passwords don't match", HttpStatus.BAD_REQUEST);
         }
@@ -90,7 +93,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    public String resetPassword(@RequestBody PasswordDto passwordDto, HttpServletRequest request) {
+    public String resetPassword(@RequestBody @Valid PasswordDto passwordDto, HttpServletRequest request) {
         Optional<AccountEntity> optionalAccount = accountService.getAccountByEmail(passwordDto.email());
 
         String url = "";
@@ -107,7 +110,7 @@ public class AuthController {
     }
 
     @PostMapping("/save-password")
-    private String savePassword(@RequestParam("token") String token, @RequestBody PasswordDto passwordDto) {
+    private String savePassword(@RequestParam("token") String token, @RequestBody @Valid PasswordDto passwordDto) {
         String result = tokenService.validatePasswordResetToken(token);
         if (!result.equalsIgnoreCase("valid")) {
             return "Invalid token";
@@ -123,7 +126,7 @@ public class AuthController {
     }
 
     @PostMapping("/change-password")
-    public String changePassword(@RequestBody PasswordDto passwordDto) {
+    public String changePassword(@RequestBody @Valid PasswordDto passwordDto) {
         Optional<AccountEntity> accountEntity = accountService.getAccountByEmail(passwordDto.email());
 
         if (accountEntity.isPresent()) {

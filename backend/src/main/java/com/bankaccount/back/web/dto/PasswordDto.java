@@ -1,7 +1,10 @@
 package com.bankaccount.back.web.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public record PasswordDto(
-        String email,
-        String oldPassword,
-        String newPassword
+        @Email String email,
+        @NotBlank String oldPassword,
+        @NotBlank String newPassword
 ) {}

@@ -1,6 +1,9 @@
 package com.bankaccount.back.domain.service;
 
+import com.bankaccount.back.domain.repository.AccountRepository;
 import com.bankaccount.back.domain.repository.AutomationRepository;
+import com.bankaccount.back.exception.NotFoundException;
+import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.AutomationEntity;
 import com.bankaccount.back.helpers.AutomationHelper;
 import com.bankaccount.back.web.dto.AutomationDto;
@@ -20,6 +23,9 @@ public class AutomationService {
     @Autowired
     private AutomationHelper automationHelper;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     public Optional<AutomationEntity> getAutomationById(long id) {
         return automationRepository.getAutomationById(id);
     }
@@ -32,11 +38,17 @@ public class AutomationService {
 
     public void updateStatusById(boolean status, long id) {
         automationRepository.updateStatusById(status, id);
+
+        if (status) automationRepository.updateExecutionTimeById(LocalDateTime.now(), id);
     }
 
-    public AutomationEntity saveAutomation(AutomationDto automationDto) {
-        LocalDateTime localDateTime = LocalDateTime.now().plusHours(automationDto.hoursToNextExecution());
+    public AutomationEntity saveAutomation(AutomationDto automationDto) throws NotFoundException {
+        Optional<AccountEntity> isAccount = accountRepository.getAccountById(automationDto.idAccount());
+        Optional<AccountEntity> isAccountTransfer = accountRepository.getAccountById(automationDto.idTransferAccount());
 
+        if (isAccount.isEmpty() || isAccountTransfer.isEmpty()) throw new NotFoundException("Account not found");
+
+        LocalDateTime localDateTime = LocalDateTime.now().plusHours(automationDto.hoursToNextExecution());
 
         AutomationEntity automationEntity = AutomationEntity.builder()
                 .idAccount(automationDto.idAccount())

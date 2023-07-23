@@ -2,14 +2,17 @@ package com.bankaccount.back.web;
 
 import com.bankaccount.back.domain.service.TransactionService;
 import com.bankaccount.back.domain.service.TransactionTypeService;
+import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
 import com.bankaccount.back.web.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,10 +33,14 @@ public class TransactionController {
     }
 
     @GetMapping("/account")
-    public ResponseEntity<Page<TransactionEntity>> getByIdAccount(@RequestParam(name = "id") int idAccount, @RequestParam int page) {
-        return transactionService.getByIdAccount(idAccount, page)
-                .map(transaction -> new ResponseEntity<>(transaction, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Page<TransactionEntity>> getByIdAccount(@RequestParam(name = "id") int idAccount, @RequestParam int page) throws NotFoundException {
+        Page<TransactionEntity> pageable = transactionService.getByIdAccount(idAccount, page).get();
+
+        if (!pageable.isEmpty()) {
+            return new ResponseEntity<>(pageable, HttpStatus.OK);
+        }
+
+        throw new NotFoundException("Transactions not found");
     }
 
     @GetMapping("/year")
@@ -47,11 +54,7 @@ public class TransactionController {
     }
 
     @PostMapping(value = "/save", consumes = {"application/json"})
-    public ResponseEntity<?> saveDepositTransaction(@RequestBody TransactionDto transactionDto) throws Exception {
-        try {
-            return new ResponseEntity<>(transactionTypeService.saveTransaction(transactionDto, false), HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> saveDepositTransaction(@RequestBody @Valid TransactionDto transactionDto) throws Exception {
+        return new ResponseEntity<>(transactionTypeService.saveTransaction(transactionDto, false), HttpStatus.CREATED);
     }
 }

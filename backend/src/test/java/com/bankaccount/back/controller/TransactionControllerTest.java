@@ -167,13 +167,6 @@ public class TransactionControllerTest {
                         .andExpect(jsonPath("$.content[2].transactionType")
                                 .value(transactionEntityList.get(2).getTransactionType().toString())),
 
-                () -> mockMvc.perform(get("/transactions/account")
-                                .param("id", "5435")
-                                .param("page", "0")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .with(user("user").roles(USER)))
-                        .andExpect(status().isNotFound()),
-
                 () -> mockMvc.perform(get("/transactions/account/885748")
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnauthorized())

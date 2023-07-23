@@ -1,7 +1,10 @@
 package com.bankaccount.back.service;
 
+import com.bankaccount.back.domain.repository.AccountRepository;
 import com.bankaccount.back.domain.repository.AutomationRepository;
 import com.bankaccount.back.domain.service.AutomationService;
+import com.bankaccount.back.exception.NotFoundException;
+import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.AutomationEntity;
 import com.bankaccount.back.web.dto.AutomationDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("dev")
@@ -33,6 +35,9 @@ public class AutomationServiceTest {
 
     @MockBean
     private AutomationRepository automationRepository;
+
+    @MockBean
+    private AccountRepository accountRepository;
 
     private List<AutomationEntity> automationEntityList;
 
@@ -114,19 +119,31 @@ public class AutomationServiceTest {
     void updateStatusById() {
         Mockito.doNothing().when(automationRepository).updateStatusById(Mockito.isA(Boolean.class), Mockito.isA(Long.class));
 
-        automationService.updateStatusById(false, 76L);
+        automationService.updateStatusById(true, 76L);
 
-        Mockito.verify(automationRepository, Mockito.times(1)).updateStatusById(false, 76L);
+        assertAll(
+                () -> Mockito.verify(automationRepository, Mockito.times(1)).updateStatusById(true, 76L),
+                () -> Mockito.verify(automationRepository, Mockito.times(1))
+                        .updateExecutionTimeById(Mockito.any(LocalDateTime.class), Mockito.eq(76L))
+        );
     }
 
     @Test
     @DisplayName("Should convert one automationDto to automationEntity to send to the repository and return it")
-    public void saveAutomation() {
+    public void saveAutomation() throws NotFoundException {
         AutomationDto automationDto = new AutomationDto(
                 54,
                 "For testing",
                 new BigDecimal("4324.43"),
                 321,
+                213
+        );
+
+        AutomationDto automationError = new AutomationDto(
+                2,
+                "For testing",
+                new BigDecimal("4324.43"),
+                765,
                 213
         );
 
@@ -141,16 +158,29 @@ public class AutomationServiceTest {
                 .status(true)
                 .build();
 
+        Mockito.when(accountRepository.getAccountById(54))
+                .thenReturn(Optional.of(AccountEntity.builder().build()));
+
+        Mockito.when(accountRepository.getAccountById(321))
+                .thenReturn(Optional.of(AccountEntity.builder().build()));
+
         Mockito.when(automationRepository.saveAutomation(ArgumentMatchers.any())).thenReturn(automationEntity);
 
         AutomationEntity automationSave = automationService.saveAutomation(automationDto);
+
+        Exception exception = assertThrows(NotFoundException.class, () ->
+                automationService.saveAutomation(automationError));
+
+        String expectedMessage = "Account not found";
+        String actualMessage = exception.getMessage();
 
         assertAll(
                 () -> assertThat(automationSave.getIdAccount()).isEqualTo(automationDto.idAccount()),
                 () -> assertThat(automationSave.getName()).isEqualTo(automationDto.name()),
                 () -> assertThat(automationSave.getAmount()).isEqualTo(automationDto.amount()),
                 () -> assertThat(automationSave.getIdTransferAccount()).isEqualTo(automationDto.idTransferAccount()),
-                () -> assertThat(automationSave.getHoursToNextExecution()).isEqualTo(automationDto.hoursToNextExecution())
+                () -> assertThat(automationSave.getHoursToNextExecution()).isEqualTo(automationDto.hoursToNextExecution()),
+                () -> assertTrue(actualMessage.contentEquals(expectedMessage))
         );
     }
 }

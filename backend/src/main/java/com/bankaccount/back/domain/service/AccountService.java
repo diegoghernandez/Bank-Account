@@ -1,16 +1,13 @@
 package com.bankaccount.back.domain.service;
 
-import com.bankaccount.back.constants.AccountRoles;
-import com.bankaccount.back.domain.AccountDomain;
 import com.bankaccount.back.domain.repository.AccountRepository;
+import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.persistence.entity.AccountEntity;
-import com.bankaccount.back.persistence.entity.AccountRoleEntity;
 import com.bankaccount.back.web.dto.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,9 +27,9 @@ public class AccountService {
         return accountRepository.getAccountByEmail(email);
     }
 
-    public AccountEntity saveAccount(AccountDto accountDto) throws Exception {
+    public AccountEntity saveAccount(AccountDto accountDto) throws NotAllowedException {
         if (accountRepository.emailExist(accountDto.email())) {
-            throw new Exception("There is an account with that email address: " + accountDto.email());
+            throw new NotAllowedException("There is an account with that email address: " + accountDto.email());
         }
         AccountEntity accountEntity = AccountEntity.builder()
                 .idAccount(idGenerator())

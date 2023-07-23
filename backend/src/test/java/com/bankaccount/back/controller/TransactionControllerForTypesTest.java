@@ -82,33 +82,6 @@ public class TransactionControllerForTypesTest {
     }
 
     @Test
-    @DisplayName("Should throw an error if doesn't get any id account")
-    void getIdAccountException() throws Exception {
-        TransactionDto transactionDto = new TransactionDto(
-                0,
-                0,
-                new BigDecimal("3245523.00"),
-                TransactionType.DEPOSIT
-        );
-
-        Mockito.when(transactionTypeService.saveTransaction(transactionDto, false))
-                .thenThrow(new Exception());
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        assertAll(
-                () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/save")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(transactionDto))
-                                .with(user("user").roles(USER))
-                                .with(csrf()))
-                        .andExpect(status().isNotFound())
-        );
-    }
-
-    @Test
     @DisplayName("Should save one DEPOSIT transactionDto in json format using the service or return an unauthorized if doesn't have permission")
     void saveDepositTransaction() throws Exception {
         Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(0), false))

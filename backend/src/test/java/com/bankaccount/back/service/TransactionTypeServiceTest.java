@@ -1,10 +1,10 @@
 package com.bankaccount.back.service;
 
 import com.bankaccount.back.constants.TransactionType;
-import com.bankaccount.back.domain.AccountDomain;
 import com.bankaccount.back.domain.repository.AccountRepository;
 import com.bankaccount.back.domain.repository.TransactionRepository;
 import com.bankaccount.back.domain.service.TransactionTypeService;
+import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
 import com.bankaccount.back.web.dto.TransactionDto;
@@ -38,11 +38,9 @@ public class TransactionTypeServiceTest {
     @MockBean
     private AccountRepository accountRepository;
 
-    private TransactionDto transactionDto;
-
-    private TransactionDto transactionError;
-
     TransactionEntity.TransactionEntityBuilder transactionEntity = TransactionEntity.builder();
+
+    private TransactionDto transactionDto;
 
     @BeforeEach
     void setUp() {
@@ -77,9 +75,42 @@ public class TransactionTypeServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw an NotFoundException if the account doesn't exist")
+    void getAccountError() throws Exception {
+        TransactionDto transactionAccountError = new TransactionDto(
+                432,
+                321,
+                new BigDecimal("1.11"),
+                TransactionType.ONLINE_PAYMENT);
+
+        TransactionDto transactionTransferError = new TransactionDto(
+                87658,
+                365421,
+                new BigDecimal("1.11"),
+                TransactionType.ONLINE_PAYMENT);
+
+        Exception exceptionAccount = assertThrows(NotFoundException.class, () ->
+                transactionTypeService.saveTransaction(transactionAccountError, false));
+
+        Exception exceptionTransfer = assertThrows(NotFoundException.class, () ->
+                transactionTypeService.saveTransaction(transactionTransferError, false));
+
+        String expectedAccountMessage = "Account not found 432";
+        String actualAccountMessage = exceptionAccount.getMessage();
+
+        String expectedTransferMessage = "Account to transfer not found 365421";
+        String actualTransferMessage = exceptionTransfer.getMessage();
+
+        assertAll(
+                () -> assertTrue(actualAccountMessage.contentEquals(expectedAccountMessage)),
+                () -> assertTrue(actualTransferMessage.contentEquals(expectedTransferMessage))
+        );
+    }
+
+    @Test
     @DisplayName("Should throw an exception if the account doesn't have enough money to do the transaction")
     void getBalanceError() throws Exception {
-        transactionError = new TransactionDto(
+        TransactionDto transactionError = new TransactionDto(
                 87658,
                 321,
                 new BigDecimal("30000.45"),
@@ -94,7 +125,7 @@ public class TransactionTypeServiceTest {
         assertTrue(actualMessage.contentEquals(expectedMessage));
     }
 
-    @Test
+        @Test
     @DisplayName("Should convert one transactionDto to transactionEntity with DEPOSIT type to repository and return one transactionDto and add to account's current balance")
     void saveDepositTransaction() throws Exception {
         transactionDto = new TransactionDto(

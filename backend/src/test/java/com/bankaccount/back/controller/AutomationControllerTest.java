@@ -2,6 +2,7 @@ package com.bankaccount.back.controller;
 
 import com.bankaccount.back.constants.AccountRoles;
 import com.bankaccount.back.domain.service.AutomationService;
+import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.persistence.entity.AutomationEntity;
 import com.bankaccount.back.web.AutomationController;
 import com.bankaccount.back.web.config.JwtUtil;
@@ -216,7 +217,7 @@ public class AutomationControllerTest {
 
     @Test
     @DisplayName("Should return one automationDto using the service or return an unauthorized if doesn't have permission")
-    void saveAutomation() {
+    void saveAutomation() throws NotFoundException {
         AutomationDto automationDto = new AutomationDto(
                 234,
                 "New fr fr",
