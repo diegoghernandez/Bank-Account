@@ -60,7 +60,7 @@ public class TransactionTypeService {
                 BigDecimal currentBalance = account.getCurrentBalance();
 
                 if (currentBalance.compareTo(amount) < 0) {
-                    throw new NotAllowedException("Not enough balance");
+                    throw new NotAllowedException("amount", "Not enough balance");
                 } else {
                     currentBalance = currentBalance.subtract(amount);
 

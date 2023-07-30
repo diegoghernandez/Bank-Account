@@ -8,11 +8,10 @@ describe("Auth tests", () => {
       });
 
       it("Should throw an StatusError if the credentials are incorrect", async () => {
-         const exception = await login("error@user.com", "1234");
-
-         expect(exception).toBeInstanceOf(StatusError);
-         expect(exception.message).toStrictEqual("Incorrect authentication credentials");
-         expect(exception.status).toStrictEqual(403);
+         await expect(login("error@user.com", "1234"))
+            .rejects.toThrow(StatusError);
+         await expect(login("error@user.com", "1234"))
+            .rejects.toThrow("Incorrect authentication credentials");
       });
 
       it("Should save the right content", async () => {

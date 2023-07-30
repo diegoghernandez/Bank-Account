@@ -116,15 +116,24 @@ public class AutomationServiceTest {
 
     @Test
     @DisplayName("Should update the status of an automationEntity by id using the repository")
-    void updateStatusById() {
+    void updateStatusById() throws NotFoundException {
+        Mockito.when(automationRepository.getAutomationById(76L))
+                .thenReturn(Optional.of(AutomationEntity.builder().build()));
         Mockito.doNothing().when(automationRepository).updateStatusById(Mockito.isA(Boolean.class), Mockito.isA(Long.class));
 
         automationService.updateStatusById(true, 76L);
 
+        Exception exception = assertThrows(NotFoundException.class, () ->
+                automationService.updateStatusById(false, 23L));
+
+        String expectedMessage = "Automation not found 23";
+        String actualMessage = exception.getMessage();
+
         assertAll(
                 () -> Mockito.verify(automationRepository, Mockito.times(1)).updateStatusById(true, 76L),
                 () -> Mockito.verify(automationRepository, Mockito.times(1))
-                        .updateExecutionTimeById(Mockito.any(LocalDateTime.class), Mockito.eq(76L))
+                        .updateExecutionTimeById(Mockito.any(LocalDateTime.class), Mockito.eq(76L)),
+                () -> assertTrue(actualMessage.contentEquals(expectedMessage))
         );
     }
 

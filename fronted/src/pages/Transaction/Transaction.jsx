@@ -8,24 +8,26 @@ import { saveTransaction } from "../_services/transactions";
 import { useState } from "react";
 
 export const Transaction = () => {
-   const handleSubmit = async (event) => {
-      const { idAccount, email } = JSON.parse(localStorage.getItem("account"));
-      const elements = [];
+   const [error, setError] = useState({});
 
+   const handleSubmit = (event) => {
       event.preventDefault();
 
-      for (const target of event.target) {
-         if (target.value) {
-            elements.push(target.value);
-         }
-      }
+      const { idAccount, email } = JSON.parse(localStorage.getItem("account"));
+      const elements = event.target;
 
-      saveTransaction({
-         idAccount,
-         "idTransferAccount": Number(elements[2]),
-         "amount": Number(elements[1]),
-         "transactionType": elements[0]
-      }, email)
+      if (!elements[0].value) setError({type: "You must choose one"});
+      else {
+         saveTransaction({
+            idAccount,
+            "idTransferAccount": Number(elements[2].value),
+            "amount": Number(elements[1].value),
+            "transactionType": elements[0].value
+         }, email).catch((e) => {
+            const message = (JSON.parse(e.message));
+            setError(message);
+         });
+      }
    };
 
    return (
@@ -39,17 +41,22 @@ export const Transaction = () => {
                label="Transaction Type"
                type={TextFieldTypes.Menu}
                inputType={InputTypes.Text}
+               supportiveText={error.type}
+               isError={error.type}
             />
             <TextField
                label="Amount"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Number}
+               supportiveText={error.amount}
+               isError={error.amount}
             />
             <TextField
                label="Account to transfer"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Number}
-               supportiveText="Add the nine account numbers"
+               supportiveText={error.desc}
+               isError={error.desc}
             />
             <Filled label="Make transaction" />
          </form>

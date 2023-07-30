@@ -3,7 +3,6 @@ import { Card } from "../../components/Card/Card";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { Page } from "../../constants/Page";
 import { getAutomations } from "../_services/automation";
-import { StatusError } from "../../errors/StatusError";
 import { Fab } from "../../components/Buttons/FAB/FAB";
 import { Link } from "react-router-dom";
 
@@ -16,8 +15,10 @@ export const Home = () => {
    useEffect(() => {
       getAutomations(account.idAccount, account.email)
          .then((data) => {
-            if (data instanceof StatusError) setNotFound(true);
-            else setAutomations(data, ...automations);
+            setAutomations(data, ...automations);
+            setNotFound(false);
+         }).catch(() => {
+            setNotFound(true);
          });
    }, []);
 

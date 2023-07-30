@@ -29,7 +29,7 @@ public class AccountService {
 
     public AccountEntity saveAccount(AccountDto accountDto) throws NotAllowedException {
         if (accountRepository.emailExist(accountDto.email())) {
-            throw new NotAllowedException("There is an account with that email address: " + accountDto.email());
+            throw new NotAllowedException("email", "There is an account with that email address: " + accountDto.email());
         }
         AccountEntity accountEntity = AccountEntity.builder()
                 .idAccount(idGenerator())

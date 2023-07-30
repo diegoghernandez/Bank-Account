@@ -7,7 +7,6 @@ import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Link } from "react-router-dom";
-import { StatusError } from "../../errors/StatusError";
 import { getAutomations } from "../_services/automation";
 
 export const Automations = () => {
@@ -20,8 +19,10 @@ export const Automations = () => {
    useEffect(() => {
       getAutomations(idAccount, email)
          .then((data) => {
-            if (data instanceof StatusError) setNotFound(true);
-            else setAutomations(data, ...automations);
+            setAutomations(data, ...automations);
+            setNotFound(false);
+         }).catch(() => {
+            setNotFound(true);
          });
    }, []);
 
@@ -61,6 +62,7 @@ export const Automations = () => {
                      name={automation.name}
                      money={automation.amount}
                      period={automation.executionTime}
+                     disable={automation.status}
                   />
                );
             })}

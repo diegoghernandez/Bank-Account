@@ -27,7 +27,7 @@ public class AutomationController {
     }
 
     @GetMapping("/account")
-    public ResponseEntity<List<AutomationEntity>> getByIdAccount(@RequestParam(name = "id") int idAccount) throws Exception {
+    public ResponseEntity<List<AutomationEntity>> getByIdAccount(@RequestParam(name = "id") int idAccount) {
         List<AutomationEntity> automationList = automationService.getByIdAccount(idAccount);
 
         if (!automationList.isEmpty()) {
@@ -37,7 +37,7 @@ public class AutomationController {
     }
 
     @PutMapping("/status")
-    public ResponseEntity<Void> updateStatusById(@RequestParam boolean status, @RequestParam long id) {
+    public ResponseEntity<Void> updateStatusById(@RequestParam boolean status, @RequestParam long id) throws NotFoundException {
         automationService.updateStatusById(status, id);
 
         return new ResponseEntity<>(HttpStatus.OK);

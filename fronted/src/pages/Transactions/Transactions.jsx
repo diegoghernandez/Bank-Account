@@ -5,7 +5,6 @@ import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { getTransactions } from "../_services/transactions";
-import { StatusError } from "../../errors/StatusError";
 
 export const Transactions = () => {
    const [transactions, setTransactions] = useState([]);
@@ -17,12 +16,13 @@ export const Transactions = () => {
    useEffect(() => {
       getTransactions(idAccount, page)
          .then(({content, last}) => {
-            if (content instanceof StatusError) setNotFound(true);
-            else {
-               setTransactions([...transactions, content].flat());  
-               if (last) globalThis.removeEventListener("scrollend", () => setPage(page + 1))
-               else globalThis.addEventListener("scrollend", () => setPage(page + 1));
-            } 
+            setTransactions([...transactions, content].flat());  
+            setNotFound(false);
+            
+            if (last) globalThis.removeEventListener("scrollend", () => setPage(page + 1))
+            else globalThis.addEventListener("scrollend", () => setPage(page + 1));
+         }).catch(() => {
+            setNotFound(true);
          });
    }, [page]);
 

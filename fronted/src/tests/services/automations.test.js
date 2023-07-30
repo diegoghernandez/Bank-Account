@@ -35,11 +35,10 @@ describe("Automations tests", () => {
       });
 
       it("Should throw an StatusError if there is no element", async () => {         
-         const exception = await getAutomations(21);
-
-         expect(exception).toBeInstanceOf(StatusError);
-         expect(exception.message).toStrictEqual("No automations found");
-         expect(exception.status).toStrictEqual(404);
+         await expect(getAutomations(21))
+            .rejects.toThrow(StatusError);
+         await expect(getAutomations(21))
+            .rejects.toThrow("No automations found");
       });
 
       it("Should give the right content", async () => {
@@ -54,11 +53,10 @@ describe("Automations tests", () => {
       });
 
       it("Should throw an StatusError if there is no element", async () => {
-         const exception = await updateStatus(21, true);
-
-         expect(exception).toBeInstanceOf(StatusError);
-         expect(exception.message).toStrictEqual("No automations found");
-         expect(exception.status).toStrictEqual(404);
+         await expect(updateStatus(21, true))
+            .rejects.toThrow(StatusError);
+         await expect(updateStatus(21, true))
+            .rejects.toThrow("No automations found");
       });
 
       it("Should give the right content", async () => {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class BankExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public Map<String, String> handleInvalidArgument(NotFoundException exception) {
         Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("error message", exception.getMessage());
+        errorMap.put("desc", exception.getMessage());
 
         return errorMap;
     }
@@ -38,7 +39,7 @@ public class BankExceptionHandler {
     @ExceptionHandler(NotAllowedException.class)
     public Map<String, String> handleInvalidArgument(NotAllowedException exception) {
         Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("error message", exception.getMessage());
+        errorMap.put(exception.getField(), exception.getMessage());
 
         return errorMap;
     }

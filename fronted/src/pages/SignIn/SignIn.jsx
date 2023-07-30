@@ -6,26 +6,28 @@ import { TextFieldTypes } from "../../constants/TextFieldType";
 import { useAuth } from "../../hooks/useAuth";
 import { getAccountData } from "../_services/account";
 import { login as logUser } from "../_services/auth";
-import { StatusError } from "../../errors/StatusError";
+import { useState } from "react";
 
 export const SignIn = () => {
    const { login } = useAuth();
    const navigate = useNavigate();
    const { state } = useLocation();
+   const [error, setError] = useState(null)
 
-   const handleSubmit = async (event) => {
+   const handleSubmit = (event) => {
       event.preventDefault();
       const email = event.target[0].value;
       const password = event.target[1].value;
       
       logUser(email, password)
          .then((token) => {
-            if (!(token instanceof StatusError)) {
-               localStorage.setItem("token", "Bearer " + token);
-               getAccountData(email);
-               login();
-               navigate(state?.location?.pathname ?? "/");
-            }
+            localStorage.setItem("token", "Bearer " + token);
+            getAccountData(email);
+            login();
+            navigate(state?.location?.pathname ?? "/");
+         }).catch((e) => {
+            const message = e.message;
+            setError(message);
          });
    };
 
@@ -40,11 +42,15 @@ export const SignIn = () => {
                label="Email"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Email}
+               supportiveText={error}
+               isError={error}
                />
             <TextField
                label="Password"
                type={TextFieldTypes.Default}
                inputType={InputTypes.Password}
+               supportiveText={error}
+               isError={error}
                />
             <Filled label="Sign In" />
          </form>

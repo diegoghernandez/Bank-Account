@@ -36,7 +36,6 @@ export const TextField = ({
 
    const textLabelColor = (isError) ? ["text-error", "text-error", "text-error", "text-on-error-container"] : ["text-primary", "text-onSurface", "text-onSurface-variant", "text-onSurface"];
    const outlineColor = (isError) ? ["outline-error", "outline-error", "outline-on-error-container"] : ["outline-outline", "outline-primary", "outline-onSurface"];
-   console.log(outlineColor[2]);
    
    return (
       <div ref={ref} className="inline-flex flex-col w-full group">
@@ -105,7 +104,7 @@ export const TextField = ({
                </svg>
             </div>}
          </div>
-         {(supportiveText && notMenu) && <p className={`ml-4 mt-1 text-onSurface-variant text-sm ${isError ? "text-error" : ""}`}>{supportiveText}</p>}
+         {(supportiveText) && <p className={`ml-4 mt-1 text-sm ${isError ? "text-error" : "text-onSurface-variant"}`}>{supportiveText}</p>}
          
          {(type === TextFieldTypes.Menu && isClicked)  && <Menu 
             text={value} 

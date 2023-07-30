@@ -36,7 +36,10 @@ public class AutomationService {
         return automationRepository.getByIdAccount(idAccount);
     }
 
-    public void updateStatusById(boolean status, long id) {
+    public void updateStatusById(boolean status, long id) throws NotFoundException {
+        Optional<AutomationEntity> isAccount = automationRepository.getAutomationById(id);
+        if (isAccount.isEmpty()) throw new NotFoundException("Automation not found " + id);
+
         automationRepository.updateStatusById(status, id);
 
         if (status) automationRepository.updateExecutionTimeById(LocalDateTime.now(), id);

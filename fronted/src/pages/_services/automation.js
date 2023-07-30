@@ -5,49 +5,40 @@ const API = "http://localhost:8090/automations";
 const TOKEN = localStorage.getItem("token");
 
 export const getAutomations = async (id, email) => {
-   try {
-      const response = await fetch(`${API}/account?id=${id}`, {
-         method: "GET",
-         headers: {
-            "Content-Type": "application/json",
-            "Authorization": TOKEN
-         }
-      });
-   
-      if (response.ok) {
-         getAccountData(email);
-         return await response.json();
-      } else {
-         throw new StatusError("No automations found", 404);
+   const response = await fetch(`${API}/account?id=${id}`, {
+      method: "GET",
+      headers: {
+         "Content-Type": "application/json",
+         "Authorization": TOKEN
       }
-   
-   } catch (error) {
-      return error;
+   });
+
+   if (response.ok) {
+      getAccountData(email);
+      return await response.json();
+   } else {
+      throw new StatusError("No automations found", 404);
    }
 }
 
 export const updateStatus = async (id, status) => {
-   try {
-      const response = await fetch(`${API}/status?id=${id}&status=${status}`, {
-         method: "PUT",
-         headers: {
-            "Content-Type": "application/json",
-            "Authorization": TOKEN
-         },
-      });
-   
-      if (response.ok) {
-         return "Update correctly";
-      } else {
-         throw new StatusError("No automations found", 404);
-      }
-   
-   } catch (error) {
-      return error;
+   const response = await fetch(`${API}/status?id=${id}&status=${status}`, {
+      method: "PUT",
+      headers: {
+         "Content-Type": "application/json",
+         "Authorization": TOKEN
+      },
+   });
+
+   if (response.ok) {
+      return "Update correctly";
+   } else {
+      throw new StatusError("No automations found", 404);
    }
 }
 
 export const saveAutomation = async (automation) => {
+   console.log(automation);
    const response = await fetch(`${API}/save`, {
       method: "POST",
       headers: {
@@ -56,5 +47,12 @@ export const saveAutomation = async (automation) => {
       },
       body: JSON.stringify(automation)
    });
-   return await response.json();
+
+   const data = await response.json();
+
+   if (response.ok) {
+      return data;
+   } else {
+      throw new StatusError(JSON.stringify(data), response.status);
+   }
 }

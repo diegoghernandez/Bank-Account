@@ -2,15 +2,44 @@ import { StatusError } from "../../errors/StatusError";
 import { getTransactions, getTransactionsByYear, saveTransaction } from "../../pages/_services/transactions";
 import transactions from "../../mocks/fixtures/transactions.json"
 
-const transaction = [{
-   "idTransaction": 1,
-   "idTransferAccount": 0,
-   "receiverName": "Random1",
-   "transactionAmount": 120.00,
-   "transactionType": "DEPOSIT",
-   "transactionTimestamp": "2023-06-26T21:02:13.374219",
-   "isAutomated": false
-}];
+const transaction = {
+   "content": [
+      {
+         "idTransaction": 1,
+         "idTransferAccount": 0,
+         "isAutomated": false,
+         "receiverName": "Random1",
+         "transactionAmount": 120,
+         "transactionTimestamp": "2023-06-26T21:02:13.374219",
+         "transactionType": "DEPOSIT",
+      },
+   ],
+   "empty": false,
+   "first": true,
+   "last": true,
+   "number": 0,
+   "numberOfElements": 1,
+   "pageable": {
+      "offset": 0,
+      "pageNumber": 0,
+      "pageSize": 10,
+      "paged": true,
+      "sort": {
+         "empty": true,
+         "sorted": false,
+         "unsorted": true,
+      },
+      "unpaged": false,
+   },
+   "size": 10,
+   "sort": {
+      "empty": true,
+      "sorted": false,
+      "unsorted": true,
+   },
+   "totalElements": 1,
+   "totalPages": 1,
+}
 
 describe("Transactions tests", () => {
    
@@ -21,11 +50,10 @@ describe("Transactions tests", () => {
       });
 
       it("Should throw an StatusError if there is no element", async () => {
-         const exception = await getTransactions(21, 3);
-
-         expect(exception).toBeInstanceOf(StatusError);
-         expect(exception.message).toStrictEqual("No transactions found");
-         expect(exception.status).toStrictEqual(404);
+         await expect(getTransactions(21, 3))
+            .rejects.toThrow(StatusError);
+         await expect(getTransactions(21, 3))
+            .rejects.toThrow("No transactions found");
       });
 
       it("Should give the right content", async () => {
@@ -41,11 +69,10 @@ describe("Transactions tests", () => {
       });
 
       it("Should throw an StatusError if there is no element", async () => {
-         const exception = await getTransactionsByYear(21, 2000);
-
-         expect(exception).toBeInstanceOf(StatusError);
-         expect(exception.message).toStrictEqual("No transactions found by 2000");
-         expect(exception.status).toStrictEqual(404);
+         await expect(getTransactionsByYear(21, 2000))
+            .rejects.toThrowError(StatusError);
+         await expect(getTransactionsByYear(21, 2000))
+            .rejects.toThrowError("No transactions found by 2000");
       });
 
       it("Should give the right content by year", async () => {
