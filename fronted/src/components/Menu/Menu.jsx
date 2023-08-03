@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import "./Menu.css"
 
 export const Menu = ({ 
@@ -7,7 +6,9 @@ export const Menu = ({
    setValue,
    handleClickOutside,
    setIsClicked,
-   setHasText
+   setHasText,
+   isChange,
+   setIsChange
 }) => {
    if (transactions) {
       const buttons = transactions.filter((transaction) => 
@@ -17,6 +18,7 @@ export const Menu = ({
                className="menu--state flex items-center w-auto h-12 px-3 text-onSurface text-sm font-sans font-medium"
                onClick={() => { 
                   setValue(type); 
+                  setIsChange(!isChange);
                }}
                onFocus={() => setIsClicked(true)}
             >{type}</button>
