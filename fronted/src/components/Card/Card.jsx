@@ -6,7 +6,7 @@ export const Card = ({
 }) => {
    return (
       <article className={`w-full h-full cursor-pointer group`} >
-         {disable && <div className="absolute w-[calc(100%-1.8rem)] h-[6.5rem] -translate-y-[0.11rem] -translate-x-[0.08rem] rounded-xl bg-surface-container/38"></div>}
+         {!disable && <div className="absolute w-[calc(100%-1.8rem)] h-[6.5rem] -translate-y-[0.11rem] -translate-x-[0.08rem] rounded-xl bg-surface-container/38"></div>}
          <div className="grid grid-cols-1 grid-rows-1 w-full pt-1 outline outline-1 rounded-xl outline-outline hover:bg-onSurface/8 focus:bg-onSurface/12 group-hover:bg-onSurface/8" tabIndex="1">
             <div className="w-full col-start-1 col-end-2 row-start-1 row-end-2 flex flex-col pl-4 pb-1 justify-end items-start">
                <h2 className="w-full text-2xl font-sans font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">{name}</h2>

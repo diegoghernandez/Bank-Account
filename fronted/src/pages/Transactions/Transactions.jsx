@@ -33,7 +33,7 @@ export const Transactions = () => {
       getTransactions(idAccount, page)
          .then(({content, last}) => {
             const modifiedContent = [];
-            const loopDates = [dates];
+            const loopDates = [dates].flat();
 
             for (const cont of content) {
                const newDate = getFormattedDate(cont.transactionTimestamp);
@@ -45,14 +45,14 @@ export const Transactions = () => {
                modifiedContent.push(cont);
             }
             
-            setDates([...dates, loopDates].flat());
+            setDates(loopDates);
             setTransactions([...transactions, modifiedContent].flat());  
             setNotFound(false);
             
             if (last) {
-               globalThis.removeEventListener("scrollend", () => setPage((page) => page + 1));
+               globalThis.removeEventListener("scrollend", () => setPage(page + 1));
                setLoading(false);
-            } else globalThis.addEventListener("scrollend", () => setPage((page) => page + 1));
+            } else globalThis.addEventListener("scrollend", () => setPage(page + 1));
          }).catch(() => {
             setNotFound(true);
             setLoading(false);
@@ -88,12 +88,12 @@ export const Transactions = () => {
          <h2 className="text-lg font-medium font-sans ml-4 underline">Transactions</h2>
          {notFound && <p>No automations found</p>}
          {transactions?.map((transaction) => {
-            const isTextName = transaction?.receiverName?.includes(textName);
+            const isTextName = transaction?.receiverName?.toLowerCase().includes(textName.toLowerCase());
             const isTextType = transaction?.transactionType?.includes(textType);
             return (
                <>
                   {(transaction?.date && !isTextName) &&
-                  <div key={transaction?.date} className="mt-3 pl-4 pb-1 border-b border-outline-variant ">
+                  <div key={transaction?.date} className="mt-3 pl-4 pb-1 border-b border-primary">
                      <h3 className="text-sm font-medium font-sans">{transaction?.date}</h3>
                   </div>
                   }

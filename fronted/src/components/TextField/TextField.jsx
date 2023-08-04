@@ -43,7 +43,7 @@ export const TextField = ({
    const outlineColor = (isError) ? ["outline-error", "outline-error", "outline-on-error-container"] : ["outline-outline", "outline-primary", "outline-onSurface"];
 
    useEffect(() => {
-      functionToUpdate();
+      functionToUpdate?.();
    }, [isChange]);
    
    return (
