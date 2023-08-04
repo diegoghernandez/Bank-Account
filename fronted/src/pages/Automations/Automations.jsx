@@ -29,7 +29,7 @@ const getTimePeriod = (hoursToNextExecution) => {
    else if (hours > 1)  text = text.concat(hours, " hours");
 
    return text;
-}
+};
 
 export const Automations = () => {
    const [status, setStatus] = useState("disabled");

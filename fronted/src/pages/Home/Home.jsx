@@ -6,6 +6,36 @@ import { getAutomations } from "../_services/automation";
 import { Fab } from "../../components/Buttons/FAB/FAB";
 import { Link } from "react-router-dom";
 
+const getTimePeriod = (executionTime) => {
+   const startTime = new Date().getTime();
+   const endTime = new Date(executionTime).getTime();
+
+   const hoursToNextExecution = (endTime - startTime) / (1000 * 60 * 60);
+   console.log(hoursToNextExecution);
+
+   /* return hoursToNextExecution; */
+
+   let hours = hoursToNextExecution.toPrecision(2);
+   let days = (hours / 24).toFixed();
+   let weeks = (days / 7 <! 1) ? (days / 7).toFixed() : 0;
+
+   hours = hours - (days * 24);
+   days = days - (weeks * 7);
+
+   let text = "Missing ";
+
+   if (weeks == 1)  text = text.concat(weeks, " week/");
+   else if (weeks > 1)  text = text.concat(weeks, " weeks/");
+   
+   if (days == 1) text = text.concat(days, " day/");
+   else if (days > 1)  text = text.concat(days, " days/");
+   
+   if (hours < 1)  text = text.concat(hours, " hour");
+   else if (hours > 1)  text = text.concat(hours, " hours");
+
+   return text;
+};
+
 export const Home = () => {
    const [automations, setAutomations] = useState([]);
    const [notFound, setNotFound] = useState(false); 
@@ -15,7 +45,7 @@ export const Home = () => {
    useEffect(() => {
       getAutomations(account.idAccount, account.email)
          .then((data) => {
-            setAutomations(data, ...automations);
+            setAutomations(data);
             setNotFound(false);
          }).catch(() => {
             setNotFound(true);
@@ -34,13 +64,15 @@ export const Home = () => {
          <div className="flex flex-col w-full gap-2">
             {notFound && <p>No automations found</p>}
             {automations?.map((automation) => {
+               console.log(automation.name);
                if (automation.status) {
                   return (
                      <Card 
                         key={automation.idAutomation}
                         name={automation.name}
                         money={automation.amount}
-                        period={automation.executionTime}
+                        period={getTimePeriod(automation.executionTime)}
+                        disable={automation.status}
                      />
                   );
                }
