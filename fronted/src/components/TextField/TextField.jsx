@@ -38,6 +38,7 @@ export const TextField = ({
 
    const transactionTypes = ["DEPOSIT", "ONLINE_PAYMENT", "WIRE_TRANSFER"];
    const notMenu = type !== TextFieldTypes.Menu;
+   const notModal = type !== TextFieldTypes.Modal;
 
    const textLabelColor = (isError) ? ["text-error", "text-error", "text-error", "text-on-error-container"] : ["text-primary", "text-onSurface", "text-onSurface-variant", "text-onSurface"];
    const outlineColor = (isError) ? ["outline-error", "outline-error", "outline-on-error-container"] : ["outline-outline", "outline-primary", "outline-onSurface"];

@@ -11,9 +11,6 @@ const getTimePeriod = (executionTime) => {
    const endTime = new Date(executionTime).getTime();
 
    const hoursToNextExecution = (endTime - startTime) / (1000 * 60 * 60);
-   console.log(hoursToNextExecution);
-
-   /* return hoursToNextExecution; */
 
    let hours = hoursToNextExecution.toPrecision(2);
    let days = (hours / 24).toFixed();
@@ -64,7 +61,6 @@ export const Home = () => {
          <div className="flex flex-col w-full gap-2">
             {notFound && <p>No automations found</p>}
             {automations?.map((automation) => {
-               console.log(automation.name);
                if (automation.status) {
                   return (
                      <Card 
