@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { InputTypes } from "../../constants/InputType";
 import { Menu } from "../Menu/Menu";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import "./TextField.css";
 import { useEffect } from "react";
+import { Modal } from "../Modal/Modal";
 
 export const TextField = ({
    label,
@@ -33,13 +34,19 @@ export const TextField = ({
    };
 
    const ref = useOutsideClick(handleClickOutside);
-
+   const dialogRef = useRef();
+   
+   const showModal = () => {
+      dialogRef.current.showModal();
+   }
+   
    const onClear = () => setValue("");
 
    const transactionTypes = ["DEPOSIT", "ONLINE_PAYMENT", "WIRE_TRANSFER"];
    const notMenu = type !== TextFieldTypes.Menu;
    const notModal = type !== TextFieldTypes.Modal;
 
+   const svgContainer = "bg-transparent flex justify-center items-center w-6 h-6 mr-3";
    const textLabelColor = (isError) ? ["text-error", "text-error", "text-error", "text-on-error-container"] : ["text-primary", "text-onSurface", "text-onSurface-variant", "text-onSurface"];
    const outlineColor = (isError) ? ["outline-error", "outline-error", "outline-on-error-container"] : ["outline-outline", "outline-primary", "outline-onSurface"];
 
@@ -71,13 +78,16 @@ export const TextField = ({
                ref={valueRef}
                autoComplete="off"
                onClick={() => {
-                  if (inputType !== InputTypes.Date) {
+                  if (!notModal) showModal(); 
+                  else {
                      handleClick();
                      setIsChange(!isChange);
-                  }
+                  } 
                }}
                onFocus={() => {
-                  if (notMenu) { 
+                  if (!notModal) {
+                     setIsClicked(false)
+                  }else if (notMenu) { 
                      setIsClicked(true)
                   } else {
                      handleClick();
@@ -93,7 +103,7 @@ export const TextField = ({
                onInput={(e) => setValue(e.target.value)}
             />
 
-            {(notMenu && inputType !== InputTypes.Date) && <svg 
+            {(notMenu && notModal) && <svg 
                   className={`mr-3 ${(isClicked || hasText) ? "fill-onSurface-variant cursor-pointer" : "fill-none"}`} width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   focusable="false"
@@ -106,16 +116,24 @@ export const TextField = ({
                <path d="M8.4 17L12 13.4L15.6 17L17 15.6L13.4 12L17 8.4L15.6 7L12 10.6L8.4 7L7 8.4L10.6 12L7 15.6L8.4 17ZM12 22C10.6167 22 9.31667 21.7375 8.1 21.2125C6.88333 20.6875 5.825 19.975 4.925 19.075C4.025 18.175 3.3125 17.1167 2.7875 15.9C2.2625 14.6833 2 13.3833 2 12C2 10.6167 2.2625 9.31667 2.7875 8.1C3.3125 6.88333 4.025 5.825 4.925 4.925C5.825 4.025 6.88333 3.3125 8.1 2.7875C9.31667 2.2625 10.6167 2 12 2C13.3833 2 14.6833 2.2625 15.9 2.7875C17.1167 3.3125 18.175 4.025 19.075 4.925C19.975 5.825 20.6875 6.88333 21.2125 8.1C21.7375 9.31667 22 10.6167 22 12C22 13.3833 21.7375 14.6833 21.2125 15.9C20.6875 17.1167 19.975 18.175 19.075 19.075C18.175 19.975 17.1167 20.6875 15.9 21.2125C14.6833 21.7375 13.3833 22 12 22ZM12 20C14.2333 20 16.125 19.225 17.675 17.675C19.225 16.125 20 14.2333 20 12C20 9.76667 19.225 7.875 17.675 6.325C16.125 4.775 14.2333 4 12 4C9.76667 4 7.875 4.775 6.325 6.325C4.775 7.875 4 9.76667 4 12C4 14.2333 4.775 16.125 6.325 17.675C7.875 19.225 9.76667 20 12 20Z"/>
             </svg>}
             
-            {(!notMenu && !isClicked) && <div className="bg-transparent flex justify-center items-center w-6 h-6 mr-3">
+            {(!notMenu && !isClicked) && <div className={svgContainer}>
                <svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5 5L0 0H10L5 5Z" fill="#1B1C1F"/>
                </svg>
             </div>}
-            {(!notMenu  && isClicked) && <div className="bg-transparent flex justify-center items-center w-6 h-6 mr-3">
+            {(!notMenu  && isClicked) && <div className={svgContainer}>
                <svg width="10" height="5" viewBox="0 0 10 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0 5L5 0L10 5H0Z" fill="#2563EB"/>
                </svg>
             </div>}
+
+            {!notModal && <svg className={svgContainer} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4H6C4.89543 4 4 4.89543 4 6Z" stroke="#45454E"/>
+               <path d="M7 7H15" stroke="#45454E"/>
+               <path d="M7 10H15" stroke="#45454E"/>
+               <path d="M7 13H15" stroke="#45454E"/>
+               <path d="M14 17C16.5234 17 17.0491 17 16.9965 17" stroke="#45454E"/>
+            </svg>}
          </div>
          {(supportiveText) && <p className={`ml-4 mt-1 text-sm ${isError ? "text-error" : "text-onSurface-variant"}`}>{supportiveText}</p>}
          
@@ -128,6 +146,18 @@ export const TextField = ({
             setIsClicked={setIsClicked}
             isChange={isChange}
             setIsChange={setIsChange}
+         />}
+
+         {!notModal && <Modal 
+            dialogRef={dialogRef}
+            title={label}
+            parameters={ {
+               year: [2015, 2016, 2017], 
+               month: ["December", "January", "February"], 
+               day: [1, 2, 3]
+            }}
+            setValue={setValue}
+            setHasText={setHasText}
          />}
       </div>
    );

@@ -2,11 +2,15 @@ import { useRef } from "react";
 import "./Modal.css"
 
 export const Modal = ({
+   dialogRef,
    title,
    parameters,
+   setValue,
+   setHasText
 }) => {
-   const dialogRef = useRef();
-   
+   const storyRef = useRef();
+
+
    const handleSubmit = (event) => {
       const values = [];
       for (const target of event.target) {
@@ -15,21 +19,22 @@ export const Modal = ({
          }
       }
 
-      console.log(values);
+      setValue?.(values);
    }
 
    const showModal = () => {
-      dialogRef.current.showModal();
+      storyRef.current.showModal();
    }
 
    const closeModal = () => {
-      dialogRef.current.close();
+      dialogRef?.current?.close();
+      storyRef?.current?.close();
    }
    
    return (
       <>
-         <button onClick={showModal}>Modal</button>
-         <dialog ref={dialogRef} className="w-72 p-0 shadow-md rounded-[1.75rem]">
+         {dialogRef === undefined && <button  onClick={showModal}>Modal</button>}
+         <dialog ref={dialogRef ?? storyRef} className="w-72 p-0 shadow-md rounded-[1.75rem]">
             <form 
                className="w-full flex flex-col justify-center items-center p-6"
                onSubmit={handleSubmit}
@@ -59,7 +64,11 @@ export const Modal = ({
                      onClick={closeModal}
                      className="text-sm font-medium font-sans text-primary"
                   >Cancel</button>
-                  <button className="text-sm font-medium font-sans text-primary">Accept</button>
+                  <button 
+                     type="submit"
+                     onClick={() => setHasText?.(true)} 
+                     className="text-sm font-medium font-sans text-primary"
+                  >Accept</button>
                </div>
             </form>
          </dialog>
