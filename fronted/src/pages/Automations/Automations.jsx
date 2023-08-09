@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Fab } from "../../components/Buttons/FAB/FAB";
 import { Card } from "../../components/Card/Card";
 import { Navbar } from "../../components/Navbar/Navbar";
-import { Switch } from "../../components/Switch/Switch";
 import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
@@ -12,7 +11,7 @@ import { getAutomations } from "../_services/automation";
 const getTimePeriod = (hoursToNextExecution) => {
    let hours = hoursToNextExecution;
    let days = (hours / 24).toFixed();
-   let weeks = (days / 7 <! 1) ? (days / 7).toFixed() : 0;
+   let weeks = (days / 7 > 1) ? (days / 7).toFixed() : 0;
 
    hours = hours - (days * 24);
    days = days - (weeks * 7);
@@ -32,11 +31,12 @@ const getTimePeriod = (hoursToNextExecution) => {
 };
 
 export const Automations = () => {
-   const [status, setStatus] = useState("disabled");
+   const [status, setStatus] = useState("");
    const [automations, setAutomations] = useState([]);
    const [notFound, setNotFound] = useState(false); 
    const [text, setText] = useState("");
 
+   const typeReference = useRef();
    const textReference = useRef();
 
    const { idAccount, email } = JSON.parse(localStorage.getItem("account"));
@@ -53,10 +53,7 @@ export const Automations = () => {
 
    const handleChange = () => {
       setText(textReference.current?.value);
-
-      if (status !== "default") {
-         setStatus("default");
-      }
+      setStatus(typeReference.current?.value);
    }
 
 
@@ -66,24 +63,34 @@ export const Automations = () => {
             className="flex flex-col gap-3"
             onChange={handleChange}   
          >
+            <TextField
+               label="Transaction Type"
+               type={TextFieldTypes.Menu}
+               valueRef={typeReference}
+               functionToUpdate={handleChange}
+               menuParameters={["Active", "Disabled"]}
+            />
             <TextField 
                label="Name"
                type = {TextFieldTypes.Search}
                valueRef={textReference}
                functionToUpdate={handleChange}
             />
-            <Switch
-               label="Automation status"
-               status={status}
-               selected={false}
-            />
          </form>
 
          <div className="flex flex-col w-full gap-2">
             {notFound && <p>No automations found</p>}
             {automations?.map((automation) => {
+               const isTextName = automation.name.toLowerCase().includes(text.toLowerCase());
+               let isTextType = true;
+
+               if (status) {
+                  isTextType = status === "Active" 
+                     ? automation.status === true 
+                     : automation.status === false;
+               }
                return (
-                  automation.name.toLowerCase().includes(text.toLowerCase()) &&
+                  (isTextName && isTextType) &&
                   <Card 
                      key={automation.idAutomation}
                      name={automation.name}
