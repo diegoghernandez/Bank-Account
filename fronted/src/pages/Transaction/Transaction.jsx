@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled/Filled";
 import { Outline } from "../../components/Buttons/Outline/Outline";
 import { TextField } from "../../components/TextField/TextField";
@@ -9,6 +9,8 @@ import { useState } from "react";
 
 export const Transaction = () => {
    const [error, setError] = useState({});
+   const navigate = useNavigate();
+   const { state } = useLocation();
 
    const handleSubmit = (event) => {
       event.preventDefault();
@@ -23,7 +25,8 @@ export const Transaction = () => {
             "idTransferAccount": Number(elements[2].value),
             "amount": Number(elements[1].value),
             "transactionType": elements[0].value
-         }, email).catch((e) => {
+         }, email).then(() => navigate(state?.location?.pathname ?? "/"))
+         .catch((e) => {
             const message = (JSON.parse(e.message));
             setError(message);
          });

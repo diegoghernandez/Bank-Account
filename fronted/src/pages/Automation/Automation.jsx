@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled/Filled";
 import { Outline } from "../../components/Buttons/Outline/Outline";
 import { TextField } from "../../components/TextField/TextField";
@@ -9,20 +9,25 @@ import { useState } from "react";
 
 export const Automation = () => {
    const [error, setError] = useState({});
+   const navigate = useNavigate();
+   const { state } = useLocation();
 
    const handleSubmit = (event) => {
       event.preventDefault()
 
       const { idAccount } = JSON.parse(localStorage.getItem("account"));
       const elements = event.target;
+      
+      const hours = Number(elements[3].value.split(" ")[1]);
 
       saveAutomation({
          idAccount,
          "name": elements[0].value,
          "amount": Number(elements[1].value),
          "idTransferAccount": Number(elements[2].value),
-         "hoursToNextExecution": Number(elements[3].value),
-      }).catch((e) => {
+         "hoursToNextExecution": hours,
+      }).then(() => navigate(state?.location?.pathname ?? "/"))
+      .catch((e) => {
          const message = (JSON.parse(e.message));
          setError(message);
       });
@@ -58,10 +63,15 @@ export const Automation = () => {
             />
             <TextField
                label="Period of time"
-               type={TextFieldTypes.Default}
-               inputType={InputTypes.Date}
+               type={TextFieldTypes.Modal}
+               inputType={InputTypes.Text}
                isError={error.hoursToNextExecution}
                supportiveText={error.hoursToNextExecution}
+               modalParameters={{
+                  weeks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+                  days: [0, 1, 2, 3, 4, 5, 6],
+                  hours: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+               }}
             />
             <Filled label="Make automation" />
          </form>

@@ -38,7 +38,6 @@ export const updateStatus = async (id, status) => {
 }
 
 export const saveAutomation = async (automation) => {
-   console.log(automation);
    const response = await fetch(`${API}/save`, {
       method: "POST",
       headers: {

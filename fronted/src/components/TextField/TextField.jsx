@@ -15,7 +15,8 @@ export const TextField = ({
    supportiveText = "",
    isError = false,
    valueRef,
-   functionToUpdate
+   functionToUpdate,
+   modalParameters
 }) => {
 
    const [isClicked, setIsClicked] = useState(false);
@@ -23,7 +24,6 @@ export const TextField = ({
    const [value, setValue] = useState("");
    const [isChange, setIsChange] = useState(false);
    const textFieldId = useId();
-
    
    const handleClick = () => {
       setIsClicked(true);
@@ -151,11 +151,7 @@ export const TextField = ({
          {!notModal && <Modal 
             dialogRef={dialogRef}
             title={label}
-            parameters={ {
-               year: [2015, 2016, 2017], 
-               month: ["December", "January", "February"], 
-               day: [1, 2, 3]
-            }}
+            parameters={modalParameters}
             setValue={setValue}
             setHasText={setHasText}
          />}

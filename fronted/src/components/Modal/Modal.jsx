@@ -10,36 +10,40 @@ export const Modal = ({
 }) => {
    const storyRef = useRef();
 
-
-   const handleSubmit = (event) => {
+   const handleSubmit = () => {
       const values = [];
-      for (const target of event.target) {
+      let formattedValue;
+      for (const target of dialogRef.current.getElementsByTagName("select")) {
          if (target.value) {
             values.push(target.value);
          }
       }
 
-      setValue?.(values);
-   }
+      if (parameters.weeks) {
+         formattedValue = Number(values[0]) * 168;
+         formattedValue = formattedValue + Number(values[1]) * 24;
+         formattedValue = formattedValue + Number(values[2]);
+         
+         formattedValue = `Each ${formattedValue} hour(s)`
+      }
+
+      setValue?.(formattedValue ?? values);
+   };
 
    const showModal = () => {
       storyRef.current.showModal();
-   }
+   };
 
    const closeModal = () => {
       dialogRef?.current?.close();
       storyRef?.current?.close();
-   }
+   };
    
    return (
       <>
          {dialogRef === undefined && <button  onClick={showModal}>Modal</button>}
          <dialog ref={dialogRef ?? storyRef} className="w-72 p-0 shadow-md rounded-[1.75rem]">
-            <form 
-               className="w-full flex flex-col justify-center items-center p-6"
-               onSubmit={handleSubmit}
-               method="dialog"
-            >
+            <div className="w-full flex flex-col justify-center items-center p-6">
                <h1 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h1>
                <div className="w-full flex flex-row justify-between">
                   {Object.entries(parameters)?.map((array) => (
@@ -60,17 +64,19 @@ export const Modal = ({
                </div>
                <div className="w-full inline-flex justify-end items-end gap-4 mt-6">
                   <button 
-                     type="button"
                      onClick={closeModal}
                      className="text-sm font-medium font-sans text-primary"
                   >Cancel</button>
                   <button 
-                     type="submit"
-                     onClick={() => setHasText?.(true)} 
+                     onClick={() => {
+                        setHasText?.(true);
+                        handleSubmit();
+                        closeModal();
+                     }}
                      className="text-sm font-medium font-sans text-primary"
                   >Accept</button>
                </div>
-            </form>
+            </div>
          </dialog>
       </>
    );
