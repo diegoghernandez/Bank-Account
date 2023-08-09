@@ -12,7 +12,7 @@ export const Menu = ({
 }) => {
    if (transactions) {
       const buttons = transactions.filter((transaction) => 
-         transaction.toLowerCase().includes(text.toLowerCase())).map((type) => 
+         transaction?.toLowerCase?.().includes(text.toLowerCase())).map((type) => 
             <button 
                key={type} 
                className="menu--state flex items-center w-auto h-12 px-3 text-onSurface text-sm font-sans font-medium"

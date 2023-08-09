@@ -16,6 +16,7 @@ export const TextField = ({
    isError = false,
    valueRef,
    functionToUpdate,
+   menuParameters,
    modalParameters
 }) => {
 
@@ -42,7 +43,6 @@ export const TextField = ({
    
    const onClear = () => setValue("");
 
-   const transactionTypes = ["DEPOSIT", "ONLINE_PAYMENT", "WIRE_TRANSFER"];
    const notMenu = type !== TextFieldTypes.Menu;
    const notModal = type !== TextFieldTypes.Modal;
 
@@ -139,7 +139,7 @@ export const TextField = ({
          
          {(type === TextFieldTypes.Menu && isClicked)  && <Menu 
             text={value} 
-            transactions={transactionTypes}
+            transactions={menuParameters}
             setValue={setValue}
             setHasText={setHasText}
             handleClickOutside={handleClickOutside}

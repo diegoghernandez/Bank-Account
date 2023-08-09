@@ -5,6 +5,7 @@ import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { getTransactions } from "../_services/transactions";
+import { TransactionType } from "../../constants/TransactionType";
 
 const getFormattedDate = (date) => {
    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -13,6 +14,13 @@ const getFormattedDate = (date) => {
    const newDate = new Date(transformDate);
 
    return `${months[newDate.getMonth()]} ${newDate.getDate()} ${newDate.getFullYear()}`;
+}
+
+const formatType = (str) => {
+   str = str.toLowerCase();
+   str = str[0].toUpperCase() + str.slice(1);
+   str = str.replace("_", " ");
+   return str;
 }
 
 export const Transactions = () => {
@@ -77,6 +85,7 @@ export const Transactions = () => {
                type={TextFieldTypes.Menu}
                valueRef={typeReference}
                functionToUpdate={handleChange}
+               menuParameters={Object.values(TransactionType).map((type) => type.description)}
             />
             <TextField 
                label="Name"
@@ -89,7 +98,7 @@ export const Transactions = () => {
          {notFound && <p>No automations found</p>}
          {transactions?.map((transaction) => {
             const isTextName = transaction?.receiverName?.toLowerCase().includes(textName.toLowerCase());
-            const isTextType = transaction?.transactionType?.includes(textType);
+            const isTextType = transaction?.transactionType?.toLowerCase().includes(textType.toLowerCase().replace(" ", "_"));
             return (
                <>
                   {(transaction?.date && !isTextName) &&
@@ -103,7 +112,7 @@ export const Transactions = () => {
                         transferAccount={transaction?.idTransferAccount}
                         name={transaction?.receiverName}
                         amount={transaction?.transactionAmount?.toFixed(2)}
-                        type={transaction?.transactionType}
+                        type={formatType(transaction?.transactionType)}
                         time={transaction?.transactionTimestamp}
                         automated={transaction?.isAutomated}
                      />

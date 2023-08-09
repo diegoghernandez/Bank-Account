@@ -6,6 +6,7 @@ import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { saveTransaction } from "../_services/transactions";
 import { useState } from "react";
+import { TransactionType } from "../../constants/TransactionType";
 
 export const Transaction = () => {
    const [error, setError] = useState({});
@@ -24,7 +25,7 @@ export const Transaction = () => {
             idAccount,
             "idTransferAccount": Number(elements[2].value),
             "amount": Number(elements[1].value),
-            "transactionType": elements[0].value
+            "transactionType": elements[0].value.toUpperCase().replace(" ", "_")
          }, email).then(() => navigate(state?.location?.pathname ?? "/"))
          .catch((e) => {
             const message = (JSON.parse(e.message));
@@ -46,6 +47,7 @@ export const Transaction = () => {
                inputType={InputTypes.Text}
                supportiveText={error.type}
                isError={error.type}
+               menuParameters={Object.values(TransactionType).map((type) => type.description)}
             />
             <TextField
                label="Amount"

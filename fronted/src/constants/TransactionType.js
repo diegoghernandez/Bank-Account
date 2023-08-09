@@ -1,5 +1,5 @@
-export const InputTypes = Object.freeze({
-   Deposit: Symbol("DEPOSIT"),
-   OnlinePayment: Symbol("ONLINE_PAYMENT"),
-   WireTransfer: Symbol("WIRE_TRANSFER")
+export const TransactionType = Object.freeze({
+   Deposit: Symbol("Deposit"),
+   OnlinePayment: Symbol("Online payment"),
+   WireTransfer: Symbol("Wire transfer")
 })
