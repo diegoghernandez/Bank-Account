@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { getTransactions, getTransactionsByYear, saveTransaction } from "../../pages/_services/transactions";
+import { getTransactions, getTransactionsByName, getTransactionsByYear, saveTransaction } from "../../pages/_services/transactions";
 import transactions from "../../mocks/fixtures/transactions.json"
 
 const transaction = {
@@ -39,6 +39,53 @@ const transaction = {
    },
    "totalElements": 1,
    "totalPages": 1,
+};
+
+const transactionByName = {
+   "content": [
+      {
+         "idTransaction": 1,
+         "idTransferAccount": 0,
+         "receiverName": "New",
+         "transactionAmount": 120.00,
+         "transactionType": "DEPOSIT",
+         "transactionTimestamp": "2023-06-26T21:02:13.374219",
+         "isAutomated": false
+      }, {
+         "idTransaction": 2,
+         "idTransferAccount": 0,
+         "receiverName": "New",
+         "transactionAmount": 120.00,
+         "transactionType": "DEPOSIT",
+         "transactionTimestamp": "2023-06-26T21:02:13.374219",
+         "isAutomated": false
+      }
+   ],
+   "pageable": {
+      "sort": {
+         "empty": true,
+         "unsorted": true,
+         "sorted": false
+      },
+      "offset": 0,
+      "pageNumber": 0,
+      "pageSize": 10,
+      "paged": true,
+      "unpaged": false
+   },
+   "totalPages": 1,
+   "totalElements": 1,
+   "last": true,
+   "size": 10,
+   "number": 0,
+   "sort": {
+      "empty": true,
+      "unsorted": true,
+      "sorted": false
+   },
+   "numberOfElements": 1,
+   "first": true,
+   "empty": false
 }
 
 describe("Transactions tests", () => {
@@ -59,6 +106,25 @@ describe("Transactions tests", () => {
       it("Should give the right content", async () => {
          const content = await getTransactions(1, 0);
          expect(content).toStrictEqual(transaction);
+      });
+   });
+
+   describe("getTransactionByName test", () => {
+
+      it("Should be a function", () => {
+         expect(typeof getTransactionsByName).toBe("function");
+      });
+
+      it("Should throw an StatusError if there is no element", async () => {
+         await expect(getTransactionsByName(1, "error", 3))
+            .rejects.toThrow(StatusError);
+         await expect(getTransactionsByName(1, "error", 3))
+            .rejects.toThrow("No transactions found");
+      });
+
+      it("Should give the right content", async () => {
+         const content = await getTransactionsByName(1, "new", 0);
+         expect(content).toStrictEqual(transactionByName);
       });
    });
 

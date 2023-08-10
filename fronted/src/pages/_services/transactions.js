@@ -21,6 +21,23 @@ export const getTransactions = async (id, page) => {
    }
 }
 
+export const getTransactionsByName = async (id, name, page) => {
+   const response = await fetch(`${API}/name?id=${id}&name=${name}&page=${page}`, {
+      method: "GET",
+      headers: {
+         "Content-Type": "application/json",
+         "Authorization": TOKEN
+      },
+   });
+
+   if (response.ok) {
+      const data = await response.json();
+      return data;
+   } else {
+      throw new StatusError("No transactions found", 404);
+   }
+}
+
 export const getTransactionsByYear = async (id, year) => {
    const response = await fetch(`${API}/year?id=${id}&year=${year}`, {
       method: "GET",
