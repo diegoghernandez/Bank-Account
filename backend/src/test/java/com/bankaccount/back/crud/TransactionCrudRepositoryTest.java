@@ -97,13 +97,13 @@ public class TransactionCrudRepositoryTest {
 
     @Test
     @Sql("/db/bankaccount_data.sql")
-    @DisplayName("Should return all transactionEntities with a specific idAccount of the data.sql")
+    @DisplayName("Should return all transactionEntities with a specific idAccount and name of the data.sql")
     void findByIdAccountAndNameContaining() {
         PageRequest pageable = PageRequest.of(0, 5);
 
-        Page<TransactionEntity> transactionEntityList = transactionCrudRepository.findByIdAccountAndReceiverNameContaining(1, "Ma", pageable);
+        Page<TransactionEntity> transactionEntityList = transactionCrudRepository.findByIdAccountAndReceiverNameContainingIgnoreCase(1, "ma", pageable);
 
-        Page<TransactionEntity> errorTransactionEntity = transactionCrudRepository.findByIdAccountAndReceiverNameContaining(453, "Ma", pageable);
+        Page<TransactionEntity> errorTransactionEntity = transactionCrudRepository.findByIdAccountAndReceiverNameContainingIgnoreCase(453, "Ma", pageable);
 
         assertAll(
                 () -> assertTrue(errorTransactionEntity.isEmpty()),
@@ -141,7 +141,7 @@ public class TransactionCrudRepositoryTest {
 
     @Test
     @Sql("/db/bankaccount_data.sql")
-    @DisplayName("Should return all transactionEntities by idAccount by year in the data.sql")
+    @DisplayName("Should return all transactionEntities by idAccount and year in the data.sql")
     void findByIdAccountAndTransactionTimestampBetween() {
         LocalDateTime startTime = LocalDateTime.of(2023, Month.JANUARY, 10, 20, 10, 0);
         LocalDateTime endTime = LocalDateTime.of(2024, Month.JANUARY, 10, 20, 10, 0);

@@ -12,6 +12,8 @@ public interface TransactionRepository {
 
     Optional<Page<TransactionEntity>> getByIdAccount(int idAccount, int page);
 
+    Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, String name, int page);
+
     List<TransactionEntity> getByIdAccountAndYear(int idAccount, int year);
 
     TransactionEntity saveTransaction(TransactionEntity transactionEntity);

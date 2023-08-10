@@ -47,6 +47,7 @@ public class TransactionRepositoryImplTest {
                 .idTransaction(432L)
                 .idAccount(343)
                 .idTransferAccount(4324)
+                .receiverName("Maria")
                 .transactionAmount(new BigDecimal("87523.45"))
                 .transactionTimestamp(LocalDateTime.of(2022, Month.OCTOBER, 12, 13, 12, 0))
                 .build();
@@ -55,6 +56,7 @@ public class TransactionRepositoryImplTest {
                 .idTransaction(342L)
                 .idAccount(343)
                 .idTransferAccount(4324)
+                .receiverName("Maria")
                 .transactionAmount(new BigDecimal("7657.75"))
                 .transactionTimestamp(LocalDateTime.of(2022, Month.JANUARY, 20, 20, 12, 0))
                 .build();
@@ -63,6 +65,7 @@ public class TransactionRepositoryImplTest {
                 .idTransaction(6546L)
                 .idAccount(84)
                 .idTransferAccount(4324)
+                .receiverName("Maria")
                 .transactionAmount(new BigDecimal("6546734.76"))
                 .transactionTimestamp(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
                 .build();
@@ -94,7 +97,23 @@ public class TransactionRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should return all transactionEntities of the database with the specific idAccount and year")
+    @DisplayName("Should return all transactionEntities with the specific idAccount and name of the database")
+    void getByIdAccountAndName() {
+        PageRequest pageable = PageRequest.of(0, 10);
+        Mockito.when(transactionCrudRepository.findByIdAccountAndReceiverNameContainingIgnoreCase(343, "ma", pageable))
+                .thenReturn(new PageImpl<>(List.of(transactionEntityList.get(0), transactionEntityList.get(1))));
+
+        Page<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndName(343, "ma", 0).get();
+
+        assertAll(
+                () -> assertEquals(List.of(432L, 342L), transactionList.stream().map(TransactionEntity::getIdTransaction).toList()),
+                () -> assertEquals(List.of("Maria", "Maria"),
+                        transactionList.stream().map(TransactionEntity::getReceiverName).toList())
+        );
+    }
+
+    @Test
+    @DisplayName("Should return all transactionEntities of the database with the specific idAccount and year of the database")
     void getByIdAccountAndYear() {
         LocalDateTime startTime = LocalDateTime.of(2022, Month.JANUARY, 1, 0, 0, 0);
         LocalDateTime endTime = LocalDateTime.of(2023, Month.JANUARY, 1, 0, 0, 0);

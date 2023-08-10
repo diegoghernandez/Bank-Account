@@ -42,6 +42,17 @@ public class TransactionController {
         throw new NotFoundException("Transactions not found");
     }
 
+    @GetMapping("/name")
+    public ResponseEntity<Page<TransactionEntity>> getByIdAccountAndName(@RequestParam(name = "id") int idAccount, @RequestParam String name, @RequestParam int page) throws NotFoundException {
+        Page<TransactionEntity> pageable = transactionService.getByIdAccountAndName(idAccount, name, page).get();
+
+        if (!pageable.isEmpty()) {
+            return new ResponseEntity<>(pageable, HttpStatus.OK);
+        }
+
+        throw new NotFoundException("Transactions not found");
+    }
+
     @GetMapping("/year")
     public ResponseEntity<List<TransactionEntity>> getByYearAndIdAccount(@RequestParam(name = "id") int idAccount, @RequestParam int year) {
         List<TransactionEntity> transactionDomainList = transactionService.getByIdAccountAndYear(idAccount, year);
@@ -53,7 +64,7 @@ public class TransactionController {
     }
 
     @PostMapping(value = "/save", consumes = {"application/json"})
-    public ResponseEntity<?> saveDepositTransaction(@RequestBody @Valid TransactionDto transactionDto) throws Exception {
+    public ResponseEntity<TransactionEntity> saveDepositTransaction(@RequestBody @Valid TransactionDto transactionDto) throws Exception {
         return new ResponseEntity<>(transactionTypeService.saveTransaction(transactionDto, false), HttpStatus.CREATED);
     }
 }

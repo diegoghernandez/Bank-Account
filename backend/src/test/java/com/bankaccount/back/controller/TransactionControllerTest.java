@@ -60,6 +60,7 @@ public class TransactionControllerTest {
         TransactionEntity transactionEntity1 = TransactionEntity.builder()
                 .idTransaction(564326L)
                 .idTransferAccount(312421)
+                .receiverName("Maria")
                 .transactionAmount(new BigDecimal("87523.45"))
                 .transactionType(TransactionType.DEPOSIT)
                 .transactionTimestamp(LocalDateTime.of(2022, Month.OCTOBER, 12, 13, 12, 0))
@@ -68,6 +69,7 @@ public class TransactionControllerTest {
         TransactionEntity transactionEntity2 = TransactionEntity.builder()
                 .idTransaction(87686L)
                 .idTransferAccount(312421)
+                .receiverName("Maria")
                 .transactionAmount(new BigDecimal("7657.75"))
                 .transactionType(TransactionType.WIRE_TRANSFER)
                 .transactionTimestamp(LocalDateTime.of(2022, Month.JANUARY, 20, 20, 12, 12))
@@ -76,6 +78,7 @@ public class TransactionControllerTest {
         TransactionEntity transactionEntity3 = TransactionEntity.builder()
                 .idTransaction(6546L)
                 .idTransferAccount(34535)
+                .receiverName("Maria")
                 .transactionAmount(new BigDecimal("6546734.76"))
                 .transactionType(TransactionType.ONLINE_PAYMENT)
                 .transactionTimestamp(LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0))
@@ -84,6 +87,7 @@ public class TransactionControllerTest {
         TransactionEntity transactionEntity4 = TransactionEntity.builder()
                 .idTransaction(67582L)
                 .idTransferAccount(312421)
+                .receiverName("Maria")
                 .transactionAmount(new BigDecimal("5464.76"))
                 .transactionType(TransactionType.ONLINE_PAYMENT)
                 .transactionTimestamp(LocalDateTime.of(2022, Month.FEBRUARY, 11, 11, 12, 11))
@@ -165,6 +169,48 @@ public class TransactionControllerTest {
                         .andExpect(jsonPath("$.content[2].transactionAmount")
                                 .value(transactionEntityList.get(2).getTransactionAmount()))
                         .andExpect(jsonPath("$.content[2].transactionType")
+                                .value(transactionEntityList.get(2).getTransactionType().toString())),
+
+                () -> mockMvc.perform(get("/transactions/account/885748")
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isUnauthorized())
+        );
+    }
+
+    @Test
+    @DisplayName("Should return all transactionEntities in json format with a specific idAccount and name using the service or return a not found if authorized")
+    void getByIdAccountAndName() {
+        Mockito.when(transactionService.getByIdAccountAndName(885748, "ma", 0))
+                .thenReturn(Optional.of(new PageImpl<>(
+                        List.of(transactionEntityList.get(1), transactionEntityList.get(2)))));
+
+        assertAll(
+                () -> mockMvc.perform(get("/transactions/name")
+                                .param("id", "885748")
+                                .param("name", "ma")
+                                .param("page", "0")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(user("user").roles(USER)))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.totalElements")
+                                .value(2))
+
+                        .andExpect(jsonPath("$.content[0].idTransaction")
+                                .value(transactionEntityList.get(1).getIdTransaction()))
+                        .andExpect(jsonPath("$.content[0].idTransferAccount")
+                                .value(transactionEntityList.get(1).getIdTransferAccount()))
+                        .andExpect(jsonPath("$.content[0].transactionAmount")
+                                .value(transactionEntityList.get(1).getTransactionAmount()))
+                        .andExpect(jsonPath("$.content[0].transactionType")
+                                .value(transactionEntityList.get(1).getTransactionType().toString()))
+
+                        .andExpect(jsonPath("$.content[1].idTransaction")
+                                .value(transactionEntityList.get(2).getIdTransaction()))
+                        .andExpect(jsonPath("$.content[1].idTransferAccount")
+                                .value(transactionEntityList.get(2).getIdTransferAccount()))
+                        .andExpect(jsonPath("$.content[1].transactionAmount")
+                                .value(transactionEntityList.get(2).getTransactionAmount()))
+                        .andExpect(jsonPath("$.content[1].transactionType")
                                 .value(transactionEntityList.get(2).getTransactionType().toString())),
 
                 () -> mockMvc.perform(get("/transactions/account/885748")

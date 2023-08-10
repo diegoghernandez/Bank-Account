@@ -32,6 +32,12 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
+    public Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, String name, int page) {
+        Pageable pageRequest = PageRequest.of(page, 10);
+        return Optional.of(transactionCrudRepository.findByIdAccountAndReceiverNameContainingIgnoreCase(idAccount, name, pageRequest));
+    }
+
+    @Override
     public List<TransactionEntity> getByIdAccountAndYear(int idAccount, int year) {
         LocalDateTime startDate = LocalDateTime.of(year, Month.JANUARY, 1, 0, 0 ,0);
         LocalDateTime endDate = LocalDateTime.of(year + 1, Month.JANUARY, 1, 0, 0 ,0);

@@ -23,6 +23,10 @@ public class TransactionService {
         return transactionRepository.getByIdAccount(idAccount, page);
     }
 
+    public Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, String name, int page) {
+        return transactionRepository.getByIdAccountAndName(idAccount, name, page);
+    }
+
     public List<TransactionEntity> getByIdAccountAndYear(int idAccount, int year) {
         return transactionRepository.getByIdAccountAndYear(idAccount, year);
     }

@@ -12,7 +12,7 @@ public interface TransactionCrudRepository extends JpaRepository<TransactionEnti
 
     Page<TransactionEntity> findByIdAccount(int idAccount, Pageable pageable);
 
-    Page<TransactionEntity> findByIdAccountAndReceiverNameContaining(int idAccount, String receiverName, Pageable pageable);
+    Page<TransactionEntity> findByIdAccountAndReceiverNameContainingIgnoreCase(int idAccount, String receiverName, Pageable pageable);
 
     List<TransactionEntity> findByIdAccountAndTransactionTimestampBetween(int idAccount, LocalDateTime startTime, LocalDateTime endTime);
 }

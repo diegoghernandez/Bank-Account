@@ -56,6 +56,7 @@ export const Transactions = () => {
             setDates(loopDates);
             setTransactions([...transactions, modifiedContent].flat());  
             setNotFound(false);
+            setLoading(true);
             
             if (last) {
                globalThis.removeEventListener("scrollend", () => setPage(page + 1));
