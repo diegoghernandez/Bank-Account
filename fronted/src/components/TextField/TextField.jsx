@@ -32,6 +32,7 @@ export const TextField = ({
    
    const handleClickOutside = () => {
       setIsClicked(false);
+      setIsChange(!isChange);
    };
 
    const ref = useOutsideClick(handleClickOutside);
@@ -57,8 +58,8 @@ export const TextField = ({
    return (
       <div ref={ref} className="inline-flex flex-col w-full group">
          <label htmlFor={textFieldId} className={`bg-white w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
-         ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base group-hover:${textLabelColor[3]} ${(type === TextFieldTypes.Search && !hasText) && "ml-6"}`}
-         ${(hasText || inputType === InputTypes.Date) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
+         ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base group-hover:${textLabelColor[3]} ${(type === TextFieldTypes.Search && !value) && "ml-6"}`}
+         ${(value) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
             {label}
          </label>
             
@@ -97,19 +98,24 @@ export const TextField = ({
                onBlur={() => {
                   if (notMenu) {
                      setIsClicked(false)
-                  } else setHasText(false) 
+                  }
                }}
-               onChange={(e) => setHasText(e.target.value)}
                onInput={(e) => setValue(e.target.value)}
+               onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                     e.target.blur();
+                     setIsChange(!isChange);
+                     setValue(value)
+                  } 
+               }}
             />
 
             {(notMenu && notModal) && <svg 
-                  className={`mr-3 ${(isClicked || hasText) ? "fill-onSurface-variant cursor-pointer" : "fill-none"}`} width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  xmlns="http://www.w3.org/2000/svg"
+                  className={`mr-3 ${(isClicked || value) ? "fill-onSurface-variant cursor-pointer" : "fill-none"}`} width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                   focusable="false"
                   onClick={() => {
                      onClear();
-                     setHasText(false);
                      setIsChange(!isChange);
                   }}
                >

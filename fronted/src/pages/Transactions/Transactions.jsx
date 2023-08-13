@@ -4,7 +4,7 @@ import { Navbar } from "../../components/Navbar/Navbar";
 import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { getTransactions } from "../_services/transactions";
+import { getTransactions, getTransactionsByName } from "../_services/transactions";
 import { TransactionType } from "../../constants/TransactionType";
 
 const getFormattedDate = (date) => {
@@ -23,64 +23,166 @@ const formatType = (str) => {
    return str;
 }
 
+const getDatesAndModifiedContent = (dates, content) => {
+   const modifiedContent = [];
+   const loopDates = [dates].flat();
+
+   for (const cont of content) {
+      const newDate = getFormattedDate(cont.transactionTimestamp);
+      if (!loopDates.includes(newDate)) {
+         modifiedContent.push({date: newDate});
+         loopDates.push(newDate);
+      }
+      
+      modifiedContent.push(cont);
+   }
+
+   return { loopDates, modifiedContent };
+}
+
 export const Transactions = () => {
-   const [transactions, setTransactions] = useState([]);
-   const [dates, setDates] = useState([]);
+   const [allTransactions, setAllTransactions] = useState({
+      default: [],
+      name: [],
+      date: []
+   });
+   const [texts, setTexts] = useState({
+      type: "",
+      name: "",
+      date: ""
+   });
+   const [dates, setDates] = useState({
+      default: [],
+      name: [],
+      date: []
+   });
+   const [page, setPage] = useState({
+      default: 0,
+      name: [0, ""]
+   });
    const [notFound, setNotFound] = useState(false); 
    const [loading, setLoading] = useState(true);
-   const [page, setPage] = useState(0);
-   const [textName, setTextName] = useState("");
-   const [textType, setTextType] = useState("");
 
    const typeReference = useRef();
    const textReference = useRef();
 
    const { idAccount } = JSON.parse(localStorage.getItem("account"));
 
+   const handleChange = () =>{
+      const text = textReference.current?.value;
+      const type = typeReference.current?.value;
+
+      if (texts.name !== text) {
+         setDates({ ...dates, name: [] });
+         setAllTransactions({ ...allTransactions, name: [] });  
+         setPage({ ...page, name: [0, text]});
+      }
+
+      setNotFound(false);
+      setLoading(true);
+      setTexts({
+         type: type,
+         name: text
+      });
+   };
+
+   let transactions = allTransactions.default;
+
+   if (texts.name) transactions = allTransactions.name;
+
    useEffect(() => {
-      getTransactions(idAccount, page)
-         .then(({content, last}) => {
-            const modifiedContent = [];
-            const loopDates = [dates].flat();
-
-            for (const cont of content) {
-               const newDate = getFormattedDate(cont.transactionTimestamp);
-               if (!loopDates.includes(newDate)) {
-                  modifiedContent.push({date: newDate});
-                  loopDates.push(newDate);
-               }
+      if (!texts.name) {
+         getTransactions(idAccount, page.default)
+            .then(({content, last}) => {
+               const { loopDates, modifiedContent } = getDatesAndModifiedContent(dates.default, content);
                
-               modifiedContent.push(cont);
-            }
-            
-            setDates(loopDates);
-            setTransactions([...transactions, modifiedContent].flat());  
-            setNotFound(false);
-            setLoading(true);
-            
-            if (last) {
-               globalThis.removeEventListener("scrollend", () => setPage(page + 1));
+               setDates({
+                  ...dates,
+                  default: loopDates
+               });
+               setAllTransactions({
+                  ...allTransactions,
+                  default: [...allTransactions.default, modifiedContent].flat()
+               });  
+               setNotFound(false);
+               
+               if (last) {
+                  setLoading(false);
+                  globalThis.removeEventListener("scrollend", () => setPage({
+                     ...page,
+                     default: page.default + 1
+                  }));
+               } else {
+                  globalThis.addEventListener("scrollend", () => setPage({
+                     ...page,
+                     default: page.default + 1
+                  }));
+               }
+            }).catch(() => {
+               setNotFound(true);
                setLoading(false);
-            } else globalThis.addEventListener("scrollend", () => setPage(page + 1));
-         }).catch(() => {
-            setNotFound(true);
-            setLoading(false);
-         });
-   }, [page]);
+            });
+      } 
+   }, [page.default]);
 
-   const handleChange = (event) =>{
-      event?.preventDefault();
+   useEffect(() => {
+      const text = textReference?.current?.value;
+      let actualPage = page.name[0];
+      if (text !== page.name[1]) {
+         setPage({...page, name: [0, text]});
+         actualPage = 0;
+      }
+      if (texts.name) {   
+         setLoading(true)
+         getTransactionsByName(idAccount, texts.name, actualPage)
+            .then(({content, last}) => {
+               const { loopDates, modifiedContent } = getDatesAndModifiedContent(dates.name, content);
+               
+               setDates({
+                  ...dates,
+                  name: loopDates
+               });
+               setAllTransactions({
+                  ...allTransactions,
+                  name: [...allTransactions.name, modifiedContent].flat()
+               });  
+               setNotFound(false);
+               setLoading(false);
+               
+               if (last) {
+                  setLoading(false);
+                  globalThis.removeEventListener("scrollend", () => setPage({
+                     ...page,
+                     name: [page.name[0] + 1, page.name[1]]
+                  }));
+               } else {
+                  globalThis.addEventListener("scrollend", () => setPage({
+                     ...page,
+                     name: [page.name[0] + 1, page.name[1]]
+                  }));
 
-      setTextName(textReference.current?.value);
-      setTextType(typeReference.current?.value);
-   }
+                  globalThis.removeEventListener("scrollend", () => setPage({
+                     ...page,
+                     default: page.default + 1
+                  }));
+               }
+            }).catch(() => {
+               setNotFound(true);
+               setLoading(false);
+               setDates({ ...dates, name: [] });
+               setAllTransactions({ ...allTransactions, name: [] });  
+            });
+      } else {
+         globalThis.addEventListener("scrollend", () => setPage({
+            ...page,
+            default: page.default + 1
+         }));
+      }
+   }, [page.name[0], texts.name]);
 
    return (
       <main>
-         <form 
-            className="flex flex-col gap-3 pt-3 px-4 mb-3"
-            onChange={handleChange}
-         >
+         <form className="flex flex-col gap-3 pt-3 px-4 mb-3" >
             <TextField
                label="Transaction Type"
                type={TextFieldTypes.Menu}
@@ -98,16 +200,15 @@ export const Transactions = () => {
          <h2 className="text-lg font-medium font-sans ml-4 underline">Transactions</h2>
          {notFound && <p>No automations found</p>}
          {transactions?.map((transaction) => {
-            const isTextName = transaction?.receiverName?.toLowerCase().includes(textName.toLowerCase());
-            const isTextType = transaction?.transactionType?.toLowerCase().includes(textType.toLowerCase().replace(" ", "_"));
+            const isTextType = transaction?.transactionType?.toLowerCase().includes(texts.type.toLowerCase().replace(" ", "_"));
             return (
                <>
-                  {(transaction?.date && !isTextName) &&
+                  {(transaction?.date) &&
                   <div key={transaction?.date} className="mt-3 pl-4 pb-1 border-b border-primary">
                      <h3 className="text-sm font-medium font-sans">{transaction?.date}</h3>
                   </div>
                   }
-                  {(isTextName && isTextType) &&
+                  {(isTextType) &&
                      <DividerCard 
                         key={transaction?.idTransaction}
                         transferAccount={transaction?.idTransferAccount}
