@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.Month;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/transactions")
@@ -53,10 +54,10 @@ public class TransactionController {
         throw new NotFoundException("Transactions not found");
     }
 
-    @GetMapping("/year")
+    @GetMapping("/date")
     public ResponseEntity<Page<TransactionEntity>> getByIdAccountAndDateAndName(@RequestParam(name = "id") int idAccount,
                                                                                 @RequestParam int year,
-                                                                                @RequestParam Month month,
+                                                                                @RequestParam Optional<Month> month,
                                                                                 @RequestParam String name,
                                                                                 @RequestParam int page) throws NotFoundException {
         Page<TransactionEntity> transactionDomainList = transactionService.getByIdAccountAndDateAndName(idAccount, year, month, name, page).get();

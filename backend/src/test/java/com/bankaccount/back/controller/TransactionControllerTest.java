@@ -222,12 +222,12 @@ public class TransactionControllerTest {
     @Test
     @DisplayName("Should return all transactionEntities in json format with a specific idAccount and with the timestamp condition using the service or return a not found if authorized")
     void getByIdAccountAndDateAndName() {
-        Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Month.JANUARY, "ma", 0))
+        Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Optional.of(Month.JANUARY), "ma", 0))
                 .thenReturn(Optional.of(new PageImpl<>(
                         Collections.singletonList(transactionEntityList.get(1)))));
 
         assertAll(
-                () -> mockMvc.perform(get("/transactions/year")
+                () -> mockMvc.perform(get("/transactions/date")
                                 .param("id", "54365")
                                 .param("year", "2021")
                                 .param("month", "JANUARY")
@@ -250,10 +250,11 @@ public class TransactionControllerTest {
                         .andExpect(jsonPath("$.content[0].transactionTimestamp")
                                 .value(transactionEntityList.get(1).getTransactionTimestamp().toString())),
 
-                () -> mockMvc.perform(get("/transactions/year")
+                () -> mockMvc.perform(get("/transactions/date")
                                 .param("id", "423")
                                 .param("year", "2034")
                                 .param("month", "JANUARY")
+                                .param("name", "ma")
                                 .param("page", "0")
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnauthorized())

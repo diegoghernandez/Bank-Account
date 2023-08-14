@@ -122,7 +122,7 @@ public class TransactionRepositoryImplTest {
                 343, startTime, endTime, "ma", pageable))
                 .thenReturn(new PageImpl<>(Collections.singletonList(transactionEntityList.get(1))));
 
-        Page<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndDateAndName(343, 2022, Month.JANUARY, "ma", 0).get();
+        Page<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndDateAndName(343, 2022, Optional.of(Month.JANUARY), "ma", 0).get();
 
         assertAll(
                 () -> assertThat(transactionList.getSize()).isEqualTo(1),

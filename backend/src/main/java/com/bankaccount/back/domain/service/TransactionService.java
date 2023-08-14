@@ -27,7 +27,7 @@ public class TransactionService {
         return transactionRepository.getByIdAccountAndName(idAccount, name, page);
     }
 
-    public Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Month month, String name, int page) {
+    public Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Optional<Month> month, String name, int page) {
         return transactionRepository.getByIdAccountAndDateAndName(idAccount, year, month, name, page);
     }
 }

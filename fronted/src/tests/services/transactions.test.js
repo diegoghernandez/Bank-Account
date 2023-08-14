@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { getTransactions, getTransactionsByName, getTransactionsByYear, saveTransaction } from "../../pages/_services/transactions";
+import { getTransactions, getTransactionsByDateAndName, getTransactionsByName,  saveTransaction } from "../../pages/_services/transactions";
 import transactions from "../../mocks/fixtures/transactions.json"
 
 const transaction = {
@@ -131,19 +131,19 @@ describe("Transactions tests", () => {
    describe("getTransactionByYear test", () => {
 
       it("Should be a function", () => {
-         expect(typeof getTransactionsByYear).toBe("function");
+         expect(typeof getTransactionsByDateAndName).toBe("function");
       });
 
       it("Should throw an StatusError if there is no element", async () => {
-         await expect(getTransactionsByYear(21, 2000))
+         await expect(getTransactionsByDateAndName(21, 2000, "", "", 0))
             .rejects.toThrowError(StatusError);
-         await expect(getTransactionsByYear(21, 2000))
-            .rejects.toThrowError("No transactions found by 2000");
+         await expect(getTransactionsByDateAndName(21, 2000, "", "", 0))
+            .rejects.toThrowError("No transactions found");
       });
 
       it("Should give the right content by year", async () => {
-         const content = await getTransactionsByYear(1, 2023);
-         expect(content).toStrictEqual(transactions);
+         const content = await getTransactionsByDateAndName(1, 2023, "", "", 0);
+         expect(content).toStrictEqual(transactionByName);
       });
    });
 
