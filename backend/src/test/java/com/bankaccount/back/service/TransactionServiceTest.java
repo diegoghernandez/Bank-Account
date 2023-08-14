@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -124,16 +123,18 @@ public class TransactionServiceTest {
 
     @Test
     @DisplayName("Should return all transactionEntity with the specific idAccount and year using the repository")
-    void getByIdAccountAndYear() {
-        Mockito.when(transactionRepository.getByIdAccountAndYear(1, 2021))
-                .thenReturn(Collections.singletonList(transactionEntityList.get(1)));
+    void getByIdAccountAndDateAndName() {
+        Mockito.when(transactionRepository.getByIdAccountAndDateAndName(1, 2021, Month.JANUARY, "ma", 0))
+                .thenReturn(Optional.of(new PageImpl<>(
+                        Collections.singletonList(transactionEntityList.get(1)))));
 
-        List<TransactionEntity> transactionList = transactionService.getByIdAccountAndYear(1, 2021);
+        Page<TransactionEntity> transactionList = transactionService.getByIdAccountAndDateAndName(1, 2021, Month.JANUARY, "ma", 0).get();
 
         assertAll(
-                () -> assertThat(transactionList.size()).isEqualTo(1),
+                () -> assertThat(transactionList.getSize()).isEqualTo(1),
                 () -> assertEquals(List.of(87686L), transactionList.stream().map(TransactionEntity::getIdTransaction).toList()),
                 () -> assertEquals(List.of(312421), transactionList.stream().map(TransactionEntity::getIdTransferAccount).toList()),
+                () -> assertEquals(List.of("Maria"), transactionList.stream().map(TransactionEntity::getReceiverName).toList()),
                 () -> assertEquals(List.of("7657.75"), transactionList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
                 () -> assertEquals(Collections.singletonList(transactionEntityList.get(1).getTransactionTimestamp()), transactionList.stream().map(TransactionEntity::getTransactionTimestamp).toList())
         );

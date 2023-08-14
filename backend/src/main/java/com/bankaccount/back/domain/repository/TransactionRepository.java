@@ -3,7 +3,7 @@ package com.bankaccount.back.domain.repository;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.time.Month;
 import java.util.Optional;
 
 public interface TransactionRepository {
@@ -14,7 +14,7 @@ public interface TransactionRepository {
 
     Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, String name, int page);
 
-    List<TransactionEntity> getByIdAccountAndYear(int idAccount, int year);
+    Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Month month, String name, int page);
 
     TransactionEntity saveTransaction(TransactionEntity transactionEntity);
 }

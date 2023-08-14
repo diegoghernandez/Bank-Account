@@ -21,7 +21,6 @@ export const TextField = ({
 }) => {
 
    const [isClicked, setIsClicked] = useState(false);
-   const [hasText, setHasText] = useState(false);
    const [value, setValue] = useState("");
    const [isChange, setIsChange] = useState(false);
    const textFieldId = useId();
@@ -143,11 +142,10 @@ export const TextField = ({
          </div>
          {(supportiveText) && <p className={`ml-4 mt-1 text-sm ${isError ? "text-error" : "text-onSurface-variant"}`}>{supportiveText}</p>}
          
-         {(type === TextFieldTypes.Menu && isClicked)  && <Menu 
+         {(!notMenu && isClicked)  && <Menu 
             text={value} 
-            transactions={menuParameters}
+            parameters={menuParameters}
             setValue={setValue}
-            setHasText={setHasText}
             handleClickOutside={handleClickOutside}
             setIsClicked={setIsClicked}
             isChange={isChange}
@@ -159,7 +157,6 @@ export const TextField = ({
             title={label}
             parameters={modalParameters}
             setValue={setValue}
-            setHasText={setHasText}
          />}
       </div>
    );

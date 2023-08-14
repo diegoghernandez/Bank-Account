@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.time.Month;
 
 @RestController
 @RequestMapping("/transactions")
@@ -54,13 +54,18 @@ public class TransactionController {
     }
 
     @GetMapping("/year")
-    public ResponseEntity<List<TransactionEntity>> getByYearAndIdAccount(@RequestParam(name = "id") int idAccount, @RequestParam int year) {
-        List<TransactionEntity> transactionDomainList = transactionService.getByIdAccountAndYear(idAccount, year);
+    public ResponseEntity<Page<TransactionEntity>> getByIdAccountAndDateAndName(@RequestParam(name = "id") int idAccount,
+                                                                                @RequestParam int year,
+                                                                                @RequestParam Month month,
+                                                                                @RequestParam String name,
+                                                                                @RequestParam int page) throws NotFoundException {
+        Page<TransactionEntity> transactionDomainList = transactionService.getByIdAccountAndDateAndName(idAccount, year, month, name, page).get();
 
         if (!transactionDomainList.isEmpty()) {
             return new ResponseEntity<>(transactionDomainList, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        throw new NotFoundException("Transactions not found");
     }
 
     @PostMapping(value = "/save", consumes = {"application/json"})

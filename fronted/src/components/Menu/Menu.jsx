@@ -2,16 +2,16 @@ import "./Menu.css"
 
 export const Menu = ({ 
    text, 
-   transactions, 
+   parameters, 
    setValue,
    handleClickOutside,
    setIsClicked,
-   setHasText,
    isChange,
    setIsChange
 }) => {
-   if (transactions) {
-      const buttons = transactions.filter((transaction) => 
+   console.log(parameters);
+   if (parameters) {
+      const buttons = parameters.filter((transaction) => 
          transaction?.toLowerCase?.().includes(text.toLowerCase())).map((type) => 
             <button 
                key={type} 
@@ -29,7 +29,6 @@ export const Menu = ({
             className="absolute w-[calc(100%-2rem)] z-20 translate-y-[3.7rem] flex flex-col bg-surface-container bg rounded"
             onClick={() => { 
                setIsClicked(false)
-               setHasText(true);
                handleClickOutside(); 
             }}
             onFocus={() => setIsClicked(true)}

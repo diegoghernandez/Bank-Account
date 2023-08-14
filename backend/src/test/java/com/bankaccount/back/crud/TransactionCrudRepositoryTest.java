@@ -143,30 +143,34 @@ public class TransactionCrudRepositoryTest {
     @Sql("/db/bankaccount_data.sql")
     @DisplayName("Should return all transactionEntities by idAccount and year in the data.sql")
     void findByIdAccountAndTransactionTimestampBetween() {
-        LocalDateTime startTime = LocalDateTime.of(2023, Month.JANUARY, 10, 20, 10, 0);
-        LocalDateTime endTime = LocalDateTime.of(2024, Month.JANUARY, 10, 20, 10, 0);
+        LocalDateTime startTime = LocalDateTime.of(2022, Month.OCTOBER, 1, 0, 10, 0);
+        LocalDateTime endTime = LocalDateTime.of(2022, Month.OCTOBER, 31, 20, 10, 0);
 
-        PageRequest pageable = PageRequest.of(0, 5);
+        PageRequest pageable = PageRequest.of(0, 10);
 
-        List<TransactionEntity> transactionEntityList = transactionCrudRepository.findByIdAccountAndTransactionTimestampBetween(
-                1, startTime, endTime);
+        Page<TransactionEntity> transactionEntityList = transactionCrudRepository.findByIdAccountAndTransactionTimestampBetweenAndReceiverNameContainingIgnoreCase(
+                1, startTime, endTime, "ma", pageable);
 
 
-        List<TransactionEntity> errorTransactionEntity = transactionCrudRepository.findByIdAccountAndTransactionTimestampBetween(3243,
+        Page<TransactionEntity> errorTransactionEntity = transactionCrudRepository.findByIdAccountAndTransactionTimestampBetweenAndReceiverNameContainingIgnoreCase(3243,
                 LocalDateTime.of(2026, Month.OCTOBER, 9, 20, 10, 0),
-                LocalDateTime.of(2026, Month.OCTOBER, 9, 20, 10, 0));
+                LocalDateTime.of(2026, Month.OCTOBER, 9, 20, 10, 0),
+                "",
+                pageable);
 
         assertAll(
                 () -> assertTrue(errorTransactionEntity.isEmpty()),
-                () -> assertThat(transactionEntityList.size()).isEqualTo(3),
+                () -> assertThat(transactionEntityList.getContent().size()).isEqualTo(3),
                 () -> assertEquals(List.of(1, 1, 1), transactionEntityList.stream().map(TransactionEntity::getIdAccount).toList()),
-                () -> assertEquals(Arrays.asList(2, 2, null), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
-                () -> assertEquals(List.of("Maria", "Maria", "Pedro"), transactionEntityList.stream().map(TransactionEntity::getReceiverName).toList()),
-                () -> assertEquals(List.of("400.00", "300.00", "6000.00"), transactionEntityList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
-                () -> assertEquals(List.of(TransactionType.ONLINE_PAYMENT, TransactionType.ONLINE_PAYMENT, TransactionType.DEPOSIT),
+                () -> assertEquals(Arrays.asList(2, 2, 2), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
+                () -> assertEquals(List.of("Maria", "Maria", "Maria"), transactionEntityList.stream().map(TransactionEntity::getReceiverName).toList()),
+                () -> assertEquals(List.of("6000.00", "400.00", "400.00"), transactionEntityList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
+                () -> assertEquals(List.of(TransactionType.WIRE_TRANSFER, TransactionType.ONLINE_PAYMENT, TransactionType.ONLINE_PAYMENT),
                         transactionEntityList.stream().map(TransactionEntity::getTransactionType).toList()),
                 () -> assertTrue(transactionEntityList.stream().map((transaction) ->
-                        transaction.getTransactionTimestamp().getYear()).allMatch((year) -> year == 2023))
+                        transaction.getTransactionTimestamp().getYear()).allMatch((year) -> year == 2022)),
+                () -> assertTrue(transactionEntityList.stream().map((transaction) ->
+                        transaction.getTransactionTimestamp().getMonth()).allMatch((month) -> month == Month.OCTOBER))
         );
     }
 

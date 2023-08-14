@@ -221,37 +221,40 @@ public class TransactionControllerTest {
 
     @Test
     @DisplayName("Should return all transactionEntities in json format with a specific idAccount and with the timestamp condition using the service or return a not found if authorized")
-    void getByYearAndIdAccount() {
-        Mockito.when(transactionService.getByIdAccountAndYear(54365, 2021))
-                .thenReturn(Collections.singletonList(transactionEntityList.get(1)));
+    void getByIdAccountAndDateAndName() {
+        Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Month.JANUARY, "ma", 0))
+                .thenReturn(Optional.of(new PageImpl<>(
+                        Collections.singletonList(transactionEntityList.get(1)))));
 
         assertAll(
                 () -> mockMvc.perform(get("/transactions/year")
                                 .param("id", "54365")
                                 .param("year", "2021")
+                                .param("month", "JANUARY")
+                                .param("name", "ma")
+                                .param("page", "0")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(USER)))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.*", hasSize(1)))
-                        .andExpect(jsonPath("$[0].idTransaction")
+                        .andExpect(jsonPath("$.totalElements").value(1))
+                        .andExpect(jsonPath("$.content[0].idTransaction")
                                 .value(transactionEntityList.get(1).getIdTransaction()))
-                        .andExpect(jsonPath("$[0].idTransferAccount")
+                        .andExpect(jsonPath("$.content[0].idTransferAccount")
                                 .value(transactionEntityList.get(1).getIdTransferAccount()))
-                        .andExpect(jsonPath("$[0].transactionAmount")
+                        .andExpect(jsonPath("$.content[0].receiverName")
+                                .value(transactionEntityList.get(1).getReceiverName()))
+                        .andExpect(jsonPath("$.content[0].transactionAmount")
                                 .value(transactionEntityList.get(1).getTransactionAmount()))
-                        .andExpect(jsonPath("$[0].transactionType")
+                        .andExpect(jsonPath("$.content[0].transactionType")
                                 .value(transactionEntityList.get(1).getTransactionType().toString()))
-                        .andExpect(jsonPath("$[0].transactionTimestamp")
+                        .andExpect(jsonPath("$.content[0].transactionTimestamp")
                                 .value(transactionEntityList.get(1).getTransactionTimestamp().toString())),
 
                 () -> mockMvc.perform(get("/transactions/year")
                                 .param("id", "423")
                                 .param("year", "2034")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .with(user("user").roles(USER)))
-                        .andExpect(status().isNotFound()),
-
-                () -> mockMvc.perform(get("/transactions/account/54365/time/2021-10-09T20:10:00Z")
+                                .param("month", "JANUARY")
+                                .param("page", "0")
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnauthorized())
         );

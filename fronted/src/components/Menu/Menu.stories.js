@@ -13,5 +13,5 @@ const Template = ({ label, ...args }) => {
 export const Default  = Template.bind({});
 Default.args = {
    text: "",
-   transactions: ["Deposit", "Online payment", "Wire Transfer"],
+   parameters: ["Deposit", "Online payment", "Wire Transfer"],
 };

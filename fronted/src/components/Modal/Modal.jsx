@@ -5,8 +5,7 @@ export const Modal = ({
    dialogRef,
    title,
    parameters,
-   setValue,
-   setHasText
+   setValue
 }) => {
    const storyRef = useRef();
 
@@ -69,7 +68,6 @@ export const Modal = ({
                   >Cancel</button>
                   <button 
                      onClick={() => {
-                        setHasText?.(true);
                         handleSubmit();
                         closeModal();
                      }}

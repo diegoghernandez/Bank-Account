@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface TransactionCrudRepository extends JpaRepository<TransactionEntity, Long> {
 
@@ -14,5 +13,6 @@ public interface TransactionCrudRepository extends JpaRepository<TransactionEnti
 
     Page<TransactionEntity> findByIdAccountAndReceiverNameContainingIgnoreCase(int idAccount, String receiverName, Pageable pageable);
 
-    List<TransactionEntity> findByIdAccountAndTransactionTimestampBetween(int idAccount, LocalDateTime startTime, LocalDateTime endTime);
+    Page<TransactionEntity> findByIdAccountAndTransactionTimestampBetweenAndReceiverNameContainingIgnoreCase(
+            int idAccount, LocalDateTime startTime, LocalDateTime endTime, String receiverName, Pageable pageable);
 }

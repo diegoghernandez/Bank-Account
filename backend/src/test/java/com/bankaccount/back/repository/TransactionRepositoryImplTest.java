@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -58,7 +57,7 @@ public class TransactionRepositoryImplTest {
                 .idTransferAccount(4324)
                 .receiverName("Maria")
                 .transactionAmount(new BigDecimal("7657.75"))
-                .transactionTimestamp(LocalDateTime.of(2022, Month.JANUARY, 20, 20, 12, 0))
+                .transactionTimestamp(LocalDateTime.of(2022, Month.JANUARY, 20, 20, 12, 12))
                 .build();
 
         TransactionEntity transactionEntity3 = TransactionEntity.builder()
@@ -114,21 +113,24 @@ public class TransactionRepositoryImplTest {
 
     @Test
     @DisplayName("Should return all transactionEntities of the database with the specific idAccount and year of the database")
-    void getByIdAccountAndYear() {
+    void getByIdAccountAndDateAndName() {
+        PageRequest pageable = PageRequest.of(0, 10);
         LocalDateTime startTime = LocalDateTime.of(2022, Month.JANUARY, 1, 0, 0, 0);
-        LocalDateTime endTime = LocalDateTime.of(2023, Month.JANUARY, 1, 0, 0, 0);
+        LocalDateTime endTime = LocalDateTime.of(2022, Month.JANUARY, 31, 0, 0, 0);
 
-        Mockito.when(transactionCrudRepository.findByIdAccountAndTransactionTimestampBetween(84, startTime, endTime))
-                .thenReturn(Collections.singletonList(transactionEntityList.get(2)));
+        Mockito.when(transactionCrudRepository.findByIdAccountAndTransactionTimestampBetweenAndReceiverNameContainingIgnoreCase(
+                343, startTime, endTime, "ma", pageable))
+                .thenReturn(new PageImpl<>(Collections.singletonList(transactionEntityList.get(1))));
 
-        List<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndYear(84, 2022);
+        Page<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndDateAndName(343, 2022, Month.JANUARY, "ma", 0).get();
 
         assertAll(
-                () -> assertThat(transactionList.size()).isEqualTo(1),
-                () -> assertEquals(List.of(84), transactionList.stream().map(TransactionEntity::getIdAccount).toList()),
-                () -> assertEquals(List.of(6546L), transactionList.stream().map(TransactionEntity::getIdTransaction).toList()),
-                () -> assertEquals(List.of("6546734.76"), transactionList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
-                () -> assertEquals(Collections.singletonList(transactionEntityList.get(2).getTransactionTimestamp()), transactionList.stream().map(TransactionEntity::getTransactionTimestamp).toList())
+                () -> assertThat(transactionList.getSize()).isEqualTo(1),
+                () -> assertEquals(List.of(343), transactionList.stream().map(TransactionEntity::getIdAccount).toList()),
+                () -> assertEquals(List.of(342L), transactionList.stream().map(TransactionEntity::getIdTransaction).toList()),
+                () -> assertEquals(List.of("Maria"), transactionList.stream().map(TransactionEntity::getReceiverName).toList()),
+                () -> assertEquals(List.of("7657.75"), transactionList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
+                () -> assertEquals(Collections.singletonList(transactionEntityList.get(1).getTransactionTimestamp()), transactionList.stream().map(TransactionEntity::getTransactionTimestamp).toList())
         );
     }
 

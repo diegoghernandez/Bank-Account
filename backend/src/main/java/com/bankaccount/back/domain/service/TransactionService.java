@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.Month;
 import java.util.Optional;
 
 @Service
@@ -27,7 +27,7 @@ public class TransactionService {
         return transactionRepository.getByIdAccountAndName(idAccount, name, page);
     }
 
-    public List<TransactionEntity> getByIdAccountAndYear(int idAccount, int year) {
-        return transactionRepository.getByIdAccountAndYear(idAccount, year);
+    public Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Month month, String name, int page) {
+        return transactionRepository.getByIdAccountAndDateAndName(idAccount, year, month, name, page);
     }
 }

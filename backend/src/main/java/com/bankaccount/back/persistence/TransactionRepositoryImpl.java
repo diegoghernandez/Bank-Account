@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.List;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Optional;
 
 @Repository
@@ -38,11 +38,14 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public List<TransactionEntity> getByIdAccountAndYear(int idAccount, int year) {
-        LocalDateTime startDate = LocalDateTime.of(year, Month.JANUARY, 1, 0, 0 ,0);
-        LocalDateTime endDate = LocalDateTime.of(year + 1, Month.JANUARY, 1, 0, 0 ,0);
+    public Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Month month, String name, int page) {
+        LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0 ,0);
+        LocalDateTime endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
+        System.out.println(endDate);
+        Pageable pageRequest = PageRequest.of(page, 10);
 
-        return transactionCrudRepository.findByIdAccountAndTransactionTimestampBetween(idAccount, startDate, endDate);
+        return Optional.of(transactionCrudRepository.findByIdAccountAndTransactionTimestampBetweenAndReceiverNameContainingIgnoreCase(
+                idAccount, startDate, endDate, name, pageRequest));
     }
 
     @Override
