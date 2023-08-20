@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DividerCard } from "../../components/Divider/DividerCard/DividerCard";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { TextField } from "../../components/TextField/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { getTransactions, getTransactionsByName } from "../_services/transactions";
+import { getTransactions, getTransactionsByName, getTransactionsByDateAndName } from "../_services/transactions";
 import { TransactionType } from "../../constants/TransactionType";
 
-const getFormattedDate = (date) => {
-   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+const getFormattedDate = (date) => {
    const transformDate = Date.parse(date);  
    const newDate = new Date(transformDate);
 
@@ -43,8 +43,7 @@ const getDatesAndModifiedContent = (dates, content) => {
 export const Transactions = () => {
    const [allTransactions, setAllTransactions] = useState({
       default: [],
-      name: [],
-      date: []
+      search: []
    });
    const [texts, setTexts] = useState({
       type: "",
@@ -53,132 +52,146 @@ export const Transactions = () => {
    });
    const [dates, setDates] = useState({
       default: [],
-      name: [],
-      date: []
+      search: []
    });
    const [page, setPage] = useState({
       default: 0,
-      name: [0, ""]
+      search: [0, "", ""],
    });
    const [notFound, setNotFound] = useState(false); 
    const [loading, setLoading] = useState(true);
 
    const typeReference = useRef();
    const textReference = useRef();
+   const dateReference = useRef();
 
    const { idAccount } = JSON.parse(localStorage.getItem("account"));
 
    const handleChange = () =>{
       const text = textReference.current?.value;
       const type = typeReference.current?.value;
+      const date = dateReference.current?.value;
 
-      if (texts.name !== text) {
-         setDates({ ...dates, name: [] });
-         setAllTransactions({ ...allTransactions, name: [] });  
-         setPage({ ...page, name: [0, text]});
-      }
+      setDates({ ...dates, search: [] });
+      setAllTransactions({ ...allTransactions, search: [] });
+      setPage({ ...page, search: [0, "", ""] });  
 
       setNotFound(false);
       setLoading(true);
+
       setTexts({
          type: type,
-         name: text
+         name: text,
+         date: date.split(" ")
       });
+
+      globalThis.removeEventListener("scrollend", () => setPage({
+         ...page,
+         search: page.search + 1
+      }));
    };
+
+   const getData = useCallback(async () => {
+      try {
+         let content = {};
+         let last = false;
+         let type = "default";
+         let pageContent = page[type] + 1;
+
+         setLoading(true);
+
+         if (texts.date[0] || texts.name) {
+            globalThis.removeEventListener("scrollend", () => setPage({
+               ...page,
+               default: page.default + 1
+            }));
+
+            const text = textReference?.current?.value;
+            const date = dateReference?.current?.value;
+            let actualPage = page.search[0];
+            if ((text !== page.search[1]) || (date !== page.search[2])) {
+               setPage({...page, search: [0, text, date]});
+               actualPage = 0;
+            } 
+
+            pageContent = [page.search[0] + 1, page.search[1], page.search[2]];
+
+            if (texts.date[0]) {
+               const { content: dateContent, last: dateLast } = await 
+                  getTransactionsByDateAndName(idAccount, texts.date[0], texts.date[1]?.toUpperCase() ?? "", texts.name, actualPage)
+
+               content = dateContent;
+               last = dateLast;
+            } else {
+               const { content: nameContent, last: nameLast } = await getTransactionsByName(idAccount, texts.name, actualPage);
+   
+               content = nameContent;
+               last = nameLast;
+            }
+
+            type = "search";
+         } else {
+            const { content: defaultContent, last: defaultLast } = await getTransactions(idAccount, page?.default);
+
+            content = defaultContent;
+            last = defaultLast;
+         }
+
+         const { loopDates, modifiedContent } = getDatesAndModifiedContent(dates[type], content);
+         
+         const reverseTransactions = allTransactions[type].toReversed();
+         const isDupe = reverseTransactions.some((transaction) => modifiedContent.some((value) => {
+            if (value?.date) return false;
+            return value?.idTransaction === transaction?.idTransaction;
+         }));
+
+         if (!isDupe) {
+            setDates({
+               ...dates,
+               [type]: loopDates
+            });
+            setAllTransactions({
+               ...allTransactions,
+               [type]: [...allTransactions[type], modifiedContent].flat()
+            });  
+         }
+         setNotFound(false);
+         setLoading(false);
+         if (last) {
+            setLoading(false);
+            globalThis.removeEventListener("scrollend", () => setPage({
+               ...page,
+               [type]: pageContent
+            }));
+         } else {
+            globalThis.addEventListener("scrollend", () => setPage({
+               ...page,
+               [type]: pageContent
+            }));
+
+            if (texts.name || texts.date) {
+               globalThis.removeEventListener("scrollend", () => setPage({
+                  ...page,
+                  default: page.default + 1
+               }));
+            }
+         }
+      } catch (error) {
+         setNotFound(true);
+         setLoading(false);
+         setDates({ ...dates, search: [] });
+         setAllTransactions({ ...allTransactions, search: [] });  
+      }
+   }, [page, texts.name, texts.date]);
 
    let transactions = allTransactions.default;
 
-   if (texts.name) transactions = allTransactions.name;
-
+   if (texts.date[0]) transactions = allTransactions.search;
+   else if (texts.name) transactions = allTransactions.search;
+   
    useEffect(() => {
-      if (!texts.name) {
-         getTransactions(idAccount, page.default)
-            .then(({content, last}) => {
-               const { loopDates, modifiedContent } = getDatesAndModifiedContent(dates.default, content);
-               
-               setDates({
-                  ...dates,
-                  default: loopDates
-               });
-               setAllTransactions({
-                  ...allTransactions,
-                  default: [...allTransactions.default, modifiedContent].flat()
-               });  
-               setNotFound(false);
-               
-               if (last) {
-                  setLoading(false);
-                  globalThis.removeEventListener("scrollend", () => setPage({
-                     ...page,
-                     default: page.default + 1
-                  }));
-               } else {
-                  globalThis.addEventListener("scrollend", () => setPage({
-                     ...page,
-                     default: page.default + 1
-                  }));
-               }
-            }).catch(() => {
-               setNotFound(true);
-               setLoading(false);
-            });
-      } 
-   }, [page.default]);
-
-   useEffect(() => {
-      const text = textReference?.current?.value;
-      let actualPage = page.name[0];
-      if (text !== page.name[1]) {
-         setPage({...page, name: [0, text]});
-         actualPage = 0;
-      }
-      if (texts.name) {   
-         setLoading(true)
-         getTransactionsByName(idAccount, texts.name, actualPage)
-            .then(({content, last}) => {
-               const { loopDates, modifiedContent } = getDatesAndModifiedContent(dates.name, content);
-               
-               setDates({
-                  ...dates,
-                  name: loopDates
-               });
-               setAllTransactions({
-                  ...allTransactions,
-                  name: [...allTransactions.name, modifiedContent].flat()
-               });  
-               setNotFound(false);
-               setLoading(false);
-               
-               if (last) {
-                  setLoading(false);
-                  globalThis.removeEventListener("scrollend", () => setPage({
-                     ...page,
-                     name: [page.name[0] + 1, page.name[1]]
-                  }));
-               } else {
-                  globalThis.addEventListener("scrollend", () => setPage({
-                     ...page,
-                     name: [page.name[0] + 1, page.name[1]]
-                  }));
-
-                  globalThis.removeEventListener("scrollend", () => setPage({
-                     ...page,
-                     default: page.default + 1
-                  }));
-               }
-            }).catch(() => {
-               setNotFound(true);
-               setLoading(false);
-               setDates({ ...dates, name: [] });
-               setAllTransactions({ ...allTransactions, name: [] });  
-            });
-      } else {
-         globalThis.addEventListener("scrollend", () => setPage({
-            ...page,
-            default: page.default + 1
-         }));
-      }
-   }, [page.name[0], texts.name]);
+      getData();
+   }, [getData]);
 
    return (
       <main>
@@ -195,6 +208,17 @@ export const Transactions = () => {
                type={TextFieldTypes.Search}
                valueRef={textReference}
                functionToUpdate={handleChange}
+            />
+            <TextField 
+               label="Date"
+               type={TextFieldTypes.Modal}
+               valueRef={dateReference}
+               functionToUpdate={handleChange}
+               modalParameters={{
+                  year: ["", 2018, 2019, 2020, 2021, 2022, 2023],
+                  month: ["", ...months].flat(),
+                  day: ["", "01", "02", "03", "04", "05"]
+               }}
             />
          </form>
          <h2 className="text-lg font-medium font-sans ml-4 underline">Transactions</h2>

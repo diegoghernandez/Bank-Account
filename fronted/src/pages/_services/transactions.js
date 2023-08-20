@@ -41,7 +41,6 @@ export const getTransactionsByName = async (id, name, page) => {
 export const getTransactionsByDateAndName = async (id, year, month, name, page) => {
    const response = await fetch(`${API}/date?id=${id}&year=${year}&month=${month}&name=${name}&page=${page}`, {
       method: "GET",
-      mode: "no-cors",
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN

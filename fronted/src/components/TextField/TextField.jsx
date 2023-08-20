@@ -58,7 +58,7 @@ export const TextField = ({
       <div ref={ref} className="inline-flex flex-col w-full group">
          <label htmlFor={textFieldId} className={`bg-white w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
          ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base group-hover:${textLabelColor[3]} ${(type === TextFieldTypes.Search && !value) && "ml-6"}`}
-         ${(value) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
+         ${(value.length > 0) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
             {label}
          </label>
             
@@ -79,10 +79,7 @@ export const TextField = ({
                autoComplete="off"
                onClick={() => {
                   if (!notModal) showModal(); 
-                  else {
-                     handleClick();
-                     setIsChange(!isChange);
-                  } 
+                  else handleClick(); 
                }}
                onFocus={() => {
                   if (!notModal) {
@@ -157,6 +154,8 @@ export const TextField = ({
             title={label}
             parameters={modalParameters}
             setValue={setValue}
+            isChange={isChange}
+            setIsChange={setIsChange}
          />}
       </div>
    );

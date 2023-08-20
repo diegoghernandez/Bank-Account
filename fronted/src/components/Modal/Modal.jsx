@@ -5,7 +5,9 @@ export const Modal = ({
    dialogRef,
    title,
    parameters,
-   setValue
+   setValue,
+   isChange,
+   setIsChange
 }) => {
    const storyRef = useRef();
 
@@ -26,7 +28,7 @@ export const Modal = ({
          formattedValue = `Each ${formattedValue} hour(s)`
       }
 
-      setValue?.(formattedValue ?? values);
+      setValue?.(formattedValue ?? values.join().replace(",", " "));
    };
 
    const showModal = () => {
@@ -63,13 +65,16 @@ export const Modal = ({
                </div>
                <div className="w-full inline-flex justify-end items-end gap-4 mt-6">
                   <button 
+                     type="button"
                      onClick={closeModal}
                      className="text-sm font-medium font-sans text-primary"
                   >Cancel</button>
                   <button 
+                     type="button"
                      onClick={() => {
                         handleSubmit();
                         closeModal();
+                        setIsChange(!isChange);
                      }}
                      className="text-sm font-medium font-sans text-primary"
                   >Accept</button>
