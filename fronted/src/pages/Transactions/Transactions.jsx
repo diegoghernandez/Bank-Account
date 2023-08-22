@@ -215,7 +215,7 @@ export const Transactions = () => {
                valueRef={dateReference}
                functionToUpdate={handleChange}
                modalParameters={{
-                  year: ["", 2018, 2019, 2020, 2021, 2022, 2023],
+                  year: [2023, 2022, 2021, 2020, 2019],
                   month: ["", ...months].flat(),
                   day: ["", "01", "02", "03", "04", "05"]
                }}

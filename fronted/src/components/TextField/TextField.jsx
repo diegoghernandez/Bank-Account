@@ -23,28 +23,28 @@ export const TextField = ({
    const [isClicked, setIsClicked] = useState(false);
    const [value, setValue] = useState("");
    const [isChange, setIsChange] = useState(false);
+   const [isShowMenu, setIsShowMenu] = useState(false);
    const textFieldId = useId();
-   
-   const handleClick = () => {
-      setIsClicked(true);
-   };
    
    const handleClickOutside = () => {
       setIsClicked(false);
       setIsChange(!isChange);
+      setIsShowMenu(false);
    };
 
    const ref = useOutsideClick(handleClickOutside);
    const dialogRef = useRef();
    
    const showModal = () => {
-      dialogRef.current.showModal();
+      dialogRef.current?.showModal();
    }
    
    const onClear = () => setValue("");
 
    const notMenu = type !== TextFieldTypes.Menu;
    const notModal = type !== TextFieldTypes.Modal;
+   let isReadOnly = (!notModal || !notMenu) ? true : false;
+
 
    const svgContainer = "bg-transparent flex justify-center items-center w-6 h-6 mr-3";
    const textLabelColor = (isError) ? ["text-error", "text-error", "text-error", "text-on-error-container"] : ["text-primary", "text-onSurface", "text-onSurface-variant", "text-onSurface"];
@@ -55,16 +55,16 @@ export const TextField = ({
    }, [isChange]);
    
    return (
-      <div ref={ref} className="inline-flex flex-col w-full group">
+      <div ref={ref} className="inline-flex flex-col w-full group/text">
          <label htmlFor={textFieldId} className={`bg-white w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
-         ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base group-hover:${textLabelColor[3]} ${(type === TextFieldTypes.Search && !value) && "ml-6"}`}
+         ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base group-hover/text:${textLabelColor[3]} ${(type === TextFieldTypes.Search && !value) && "ml-6"}`}
          ${(value.length > 0) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
             {label}
          </label>
             
          <div className={`inline-flex relative items-center rounded outline font-sans font-normal text-base cursor-text 
          ${isError ? "caret-error" : "caret-primary"}
-         ${isClicked ? `outline-2 ${outlineColor[1]}` : `outline-1 ${outlineColor[0]} group-hover:${outlineColor[2]}`}`}>
+         ${isClicked ? `outline-2 ${outlineColor[1]}` : `outline-1 ${outlineColor[0]} group-hover/text:${outlineColor[2]}`}`}>
 
             {type === TextFieldTypes.Search && <svg className="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                <path d="M19.6 21L13.3 14.7C12.8 15.1 12.225 15.4167 11.575 15.65C10.925 15.8833 10.2333 16 9.5 16C7.68333 16 6.14583 15.3708 4.8875 14.1125C3.62917 12.8542 3 11.3167 3 9.5C3 7.68333 3.62917 6.14583 4.8875 4.8875C6.14583 3.62917 7.68333 3 9.5 3C11.3167 3 12.8542 3.62917 14.1125 4.8875C15.3708 6.14583 16 7.68333 16 9.5C16 10.2333 15.8833 10.925 15.65 11.575C15.4167 12.225 15.1 12.8 14.7 13.3L21 19.6L19.6 21ZM9.5 14C10.75 14 11.8125 13.5625 12.6875 12.6875C13.5625 11.8125 14 10.75 14 9.5C14 8.25 13.5625 7.1875 12.6875 6.3125C11.8125 5.4375 10.75 5 9.5 5C8.25 5 7.1875 5.4375 6.3125 6.3125C5.4375 7.1875 5 8.25 5 9.5C5 10.75 5.4375 11.8125 6.3125 12.6875C7.1875 13.5625 8.25 14 9.5 14Z" fill="#45454E"/>
@@ -77,22 +77,24 @@ export const TextField = ({
                type={inputType.description}
                ref={valueRef}
                autoComplete="off"
+               readOnly={isReadOnly}
                onClick={() => {
-                  if (!notModal) showModal(); 
-                  else handleClick(); 
-               }}
-               onFocus={() => {
+                  setIsClicked(true);
                   if (!notModal) {
-                     setIsClicked(false)
-                  }else if (notMenu) { 
-                     setIsClicked(true)
-                  } else {
-                     handleClick();
-                     onClear();
+                     showModal();
+                  } else if (!notMenu) {
+                     setIsShowMenu(true);
                   }
                }}
+               onFocus={() => {
+                  setIsClicked(true);
+                  if (!notMenu) { 
+                     onClear();
+                  }
+                  
+               }}
                onBlur={() => {
-                  if (notMenu) {
+                  if (notMenu && notModal) {
                      setIsClicked(false)
                   }
                }}
@@ -101,8 +103,15 @@ export const TextField = ({
                   if (e.key === "Enter") {
                      e.target.blur();
                      setIsChange(!isChange);
-                     setValue(value)
+                     setValue(value);
+                     showModal();
+                     if (!notMenu) {
+                        setIsShowMenu(true);
+                     }
                   } 
+                  if (e.key === "Tab" && (!notModal || !notMenu)) {
+                     setIsClicked(false);
+                  }
                }}
             />
 
@@ -139,14 +148,14 @@ export const TextField = ({
          </div>
          {(supportiveText) && <p className={`ml-4 mt-1 text-sm ${isError ? "text-error" : "text-onSurface-variant"}`}>{supportiveText}</p>}
          
-         {(!notMenu && isClicked)  && <Menu 
-            text={value} 
+         {(!notMenu && isShowMenu)  && <Menu 
             parameters={menuParameters}
             setValue={setValue}
             handleClickOutside={handleClickOutside}
             setIsClicked={setIsClicked}
             isChange={isChange}
             setIsChange={setIsChange}
+            setIsShowMenu={setIsShowMenu}
          />}
 
          {!notModal && <Modal 
@@ -156,6 +165,7 @@ export const TextField = ({
             setValue={setValue}
             isChange={isChange}
             setIsChange={setIsChange}
+            setIsClicked={setIsClicked}
          />}
       </div>
    );

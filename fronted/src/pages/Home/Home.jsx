@@ -75,7 +75,7 @@ export const Home = () => {
             })}
          </div>
 
-         <Link to="/transaction">
+         <Link className="group/fab" to="/transaction">
             <Fab label="Transaction" />
          </Link>
          <div className="w-full h-20">

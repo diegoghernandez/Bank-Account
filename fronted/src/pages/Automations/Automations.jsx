@@ -102,7 +102,7 @@ export const Automations = () => {
             })}
          </div>
 
-         <Link to="/automation">
+         <Link className="group/fab" to="/automation">
             <Fab label="Automation" />
          </Link>
          <div className="w-full h-20">

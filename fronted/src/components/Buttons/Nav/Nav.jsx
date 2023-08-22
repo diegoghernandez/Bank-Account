@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import { Page } from "../../../constants/Page";
-import "./Nav.css"
 
 const getPage = (page, svgColor) => {
    switch (page) {
@@ -42,8 +40,8 @@ const getPage = (page, svgColor) => {
 }
 
 const getActive = (isActive) => isActive 
-   ? ["bg-secondary-container", "nav--state--active", "text-onSurface", "#191B2B"]
-   : ["", "nav--state--inactive", "text-onSurface-variant", "#45454E"];
+   ? ["bg-secondary-container", "group-hover/nav:bg-onSurface/8 group-focus/nav:bg-onSurface-variant/8", "text-onSurface", "#191B2B"]
+   : ["", "group-hover/nav:bg-onSurface/12 group-focus/nav:bg-onSurface-variant/12", "text-onSurface-variant", "#45454E"];
 
 const BASE_BUTTON_CLASSES = "flex flex-col justify-center items-center cursor-pointer pt-3";
 
@@ -61,13 +59,13 @@ export const Nav = ({
    const pageElements = getPage(page, svgColor);
 
    return (
-      <button type="button" className={BASE_BUTTON_CLASSES}>
+      <div className={`${BASE_BUTTON_CLASSES}`}>
          <div className={`${BASE_INDICATOR_CLASSES} ${svgContainer} mb-1`}>
             <div className={`${BASE_INDICATOR_CLASSES} ${stateLayer}`}>
                {pageElements.svg}
             </div>
          </div>
          <p className={`text-xs font-sans font-medium ${textColor}`}>{pageElements.label}</p>
-      </button>
+      </div>
    );
 }

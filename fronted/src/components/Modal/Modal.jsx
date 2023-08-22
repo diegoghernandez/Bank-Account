@@ -7,7 +7,8 @@ export const Modal = ({
    parameters,
    setValue,
    isChange,
-   setIsChange
+   setIsChange,
+   setIsClicked
 }) => {
    const storyRef = useRef();
 
@@ -66,7 +67,10 @@ export const Modal = ({
                <div className="w-full inline-flex justify-end items-end gap-4 mt-6">
                   <button 
                      type="button"
-                     onClick={closeModal}
+                     onClick={() => { 
+                        closeModal();
+                        setIsClicked();
+                     }}
                      className="text-sm font-medium font-sans text-primary"
                   >Cancel</button>
                   <button 
@@ -75,6 +79,7 @@ export const Modal = ({
                         handleSubmit();
                         closeModal();
                         setIsChange(!isChange);
+                        setIsClicked(false)
                      }}
                      className="text-sm font-medium font-sans text-primary"
                   >Accept</button>
