@@ -16,7 +16,11 @@ public interface AccountRepository {
 
     void updateStatus(int id);
 
+    void updateName(String newName, int id);
+
     void updatePassword(String newPassword, int id);
+
+    void updateEmail(String newEmail, int id);
 
     AccountEntity saveAccount(AccountEntity accountEntity);
 

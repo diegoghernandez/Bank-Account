@@ -25,8 +25,18 @@ public interface AccountCrudRepository extends CrudRepository<AccountEntity, Int
 
     @Modifying
     @Transactional
+    @Query("UPDATE AccountEntity AS acc SET acc.accountName = :newName WHERE acc.idAccount = :id")
+    void updateName(@Param("newName") String newName, int id);
+
+    @Modifying
+    @Transactional
     @Query("UPDATE AccountEntity AS acc SET acc.password = :newPassword WHERE acc.idAccount = :id")
     void updatePassword(@Param("newPassword") String newPassword, int id);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE AccountEntity AS acc SET acc.email = :newEmail WHERE acc.idAccount = :id")
+    void updateEmail(@Param("newEmail") String newEmail, int id);
 
     @Modifying
     @Transactional

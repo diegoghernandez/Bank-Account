@@ -17,4 +17,6 @@ public interface TransactionRepository {
     Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Optional<Month> month, String name, int page);
 
     TransactionEntity saveTransaction(TransactionEntity transactionEntity);
+
+    void updateTransactionsName(int id, String name);
 }

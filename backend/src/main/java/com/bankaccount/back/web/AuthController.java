@@ -4,6 +4,7 @@ import com.bankaccount.back.domain.event.RegistrationCompleteEvent;
 import com.bankaccount.back.domain.service.AccountService;
 import com.bankaccount.back.domain.service.TokenService;
 import com.bankaccount.back.exception.NotAllowedException;
+import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.VerificationToken;
 import com.bankaccount.back.web.config.JwtUtil;
@@ -13,23 +14,23 @@ import com.bankaccount.back.web.dto.PasswordDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
@@ -110,7 +111,7 @@ public class AuthController {
     }
 
     @PostMapping("/save-password")
-    private String savePassword(@RequestParam("token") String token, @RequestBody @Valid PasswordDto passwordDto) {
+    private String savePassword(@RequestParam("token") String token, @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
         String result = tokenService.validatePasswordResetToken(token);
         if (!result.equalsIgnoreCase("valid")) {
             return "Invalid token";
@@ -118,27 +119,26 @@ public class AuthController {
 
         Optional<AccountEntity> accountEntity = tokenService.getAccountByPasswordResetToken(token);
         if (accountEntity.isPresent()) {
-            accountService.changePassword(passwordDto.newPassword(), accountEntity.get().getIdAccount());
+            accountService.changePassword(passwordDto);
             return "Password Reset Successfully";
         }
 
         return "Invalid token";
     }
 
-    @PostMapping("/change-password")
-    public String changePassword(@RequestBody @Valid PasswordDto passwordDto) {
-        Optional<AccountEntity> accountEntity = accountService.getAccountByEmail(passwordDto.email());
+    @PostMapping("/secure/change-name")
+    public String changeName(@RequestParam @NotBlank String name, @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+        return accountService.changeName(name, passwordDto);
+    }
 
-        if (accountEntity.isPresent()) {
-            if (!accountService.checkIfValidOldPassword(accountEntity.get(), passwordDto.oldPassword())) {
-                return "Invalid Old Password";
-            } else {
-                accountService.changePassword(passwordDto.newPassword(), accountEntity.get().getIdAccount());
-                return "Password Changed Successfully";
-            }
-        }
+    @PostMapping("/secure/change-password")
+    public String changePassword(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+            return accountService.changePassword(passwordDto);
+    }
 
-        return "Email doesn't exist";
+    @PostMapping("/secure/change-email")
+    public String changeEmail(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
+        return accountService.changeEmail(passwordDto);
     }
 
     private String passwordResetTokenEmail(AccountEntity accountEntity, String applicationUrl, String token) {

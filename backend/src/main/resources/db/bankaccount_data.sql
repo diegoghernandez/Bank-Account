@@ -23,11 +23,11 @@ INSERT INTO `transaction` (id_transaction, id_account, id_transfer_account, rece
 (2, 2, 1, 'Pedro', 2000.00, 'DEPOSIT', {ts '2022-10-09 20:10:12'}),
 (3, 1, 2, 'Maria', 400.00, 'ONLINE_PAYMENT', {ts '2023-10-09 20:10:12'}),
 (4, 1, 2, 'Maria', 300.00, 'ONLINE_PAYMENT', {ts '2023-10-09 20:10:12'}),
-(5, 1, null, 'Pedro', 6000.00, 'DEPOSIT', {ts '2023-10-09 20:10:12'}),
+(5, 1, 0, 'Pedro', 6000.00, 'DEPOSIT', {ts '2023-10-09 20:10:12'}),
 (6, 1, 2, 'Luisa', 2000.00, 'WIRE_TRANSFER', {ts '2022-10-09 20:10:12'}),
 (7, 1, 2, 'Maria', 400.00, 'ONLINE_PAYMENT', {ts '2022-10-09 20:10:12'}),
 (8, 1, 2, 'Ana', 300.00, 'ONLINE_PAYMENT', {ts '2024-11-09 20:10:12'}),
 (9, 1, 2, 'Javier', 6000.00, 'WIRE_TRANSFER', {ts '2022-10-09 20:10:12'}),
-(10, 1, null, 'Pedro', 2000.00, 'DEPOSIT', {ts '2022-10-09 20:10:12'}),
+(10, 1, 0, 'Pedro', 2000.00, 'DEPOSIT', {ts '2022-10-09 20:10:12'}),
 (11, 1, 2, 'Maria', 400.00, 'ONLINE_PAYMENT', {ts '2022-10-09 20:10:12'}),
 (12, 1, 2, 'Maria', 300.00, 'ONLINE_PAYMENT', {ts '2024-10-09 20:10:12'});

@@ -1,9 +1,10 @@
 package com.bankaccount.back.controller;
 
 import com.bankaccount.back.constants.AccountRoles;
-import com.bankaccount.back.domain.AccountDomain;
 import com.bankaccount.back.domain.service.AccountService;
 import com.bankaccount.back.domain.service.TokenService;
+import com.bankaccount.back.exception.NotAllowedException;
+import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.VerificationToken;
 import com.bankaccount.back.web.AuthController;
@@ -70,7 +71,7 @@ public class AuthControllerTest {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         assertAll(
-                () -> mockMvc.perform(post("/api/auth/login")
+                () -> mockMvc.perform(post("/auth/login")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(new LoginDto("user@user.com", "1234")))
                                 .with(user("user").roles(USER))
@@ -117,14 +118,14 @@ public class AuthControllerTest {
                 .thenReturn("hello");
 
         assertAll(
-                () -> mockMvc.perform(get("/api/auth/verify-registration")
+                () -> mockMvc.perform(get("/auth/verify-registration")
                                 .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(USER)))
                         .andExpect(status().isOk())
                         .andExpect(content().string("Account verifies successfully")),
 
-                () -> mockMvc.perform(get("/api/auth/verify-registration")
+                () -> mockMvc.perform(get("/auth/verify-registration")
                                 .param("token", "hello")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(USER)))
@@ -152,7 +153,7 @@ public class AuthControllerTest {
                         .thenReturn(newVerificationToken);
 
         assertAll(
-                () -> mockMvc.perform(get("/api/auth/resend-token")
+                () -> mockMvc.perform(get("/auth/resend-token")
                                 .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(USER)))
@@ -165,6 +166,7 @@ public class AuthControllerTest {
     @DisplayName("Should send a url for reset the password")
     void resetPassword() {
         PasswordDto passwordDto = new PasswordDto(
+                1,
                 "user@user.com",
                 "1234",
                 "4321"
@@ -186,7 +188,7 @@ public class AuthControllerTest {
                         .thenReturn(Optional.of(account));
 
         assertAll(
-                () -> mockMvc.perform(post("/api/auth/reset-password")
+                () -> mockMvc.perform(post("/auth/reset-password")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(passwordDto))
                                 .with(user("user").roles(USER))
@@ -199,6 +201,7 @@ public class AuthControllerTest {
     @DisplayName("Should save a new password")
     void savePassword() {
         PasswordDto passwordDto = new PasswordDto(
+                1,
                 "user@user.com",
                 "1234",
                 "4321"
@@ -220,12 +223,176 @@ public class AuthControllerTest {
                 .thenReturn(Optional.of(account));
 
         assertAll(
-                () -> mockMvc.perform(post("/api/auth/reset-password")
+                () -> mockMvc.perform(post("/auth/reset-password")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(passwordDto))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
+        );
+    }
+
+    @Test
+    @DisplayName("Should save a new name")
+    void changeName() throws NotFoundException {
+        PasswordDto passwordError = new PasswordDto(
+                1,
+                "user@user.com",
+                "1234",
+                "4321"
+        );
+
+        PasswordDto password = new PasswordDto(
+                1,
+                "user@user.com",
+                "123456",
+                "1234"
+        );
+
+        AccountEntity account = AccountEntity.builder()
+                .idAccount(687452786)
+                .accountName("Random634675")
+                .email("random@names.com")
+                .password("1234567")
+                .currentBalance(new BigDecimal("654316.76"))
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        Mockito.when(accountService.changeName("newName", password))
+                .thenReturn("Change name successfully");
+
+        Mockito.when(accountService.changeName("newError", passwordError))
+                .thenReturn("Invalid password");
+
+        assertAll(
+                () -> mockMvc.perform(post("/auth/secure/change-name")
+                                .param("name", "newName")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(password))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Change name successfully")),
+
+                () -> mockMvc.perform(post("/auth/secure/change-name")
+                                .param("name", "newError")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(passwordError))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Invalid password"))
+        );
+    }
+
+    @Test
+    @DisplayName("Should save a new password")
+    void changePassword() throws NotFoundException {
+        PasswordDto passwordError = new PasswordDto(
+                1,
+                "user@user.com",
+                "1234",
+                "4321"
+        );
+
+        PasswordDto password = new PasswordDto(
+                1,
+                "user@user.com",
+                "123456",
+                "1234"
+        );
+
+        AccountEntity account = AccountEntity.builder()
+                .idAccount(687452786)
+                .accountName("Random634675")
+                .email("random@names.com")
+                .password("1234567")
+                .currentBalance(new BigDecimal("654316.76"))
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        Mockito.when(accountService.changePassword(password))
+                .thenReturn("Password changed successfully");
+
+        Mockito.when(accountService.changePassword(passwordError))
+                .thenReturn("Invalid old password");
+
+        assertAll(
+                () -> mockMvc.perform(post("/auth/secure/change-password")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(password))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Password changed successfully")),
+
+                () -> mockMvc.perform(post("/auth/secure/change-password")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(passwordError))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Invalid old password"))
+        );
+    }
+
+    @Test
+    @DisplayName("Should save a new email")
+    void changeEmail() throws NotFoundException, NotAllowedException {
+        PasswordDto passwordError = new PasswordDto(
+                1,
+                "user@user.com",
+                "1234",
+                "4321"
+        );
+
+        PasswordDto password = new PasswordDto(
+                1,
+                "user@user.com",
+                "123456",
+                "1234"
+        );
+
+        AccountEntity account = AccountEntity.builder()
+                .idAccount(687452786)
+                .accountName("Random634675")
+                .email("random@names.com")
+                .password("1234567")
+                .currentBalance(new BigDecimal("654316.76"))
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        Mockito.when(accountService.changeEmail(password))
+                .thenReturn("Change email successfully");
+
+        Mockito.when(accountService.changeEmail(passwordError))
+                .thenReturn("Invalid password");
+
+        assertAll(
+                () -> mockMvc.perform(post("/auth/secure/change-email")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(password))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Change email successfully")),
+
+                () -> mockMvc.perform(post("/auth/secure/change-email")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(passwordError))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Invalid password"))
         );
     }
 }

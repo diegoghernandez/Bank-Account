@@ -58,4 +58,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public TransactionEntity saveTransaction(TransactionEntity transactionEntity) {
         return transactionCrudRepository.save(transactionEntity);
     }
+
+    @Override
+    public void updateTransactionsName(int id, String name) {
+        transactionCrudRepository.updateNameByIdAccount(id, name);
+        transactionCrudRepository.updateNameByIdTransferAccount(id, name);
+    }
 }

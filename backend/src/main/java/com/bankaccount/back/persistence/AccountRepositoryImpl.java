@@ -41,8 +41,18 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
+    public void updateName(String newName, int id) {
+        accountCrudRepository.updateName(newName, id);
+    }
+
+    @Override
     public void updatePassword(String newPassword, int id) {
         accountCrudRepository.updatePassword(newPassword, id);
+    }
+
+    @Override
+    public void updateEmail(String newEmail, int id) {
+        accountCrudRepository.updateEmail(newEmail, id);
     }
 
     @Override

@@ -154,4 +154,18 @@ public class TransactionRepositoryImplTest {
                 () -> assertEquals(transactionEntity.getTransactionTimestamp(), transactionSave.getTransactionTimestamp())
         );
     }
+
+    @Test
+    @DisplayName("Should update all receiverNames in the database with the specific id")
+    void updateTransactionsName() {
+        Mockito.doNothing().when(transactionCrudRepository).updateNameByIdAccount(Mockito.isA(Integer.class), Mockito.isA(String.class));
+        Mockito.doNothing().when(transactionCrudRepository).updateNameByIdTransferAccount(Mockito.isA(Integer.class), Mockito.isA(String.class));
+
+        transactionRepository.updateTransactionsName(1, "newPAss");
+
+        assertAll(
+                () -> Mockito.verify(transactionCrudRepository, Mockito.times(1)).updateNameByIdAccount(1, "newPAss"),
+                () -> Mockito.verify(transactionCrudRepository, Mockito.times(1)).updateNameByIdTransferAccount(1, "newPAss")
+        );
+    }
 }

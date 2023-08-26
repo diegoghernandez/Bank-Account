@@ -72,7 +72,7 @@ public class TransactionCrudRepositoryTest {
                 () -> assertEquals(List.of(1, 1, 1, 1, 1),
                         transactionEntityList.stream().map(TransactionEntity::getIdAccount).toList()),
 
-                () -> assertEquals(Arrays.asList(2, 2, 2, null, 2),
+                () -> assertEquals(Arrays.asList(2, 2, 2, 0, 2),
                         transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
 
                 () -> assertEquals(List.of("Maria", "Maria", "Maria", "Pedro", "Luisa"),
@@ -193,6 +193,46 @@ public class TransactionCrudRepositoryTest {
                 () -> assertEquals(transactionEntity.getTransactionAmount(), transactionSave.getTransactionAmount()),
                 () -> org.junit.jupiter.api.Assertions.assertEquals(transactionEntity.getTransactionType(), transactionSave.getTransactionType()),
                 () -> assertTrue(transactionSave.getTransactionTimestamp().isBefore(LocalDateTime.now()))
+        );
+    }
+
+    @Test
+    @Sql("/db/bankaccount_data.sql")
+    @DisplayName("Should update all receiverNames by idTransferAccount the data.sql")
+    void updateNameByIdTransferAccount() {
+        PageRequest pageable = PageRequest.of(0, 3);
+        transactionCrudRepository.updateNameByIdTransferAccount(2, "TEst");
+
+        Page<TransactionEntity> transactionEntityList = transactionCrudRepository.findByIdAccount(1, pageable);
+
+        assertAll(
+                () -> assertThat(transactionEntityList.getContent().size()).isEqualTo(3),
+                () -> assertEquals(List.of(1, 1, 1), transactionEntityList.stream().map(TransactionEntity::getIdAccount).toList()),
+                () -> assertEquals(Arrays.asList(2, 2, 2), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
+                () -> assertEquals(List.of("TEst", "TEst", "TEst"), transactionEntityList.stream().map(TransactionEntity::getReceiverName).toList()),
+                () -> assertEquals(List.of("6000.00", "400.00", "300.00"), transactionEntityList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
+                () -> assertEquals(List.of(TransactionType.WIRE_TRANSFER, TransactionType.ONLINE_PAYMENT, TransactionType.ONLINE_PAYMENT),
+                        transactionEntityList.stream().map(TransactionEntity::getTransactionType).toList())
+        );
+    }
+
+    @Test
+    @Sql("/db/bankaccount_data.sql")
+    @DisplayName("Should update all receiverNames by idAccount the data.sql")
+    void updateNameByIdAccount() {
+        PageRequest pageable = PageRequest.of(0, 3);
+        transactionCrudRepository.updateNameByIdAccount(1, "TEst");
+
+        Page<TransactionEntity> transactionEntityList = transactionCrudRepository.findByIdAccountAndReceiverNameContainingIgnoreCase(1, "TEst", pageable);
+
+        assertAll(
+                () -> assertThat(transactionEntityList.getContent().size()).isEqualTo(2),
+                () -> assertEquals(List.of(1, 1), transactionEntityList.stream().map(TransactionEntity::getIdAccount).toList()),
+                () -> assertEquals(Arrays.asList(0, 0), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
+                () -> assertEquals(List.of("TEst", "TEst"), transactionEntityList.stream().map(TransactionEntity::getReceiverName).toList()),
+                () -> assertEquals(List.of("6000.00", "2000.00"), transactionEntityList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
+                () -> assertEquals(List.of(TransactionType.DEPOSIT, TransactionType.DEPOSIT),
+                        transactionEntityList.stream().map(TransactionEntity::getTransactionType).toList())
         );
     }
 }

@@ -73,7 +73,7 @@ public class AccountControllerTest {
                 .thenReturn(Optional.of(accountEntityList.get(1)));
 
         assertAll(
-                () -> mockMvc.perform(get("/api/accounts/id/75347")
+                () -> mockMvc.perform(get("/accounts/id/75347")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(ADMIN)))
                         .andExpect(status().isOk())
@@ -86,7 +86,7 @@ public class AccountControllerTest {
                         .andExpect(jsonPath("$.currentBalance")
                                 .value(accountEntityList.get(1).getCurrentBalance().toString())),
 
-                () -> mockMvc.perform(get("/api/accounts/id/54")
+                () -> mockMvc.perform(get("/accounts/id/54")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(ADMIN)))
                         .andExpect(status().isNotFound()),
@@ -104,7 +104,7 @@ public class AccountControllerTest {
                 .thenReturn(Optional.of(accountEntityList.get(0)));
 
         assertAll(
-                () -> mockMvc.perform(get("/api/accounts/email/random@names.com")
+                () -> mockMvc.perform(get("/accounts/email/random@names.com")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(ADMIN)))
                         .andExpect(status().isOk())
@@ -117,12 +117,12 @@ public class AccountControllerTest {
                         .andExpect(jsonPath("$.currentBalance")
                                 .value(accountEntityList.get(0).getCurrentBalance().toString())),
 
-                () -> mockMvc.perform(get("/api/accounts/email/ewtewtre@names.com")
+                () -> mockMvc.perform(get("/accounts/email/ewtewtre@names.com")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(ADMIN)))
                         .andExpect(status().isNotFound()),
 
-                () -> mockMvc.perform(get("/api/accounts/email/ewtewtre@names.com")
+                () -> mockMvc.perform(get("/accounts/email/ewtewtre@names.com")
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnauthorized())
         );

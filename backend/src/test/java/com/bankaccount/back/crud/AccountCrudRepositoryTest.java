@@ -80,6 +80,20 @@ public class AccountCrudRepositoryTest {
                 () -> assertThat(accountEntity.getCurrentBalance().toString()).isEqualTo("3000.00")
         );
     }
+    @Test
+    @Sql("/db/bankaccount_data.sql")
+    @DisplayName("Should update the name of a specific account with its id in the database")
+    public void updateName() {
+        accountCrudRepository.updateName("newTest", 1);
+
+        AccountEntity accountEntity = accountCrudRepository.findById(1).get();
+
+        assertAll(
+                () -> assertThat(accountEntity.getIdAccount()).isEqualTo(1),
+                () -> assertThat(accountEntity.getAccountName()).isEqualTo("newTest")
+        );
+    }
+
 
     @Test
     @Sql("/db/bankaccount_data.sql")
@@ -92,6 +106,20 @@ public class AccountCrudRepositoryTest {
         assertAll(
                 () -> assertThat(accountEntity.getIdAccount()).isEqualTo(3),
                 () -> assertThat(accountEntity.getPassword()).isEqualTo("test")
+        );
+    }
+
+    @Test
+    @Sql("/db/bankaccount_data.sql")
+    @DisplayName("Should update the email of a specific account with its id in the database")
+    public void updateEmail() {
+        accountCrudRepository.updateEmail("test@test.com", 5);
+
+        AccountEntity accountEntity = accountCrudRepository.findById(5).get();
+
+        assertAll(
+                () -> assertThat(accountEntity.getIdAccount()).isEqualTo(5),
+                () -> assertThat(accountEntity.getEmail()).isEqualTo("test@test.com")
         );
     }
 

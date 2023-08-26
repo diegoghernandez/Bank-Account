@@ -53,7 +53,7 @@ public class AccountRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should return one accountEntity with the specific id of the database and the mapper should transform to accountDomain")
+    @DisplayName("Should return one accountEntity with the specific id of the database")
     void getAccountById() {
         Mockito.when(accountCrudRepository.findById(958))
                 .thenReturn(Optional.of(accountEntityList.get(1)));
@@ -64,7 +64,7 @@ public class AccountRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should return one accountEntity with the specific email of the database and the mapper should transform to accountDomain")
+    @DisplayName("Should return one accountEntity with the specific email of the database")
     void getAccountByEmail() {
         Mockito.when(accountCrudRepository.findByEmail("random@names.com"))
                 .thenReturn(Optional.of(accountEntityList.get(0)));
@@ -75,12 +75,52 @@ public class AccountRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Should update the balance of a accountEntity in the database with the specific id")
+    @DisplayName("Should update the balance of an accountEntity in the database with the specific id")
     void updateBalance() {
         Mockito.doNothing().when(accountCrudRepository).updateBalanceById(Mockito.isA(BigDecimal.class), Mockito.isA(Integer.class));
 
         accountRepository.updateBalance(new BigDecimal(535435), 1);
 
         Mockito.verify(accountCrudRepository, Mockito.times(1)).updateBalanceById(new BigDecimal(535435), 1);
+    }
+
+    @Test
+    @DisplayName("Should update the status of an accountEntity in the database with the specific id")
+    void updateStatus() {
+        Mockito.doNothing().when(accountCrudRepository).updateStatusById(Mockito.isA(Integer.class));
+
+        accountRepository.updateStatus(1);
+
+        Mockito.verify(accountCrudRepository, Mockito.times(1)).updateStatusById(1);
+    }
+
+    @Test
+    @DisplayName("Should update the name of an accountEntity in the database with the specific id")
+    void updateName() {
+        Mockito.doNothing().when(accountCrudRepository).updateName(Mockito.isA(String.class), Mockito.isA(Integer.class));
+
+        accountRepository.updateName("test", 1);
+
+        Mockito.verify(accountCrudRepository, Mockito.times(1)).updateName("test", 1);
+    }
+
+    @Test
+    @DisplayName("Should update the password of an accountEntity in the database with the specific id")
+    void updatePassword() {
+        Mockito.doNothing().when(accountCrudRepository).updatePassword(Mockito.isA(String.class), Mockito.isA(Integer.class));
+
+        accountRepository.updatePassword("newPAss", 1);
+
+        Mockito.verify(accountCrudRepository, Mockito.times(1)).updatePassword("newPAss", 1);
+    }
+
+    @Test
+    @DisplayName("Should update the email of an accountEntity in the database with the specific id")
+    void updateEmail() {
+        Mockito.doNothing().when(accountCrudRepository).updateEmail(Mockito.isA(String.class), Mockito.isA(Integer.class));
+
+        accountRepository.updateEmail("test@test.com", 1);
+
+        Mockito.verify(accountCrudRepository, Mockito.times(1)).updateEmail("test@test.com", 1);
     }
 }
