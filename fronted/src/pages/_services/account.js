@@ -1,4 +1,4 @@
-const API = "http://localhost:8090/api/accounts";
+const API = "http://localhost:8090/accounts";
 
 export const getAccountData = async (email) => {
    const TOKEN = localStorage.getItem("token");

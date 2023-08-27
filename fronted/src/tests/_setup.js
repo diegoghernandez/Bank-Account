@@ -2,11 +2,23 @@ import "@testing-library/jest-dom/extend-expect";
 import { server } from "../mocks/server";
 
 // Establish API mocking before all tests.
-beforeAll(() => server.listen())
+beforeAll(() => server.listen());
 
 // Reset any request handlers that we may add during the tests,
 // so they don't affect other tests.
-afterEach(() => server.resetHandlers())
+afterEach(() => server.resetHandlers());
 
 // Clean up after the tests are finished.
-afterAll(() => server.close())
+afterAll(() => server.close());
+
+globalThis.localStorage = {
+   state: {
+      "account": '{"idAccount":238589851,"accountName":"juan","email":"juan@names.com","currentBalance":54}'
+   },
+   setItem (key, item) {
+      this.state[key] = item
+   },
+   getItem (key) { 
+      return this.state[key]
+   }
+}

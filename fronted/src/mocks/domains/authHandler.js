@@ -1,6 +1,6 @@
 import { rest } from "msw";
 
-const API = "http://localhost:8090/api/auth";
+const API = "http://localhost:8090/auth";
 
 export const authHandler = [
    rest.post(`${API}/login`, async (req, res, ctx) => {
@@ -11,5 +11,35 @@ export const authHandler = [
       }
 
       return res(ctx.status(403));
+   }),
+
+   rest.post(`${API}/secure/change-name`, async (req, res, ctx) => {
+      const body = await req.json();
+
+      if (body.newPassword === "1234") {
+         return res(ctx.status(200), ctx.text("Change name successfully"));
+      }
+
+      return res(ctx.status(400), ctx.text("Invalid password"));
+   }),
+
+   rest.post(`${API}/secure/change-password`, async (req, res, ctx) => {
+      const body = await req.json();
+
+      if (body.oldPassword === "oldPass") {
+         return res(ctx.status(200), ctx.text("Change password successfully"));
+      }
+
+      return res(ctx.status(400), ctx.text("Invalid password"));
+   }),
+
+   rest.post(`${API}/secure/change-email`, async (req, res, ctx) => {
+      const body = await req.json();
+
+      if (body.email === "test@names.com") {
+         return res(ctx.status(200), ctx.text("Change email successfully"));
+      }
+
+      return res(ctx.status(400), ctx.text("Invalid password"));
    })
 ]

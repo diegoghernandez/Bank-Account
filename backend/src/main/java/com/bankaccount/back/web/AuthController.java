@@ -127,18 +127,36 @@ public class AuthController {
     }
 
     @PostMapping("/secure/change-name")
-    public String changeName(@RequestParam @NotBlank String name, @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
-        return accountService.changeName(name, passwordDto);
+    public ResponseEntity<String> changeName(@RequestParam @NotBlank String name, @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+        String result = accountService.changeName(name, passwordDto);
+
+        if (result.contains("Change")) {
+            return ResponseEntity.ok().body(result);
+        }
+
+        return ResponseEntity.badRequest().body(result);
     }
 
     @PostMapping("/secure/change-password")
-    public String changePassword(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
-            return accountService.changePassword(passwordDto);
+    public ResponseEntity<String> changePassword(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+        String result = accountService.changePassword(passwordDto);
+
+        if (result.contains("Change")) {
+            return ResponseEntity.ok().body(result);
+        }
+
+        return ResponseEntity.badRequest().body(result);
     }
 
     @PostMapping("/secure/change-email")
-    public String changeEmail(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
-        return accountService.changeEmail(passwordDto);
+    public ResponseEntity<String> changeEmail(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
+        String result = accountService.changeEmail(passwordDto);
+
+        if (result.contains("Change")) {
+            return ResponseEntity.ok().body(result);
+        }
+
+        return ResponseEntity.badRequest().body(result);
     }
 
     private String passwordResetTokenEmail(AccountEntity accountEntity, String applicationUrl, String token) {

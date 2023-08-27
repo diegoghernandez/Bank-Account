@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import "./Outline.css"
 
 const BASE_BUTTON_CLASSES =

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useId, useRef, useState } from "react";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { InputTypes } from "../../constants/InputType";

@@ -1,6 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
 import { getTransactions, getTransactionsByDateAndName, getTransactionsByName,  saveTransaction } from "../../pages/_services/transactions";
-import transactions from "../../mocks/fixtures/transactions.json"
 
 const transaction = {
    "content": [

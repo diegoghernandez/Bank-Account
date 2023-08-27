@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 export const DividerField = ({ label }) => {
    return (
       <button className="w-full h-12 p-4 inline-flex flex-row items-center justify-between outline-none border-b border-outline-variant focus:bg-onSurface/12 hover:bg-onSurface/8">
