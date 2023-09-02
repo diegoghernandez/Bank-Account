@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -127,36 +127,50 @@ public class AuthController {
     }
 
     @PostMapping("/secure/change-name")
-    public ResponseEntity<String> changeName(@RequestParam @NotBlank String name, @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> changeName(@RequestParam String name, @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+        Map<String, String> response = new HashMap<>();
+        if (name.isEmpty()) {
+            response.put("name", "Name must not be empty");
+            return ResponseEntity.badRequest().body(response);
+        }
+
         String result = accountService.changeName(name, passwordDto);
 
         if (result.contains("Change")) {
-            return ResponseEntity.ok().body(result);
+            response.put("result", result);
+            return ResponseEntity.ok().body(response);
         }
 
-        return ResponseEntity.badRequest().body(result);
+        response.put("newPassword", result);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @PostMapping("/secure/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> changePassword(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+        Map<String, String> response = new HashMap<>();
         String result = accountService.changePassword(passwordDto);
 
-        if (result.contains("Change")) {
-            return ResponseEntity.ok().body(result);
+        if (result.contains("changed")) {
+            response.put("result", result);
+            return ResponseEntity.ok().body(response);
         }
 
-        return ResponseEntity.badRequest().body(result);
+        response.put("oldPassword", result);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @PostMapping("/secure/change-email")
-    public ResponseEntity<String> changeEmail(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
+    public ResponseEntity<Map<String, String>> changeEmail(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
+        Map<String, String> response = new HashMap<>();
         String result = accountService.changeEmail(passwordDto);
 
         if (result.contains("Change")) {
-            return ResponseEntity.ok().body(result);
+            response.put("result", result);
+            return ResponseEntity.ok().body(response);
         }
 
-        return ResponseEntity.badRequest().body(result);
+        response.put("newPassword", result);
+        return ResponseEntity.badRequest().body(response);
     }
 
     private String passwordResetTokenEmail(AccountEntity accountEntity, String applicationUrl, String token) {

@@ -3,9 +3,9 @@ import { TextFieldTypes } from "../../constants/TextFieldType";
 import { InputTypes } from "../../constants/InputType";
 import { Menu } from "../Menu/Menu";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
-import "./TextField.css";
 import { useEffect } from "react";
 import { Modal } from "../Modal/Modal";
+import "./TextField.css";
 
 export const TextField = ({
    label,
@@ -161,10 +161,12 @@ export const TextField = ({
             dialogRef={dialogRef}
             title={label}
             parameters={modalParameters}
-            setValue={setValue}
-            isChange={isChange}
-            setIsChange={setIsChange}
-            setIsClicked={setIsClicked}
+            textField={{
+               setValue,
+               isChange,
+               setIsChange,
+               setIsClicked
+            }}
          />}
       </div>
    );

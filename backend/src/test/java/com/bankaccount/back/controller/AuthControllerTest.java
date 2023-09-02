@@ -275,7 +275,7 @@ public class AuthControllerTest {
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
-                        .andExpect(content().string("Change name successfully")),
+                        .andExpect(jsonPath("$.result").value("Change name successfully")),
 
                 () -> mockMvc.perform(post("/auth/secure/change-name")
                                 .param("name", "newError")
@@ -283,8 +283,8 @@ public class AuthControllerTest {
                                 .content(objectMapper.writeValueAsString(passwordError))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string("Invalid password"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.newPassword").value("Invalid password"))
         );
     }
 
@@ -330,15 +330,15 @@ public class AuthControllerTest {
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
-                        .andExpect(content().string("Password changed successfully")),
+                        .andExpect(jsonPath("$.result").value("Password changed successfully")),
 
                 () -> mockMvc.perform(post("/auth/secure/change-password")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(passwordError))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string("Invalid old password"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.oldPassword").value("Invalid old password"))
         );
     }
 
@@ -384,15 +384,15 @@ public class AuthControllerTest {
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
-                        .andExpect(content().string("Change email successfully")),
+                        .andExpect(jsonPath("$.result").value("Change email successfully")),
 
                 () -> mockMvc.perform(post("/auth/secure/change-email")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(passwordError))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string("Invalid password"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.newPassword").value("Invalid password"))
         );
     }
 }

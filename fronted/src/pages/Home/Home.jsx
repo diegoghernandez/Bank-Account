@@ -40,7 +40,7 @@ export const Home = () => {
    const account = JSON.parse(localStorage.getItem("account"));
 
    useEffect(() => {
-      getAutomations(account.idAccount, account.email)
+      getAutomations(account?.idAccount, account?.email)
          .then((data) => {
             setAutomations(data);
             setNotFound(false);
@@ -49,12 +49,13 @@ export const Home = () => {
          });
    }, []);
 
+
    return (
       <main className="flex flex-col px-4 pt-4 will-change-scroll">
          <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans">
-            <p className="text-sm">Hello {account.accountName}</p>
+            <p className="text-sm">Hello {account?.accountName}</p>
             <p className="text-base">Active balance:</p>
-            <p className="text-2xl">{account.currentBalance.toFixed(2)}</p>
+            <p className="text-2xl">{account?.currentBalance.toFixed(2)}</p>
          </div>
 
          <p className="text-base font-semibold font-sans mb-3">Automatic payments active:</p>

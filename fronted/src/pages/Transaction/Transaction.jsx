@@ -28,7 +28,7 @@ export const Transaction = () => {
             "transactionType": elements[0].value.toUpperCase().replace(" ", "_")
          }, email).then(() => navigate(state?.location?.pathname ?? "/"))
          .catch((e) => {
-            const message = (JSON.parse(e.message));
+            const message = JSON.parse(e.message);
             setError(message);
          });
       }

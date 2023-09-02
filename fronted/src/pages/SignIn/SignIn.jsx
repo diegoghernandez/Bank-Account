@@ -22,9 +22,11 @@ export const SignIn = () => {
       logUser(email, password)
          .then((token) => {
             localStorage.setItem("token", "Bearer " + token);
-            getAccountData(email);
-            login();
-            navigate(state?.location?.pathname ?? "/");
+            getAccountData(email)
+               .then(() => {
+                  login();
+                  navigate(state?.location?.pathname ?? "/");
+               });
          }).catch((e) => {
             const message = e.message;
             setError(message);
