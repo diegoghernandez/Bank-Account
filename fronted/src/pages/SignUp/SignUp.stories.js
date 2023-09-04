@@ -1,9 +1,11 @@
+import { withRouter } from "storybook-addon-react-router-v6";
 import { SignUp } from "./SignUp";
 
 export default {
    title: "Pages/SignUp",
    component: SignUp,
    tags: ["autodocs"],
+   decorators: [withRouter],
    parameters: {
       layout: "fullscreen",
       viewport: {

@@ -1,9 +1,11 @@
+import { withRouter } from "storybook-addon-react-router-v6";
 import { Automations } from "./Automations";
 
 export default {
    title: "Pages/Automations",
    component: Automations,
    tags: ["autodocs"],
+   decorators: [withRouter],
    parameters: {
       layout: "fullscreen",
       viewport: {

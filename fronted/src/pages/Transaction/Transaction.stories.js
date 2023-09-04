@@ -1,9 +1,11 @@
+import { withRouter } from "storybook-addon-react-router-v6";
 import { Transaction } from "./Transaction";
 
 export default {
    title: "Pages/Transaction",
    component: Transaction,
    tags: ["autodocs"],
+   decorators: [withRouter],
    parameters: {
       layout: "fullscreen",
       viewport: {

@@ -160,8 +160,8 @@ export const TextField = ({
          {!notModal && <Modal 
             dialogRef={dialogRef}
             title={label}
-            parameters={modalParameters}
-            textField={{
+            listUtils={{
+               parameters: modalParameters,
                setValue,
                isChange,
                setIsChange,

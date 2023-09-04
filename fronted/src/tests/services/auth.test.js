@@ -41,7 +41,7 @@ describe("Auth tests", () => {
          await expect(changeName("lopez", "3RR0R"))
             .rejects.toThrow(StatusError);
          await expect(changeName("lopez", "3RR0R"))
-            .rejects.toThrow("Incorrect authentication credentials");
+            .rejects.toThrow("Invalid password");
       });
 
       it("Should change the name correctly", async () => {
@@ -59,7 +59,7 @@ describe("Auth tests", () => {
          await expect(changePassword("3RR0R", "3RR0R"))
             .rejects.toThrow(StatusError);
          await expect(changePassword("3RR0R", "3RR0R"))
-            .rejects.toThrow("Incorrect authentication credentials");
+            .rejects.toThrow("Invalid old password");
       });
 
       it("Should change the password correctly", async () => {
@@ -77,7 +77,7 @@ describe("Auth tests", () => {
          await expect(changeEmail("error@names.com", "3RR0R"))
             .rejects.toThrow(StatusError);
          await expect(changeEmail("error@names.com", "3RR0R"))
-            .rejects.toThrow("Incorrect authentication credentials");
+            .rejects.toThrow("Invalid password");
       });
 
       it("Should change the email correctly", async () => {

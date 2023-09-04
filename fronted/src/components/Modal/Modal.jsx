@@ -5,14 +5,14 @@ const valueContainer = "bg-surface-container-highest outline-none border-b borde
 
 const ListModal = ({ 
    title, 
-   parameters, 
+   listUtils, 
    children 
 }) => {
    return (
       <div className="w-full flex flex-col justify-center items-center p-6">
          <h1 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h1>
          <div className="w-full flex flex-row justify-between">
-            {Object.entries(parameters)?.map((array) => (
+            {Object.entries(listUtils?.parameters)?.map((array) => (
                <div key={array[0]} className="flex flex-col justify-center items-center">
                   <label htmlFor={array[0]} className="text-lg font-medium font-sans text-onSurface mb-2">{array[0]}</label>
                   <select 
@@ -92,8 +92,7 @@ const FormModal = ({ title, formUtils, children }) => {
 export const Modal = ({
    dialogRef,
    title,
-   parameters,
-   textField,
+   listUtils,
    formUtils
 }) => {
    const storyRef = useRef();
@@ -110,7 +109,7 @@ export const Modal = ({
             }
          }
    
-         if (parameters.weeks) {
+         if (listUtils?.parameters.weeks) {
             formattedValue = Number(values[0]) * 168;
             formattedValue = formattedValue + Number(values[1]) * 24;
             formattedValue = formattedValue + Number(values[2]);
@@ -118,7 +117,7 @@ export const Modal = ({
             formattedValue = `Each ${formattedValue} hour(s)`
          }
    
-         textField?.setValue(formattedValue ?? values.join().replace(",", " "));
+         listUtils?.setValue(formattedValue ?? values.join().replace(",", " "));
       }
    };
 
@@ -149,15 +148,15 @@ export const Modal = ({
             className="w-72 p-0 shadow-md rounded-[1.75rem]"
             onClose={(formUtils?.inputs[0].match("email") && formUtils?.successMessage) ? formUtils?.closeSession : clearModal}
          >
-            {textField && <ListModal 
+            {listUtils && <ListModal 
                title={title}
-               parameters={parameters}
+               listUtils={listUtils}
             >
                <button 
                   type="button"
                   onClick={() => { 
                      closeModal();
-                     textField.setIsClicked?.();
+                     listUtils.setIsClicked?.();
                   }}
                   className="text-sm font-medium font-sans text-primary"
                >Cancel</button>
@@ -166,13 +165,13 @@ export const Modal = ({
                   onClick={() => {
                      handleValues();
                      closeModal();
-                     textField?.setIsChange(!textField.isChange);
-                     textField?.setIsClicked(false)
+                     listUtils?.setIsChange(!listUtils.isChange);
+                     listUtils?.setIsClicked(false)
                   }}
                   className="text-sm font-medium font-sans text-primary"
                >Accept</button>
             </ListModal>}
-            {(!textField && !formUtils?.logout) && <FormModal 
+            {(!listUtils && !formUtils?.logout) && <FormModal 
                title={title}
                formUtils={formUtils}
             >
@@ -181,7 +180,7 @@ export const Modal = ({
                      type="button"
                      onClick={() => { 
                         closeModal();
-                        textField?.setIsClicked();
+                        listUtils?.setIsClicked();
                      }}
                      className="text-sm font-medium font-sans text-primary"
                   >Cancel</button>

@@ -1,4 +1,5 @@
 import { rest } from "msw";
+import automations from "../fixtures/automations.json"
 
 const API = "http://localhost:8090/automations";
 
@@ -7,32 +8,7 @@ export const automationHandler = [
       const idAccount = req.url.searchParams.get("id");
 
       if (idAccount == 1) {
-         return res(ctx.json([{
-               "idAutomation": 1,
-               "name": "New automation",
-               "amount": 2000.00,
-               "idTransferAccount": 419670285,
-               "hoursToNextExecution": 6,
-               "executionTime": "2023-07-15T17:51:36.986827",
-               "status": true
-            }, {
-               "idAutomation": 2,
-               "name": "New automation",
-               "amount": 2000.00,
-               "idTransferAccount": 419670285,
-               "hoursToNextExecution": 4, 
-               "executionTime": "2023-07-15T17:51:36.986827",
-               "status": true
-            }, {
-               "idAutomation": 3,
-               "name": "New automation",
-               "amount": 2000.00,
-               "idTransferAccount": 419670285,
-               "hoursToNextExecution": 5,
-               "executionTime": "2023-07-15T17:51:36.986827",
-               "status": true
-            }
-         ]));
+         return res(ctx.json(automations));
       }
 
       return res(ctx.status(404));
