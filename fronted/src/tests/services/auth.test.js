@@ -1,17 +1,5 @@
-import { vi } from "vitest";
 import { StatusError } from "../../errors/StatusError";
 import { changeEmail, changeName, changePassword, login } from "../../pages/_services/auth";
-
-/* const localStorageMock = {
-   getItem: vi.fn(),
-   setItem: vi.fn(),
-   clear: vi.fn()
-};
-const getItemMock = vi.spyOn(localStorageMock, "account");
-getItemMock.mockReturnValue({account: '{"idAccount":238589851,"accountName":"juan","email":"juan@names.com","currentBalance":54}'});
-
-globalThis.localStorage = localStorageMock; */
-
 
 describe("Auth tests", () => {
    describe("login test", () => {

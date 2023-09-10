@@ -12,31 +12,38 @@ export const SignIn = () => {
    const { login } = useAuth();
    const navigate = useNavigate();
    const { state } = useLocation();
-   const [error, setError] = useState(null)
+   const [error, setError] = useState("")
 
    const handleSubmit = (event) => {
       event.preventDefault();
-      const email = event.target[0].value;
-      const password = event.target[1].value;
-      
-      logUser(email, password)
-         .then((token) => {
-            localStorage.setItem("token", "Bearer " + token);
-            getAccountData(email)
-               .then(() => {
-                  login();
-                  navigate(state?.location?.pathname ?? "/");
-               });
-         }).catch((e) => {
-            const message = e.message;
-            setError(message);
-         });
+      const email = event.target[0]?.value;
+      const password = event.target[1]?.value;
+
+      console.log(event.target.value);
+
+      if (!email || !password) {
+         console.log({email, password});
+         setError("Must not be empty");
+      } else {
+         logUser(email, password)
+            .then((token) => {
+               localStorage.setItem("token", "Bearer " + token);
+               getAccountData(email)
+                  .then(() => {
+                     login();
+                     navigate(state?.location?.pathname ?? "/");
+                  });
+            }).catch((e) => {
+               const message = e.message;
+               setError(message);
+            });
+      }
    };
 
    return (
       <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
          <h1 className="text-4xl font-bold font-sans">Sign In</h1>
-         <form 
+         <form
             className="flex flex-col items-center gap-3 w-full"
             onSubmit={handleSubmit}   
          >

@@ -24,6 +24,7 @@ export const TextField = ({
    const [isChange, setIsChange] = useState(false);
    const [isShowMenu, setIsShowMenu] = useState(false);
    const textFieldId = useId();
+   const errorId = useId();
    
    const handleClickOutside = () => {
       setIsClicked(false);
@@ -77,6 +78,8 @@ export const TextField = ({
                ref={valueRef}
                autoComplete="off"
                readOnly={isReadOnly}
+               aria-errormessage={(isError) ? errorId : ""}
+               aria-invalid={Boolean(isError)}
                onClick={() => {
                   setIsClicked(true);
                   if (!notModal) {
@@ -145,7 +148,10 @@ export const TextField = ({
                <path d="M14 17C16.5234 17 17.0491 17 16.9965 17" stroke="#45454E"/>
             </svg>}
          </div>
-         {(supportiveText) && <p className={`ml-4 mt-1 text-sm ${isError ? "text-error" : "text-onSurface-variant"}`}>{supportiveText}</p>}
+         {(supportiveText) && <span 
+            id={(isError) ? errorId : ""} 
+            className={`ml-4 mt-1 text-sm ${isError ? "text-error" : "text-onSurface-variant"}`}
+         >{supportiveText}</span>}
          
          {(!notMenu && isShowMenu)  && <Menu 
             parameters={menuParameters}
