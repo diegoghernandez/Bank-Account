@@ -36,8 +36,8 @@ export const TextField = ({
    const dialogRef = useRef();
    
    const showModal = () => {
-      dialogRef.current?.showModal();
-   }
+      dialogRef.current?.showModal?.();
+   };
    
    const onClear = () => setValue("");
 
@@ -97,7 +97,7 @@ export const TextField = ({
                }}
                onBlur={() => {
                   if (notMenu && notModal) {
-                     setIsClicked(false)
+                     setIsClicked(false);
                   }
                }}
                onInput={(e) => setValue(e.target.value)}

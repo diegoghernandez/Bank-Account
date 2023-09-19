@@ -5,8 +5,8 @@ export const DividerField = ({ label, formUtils }) => {
    const dialogRef = useRef();
    
    const showModal = () => {
-      dialogRef.current?.showModal();
-   }
+      dialogRef.current?.showModal?.();
+   };
 
    return (
       <>

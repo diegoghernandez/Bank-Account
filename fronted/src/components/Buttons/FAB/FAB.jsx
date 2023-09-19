@@ -1,9 +1,5 @@
-const BASE_BUTTON_CLASSES =
-  "flex flex-row justify-center items-center cursor-pointer w-fit h-14 rounded-2xl shadow";
+const BASE_BUTTON_CLASSES = "flex flex-row justify-center items-center cursor-pointer w-fit h-14 rounded-2xl shadow";
 
-/**
-* Primary UI component for user interaction
-*/
 export const Fab = ({ label }) => {
    return (
       <div type="div" className={`fixed bottom-24 right-4 ${BASE_BUTTON_CLASSES} bg-primary-container`}>
@@ -12,7 +8,7 @@ export const Fab = ({ label }) => {
                <rect width="24" height="24" fill="none"/>
                <path d="M11 19V13H5V11H11V5H13V11H19V13H13V19H11Z"/>
             </svg>
-            <p className="text-onPrimary-container text-sm font-sans font-medium">{label}</p>
+            <span className="text-onPrimary-container text-sm font-sans font-medium">{label}</span>
          </div>
       </div>
    );

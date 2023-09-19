@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import "./Modal.css";
 
-const valueContainer = "bg-surface-container-highest outline-none border-b border-onSurface-variant focus:border-primary caret-primary text-onSurface text-base font-sans font-normal"
+const valueContainer = "bg-surface-container-highest outline-none border-b border-onSurface-variant focus:border-primary caret-primary text-onSurface text-base font-sans font-normal";
 
 const ListModal = ({ 
    title, 
@@ -10,7 +10,7 @@ const ListModal = ({
 }) => {
    return (
       <div className="w-full flex flex-col justify-center items-center p-6">
-         <h1 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h1>
+         <h2 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h2>
          <div className="w-full flex flex-row justify-between">
             {Object.entries(listUtils?.parameters)?.map((array) => (
                <div key={array[0]} className="flex flex-col justify-center items-center">
@@ -36,20 +36,23 @@ const ListModal = ({
 
 const FormModal = ({ title, formUtils, children }) => {
    const [parameters, setParameters] = useState(formUtils?.errorParameters);
+   const inputId = useId();
+   const errorId = useId();
+
    const handleSubmit = (event) => {
       event.preventDefault();
-      if (event.target[0].value && event.target[1].value) formUtils?.handle(event.target[0].value, event.target[1].value); 
+      if (event.target.elements[0].value && event.target.elements[1].value) formUtils?.handle(event.target.elements[0].value, event.target.elements[1].value); 
       else {
          setParameters({
-            first: !event.target[0].value ? "Must not be empty" : "",
-            second: !event.target[1].value ? "Must not be empty" : ""
+            first: !event.target.elements[0].value ? "Must not be empty" : "",
+            second: !event.target.elements[1].value ? "Must not be empty" : ""
          });
       }
-   }
+   };
 
    useEffect(() => {
-      setParameters(formUtils?.errorParameters)
-   }, [formUtils?.errorParameters])
+      setParameters(formUtils?.errorParameters);
+   }, [formUtils?.errorParameters]);
 
    return (
       <form 
@@ -57,23 +60,27 @@ const FormModal = ({ title, formUtils, children }) => {
          className="w-full flex flex-col justify-center items-center p-6"
          onSubmit={handleSubmit}
       >
-         <h1 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h1>
+         <h2 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h2>
          {!formUtils?.successMessage && <>
             <div className="w-full flex flex-col justify-between">
-                  <label htmlFor="first">{formUtils?.inputs[0]}</label>
+                  <label htmlFor={inputId + "-first"}>{formUtils?.inputs[0]}</label>
                   <input 
-                     id="first"
+                     id={inputId + "-first"}
                      type={formUtils?.inputs[0].match("email") ? "email" : "text"}
                      className={`${valueContainer}`}
+                     aria-errormessage={(parameters?.first) ? errorId + "-first" : ""}
+                     aria-invalid={Boolean(parameters?.first)}
                   />
-                  {parameters?.first && <p className={"ml-4 mt-1 text-sm text-error"}>{parameters?.first}</p>}
-                  <label htmlFor="second">{formUtils?.inputs[1]}</label>
+                  {parameters?.first && <span id={errorId + "-first"} className={"ml-4 mt-1 text-sm text-error"}>{parameters?.first}</span>}
+                  <label htmlFor={inputId + "-second"}>{formUtils?.inputs[1]}</label>
                   <input 
-                     id="second"
+                     id={inputId + "-second"}
                      type="text" 
                      className={`${valueContainer}`}
+                     aria-errormessage={(parameters?.second) ? errorId + "-second" : ""}
+                     aria-invalid={Boolean(parameters?.second)}
                   />
-                  {parameters?.second && <p className={"ml-4 mt-1 text-sm text-error"}>{parameters?.second}</p>}
+                  {parameters?.second && <span id={errorId + "-second"} className={"ml-4 mt-1 text-sm text-error"}>{parameters?.second}</span>}
             </div>
             <div className="w-full inline-flex justify-end items-end gap-4 mt-6">
                {children}
@@ -114,7 +121,7 @@ export const Modal = ({
             formattedValue = formattedValue + Number(values[1]) * 24;
             formattedValue = formattedValue + Number(values[2]);
             
-            formattedValue = `Each ${formattedValue} hour(s)`
+            formattedValue = `Each ${formattedValue} hour(s)`;
          }
    
          listUtils?.setValue(formattedValue ?? values.join().replace(",", " "));
@@ -126,7 +133,7 @@ export const Modal = ({
    };
 
    const closeModal = () => {
-      dialogRef?.current?.close();
+      dialogRef?.current?.close?.();
       storyRef?.current?.close();
    };
 
@@ -138,7 +145,7 @@ export const Modal = ({
       for (const input of inputs) {
          input.value = "";
       }
-   }
+   };
    
    return (
       <>
@@ -166,7 +173,7 @@ export const Modal = ({
                      handleValues();
                      closeModal();
                      listUtils?.setIsChange(!listUtils.isChange);
-                     listUtils?.setIsClicked(false)
+                     listUtils?.setIsClicked(false);
                   }}
                   className="text-sm font-medium font-sans text-primary"
                >Accept</button>
@@ -200,7 +207,8 @@ export const Modal = ({
                </>}
             </FormModal>}
             {formUtils?.logout && <div className="w-full flex flex-col justify-center items-center p-6">
-               <h1 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h1>
+               <h2 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h2>
+               <p>Do you want to close session?</p>
                <div className="w-full inline-flex justify-center items-center gap-4 mt-6">
                   <button 
                      type="button"

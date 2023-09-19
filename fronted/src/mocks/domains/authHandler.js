@@ -42,4 +42,4 @@ export const authHandler = [
 
       return res(ctx.status(400), ctx.json({ newPassword: "Invalid password"}));
    })
-]
+];

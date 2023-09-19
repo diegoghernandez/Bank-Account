@@ -34,16 +34,16 @@ export const Account = () => {
 
    const handleEmail =  (newEmail, password) => {
       handleMethods(newEmail, password, changeEmail);
-   }
+   };
 
    const closeSession = () => {
       localStorage.removeItem("account");
       localStorage.removeItem("token");
       navigate("/sign-in");
-   }
+   };
 
    return (
-      <main>
+      <section>
          <h1 className="ml-4 mt-8 text-4xl font-sans font-bold">{accountName}</h1>
          <p className="ml-4 mt-3 text-base font-sans font-normal">Account Number: {idAccount}</p>
 
@@ -107,6 +107,6 @@ export const Account = () => {
          />
 
          <Navbar page={Page.Account} />
-      </main>
+      </section>
    );
-}
+};

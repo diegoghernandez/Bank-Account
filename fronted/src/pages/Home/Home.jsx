@@ -51,7 +51,7 @@ export const Home = () => {
 
 
    return (
-      <main className="flex flex-col px-4 pt-4 will-change-scroll">
+      <section className="flex flex-col px-4 pt-4 will-change-scroll">
          <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans">
             <p className="text-sm">Hello {account?.accountName}</p>
             <p className="text-base">Active balance:</p>
@@ -82,6 +82,6 @@ export const Home = () => {
          <div className="w-full h-20">
             <Navbar page={Page.Home} />
          </div>
-      </main>
+      </section>
    );
-}
+};

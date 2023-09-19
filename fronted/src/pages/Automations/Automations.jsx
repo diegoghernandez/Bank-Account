@@ -54,7 +54,7 @@ export const Automations = () => {
    const handleChange = () => {
       setText(textReference.current?.value);
       setStatus(typeReference.current?.value);
-   }
+   };
 
 
    return (
@@ -64,11 +64,11 @@ export const Automations = () => {
             onChange={handleChange}   
          >
             <TextField
-               label="Transaction Type"
+               label="Automation Status"
                type={TextFieldTypes.Menu}
                valueRef={typeReference}
                functionToUpdate={handleChange}
-               menuParameters={["Active", "Disabled"]}
+               menuParameters={["Active", "Disable"]}
             />
             <TextField 
                label="Name"
@@ -110,4 +110,4 @@ export const Automations = () => {
          </div>
       </main>
    );
-}
+};

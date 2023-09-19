@@ -14,7 +14,7 @@
       "idTransferAccount": 419670285,
       "hoursToNextExecution": 4, 
       "executionTime": "2023-07-15T17:51:36.986827",
-      "status": true
+      "status": false
    }, {
       "idAutomation": 3,
       "name": "New automation",

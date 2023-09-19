@@ -11,14 +11,19 @@ afterEach(() => server.resetHandlers());
 // Clean up after the tests are finished.
 afterAll(() => server.close());
 
-globalThis.localStorage = {
+let storage = {};
+const localStorageMock = {
    state: {
       "account": '{"idAccount":238589851,"accountName":"juan","email":"juan@names.com","currentBalance":54}'
    },
    setItem (key, item) {
-      this.state[key] = item
+      this.state[key] = item;
    },
    getItem (key) { 
-      return this.state[key]
+      return this.state[key];
+   },
+   removeItem (key) { 
+      delete storage[key];
    }
-}
+};
+globalThis.localStorage = localStorageMock;

@@ -1,25 +1,9 @@
-import { cleanup, fireEvent, render, waitFor } from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 import { SignIn } from "../../pages/SignIn/SignIn";
-import { AuthProvider } from "../../hooks/useAuth";
-import { BrowserRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
-import { vi } from "vitest";
-import { StatusError } from "../../errors/StatusError";
+import { expect, vi } from "vitest";
 import * as auth from "../../pages/_services/auth";
-
-const customRender = (ui) => {
-   return render(<AuthProvider>{ui}</AuthProvider>, {wrapper: BrowserRouter})
-};
-
-/* vi.mock("../_services/auth", () => ({
-   login: vi.fn((email, password) => {
-      if (email == "error@user.com") {
-         return Promise.reject(new StatusError("Incorrect authentication credentials"))
-      }
-   })
-})); */
-
-/* auth.login = vi.fn().mockRejectedValue(new StatusError("Incorrect authentication credentials")) */
+import { customRender } from "../../utils/renderTest";
 
 describe("SignIn page tests", () => {
    it("Should render SignIn page correctly", () => {  
@@ -32,7 +16,7 @@ describe("SignIn page tests", () => {
    });
 
    describe("After clicking", () => {
-      it("If some value is not passed, should show the following text", async () => { 
+      it("If some value is not passed, should show the following error", async () => { 
          const page = customRender(<SignIn />);
          const button = page.getByRole("button");
 
@@ -44,7 +28,7 @@ describe("SignIn page tests", () => {
          });
       });
 
-      it("If the credentials are wrong, should show the following text", async () => {
+      it("If the credentials are wrong, should show the following error", async () => {
          const page = customRender(<SignIn />);
          const user = userEvent.setup();
          const spyLogin = vi.spyOn(auth, "login");
@@ -60,6 +44,7 @@ describe("SignIn page tests", () => {
 
          await waitFor(() => {
             expect(spyLogin).toHaveBeenCalledTimes(1);
+            expect(spyLogin).toHaveBeenLastCalledWith("error@user.com", "1234");
          });
 
          await waitFor(() => {
@@ -68,8 +53,12 @@ describe("SignIn page tests", () => {
          });
       });
 
-      /* it("If the credentials are good, should show the following text", async () => {
+      it("If the credentials are good, shouldn't show the following error", async () => {
+         const page = customRender(<SignIn />);
          const user = userEvent.setup();
+         const spyLogin = vi.spyOn(auth, "login");
+
+         const button = page.getByRole("button");
          const emailInput = page.getByLabelText("Email");
          const passwordInput = page.getByLabelText("Password");
 
@@ -79,13 +68,14 @@ describe("SignIn page tests", () => {
          await user.click(button);
 
          await waitFor(() => {
-            expect(auth.login).toHaveBeenCalledTimes(1);
+            expect(spyLogin).toHaveBeenCalledTimes(1);
+            expect(spyLogin).toHaveBeenCalledWith("user@user.com", "1234");
          });
-         
+
          await waitFor(() => {
-            page.getByText("Incorrect authentication credentials");
+            expect(passwordInput).not.toHaveAccessibleErrorMessage("Incorrect authentication credentials");
+            expect(emailInput).not.toHaveAccessibleErrorMessage("Incorrect authentication credentials");
          });
-         expect(page.getByText('Incorrect authentication credentials')).toBeInTheDocument();
-      }); */
+      });
    });
 });

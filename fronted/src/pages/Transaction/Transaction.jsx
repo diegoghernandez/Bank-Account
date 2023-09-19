@@ -17,10 +17,18 @@ export const Transaction = () => {
       event.preventDefault();
 
       const { idAccount, email } = JSON.parse(localStorage.getItem("account"));
-      const elements = event.target;
+      const elements = event.target.elements;
 
-      if (!elements[0].value) setError({type: "You must choose one"});
-      else {
+      const typeValue = elements[0].value;
+      const limit = (typeValue === "Deposit") ? 2 : 3; 
+      if (!typeValue) setError({type: "You must choose one"});
+      else if (Array.from(elements).slice(0,limit).some((element) => !element.value)) {
+         const emptyError = "Must not be empty";
+         setError({
+            amount: !elements[1].value ? emptyError : "",
+            desc: (!elements[2].value && limit == 3) ? emptyError : "",
+         });
+      } else {
          saveTransaction({
             idAccount,
             "idTransferAccount": Number(elements[2].value),
@@ -71,4 +79,4 @@ export const Transaction = () => {
          </Link>
       </section>
    );
-}
+};

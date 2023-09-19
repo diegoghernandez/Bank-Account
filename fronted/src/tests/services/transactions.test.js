@@ -2,90 +2,54 @@ import { StatusError } from "../../errors/StatusError";
 import { getTransactions, getTransactionsByDateAndName, getTransactionsByName,  saveTransaction } from "../../pages/_services/transactions";
 
 const transaction = {
-   "content": [
-      {
-         "idTransaction": 1,
-         "idTransferAccount": 0,
-         "isAutomated": false,
-         "receiverName": "Random1",
-         "transactionAmount": 120,
-         "transactionTimestamp": "2023-06-26T21:02:13.374219",
-         "transactionType": "DEPOSIT",
-      },
-   ],
-   "empty": false,
-   "first": true,
-   "last": true,
-   "number": 0,
-   "numberOfElements": 1,
-   "pageable": {
-      "offset": 0,
-      "pageNumber": 0,
-      "pageSize": 10,
-      "paged": true,
-      "sort": {
-         "empty": true,
-         "sorted": false,
-         "unsorted": true,
-      },
-      "unpaged": false,
-   },
-   "size": 10,
-   "sort": {
-      "empty": true,
-      "sorted": false,
-      "unsorted": true,
-   },
-   "totalElements": 1,
-   "totalPages": 1,
+   content: [{
+      "idTransaction": 1,
+      "idTransferAccount": 0,
+      "receiverName": "Random1",
+      "transactionAmount": 120.00,
+      "transactionType": "DEPOSIT",
+      "transactionTimestamp": "2023-06-26T21:02:13.374219",
+      "isAutomated": false
+   }, {
+      "idTransaction": 2,
+      "idTransferAccount": 432,
+      "receiverName": "Random1",
+      "transactionAmount": 120.00,
+      "transactionType": "WIRE_TRANSFER",
+      "transactionTimestamp": "2023-06-26T21:02:13.374219",
+      "isAutomated": false
+   }, {
+      "idTransaction": 3,
+      "idTransferAccount": 78568,
+      "receiverName": "Random3",
+      "transactionAmount": 120.00,
+      "transactionType": "WIRE_TRANSFER",
+      "transactionTimestamp": "2023-06-26T21:02:13.374219",
+      "isAutomated": false
+   }],
+   last: true
 };
 
 const transactionByName = {
-   "content": [
-      {
-         "idTransaction": 1,
-         "idTransferAccount": 0,
-         "receiverName": "New",
-         "transactionAmount": 120.00,
-         "transactionType": "DEPOSIT",
-         "transactionTimestamp": "2023-06-26T21:02:13.374219",
-         "isAutomated": false
-      }, {
-         "idTransaction": 2,
-         "idTransferAccount": 0,
-         "receiverName": "New",
-         "transactionAmount": 120.00,
-         "transactionType": "DEPOSIT",
-         "transactionTimestamp": "2023-06-26T21:02:13.374219",
-         "isAutomated": false
-      }
-   ],
-   "pageable": {
-      "sort": {
-         "empty": true,
-         "unsorted": true,
-         "sorted": false
-      },
-      "offset": 0,
-      "pageNumber": 0,
-      "pageSize": 10,
-      "paged": true,
-      "unpaged": false
-   },
-   "totalPages": 1,
-   "totalElements": 1,
-   "last": true,
-   "size": 10,
-   "number": 0,
-   "sort": {
-      "empty": true,
-      "unsorted": true,
-      "sorted": false
-   },
-   "numberOfElements": 1,
-   "first": true,
-   "empty": false
-}
+   content: [{
+      "idTransaction": 1,
+      "idTransferAccount": 654,
+      "receiverName": "New",
+      "transactionAmount": 120.00,
+      "transactionType": "WIRE_TRANSFER",
+      "transactionTimestamp": "2023-06-26T21:02:13.374219",
+      "isAutomated": false
+   }, {
+      "idTransaction": 2,
+      "idTransferAccount": 654,
+      "receiverName": "New",
+      "transactionAmount": 120.00,
+      "transactionType": "WIRE_TRANSFER",
+      "transactionTimestamp": "2023-06-26T21:02:13.374219",
+      "isAutomated": false
+   }],
+   last: true
+};
 
 describe("Transactions tests", () => {
    
@@ -103,7 +67,7 @@ describe("Transactions tests", () => {
       });
 
       it("Should give the right content", async () => {
-         const content = await getTransactions(1, 0);
+         const content = await getTransactions(238589851, 0);
          expect(content).toStrictEqual(transaction);
       });
    });
@@ -122,7 +86,7 @@ describe("Transactions tests", () => {
       });
 
       it("Should give the right content", async () => {
-         const content = await getTransactionsByName(1, "new", 0);
+         const content = await getTransactionsByName(238589851, "new", 0);
          expect(content).toStrictEqual(transactionByName);
       });
    });
@@ -141,7 +105,7 @@ describe("Transactions tests", () => {
       });
 
       it("Should give the right content by year", async () => {
-         const content = await getTransactionsByDateAndName(1, 2023, "", "", 0);
+         const content = await getTransactionsByDateAndName(238589851, 2023, "", "", 0);
          expect(content).toStrictEqual(transactionByName);
       });
    });

@@ -5,8 +5,8 @@ const API = "http://localhost:8090/transactions";
 export const transactionHandler = [
    rest.get(`${API}/account`, (req, res, ctx) => {
       const idAccount = req.url.searchParams.get("id");
-
-      if (idAccount == 1) {
+      
+      if (idAccount == 238589851) {
          return res(ctx.json({
             "content": [
                {
@@ -15,6 +15,24 @@ export const transactionHandler = [
                   "receiverName": "Random1",
                   "transactionAmount": 120.00,
                   "transactionType": "DEPOSIT",
+                  "transactionTimestamp": "2023-06-26T21:02:13.374219",
+                  "isAutomated": false
+               },
+               {
+                  "idTransaction": 2,
+                  "idTransferAccount": 432,
+                  "receiverName": "Random1",
+                  "transactionAmount": 120.00,
+                  "transactionType": "WIRE_TRANSFER",
+                  "transactionTimestamp": "2023-06-26T21:02:13.374219",
+                  "isAutomated": false
+               },
+               {
+                  "idTransaction": 3,
+                  "idTransferAccount": 78568,
+                  "receiverName": "Random3",
+                  "transactionAmount": 120.00,
+                  "transactionType": "WIRE_TRANSFER",
                   "transactionTimestamp": "2023-06-26T21:02:13.374219",
                   "isAutomated": false
                }
@@ -45,9 +63,9 @@ export const transactionHandler = [
             "first": true,
             "empty": false
          }));
-      } 
-
-      return res(ctx.status(404));
+      } else {
+         return res(ctx.status(404));
+      }
    }),
 
    rest.get(`${API}/name`, (req, res, ctx) => {
@@ -58,18 +76,18 @@ export const transactionHandler = [
             "content": [
                {
                   "idTransaction": 1,
-                  "idTransferAccount": 0,
+                  "idTransferAccount": 654,
                   "receiverName": "New",
                   "transactionAmount": 120.00,
-                  "transactionType": "DEPOSIT",
+                  "transactionType": "WIRE_TRANSFER",
                   "transactionTimestamp": "2023-06-26T21:02:13.374219",
                   "isAutomated": false
                }, {
                   "idTransaction": 2,
-                  "idTransferAccount": 0,
+                  "idTransferAccount": 654,
                   "receiverName": "New",
                   "transactionAmount": 120.00,
-                  "transactionType": "DEPOSIT",
+                  "transactionType": "WIRE_TRANSFER",
                   "transactionTimestamp": "2023-06-26T21:02:13.374219",
                   "isAutomated": false
                }
@@ -113,18 +131,18 @@ export const transactionHandler = [
             "content": [
                {
                   "idTransaction": 1,
-                  "idTransferAccount": 0,
+                  "idTransferAccount": 654,
                   "receiverName": "New",
                   "transactionAmount": 120.00,
-                  "transactionType": "DEPOSIT",
+                  "transactionType": "WIRE_TRANSFER",
                   "transactionTimestamp": "2023-06-26T21:02:13.374219",
                   "isAutomated": false
                }, {
                   "idTransaction": 2,
-                  "idTransferAccount": 0,
+                  "idTransferAccount": 654,
                   "receiverName": "New",
                   "transactionAmount": 120.00,
-                  "transactionType": "DEPOSIT",
+                  "transactionType": "WIRE_TRANSFER",
                   "transactionTimestamp": "2023-06-26T21:02:13.374219",
                   "isAutomated": false
                }
@@ -160,7 +178,15 @@ export const transactionHandler = [
       return res(ctx.status(404));
    }),
 
-   rest.post(`${API}/save`, (req, res, ctx) => {
+   rest.post(`${API}/save`, async (req, res, ctx) => {
+      const { idTransferAccount } = await req.json();
+
+      if (idTransferAccount == 124124) {
+         return res(ctx.status(404), ctx.json({
+            amount: "Not enough balance"
+         }));
+      }
+
       return res(ctx.status(200), ctx.json({
          "idTransaction": 1,
          "idTransferAccount": 432,
@@ -171,4 +197,4 @@ export const transactionHandler = [
          "isAutomated": false
       }));
    })
-]
+];

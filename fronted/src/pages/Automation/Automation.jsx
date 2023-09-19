@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled/Filled";
 import { Outline } from "../../components/Buttons/Outline/Outline";
 import { TextField } from "../../components/TextField/TextField";
@@ -10,28 +10,38 @@ import { useState } from "react";
 export const Automation = () => {
    const [error, setError] = useState({});
    const navigate = useNavigate();
-   const { state } = useLocation();
 
    const handleSubmit = (event) => {
-      event.preventDefault()
+      event.preventDefault();
 
       const { idAccount } = JSON.parse(localStorage.getItem("account"));
-      const elements = event.target;
-      
-      const hours = Number(elements[3].value.split(" ")[1]);
+      const elements = event.target.elements;
 
-      saveAutomation({
-         idAccount,
-         "name": elements[0].value,
-         "amount": Number(elements[1].value),
-         "idTransferAccount": Number(elements[2].value),
-         "hoursToNextExecution": hours,
-      }).then(() => navigate(state?.location?.pathname ?? "/"))
-      .catch((e) => {
-         const message = (JSON.parse(e.message));
-         setError(message);
-      });
-   }
+      if (Array.from(elements).slice(0,4).some((element) => !element.value)) {
+         const emptyError = "Must not be empty";
+         setError({
+            name: !elements[0].value ? emptyError : "",
+            amount: !elements[1].value ? emptyError : "",
+            desc: !elements[2].value ? emptyError : "",
+            hoursToNextExecution: !elements[3].value ? emptyError : ""
+         });
+      } else {
+         const hours = Number(elements[3].value.split(" ")[1]);
+   
+         saveAutomation({
+            idAccount,
+            "name": elements[0].value,
+            "amount": Number(elements[1].value),
+            "idTransferAccount": Number(elements[2].value),
+            "hoursToNextExecution": hours,
+         }).then(() => navigate("/automations"))
+         .catch((e) => {
+            const message = (JSON.parse(e.message));
+            setError(message);
+         });
+      }
+      
+   };
 
    return (
       <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
@@ -81,4 +91,4 @@ export const Automation = () => {
          </Link>
       </section>
    );
-}
+};

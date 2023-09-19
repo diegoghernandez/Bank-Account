@@ -6,7 +6,7 @@ const account = {
    "accountName": "user",
    "email": "user@names.com",
    "currentBalance": 22677.00
-}
+};
 
 const localStorageMock = {
    getItem: vi.fn(),

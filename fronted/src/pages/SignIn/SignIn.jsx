@@ -13,16 +13,12 @@ export const SignIn = () => {
    const navigate = useNavigate();
    const { state } = useLocation();
    const [error, setError] = useState("")
-
    const handleSubmit = (event) => {
       event.preventDefault();
-      const email = event.target[0]?.value;
-      const password = event.target[1]?.value;
-
-      console.log(event.target.value);
+      const email = event?.target?.elements[0]?.value;
+      const password = event?.target?.elements[1]?.value;
 
       if (!email || !password) {
-         console.log({email, password});
          setError("Must not be empty");
       } else {
          logUser(email, password)

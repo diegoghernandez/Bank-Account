@@ -1,31 +1,6 @@
 import { StatusError } from "../../errors/StatusError";
 import { getAutomations, saveAutomation, updateStatus } from "../../pages/_services/automation";
-
-const automations = [{
-   "idAutomation": 1,
-   "name": "New automation",
-   "amount": 2000.00,
-   "idTransferAccount": 419670285,
-   "hoursToNextExecution": 6,
-   "executionTime": "2023-07-15T17:51:36.986827",
-   "status": true
-}, {
-   "idAutomation": 2,
-   "name": "New automation",
-   "amount": 2000.00,
-   "idTransferAccount": 419670285,
-   "hoursToNextExecution": 4, 
-   "executionTime": "2023-07-15T17:51:36.986827",
-   "status": true
-}, {
-   "idAutomation": 3,
-   "name": "New automation",
-   "amount": 2000.00,
-   "idTransferAccount": 419670285,
-   "hoursToNextExecution": 5,
-   "executionTime": "2023-07-15T17:51:36.986827",
-   "status": true
-}];
+import automations from "../../mocks/fixtures/automations.json";
 
 describe("Automations tests", () => {
 
@@ -42,7 +17,7 @@ describe("Automations tests", () => {
       });
 
       it("Should give the right content", async () => {
-         const content = await getAutomations(1);
+         const content = await getAutomations(238589851);
          expect(content).toStrictEqual(automations);
       });
    });
@@ -80,7 +55,7 @@ describe("Automations tests", () => {
          });
          
          expect(content).toStrictEqual({
-            "idAutomation": 1,
+            "idAutomation": 238589851,
             "name": "New automation",
             "amount": 2000.00,
             "idTransferAccount": 2132,
