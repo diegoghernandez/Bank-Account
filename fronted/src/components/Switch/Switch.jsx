@@ -18,7 +18,7 @@ const getStyles = (requirement) => {
          return ["cursor-not-allowed justify-start p-2 border-2 bg-surface-container-highest/12 border-onSurface/12", "w-4 h-4 bg-onSurface/38"];
       }
    }
-}
+};
 
 export const Switch = ({ 
    label="",
@@ -49,4 +49,4 @@ export const Switch = ({
          </button>
       </div>
    );
-}
+};

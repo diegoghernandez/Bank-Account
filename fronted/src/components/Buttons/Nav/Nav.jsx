@@ -37,7 +37,7 @@ const getPage = (page, svgColor) => {
       default:
          break;
    }
-}
+};
 
 const getActive = (isActive) => isActive 
    ? ["bg-secondary-container", "group-hover/nav:bg-onSurface/8 group-focus/nav:bg-onSurface-variant/8", "text-onSurface", "#191B2B"]
@@ -68,4 +68,4 @@ export const Nav = ({
          <p className={`text-xs font-sans font-medium ${textColor}`}>{pageElements.label}</p>
       </div>
    );
-}
+};

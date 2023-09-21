@@ -3,4 +3,4 @@ export const TextFieldTypes = Object.freeze({
    Search: Symbol("search"),
    Menu: Symbol("menu"),
    Modal: Symbol("modal"),
-})
+});

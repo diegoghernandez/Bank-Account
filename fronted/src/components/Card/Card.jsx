@@ -24,5 +24,5 @@ export const Card = ({
             </div>
          </div>
       </article>
-   )
-}
+   );
+};

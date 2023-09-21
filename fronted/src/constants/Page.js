@@ -3,4 +3,4 @@ export const Page = Object.freeze({
    Transactions: Symbol("transactions"),
    Automation: Symbol("automation"),
    Account: Symbol("account")
-})
+});

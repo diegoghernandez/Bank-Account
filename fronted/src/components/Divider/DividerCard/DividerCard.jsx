@@ -25,5 +25,5 @@ export const DividerCard = ({
             <p>{time}</p>
          </div>
       </article>
-   )
-}
+   );
+};

@@ -19,7 +19,7 @@ export const getAutomations = async (id, email) => {
    } else {
       throw new StatusError("No automations found", 404);
    }
-}
+};
 
 export const updateStatus = async (id, status) => {
    const response = await fetch(`${API}/status?id=${id}&status=${status}`, {
@@ -35,7 +35,7 @@ export const updateStatus = async (id, status) => {
    } else {
       throw new StatusError("No automations found", 404);
    }
-}
+};
 
 export const saveAutomation = async (automation) => {
    const response = await fetch(`${API}/save`, {
@@ -54,4 +54,4 @@ export const saveAutomation = async (automation) => {
    } else {
       throw new StatusError(JSON.stringify(data), response.status);
    }
-}
+};

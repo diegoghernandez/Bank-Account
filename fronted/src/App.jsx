@@ -14,11 +14,11 @@ const ProtectedRoute = ({ children }) => {
    const location = useLocation();
 
    if (!isAuthenticated) {
-      return <Navigate to="/sign-in" state={{ location }} />
+      return <Navigate to="/sign-in" state={{ location }} />;
    }
 
    return children;
-}
+};
 
 function App() {
    return (
@@ -34,7 +34,7 @@ function App() {
             <Route path="/sign-up" element={<SignUp />} />
          </Routes>
       </>
-   )
+   );
 }
 
-export default App
+export default App;

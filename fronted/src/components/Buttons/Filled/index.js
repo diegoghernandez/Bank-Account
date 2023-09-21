@@ -1,1 +1,1 @@
-export { default } from "./Filled"
+export { default } from "./Filled";

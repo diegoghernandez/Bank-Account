@@ -12,7 +12,7 @@ export const DefaultFalse = {
       status: "default",
       selected: false
    }
-}
+};
 
 export const DisabledFalse = {
    args: {
@@ -20,7 +20,7 @@ export const DisabledFalse = {
       status: "disabled",
       selected: false
    }
-}
+};
 
 export const DefaultTrue = {
    args: {
@@ -28,7 +28,7 @@ export const DefaultTrue = {
       status: "default",
       selected: true
    }
-}
+};
 
 export const DisabledTrue = {
    args: {
@@ -36,4 +36,4 @@ export const DisabledTrue = {
       status: "disabled",
       selected: true
    }
-}
+};

@@ -54,7 +54,7 @@ describe("Auth tests", () => {
          const content = await changePassword("oldPass", "1234");
          expect(content).toStrictEqual("Change password successfully");
       });
-   })
+   });
 
    describe("change email test", () => {
       it("Should be a function", () => {

@@ -15,4 +15,4 @@ export const getAccountData = async (email) => {
       const account = await response.json();
       localStorage.setItem("account", JSON.stringify(account));
    }
-}
+};

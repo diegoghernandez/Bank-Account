@@ -3,4 +3,4 @@ export const InputTypes = Object.freeze({
    Number: Symbol("number"),
    Password: Symbol("password"),
    Text: Symbol("text"),
-})
+});

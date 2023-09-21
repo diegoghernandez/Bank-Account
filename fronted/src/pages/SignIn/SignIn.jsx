@@ -12,7 +12,8 @@ export const SignIn = () => {
    const { login } = useAuth();
    const navigate = useNavigate();
    const { state } = useLocation();
-   const [error, setError] = useState("")
+   const [error, setError] = useState("");
+
    const handleSubmit = (event) => {
       event.preventDefault();
       const email = event?.target?.elements[0]?.value;
@@ -61,4 +62,4 @@ export const SignIn = () => {
          </form>
       </section>
    );
-}
+};

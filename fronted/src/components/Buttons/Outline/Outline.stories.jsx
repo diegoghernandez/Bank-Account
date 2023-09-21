@@ -13,4 +13,5 @@ const Template = ({ label, ...args }) => {
 export const Default  = Template.bind({});
 Default.args = {
    label: "Button",
+   isDisable: false
 };

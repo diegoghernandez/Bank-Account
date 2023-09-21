@@ -1,17 +1,14 @@
-import "./Filled.css";
-
 const BASE_BUTTON_CLASSES =
-  "flex flex-col justify-center items-center cursor-pointer bg-primary h-10 w-auto rounded-3xl w-full";
+   "flex flex-col justify-center items-center h-10 w-auto rounded-3xl w-full";
 
-/**
-* Primary UI component for user interaction
-*/
 export const Filled = ({
-      label
+      label,
+      isDisable
    }) => {
    return (
-      <div className={`${BASE_BUTTON_CLASSES}`}>
-         <button className={`${BASE_BUTTON_CLASSES} filled--state px-3 text-onPrimary text-sm font-medium`} >
+      <div className={`${BASE_BUTTON_CLASSES} ${(isDisable) ? "bg-onSurface/12" : "bg-primary"} `}>
+         <button className={`${BASE_BUTTON_CLASSES} bg-primary px-3 text-sm font-medium text-onPrimary hover:bg-onPrimary/8 focus:bg-onPrimary/12 focus:outline-none 
+            disabled:bg-onSurface/12 disabled:text-onSurface/38`} disabled={isDisable}>
             {label}
          </button>
       </div>

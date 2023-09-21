@@ -36,4 +36,4 @@ export const SignUp = () => {
          <Filled label="Sign Up" />
       </section>
    );
-}
+};

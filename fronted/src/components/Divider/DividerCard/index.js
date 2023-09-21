@@ -1,1 +1,1 @@
-export { default } from "./DividerCard"
+export { default } from "./DividerCard";

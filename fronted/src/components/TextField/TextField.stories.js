@@ -7,6 +7,8 @@ export default {
    component: TextField,
    tags: ["autodocs"],
    argTypes: {
+      isError: { control: "boolean" },
+      isDisable: { control: "boolean" },
       type: {
          options: ["Default", "Search"],
          mapping: TextFieldTypes,
@@ -26,7 +28,6 @@ export const Default = {
       type: TextFieldTypes.Default,
       inputType: InputTypes.Text,
       supportiveText: "Text",
-      isError: true,
    }
 };
 
@@ -35,7 +36,6 @@ export const Menu = {
       label: "Base",
       type: TextFieldTypes.Menu,
       supportiveText: "Text",
-      isError: false,
       menuParameters: ["Deposit", "Online payment", "Wire Transfer"],
    },
    parameters: {
@@ -50,7 +50,6 @@ export const Modal = {
       label: "Base",
       type: TextFieldTypes.Modal,
       supportiveText: "Text",
-      isError: false,
       modalParameters: {
          weeks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
          days: [0, 1, 2, 3, 4, 5, 6],

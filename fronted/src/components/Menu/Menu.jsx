@@ -1,5 +1,3 @@
-import "./Menu.css"
-
 export const Menu = ({ 
    parameters, 
    setValue,
@@ -13,7 +11,7 @@ export const Menu = ({
       const buttons = parameters.map((type) => 
             <button 
                key={type} 
-               className="menu--state flex items-center w-auto h-12 px-3 text-onSurface text-sm font-sans font-medium"
+               className="hover:bg-onSurface/8 focus:outline-none focus:bg-onSurface/12 flex items-center w-auto h-12 px-3 text-onSurface text-sm font-sans font-medium"
                onClick={() => { 
                   setValue(type); 
                   setIsChange(!isChange);
@@ -42,4 +40,4 @@ export const Menu = ({
          </div>
       );
    }
-}
+};

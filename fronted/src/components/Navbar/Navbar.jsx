@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Page } from "../../constants/Page";
-import { Nav } from "../Buttons/Nav/Nav"
+import { Nav } from "../Buttons/Nav/Nav";
 
 export const Navbar = ({ 
    page = Page.Home,

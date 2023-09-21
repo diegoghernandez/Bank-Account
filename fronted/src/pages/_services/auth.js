@@ -46,7 +46,7 @@ export const changeName = async (newName, password) => {
    } else {
       throw new StatusError(JSON.stringify(data), response.status);
    }
-}
+};
 
 export const changePassword = async (oldPassword, newPassword) => {
    const response = await fetch(`${API}/secure/change-password`, {
@@ -71,7 +71,7 @@ export const changePassword = async (oldPassword, newPassword) => {
    } else {
       throw new StatusError(JSON.stringify(data), response.status);
    }
-}
+};
 
 export const changeEmail = async (newEmail, password) => {
    const response = await fetch(`${API}/secure/change-email`, {
@@ -95,4 +95,4 @@ export const changeEmail = async (newEmail, password) => {
    } else {
       throw new StatusError(JSON.stringify(data), response.status);
    }
-}
+};
