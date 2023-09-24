@@ -56,53 +56,60 @@ export const Account = () => {
          </div>
          <DividerField 
             label="Change name"
-            formUtils={{
-               inputs: ["New name", "Password"],
-               handle: handleName,
-               successMessage,
-               setSuccessMessage,
-               setError,
-               errorParameters: {
-                  first: error?.name ?? "",
-                  second: error?.newPassword ?? ""
+            modalUtils={{
+               formUtils: {
+                  inputs: ["New name", "Password"],
+                  handle: handleName,
+                  successMessage,
+                  setSuccessMessage,
+                  setError,
+                  errorParameters: {
+                     first: error?.name ?? "",
+                     second: error?.newPassword ?? ""
+                  }
                }
             }}
          />
          <DividerField 
             label="Change password" 
-            formUtils={{
-               inputs: ["Old password", "New password"],
-               handle: handlePassword,
-               successMessage,
-               setSuccessMessage,
-               setError,
-               errorParameters: {
-                  first: error?.oldPassword ?? "",
-                  second: error?.newPassword ?? ""
+            modalUtils={{
+               formUtils: {
+                  inputs: ["Old password", "New password"],
+                  handle: handlePassword,
+                  successMessage,
+                  setSuccessMessage,
+                  setError,
+                  errorParameters: {
+                     first: error?.oldPassword ?? "",
+                     second: error?.newPassword ?? ""
+                  }
                }
             }}
          />
          <DividerField 
             label="Change email" 
-            formUtils={{
-               inputs: ["New email", "Password"],
-               handle: handleEmail,
-               successMessage,
-               setSuccessMessage,
-               setError,
-               errorParameters: {
-                  first: error?.email ?? "",
-                  second: error?.newPassword ?? ""
-               },
-               closeSession
+            modalUtils={{
+               formUtils: {
+                  inputs: ["New email", "Password"],
+                  handle: handleEmail,
+                  successMessage,
+                  setSuccessMessage,
+                  setError,
+                  errorParameters: {
+                     first: error?.email ?? "",
+                     second: error?.newPassword ?? ""
+                  },
+                  closeSession
+               }
             }}
          />
          <DividerField 
             label="Logout" 
-            formUtils={{
-               inputs: ["", ""],
-               logout: true,
-               closeSession
+            modalUtils={{
+               messageUtils: {
+                  message: "Do you want to close session?",
+                  closeSession
+               }
             }}
          />
 

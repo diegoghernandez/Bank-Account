@@ -6,16 +6,13 @@ export default {
    tags: ['autodocs']
 };
 
-const Template = ({ label, ...args }) => { 
-   return DividerCard({ label, ...args });
-};
-
-export const Default  = Template.bind({});
-Default.args = {
-   automated: true,
-   transferAccount: "0",
-   name: "Cuenta",
-   amount: "$432003.00",
-   type: "Wire Transfer",
-   time: "2024/02/03  11:34:23"
+export const Default = {
+   args: {
+      automated: true,
+      transferAccount: "0",
+      name: "Account",
+      amount: "$432003.00",
+      type: "Wire Transfer",
+      time: "2024/02/03  11:34:23"
+   }
 };

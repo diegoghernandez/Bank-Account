@@ -3,15 +3,11 @@ import { Menu } from "./Menu";
 export default {
    title: "Menu",
    component: Menu,
-   tags: ["autodocs"]
+   tags: ["autodocs"],
+   args: {
+      text: "",
+      parameters: ["Deposit", "Online payment", "Wire Transfer"],
+   }
 };
 
-const Template = ({ label, ...args }) => { 
-   return Menu({ label, ...args });
-};
-
-export const Default  = Template.bind({});
-Default.args = {
-   text: "",
-   parameters: ["Deposit", "Online payment", "Wire Transfer"],
-};
+export const Default = {};

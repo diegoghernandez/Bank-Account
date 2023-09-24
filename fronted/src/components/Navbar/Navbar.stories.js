@@ -16,9 +16,8 @@ export default {
    }
 };
 
-const Template = ({ label, ...args }) => {
-   return Navbar({ label, ...args });
+export const Default = {
+   args: {
+      page: Page.Home
+   }
 };
-
-export const Default  = Template.bind({});
-Default.args = {};

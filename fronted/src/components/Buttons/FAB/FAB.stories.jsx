@@ -6,11 +6,8 @@ export default {
    tags: ['autodocs']
 };
 
-const Template = ({ label, ...args }) => {
-   return Fab({ label, ...args });
-};
-
-export const Default  = Template.bind({});
-Default.args = {
-   label: "Transaction",
+export const Default =  {
+   args: {
+      label: "Transaction",
+   }
 };

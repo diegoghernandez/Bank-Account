@@ -66,7 +66,7 @@ const FormModal = ({ title, formUtils, children }) => {
                   <label htmlFor={inputId + "-first"}>{formUtils?.inputs[0]}</label>
                   <input 
                      id={inputId + "-first"}
-                     type={formUtils?.inputs[0].match("email") ? "email" : "text"}
+                     type={formUtils?.inputs[0]?.match("email") ? "email" : "text"}
                      className={`${valueContainer}`}
                      aria-errormessage={(parameters?.first) ? errorId + "-first" : ""}
                      aria-invalid={Boolean(parameters?.first)}
@@ -100,14 +100,16 @@ export const Modal = ({
    dialogRef,
    title,
    listUtils,
-   formUtils
+   formUtils,
+   messageUtils
 }) => {
    const storyRef = useRef();
 
    const handleValues = () => {
       const values = [];
       let formattedValue;
-      const selects = dialogRef?.current.getElementsByTagName("select");
+      const reference = dialogRef ?? storyRef;
+      const selects = reference?.current.getElementsByTagName("select");
 
       if (selects) {
          for (const target of selects) {
@@ -129,12 +131,12 @@ export const Modal = ({
    };
 
    const showModal = () => {
-      storyRef.current.showModal();
+      storyRef?.current?.showModal?.();
    };
 
    const closeModal = () => {
       dialogRef?.current?.close?.();
-      storyRef?.current?.close();
+      storyRef?.current?.close?.();
    };
 
    const clearModal = () => {
@@ -178,7 +180,7 @@ export const Modal = ({
                   className="text-sm font-medium font-sans text-primary"
                >Accept</button>
             </ListModal>}
-            {(!listUtils && !formUtils?.logout) && <FormModal 
+            {formUtils && <FormModal 
                title={title}
                formUtils={formUtils}
             >
@@ -206,9 +208,9 @@ export const Modal = ({
                   >Accept</button>
                </>}
             </FormModal>}
-            {formUtils?.logout && <div className="w-full flex flex-col justify-center items-center p-6">
+            {messageUtils && <div className="w-full flex flex-col justify-center items-center p-6">
                <h2 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h2>
-               <p>Do you want to close session?</p>
+               <p>{messageUtils?.message}</p>
                <div className="w-full inline-flex justify-center items-center gap-4 mt-6">
                   <button 
                      type="button"
@@ -220,7 +222,7 @@ export const Modal = ({
                   <button 
                      type="button"
                      onClick={() => { 
-                        formUtils?.closeSession();
+                        messageUtils?.closeSession();
                      }}
                      className="text-sm font-medium font-sans text-primary"
                   >Accept</button>

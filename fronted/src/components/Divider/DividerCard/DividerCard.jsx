@@ -1,5 +1,5 @@
 export const DividerCard = ({
-   transferAccount,
+   transferAccount = 0,
    name,
    amount,
    type,

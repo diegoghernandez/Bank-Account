@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Modal } from "../../Modal/Modal";
 
-export const DividerField = ({ label, formUtils }) => {
+export const DividerField = ({ label, modalUtils }) => {
    const dialogRef = useRef();
    
    const showModal = () => {
@@ -21,12 +21,12 @@ export const DividerField = ({ label, formUtils }) => {
             </svg>
 
          </button>
-         <Modal 
+         {modalUtils && <Modal 
             dialogRef={dialogRef}
             title={label}
-            parameters={{year: [2023, 2022, 2021, 2020, 2019]}}
-            formUtils={formUtils}
-         />
+            formUtils={modalUtils.formUtils}
+            messageUtils={modalUtils.messageUtils}
+         />}
       </>
    );
 };

@@ -24,18 +24,18 @@ export default {
 
 export const Default = { 
    args: {
-      label: "Base",
+      label: "Default",
       type: TextFieldTypes.Default,
       inputType: InputTypes.Text,
-      supportiveText: "Text",
+      supportiveText: "Supportive",
    }
 };
 
 export const Menu = { 
    args: {
-      label: "Base",
+      label: "Menu",
       type: TextFieldTypes.Menu,
-      supportiveText: "Text",
+      supportiveText: "Supportive",
       menuParameters: ["Deposit", "Online payment", "Wire Transfer"],
    },
    parameters: {
@@ -47,9 +47,9 @@ export const Menu = {
 
 export const Modal = { 
    args: {
-      label: "Base",
+      label: "Modal",
       type: TextFieldTypes.Modal,
-      supportiveText: "Text",
+      supportiveText: "Supportive",
       modalParameters: {
          weeks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
          days: [0, 1, 2, 3, 4, 5, 6],

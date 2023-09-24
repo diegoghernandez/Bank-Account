@@ -3,15 +3,9 @@ import { Outline } from "./Outline";
 export default {
    title: "Buttons/Outline",
    component: Outline,
-   tags: ['autodocs']
+   tags: ['autodocs'],
+   args: { label: "Button", isDisable: false }
 };
 
-const Template = ({ label, ...args }) => {
-   return Outline({ label, ...args });
-};
-
-export const Default  = Template.bind({});
-Default.args = {
-   label: "Button",
-   isDisable: false
-};
+export const Default  = {};
+export const Disable  = { args: { isDisable: true } };

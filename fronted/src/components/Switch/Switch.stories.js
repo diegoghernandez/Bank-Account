@@ -9,31 +9,31 @@ export default {
 export const DefaultFalse = {
    args: {
       label: "Default-false",
-      status: "default",
-      selected: false
+      isDisable: false,
+      checked: false
    }
 };
 
 export const DisabledFalse = {
    args: {
       label: "Disabled-false",
-      status: "disabled",
-      selected: false
+      isDisable: true,
+      checked: false
    }
 };
 
 export const DefaultTrue = {
    args: {
       label: "Default-true",
-      status: "default",
-      selected: true
+      isDisable: false,
+      checked: true
    }
 };
 
 export const DisabledTrue = {
    args: {
       label: "Disabled-true",
-      status: "disabled",
-      selected: true
+      isDisable: true,
+      checked: true
    }
 };
