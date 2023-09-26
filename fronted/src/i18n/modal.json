@@ -1,0 +1,12 @@
+{
+   "en": {
+      "errorMessage": "Must not be empty",
+      "cancel": "Cancel",
+      "accept": "Accept"
+   },
+   "es": {
+      "errorMessage": "No debe estar vació",
+      "cancel": "Cancelar",
+      "accept": "Aceptar"
+   }
+}

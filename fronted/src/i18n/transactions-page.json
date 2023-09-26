@@ -1,0 +1,12 @@
+{
+   "en": {
+      "labels": ["Transaction Type", "Name", "Date"],
+      "title": "Transactions",
+      "notFound": "No transactions found"
+   },
+   "es": {
+      "labels": ["Tipo de transacción", "Nombre", "Fecha"],
+      "title": "Transacciones",
+      "notFound": "Sin transacciones"
+   }
+}

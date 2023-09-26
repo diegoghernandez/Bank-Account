@@ -5,30 +5,29 @@ import { Page } from "../../constants/Page";
 import { getAutomations } from "../_services/automation";
 import { Fab } from "../../components/Buttons/FAB/FAB";
 import { Link } from "react-router-dom";
+import { getTraduction } from "../../utils/getTraduction";
+import { Traduction } from "../../constants/Traduction";
 
-const getTimePeriod = (executionTime) => {
+const getTimePeriod = (textTime, executionTime) => {
    const startTime = new Date().getTime();
    const endTime = new Date(executionTime).getTime();
 
-   const hoursToNextExecution = (endTime - startTime) / (1000 * 60 * 60);
+   const hoursToNextExecution = Math.round((endTime - startTime) / (1000 * 60 * 60));
 
-   let hours = hoursToNextExecution.toPrecision(2);
-   let days = (hours / 24).toFixed();
-   let weeks = (days / 7 <! 1) ? (days / 7).toFixed() : 0;
+   let hours = hoursToNextExecution;
+   let days = Math.floor(hours / 24);
+   let weeks = Math.floor(days / 7);
 
-   hours = hours - (days * 24);
-   days = days - (weeks * 7);
-
-   let text = "Missing ";
-
-   if (weeks == 1)  text = text.concat(weeks, " week/");
-   else if (weeks > 1)  text = text.concat(weeks, " weeks/");
+   hours = hoursToNextExecution % 24;
+   if (weeks !== 0) days = days - (weeks * 7);
    
-   if (days == 1) text = text.concat(days, " day/");
-   else if (days > 1)  text = text.concat(days, " days/");
+   let text = textTime[0];
+
+   if (weeks >= 1)  text = text.concat(weeks, ` ${textTime[1]}/`);
    
-   if (hours < 1)  text = text.concat(hours, " hour");
-   else if (hours > 1)  text = text.concat(hours, " hours");
+   if (days >= 1) text = text.concat(days, ` ${textTime[2]}/`);
+   
+   if (hours >= 1)  text = text.concat(hours, ` ${textTime[3]}`);
 
    return text;
 };
@@ -36,6 +35,7 @@ const getTimePeriod = (executionTime) => {
 export const Home = () => {
    const [automations, setAutomations] = useState([]);
    const [notFound, setNotFound] = useState(false); 
+   const t = getTraduction(Traduction.HOME_PAGE);
 
    const account = JSON.parse(localStorage.getItem("account"));
 
@@ -53,14 +53,14 @@ export const Home = () => {
    return (
       <section className="flex flex-col px-4 pt-4 will-change-scroll">
          <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans">
-            <p className="text-sm">Hello {account?.accountName}</p>
-            <p className="text-base">Active balance:</p>
+            <p className="text-sm">{t.greeting} {account?.accountName}</p>
+            <p className="text-base">{t.balance}:</p>
             <p className="text-2xl">{account?.currentBalance.toFixed(2)}</p>
          </div>
 
-         <p className="text-base font-semibold font-sans mb-3">Automatic payments active:</p>
+         <p className="text-base font-semibold font-sans mb-3">{t.activeAutomation}:</p>
          <div className="flex flex-col w-full gap-2">
-            {notFound && <p>No automations found</p>}
+            {notFound && <p>{t.notFound}</p>}
             {automations?.map((automation) => {
                if (automation.status) {
                   return (
@@ -68,7 +68,7 @@ export const Home = () => {
                         key={automation.idAutomation}
                         name={automation.name}
                         money={automation.amount}
-                        period={getTimePeriod(automation.executionTime)}
+                        period={getTimePeriod(t.period, automation.executionTime)}
                         disable={automation.status}
                      />
                   );
@@ -77,7 +77,7 @@ export const Home = () => {
          </div>
 
          <Link className="group/fab" to="/transaction">
-            <Fab label="Transaction" />
+            <Fab label={t.fab} />
          </Link>
          <div className="w-full h-20">
             <Navbar page={Page.Home} />

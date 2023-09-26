@@ -1,0 +1,14 @@
+{
+   "en": {
+      "home": "Home",
+      "transactions": "Transactions",
+      "automations": "Automations",
+      "account": "Account"
+   },
+   "es": {
+      "home": "Inicio",
+      "transactions": "Transacciones",
+      "automations": "Automatizaciones",
+      "account": "Cuenta"
+   }
+}

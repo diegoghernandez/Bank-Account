@@ -6,10 +6,13 @@ import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { saveAutomation } from "../_services/automation";
 import { useState } from "react";
+import { getTraduction } from "../../utils/getTraduction";
+import { Traduction } from "../../constants/Traduction";
 
 export const Automation = () => {
    const [error, setError] = useState({});
    const navigate = useNavigate();
+   const t = getTraduction(Traduction.AUTOMATION_PAGE);
 
    const handleSubmit = (event) => {
       event.preventDefault();
@@ -18,7 +21,7 @@ export const Automation = () => {
       const elements = event.target.elements;
 
       if (Array.from(elements).slice(0,4).some((element) => !element.value)) {
-         const emptyError = "Must not be empty";
+         const emptyError = t.errorMessage;
          setError({
             name: !elements[0].value ? emptyError : "",
             amount: !elements[1].value ? emptyError : "",
@@ -45,49 +48,49 @@ export const Automation = () => {
 
    return (
       <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
-         <h1 className="text-4xl font-bold font-sans">Automation</h1>
+         <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
          <form 
             className="flex flex-col items-center gap-3 w-full"
             onSubmit={handleSubmit}
          >
             <TextField
-               label="Name"
+               label={t.labels[0]}
                type={TextFieldTypes.Default}
                inputType={InputTypes.Text}
                isError={error.name}
                supportiveText={error.name}
             />
             <TextField
-               label="Amount"
+               label={t.labels[1]}
                type={TextFieldTypes.Default}
                inputType={InputTypes.Number}
                isError={error.amount}
                supportiveText={error.amount}
             />
             <TextField
-               label="Account to transfer"
+               label={t.labels[2]}
                type={TextFieldTypes.Default}
                inputType={InputTypes.Number}
                isError={error.desc}
-               supportiveText={error.desc ?? "Add the nine account numbers"}
+               supportiveText={error.desc ?? t.description}
             />
             <TextField
-               label="Period of time"
+               label={t.labels[3]}
                type={TextFieldTypes.Modal}
                inputType={InputTypes.Text}
                isError={error.hoursToNextExecution}
                supportiveText={error.hoursToNextExecution}
                modalParameters={{
-                  weeks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-                  days: [0, 1, 2, 3, 4, 5, 6],
-                  hours: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+                  [t.modalParameters[0]]: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+                  [t.modalParameters[1]]: [0, 1, 2, 3, 4, 5, 6],
+                  [t.modalParameters[2]]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
                }}
             />
-            <Filled label="Make automation" />
+            <Filled label={t.accept} />
          </form>
 
          <Link className="w-full" to="/automations">
-            <Outline label="Cancel" />
+            <Outline label={t.cancel} />
          </Link>
       </section>
    );

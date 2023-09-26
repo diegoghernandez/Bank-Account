@@ -1,0 +1,14 @@
+{
+   "en": {
+      "labels": ["Automation Status", "Name"],
+      "menuParameters": ["Active", "Disable"],
+      "notFound": "No automations found",
+      "fab": "Automation"
+   },
+   "es": {
+      "labels": ["Estado de la automatización", "Nombre"],
+      "menuParameters": ["Activa", "Deshabilitada"],
+      "notFound": "Sin automatizaciones",
+      "fab": "Automatización"
+   }
+}

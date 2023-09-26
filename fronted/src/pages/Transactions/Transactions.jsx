@@ -7,6 +7,8 @@ import { TextFieldTypes } from "../../constants/TextFieldType";
 import { getTransactions, getTransactionsByName, getTransactionsByDateAndName } from "../_services/transactions";
 import { TransactionType } from "../../constants/TransactionType";
 import { StatusError } from "../../errors/StatusError";
+import { getTraduction } from "../../utils/getTraduction";
+import { Traduction } from "../../constants/Traduction";
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -15,13 +17,6 @@ const getFormattedDate = (date) => {
    const newDate = new Date(transformDate);
 
    return `${months[newDate.getMonth()]} ${newDate.getDate()} ${newDate.getFullYear()}`;
-};
-
-const formatType = (str) => {
-   str = str.toLowerCase();
-   str = str[0].toUpperCase() + str.slice(1);
-   str = str.replace("_", " ");
-   return str;
 };
 
 const getDatesAndModifiedContent = (dates, content) => {
@@ -61,6 +56,7 @@ export const Transactions = () => {
    });
    const [notFound, setNotFound] = useState(false); 
    const [loading, setLoading] = useState(true);
+   const t = getTraduction(Traduction.TRANSACTIONS_PAGE);
 
    const typeReference = useRef();
    const textReference = useRef();
@@ -202,20 +198,20 @@ export const Transactions = () => {
       <main>
          <form className="flex flex-col gap-3 pt-3 px-4 mb-3" >
             <TextField
-               label="Transaction Type"
+               label={t.labels[0]}
                type={TextFieldTypes.Menu}
                valueRef={typeReference}
                functionToUpdate={handleChange}
                menuParameters={Object.values(TransactionType).map((type) => type.description)}
             />
             <TextField 
-               label="Name"
+               label={t.labels[1]}
                type={TextFieldTypes.Search}
                valueRef={textReference}
                functionToUpdate={handleChange}
             />
             <TextField 
-               label="Date"
+               label={t.labels[2]}
                type={TextFieldTypes.Modal}
                valueRef={dateReference}
                functionToUpdate={handleChange}
@@ -226,10 +222,11 @@ export const Transactions = () => {
                }}
             />
          </form>
-         <h2 className="text-lg font-medium font-sans ml-4 underline">Transactions</h2>
-         {notFound && <p>No transactions found</p>}
+         <h2 className="text-lg font-medium font-sans ml-4 underline">{t.title}</h2>
+         {notFound && <p>{t.notFound}</p>}
          {transactions?.map((transaction) => {
-            const isTextType = transaction?.transactionType?.toLowerCase().includes(texts.type.toLowerCase().replace(" ", "_"));
+            const formattedType = TransactionType[transaction?.transactionType]?.description;
+            const isTextType = formattedType?.includes(texts.type);
             return (
                <>
                   {(transaction?.date) &&
@@ -243,7 +240,7 @@ export const Transactions = () => {
                         transferAccount={transaction?.idTransferAccount}
                         name={transaction?.receiverName}
                         amount={transaction?.transactionAmount?.toFixed(2)}
-                        type={formatType(transaction?.transactionType)}
+                        type={formattedType}
                         time={transaction?.transactionTimestamp}
                         automated={transaction?.isAutomated}
                      />

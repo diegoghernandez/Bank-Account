@@ -7,6 +7,8 @@ import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Link } from "react-router-dom";
 import { getAutomations } from "../_services/automation";
+import { getTraduction } from "../../utils/getTraduction";
+import { Traduction } from "../../constants/Traduction";
 
 const getTimePeriod = (hoursToNextExecution) => {
    let hours = hoursToNextExecution;
@@ -35,6 +37,7 @@ export const Automations = () => {
    const [automations, setAutomations] = useState([]);
    const [notFound, setNotFound] = useState(false); 
    const [text, setText] = useState("");
+   const t = getTraduction(Traduction.AUTOMATIONS_PAGE);
 
    const typeReference = useRef();
    const textReference = useRef();
@@ -64,14 +67,14 @@ export const Automations = () => {
             onChange={handleChange}   
          >
             <TextField
-               label="Automation Status"
+               label={t.labels[0]}
                type={TextFieldTypes.Menu}
                valueRef={typeReference}
                functionToUpdate={handleChange}
-               menuParameters={["Active", "Disable"]}
+               menuParameters={t.menuParameters}
             />
             <TextField 
-               label="Name"
+               label={t.labels[1]}
                type = {TextFieldTypes.Search}
                valueRef={textReference}
                functionToUpdate={handleChange}
@@ -79,13 +82,13 @@ export const Automations = () => {
          </form>
 
          <div className="flex flex-col w-full gap-2">
-            {notFound && <p>No automations found</p>}
+            {notFound && <p>{t.notFound}</p>}
             {automations?.map((automation) => {
                const isTextName = automation.name.toLowerCase().includes(text.toLowerCase());
                let isTextType = true;
 
                if (status) {
-                  isTextType = status === "Active" 
+                  isTextType = status === (t.menuParameters[0])
                      ? automation.status === true 
                      : automation.status === false;
                }
@@ -96,14 +99,14 @@ export const Automations = () => {
                      name={automation.name}
                      money={automation.amount}
                      period={getTimePeriod(automation.hoursToNextExecution)}
-                     disable={automation.status}
+                     isDisable={!automation.status}
                   />
                );
             })}
          </div>
 
          <Link className="group/fab" to="/automation">
-            <Fab label="Automation" />
+            <Fab label={t.fab} />
          </Link>
          <div className="w-full h-20">
             <Navbar page={Page.Automation} />

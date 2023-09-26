@@ -1,0 +1,14 @@
+{
+   "en": {
+      "errorMessage": "Must not be empty",
+      "title": "Sign In",
+      "labels": ["Email", "Password"],
+      "accept": "Sign In"
+   },
+   "es": {
+      "errorMessage": "No debe estar vació",
+      "title": "Iniciar sesión",
+      "labels": ["Email", "Contraseña"],
+      "accept": "Iniciar sesión"
+   }
+}

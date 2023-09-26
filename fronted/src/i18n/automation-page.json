@@ -1,0 +1,20 @@
+{
+   "en": {
+      "errorMessage": "Must not be empty",
+      "title": "Automation",
+      "labels": ["Name", "Amount", "Account to transfer", "Period of time"],
+      "description": "Add the nine account numbers",
+      "modalParameters": ["weeks", "days", "hours"],
+      "cancel": "Cancel",
+      "accept": "Make automation"
+   },
+   "es": {
+      "errorMessage": "No debe estar vació",
+      "title": "Automatización",
+      "labels": ["Nombre", "Monto", "Cuenta a transferir", "Periodo de tiempo"],
+      "description": "Agrega los nueve números de la cuenta",
+      "modalParameters": ["semanas", "días", "horas"],
+      "cancel": "Cancelar",
+      "accept": "Crear automatización"
+   }
+}

@@ -3,6 +3,10 @@ import { Home } from "../../pages/Home/Home";
 import { customRender } from "../../utils/renderTest";
 import * as automation from "../../pages/_services/automation";
 import { waitFor } from "@testing-library/dom";
+import { getTraduction } from "../../utils/getTraduction";
+import { Traduction } from "../../constants/Traduction";
+
+const t = getTraduction(Traduction.HOME_PAGE);
 
 describe("Home page tests", () => {
    it("Should render Home page correctly with all active automations", async () => {  
@@ -12,7 +16,7 @@ describe("Home page tests", () => {
       page.getByText(/^hello\s[A-Za-z]+$/i);
       page.getByText("Active balance:");
       page.getByText(/^\d+\.\d+$/);
-      page.getByText("Automatic payments active:");
+      page.getByText(t.activeAutomation + ":");
       page.getByRole("link", { name: "Transaction"});
 
       await waitFor(() => {
@@ -37,7 +41,7 @@ describe("Home page tests", () => {
       page.getByText(/^hello\s[A-Za-z]+$/i);
       page.getByText("Active balance:");
       page.getByText(/^\d+\.\d+$/);
-      page.getByText("Automatic payments active:");
+      page.getByText(t.activeAutomation + ":");
       page.getByRole("link", { name: "Transaction"});
 
       await waitFor(() => {

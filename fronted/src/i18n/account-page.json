@@ -1,0 +1,54 @@
+{
+   "en": {
+      "accountNumber": "Account Number",
+      "dark": "Dark Mode",
+      "change": {
+         "language": {
+            "label": "Change language",
+            "message": "Do you want to change to spanish?"
+         },
+         "name": {
+            "label": "Change name",
+            "inputs": ["New name", "Password"]
+         },
+         "password": {
+            "label": "Change password",
+            "inputs": ["Old password", "New password"]
+         },
+         "email": {
+            "label": "Change email",
+            "inputs": ["New email", "Password"]
+         }
+      },
+      "logout": {
+         "label": "Logout",
+         "message": "Do you want to close session?"
+      }
+   },
+   "es": {
+      "accountNumber": "Número de cuenta",
+      "dark": "Modo oscuro",
+      "change": {
+         "language": {
+            "label": "Cambiar idioma",
+            "message": "¿Quieres cambiar a ingles?"
+         },
+         "name": {
+            "label": "Cambiar nombre",
+            "inputs": ["Nuevo nombre", "Contraseña"]
+         },
+         "password": {
+            "label": "Cambiar contraseña",
+            "inputs": ["Contraseña anterior", "Nueva contraseña"]
+         },
+         "email": {
+            "label": "Cambiar email",
+            "inputs": ["Nuevo email", "Contraseña"]
+         }
+      },
+      "logout": {
+         "label": "Cerrar sesión",
+         "message": "¿Quieres cerrar sesión?"
+      }
+   }
+}

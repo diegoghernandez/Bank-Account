@@ -1,5 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import "./Modal.css";
+import { getTraduction } from "../../utils/getTraduction";
+import { Traduction } from "../../constants/Traduction";
 
 const valueContainer = "bg-surface-container-highest outline-none border-b border-onSurface-variant focus:border-primary caret-primary text-onSurface text-base font-sans font-normal";
 
@@ -34,7 +36,7 @@ const ListModal = ({
    );
 };
 
-const FormModal = ({ title, formUtils, children }) => {
+const FormModal = ({ title, errorMessage, formUtils, children }) => {
    const [parameters, setParameters] = useState(formUtils?.errorParameters);
    const inputId = useId();
    const errorId = useId();
@@ -44,8 +46,8 @@ const FormModal = ({ title, formUtils, children }) => {
       if (event.target.elements[0].value && event.target.elements[1].value) formUtils?.handle(event.target.elements[0].value, event.target.elements[1].value); 
       else {
          setParameters({
-            first: !event.target.elements[0].value ? "Must not be empty" : "",
-            second: !event.target.elements[1].value ? "Must not be empty" : ""
+            first: !event.target.elements[0].value ? errorMessage : "",
+            second: !event.target.elements[1].value ? errorMessage : ""
          });
       }
    };
@@ -104,6 +106,7 @@ export const Modal = ({
    messageUtils
 }) => {
    const storyRef = useRef();
+   const { errorMessage, cancel, accept } = getTraduction(Traduction.MODAL);
 
    const handleValues = () => {
       const values = [];
@@ -168,7 +171,7 @@ export const Modal = ({
                      listUtils.setIsClicked?.();
                   }}
                   className="text-sm font-medium font-sans text-primary"
-               >Cancel</button>
+               >{cancel}</button>
                <button 
                   type="button"
                   onClick={() => {
@@ -178,10 +181,11 @@ export const Modal = ({
                      listUtils?.setIsClicked(false);
                   }}
                   className="text-sm font-medium font-sans text-primary"
-               >Accept</button>
+               >{accept}</button>
             </ListModal>}
             {formUtils && <FormModal 
                title={title}
+               errorMessage={errorMessage}
                formUtils={formUtils}
             >
                {!formUtils?.successMessage && <>
@@ -192,11 +196,11 @@ export const Modal = ({
                         listUtils?.setIsClicked();
                      }}
                      className="text-sm font-medium font-sans text-primary"
-                  >Cancel</button>
+                  >{cancel}</button>
                   <button 
                      type="submit"
                      className="text-sm font-medium font-sans text-primary"
-                  >Accept</button>
+                  >{accept}</button>
                </>}
                {formUtils?.successMessage && <>
                   <button 
@@ -205,7 +209,7 @@ export const Modal = ({
                         closeModal();
                      }}
                      className="text-sm font-medium font-sans text-primary"
-                  >Accept</button>
+                  >{accept}</button>
                </>}
             </FormModal>}
             {messageUtils && <div className="w-full flex flex-col justify-center items-center p-6">
@@ -218,14 +222,16 @@ export const Modal = ({
                         closeModal();
                      }}
                      className="text-sm font-medium font-sans text-primary"
-                  >Cancel</button>
+                  >{cancel}</button>
                   <button 
                      type="button"
                      onClick={() => { 
-                        messageUtils?.closeSession();
+                        messageUtils?.changeLanguage?.();
+                        messageUtils?.closeSession?.();
+                        closeModal();
                      }}
                      className="text-sm font-medium font-sans text-primary"
-                  >Accept</button>
+                  >{accept}</button>
                </div>
             </div>}
          </dialog>

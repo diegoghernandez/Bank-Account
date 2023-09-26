@@ -1,0 +1,16 @@
+{
+   "en": {
+      "errorMessages": ["You must choose one", "Must not be empty"],
+      "title": "Transaction",
+      "labels": ["Transaction Type", "Amount", "Account to transfer"],
+      "cancel": "Cancel",
+      "accept": "Make transaction"
+   },
+   "es": {
+      "errorMessages": ["Debes escoger una", "No debe estar vació"],
+      "title": "Transacción",
+      "labels": ["Tipo de transacción", "Monto", "Cuenta a transferir"],
+      "cancel": "Cancelar",
+      "accept": "Hacer transacción"
+   }
+}

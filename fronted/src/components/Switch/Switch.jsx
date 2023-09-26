@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const getTextColor = (isDisable) => (isDisable) ? 
-   "text-onSurface" : "text-onSurface/38";
+   "text-onSurface/38" : "text-onSurface";
 
 const getStyles = (requirement) => {
    if (!requirement.isDisable) {
@@ -13,7 +13,6 @@ const getStyles = (requirement) => {
    } else {
       if (requirement.checked) {
          return ["cursor-not-allowed justify-end p-1 bg-onSurface/12", "w-6 h-6 bg-surface"];
-         
       } else {
          return ["cursor-not-allowed justify-start p-2 border-2 bg-surface-container-highest/12 border-onSurface/12", "w-4 h-4 bg-onSurface/38"];
       }

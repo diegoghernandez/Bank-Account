@@ -18,6 +18,35 @@ describe("Account page tests", () =>  {
       page.getByRole("button", { name: "Logout" });
    });
 
+   describe("After click change language", () => {
+      it("Should render correctly", async () => {
+         const page = customRender(<Account />);
+         const user = userEvent.setup();
+
+         await user.click(page.getByRole("button", { name: "Change language" }));
+
+         page.getByRole("heading", { name: "Logout", level: 2, hidden: true });
+         page.getByText("Do you want to change to spanish?");
+         page.getAllByRole("button", { name: "Cancel", hidden: true })[0];
+         page.getAllByRole("button", { name: "Accept", hidden: true })[0];
+      });
+
+      it("Should render correctly", async () => {
+         const page = customRender(<Account />);
+         const user = userEvent.setup();
+         const spyLocalStorage = vi.spyOn(globalThis.localStorage, "getItem");
+
+         await user.click(page.getByRole("button", { name: "Logout" }));
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[0]);
+
+         await waitFor(() => {
+            expect(spyLocalStorage).toBeCalledTimes(1);
+            expect(spyLocalStorage).toHaveBeenCalledWith("language");
+            expect(localStorage.state).toContain({ language: "es" });
+         });
+      });
+   });
+
    describe("After click change name", () => {
       it("Should show an error individually if some value is not passed", async () => {
          const page = customRender(<Account />);
@@ -29,7 +58,7 @@ describe("Account page tests", () =>  {
 
          page.getByRole("heading", { name: "Change name", level: 2, hidden: true });
 
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[0]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[1]);
 
          await waitFor(() => {
             expect(newNameInput).toHaveAccessibleErrorMessage("Must not be empty");
@@ -49,7 +78,7 @@ describe("Account page tests", () =>  {
          await user.type(newNameInput, "Hello");
          await user.type(passwordInput, "test");
    
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[0]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[1]);
    
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
@@ -68,7 +97,7 @@ describe("Account page tests", () =>  {
          await user.type(page.getByLabelText("New name"), "Hello");
          await user.type(page.getAllByLabelText("Password")[0], "1234");
    
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[0]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[1]);
    
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
@@ -89,7 +118,7 @@ describe("Account page tests", () =>  {
 
          page.getByRole("heading", { name: "Change password", level: 2, hidden: true });
 
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[1]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[2]);
 
          await waitFor(() => {
             expect(oldPasswordInput).toHaveAccessibleErrorMessage("Must not be empty");
@@ -109,7 +138,7 @@ describe("Account page tests", () =>  {
          await user.type(oldPasswordInput, "Hello");
          await user.type(newPasswordInput, "test");
    
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[1]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[2]);
    
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
@@ -128,7 +157,7 @@ describe("Account page tests", () =>  {
          await user.type(page.getByLabelText("Old password"), "oldPass");
          await user.type(page.getByLabelText("New password"), "NEW1234");
    
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[1]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[2]);
    
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
@@ -149,7 +178,7 @@ describe("Account page tests", () =>  {
 
          page.getByRole("heading", { name: "Change email", level: 2, hidden: true });
 
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[2]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[3]);
 
          await waitFor(() => {
             expect(newNameInput).toHaveAccessibleErrorMessage("Must not be empty");
@@ -169,7 +198,7 @@ describe("Account page tests", () =>  {
          await user.type(newNameInput, "error@names.com");
          await user.type(passwordInput, "1234");
    
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[2]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[3]);
    
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
@@ -188,7 +217,7 @@ describe("Account page tests", () =>  {
          await user.type(page.getByLabelText("New email"), "test@names.com");
          await user.type(page.getAllByLabelText("Password")[1], "1234");
    
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[2]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[3]);
    
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
@@ -207,8 +236,8 @@ describe("Account page tests", () =>  {
 
          page.getByRole("heading", { name: "Logout", level: 2, hidden: true });
          page.getByText("Do you want to close session?");
-         page.getAllByRole("button", { name: "Cancel", hidden: true })[2];
-         page.getAllByRole("button", { name: "Accept", hidden: true })[2];
+         page.getAllByRole("button", { name: "Cancel", hidden: true })[4];
+         page.getAllByRole("button", { name: "Accept", hidden: true })[4];
       });
 
       it("Should render correctly", async () => {
@@ -217,7 +246,7 @@ describe("Account page tests", () =>  {
          const spyLocalStorage = vi.spyOn(globalThis.localStorage, "removeItem");
 
          await user.click(page.getByRole("button", { name: "Logout" }));
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[3]);
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[4]);
 
          await waitFor(() => {
             expect(spyLocalStorage).toBeCalledTimes(2);

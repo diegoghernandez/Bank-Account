@@ -6,6 +6,6 @@ describe("FAB component tests", () => {
    it("Should render correctly", () => {
       render(<Fab label="TESTING" />);
 
-      expect(screen.getByText("Transaction")).toBeInTheDocument();
+      expect(screen.getByText("TESTING")).toBeInTheDocument();
    });
 });

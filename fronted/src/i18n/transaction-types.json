@@ -1,0 +1,12 @@
+{
+   "en": {
+      "deposit": "Deposit",
+      "onlinePayment": "Online payment",
+      "wireTransfer": "Wire transfer"
+   },
+   "es": {
+      "deposit": "Deposito",
+      "onlinePayment": "Pago online",
+      "wireTransfer": "Transferencia bancaria"
+   }
+}
