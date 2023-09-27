@@ -23,8 +23,8 @@ describe("SignIn page tests", () => {
          fireEvent.click(button);
    
          await waitFor(() => {
-            expect(page.getByLabelText("Password")).toHaveAccessibleErrorMessage("Must not be empty");
-            expect(page.getByLabelText("Email")).toHaveAccessibleErrorMessage("Must not be empty");
+            expect(page.getByLabelText("Password")).toHaveAccessibleDescription("Must not be empty");
+            expect(page.getByLabelText("Email")).toHaveAccessibleDescription("Must not be empty");
          });
       });
 
@@ -48,8 +48,8 @@ describe("SignIn page tests", () => {
          });
 
          await waitFor(() => {
-            expect(passwordInput).toHaveAccessibleErrorMessage("Incorrect authentication credentials");
-            expect(emailInput).toHaveAccessibleErrorMessage("Incorrect authentication credentials");
+            expect(passwordInput).toHaveAccessibleDescription("Incorrect authentication credentials");
+            expect(emailInput).toHaveAccessibleDescription("Incorrect authentication credentials");
          });
       });
 
@@ -73,8 +73,8 @@ describe("SignIn page tests", () => {
          });
 
          await waitFor(() => {
-            expect(passwordInput).not.toHaveAccessibleErrorMessage("Incorrect authentication credentials");
-            expect(emailInput).not.toHaveAccessibleErrorMessage("Incorrect authentication credentials");
+            expect(passwordInput).not.toHaveAccessibleDescription("Incorrect authentication credentials");
+            expect(emailInput).not.toHaveAccessibleDescription("Incorrect authentication credentials");
          });
       });
    });

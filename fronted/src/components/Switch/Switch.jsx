@@ -39,6 +39,7 @@ export const Switch = ({
          <label htmlFor="switch" className={`${textColor} text-base font-normal font-sans`}>{label}</label>
          <div>
             <input 
+               id="switch"
                type="checkbox"
                disabled={isDisable}
                checked={isChecked}

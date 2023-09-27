@@ -1,5 +1,11 @@
 import { withRouter } from "storybook-addon-react-router-v6";
 import { Automations } from "./Automations";
+import { rest } from "msw";
+import automations from "../../mocks/fixtures/automations.json";
+import { waitFor, within } from "@storybook/testing-library";
+import { expect } from "@storybook/jest";
+import { getTraduction } from "../../utils/getTraduction";
+import { Traduction } from "../../constants/Traduction";
 
 export default {
    title: "Pages/Automations",
@@ -14,9 +20,37 @@ export default {
    }
 };
 
-const Template = ({ label, ...args }) => { 
-   return Automations({ label, ...args });
+export const Default = {
+   play: async ({ canvasElement }) => { 
+      const canvas = within(canvasElement);
+
+      await waitFor(() => {
+         expect(canvas.getAllByRole("article")).toHaveLength(3);
+      });
+   },
+   parameters: {
+      msw: [
+         rest.get("http://localhost:8090/automations/account", (req, res, ctx) => {
+            return res(ctx.json(automations));
+         }),
+      ],
+   },
 };
 
-export const Default  = Template.bind({});
-Default.args = {};
+export const NotFound = {
+   play: async ({ canvasElement }) => { 
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.AUTOMATIONS_PAGE);
+
+      await waitFor(() => {
+         expect(canvas.getByText(t.notFound)).toBeInTheDocument();
+      });
+   },
+   parameters: {
+      msw: [
+         rest.get("http://localhost:8090/automations/account", (req, res, ctx) => {
+            return res(ctx.status(404));
+         }),
+      ],
+   },
+};

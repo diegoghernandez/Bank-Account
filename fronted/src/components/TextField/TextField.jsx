@@ -103,8 +103,7 @@ export const TextField = ({
                autoComplete="off"
                readOnly={isReadOnly}
                disabled={isDisable}
-               aria-describedby={textFieldId + "-describe"}
-               aria-errormessage={(isError) ? textFieldId + "-error" : ""}
+               aria-describedby={(supportiveText) ? textFieldId + "-describe" : ""}
                aria-invalid={Boolean(isError)}
                onClick={() => {
                   setIsClicked(true);
@@ -179,8 +178,9 @@ export const TextField = ({
             </div>}
          </div>
          {(supportiveText) && <span 
-            id={(isError) ? textFieldId + "-error" : textFieldId + "-describe"} 
+            id={textFieldId + "-describe"} 
             className={`ml-4 mt-1 text-sm ${supportiveColor}`}
+            aria-disabled={isDisable}
          >{supportiveText}</span>}
          
          {(!notMenu && isShowMenu)  && <Menu 

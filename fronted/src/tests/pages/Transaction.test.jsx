@@ -30,7 +30,8 @@ describe("Transaction page tests", () => {
          
          await user.click(makeButton);
    
-         expect(typeInput).toHaveAccessibleErrorMessage("You must choose one");
+         expect(typeInput).toBeInvalid();
+         expect(typeInput).toHaveAccessibleDescription("You must choose one");
       });
 
       it("Should show the following error individually if some value is not passed", async () => {
@@ -41,7 +42,8 @@ describe("Transaction page tests", () => {
          
          await user.click(makeButton);
    
-         expect(amountInput).toHaveAccessibleErrorMessage("Must not be empty");
+         expect(amountInput).toBeInvalid();
+         expect(amountInput).toHaveAccessibleDescription("Must not be empty");
          expect(transferInput).not.toHaveAccessibleErrorMessage("Must not be empty");
       });
 
@@ -66,7 +68,8 @@ describe("Transaction page tests", () => {
          });
 
          await waitFor(() => {
-            expect(amountInput).toHaveAccessibleErrorMessage("Not enough balance");
+            expect(amountInput).toBeInvalid();
+            expect(amountInput).toHaveAccessibleDescription("Not enough balance");
          });
       });
 

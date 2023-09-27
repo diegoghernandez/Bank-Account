@@ -38,10 +38,10 @@ describe("Automation page tests", () => {
          await user.click(makeButton);
 
          await waitFor(() => {
-            expect(nameInput).not.toHaveAccessibleErrorMessage("Must not be empty");
-            expect(amountInput).toHaveAccessibleErrorMessage("Must not be empty");
-            expect(transferInput).not.toHaveAccessibleErrorMessage("Must not be empty");
-            expect(timeInput).toHaveAccessibleErrorMessage("Must not be empty");
+            expect(nameInput).not.toHaveAccessibleDescription("Must not be empty");
+            expect(amountInput).toHaveAccessibleDescription("Must not be empty");
+            expect(transferInput).not.toHaveAccessibleDescription("Must not be empty");
+            expect(timeInput).toHaveAccessibleDescription("Must not be empty");
          });
       });
 
@@ -68,7 +68,7 @@ describe("Automation page tests", () => {
          });
 
          await waitFor(() => {
-            expect(transferInput).toHaveAccessibleErrorMessage("Account not found 124124");
+            expect(transferInput).toHaveAccessibleDescription("Account not found 124124");
          });
       });
 
@@ -95,7 +95,7 @@ describe("Automation page tests", () => {
          });
 
          await waitFor(() => {
-            expect(transferInput).not.toHaveAccessibleErrorMessage("Account not found 124124");
+            expect(transferInput).not.toHaveAccessibleDescription("Account not found 124124");
          });
       });
    });

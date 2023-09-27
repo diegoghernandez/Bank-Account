@@ -14,9 +14,4 @@ export default {
    }
 };
 
-const Template = ({ label, ...args }) => { 
-   return Account({ label, ...args });
-};
-
-export const Default  = Template.bind({});
-Default.args = {};
+export const Default = {};

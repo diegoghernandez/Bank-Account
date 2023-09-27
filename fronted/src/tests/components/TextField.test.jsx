@@ -35,7 +35,7 @@ describe("TextField component tests", () => {
          expect(textField).toBeInTheDocument();
          expect(textField).toHaveValue("new value");
          expect(textField).toHaveAttribute("aria-invalid", "true");
-         expect(textField).toHaveAccessibleErrorMessage("Show error");
+         expect(textField).toHaveAccessibleDescription("Show error");
       });
 
       it("Should show the disable status", async () => {
@@ -89,7 +89,7 @@ describe("TextField component tests", () => {
          expect(textField).toBeInTheDocument();
          expect(textField).toHaveAttribute("aria-invalid", "true");
          expect(textField).toHaveAttribute("readOnly");
-         expect(textField).toHaveAccessibleErrorMessage("Show error");
+         expect(textField).toHaveAccessibleDescription("Show error");
       });
 
       it("Should show the disable status", () => {
@@ -143,7 +143,7 @@ describe("TextField component tests", () => {
          expect(textField).toBeInTheDocument();
          expect(textField).toHaveAttribute("aria-invalid", "true");
          expect(textField).toHaveAttribute("readOnly");
-         expect(textField).toHaveAccessibleErrorMessage("Show error");
+         expect(textField).toHaveAccessibleDescription("Show error");
       });
 
       it("Should show the disable status", () => {
