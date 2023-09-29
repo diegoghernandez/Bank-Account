@@ -1,5 +1,10 @@
 import { withRouter } from "storybook-addon-react-router-v6";
 import { SignIn } from "./SignIn";
+import { rest } from "msw";
+import { userEvent, waitFor, within } from "@storybook/testing-library";
+import { getTraduction } from "../../utils/getTraduction";
+import { expect } from "@storybook/jest";
+import { Traduction } from "../../constants/Traduction";
 
 export default {
    title: "Pages/SignIn",
@@ -14,9 +19,71 @@ export default {
    }
 };
 
-const Template = ({ label, ...args }) => { 
-   return SignIn({ label, ...args });
+export const Default = {};
+
+export const Error = {
+   play: async ({ canvasElement }) => { 
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.SIGN_IN_PAGE);
+      
+      const emailInput = canvas.getByLabelText(t.labels[0]);
+      const passwordInput = canvas.getByLabelText(t.labels[1]);
+      const acceptButton = canvas.getByRole("button", { name: t.accept });
+
+      await userEvent.type(emailInput, "wrong@email.com");
+      await userEvent.type(passwordInput, "W0rng PAsswrOd");
+      
+      await userEvent.click(canvas.getByRole("button", { name: t.accept }));
+
+      await waitFor(async () => {
+         await expect(emailInput).toBeDisabled();
+         await expect(passwordInput).toBeDisabled();
+         await expect(acceptButton).toBeDisabled();
+
+         await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+      });
+
+      await waitFor(async () => {
+         await expect(emailInput).toBeInvalid();
+         await expect(passwordInput).toBeInvalid();
+      });
+   },
+   parameters: {
+      msw: [
+         rest.post("http://localhost:8090/auth/login", (req, res, ctx) => {
+            return res(ctx.status(403), ctx.delay(600));
+         }),
+      ],
+   },
 };
 
-export const Default  = Template.bind({});
-Default.args = {};
+export const Load = {
+   play: async ({ canvasElement }) => { 
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.SIGN_IN_PAGE);
+      
+      const emailInput = canvas.getByLabelText(t.labels[0]);
+      const passwordInput = canvas.getByLabelText(t.labels[1]);
+      const acceptButton = canvas.getByRole("button", { name: t.accept });
+
+      await userEvent.type(emailInput, "loading@email.com");
+      await userEvent.type(passwordInput, "Loading.....");
+      
+      await userEvent.click(canvas.getByRole("button", { name: t.accept }));
+
+      await waitFor(async () => {
+         await expect(emailInput).toBeDisabled();
+         await expect(passwordInput).toBeDisabled();
+         await expect(acceptButton).toBeDisabled();
+
+         await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+      });
+   },
+   parameters: {
+      msw: [
+         rest.post("http://localhost:8090/auth/login", (req, res, ctx) => {
+            return res(ctx.delay("infinite"));
+         }),
+      ],
+   },
+};

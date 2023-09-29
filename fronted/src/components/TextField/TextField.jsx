@@ -101,6 +101,7 @@ export const TextField = ({
                type={inputType.description}
                ref={valueRef}
                autoComplete="off"
+               required
                readOnly={isReadOnly}
                disabled={isDisable}
                aria-describedby={(supportiveText) ? textFieldId + "-describe" : ""}

@@ -16,18 +16,6 @@ describe("SignIn page tests", () => {
    });
 
    describe("After clicking", () => {
-      it("If some value is not passed, should show the following error", async () => { 
-         const page = customRender(<SignIn />);
-         const button = page.getByRole("button");
-
-         fireEvent.click(button);
-   
-         await waitFor(() => {
-            expect(page.getByLabelText("Password")).toHaveAccessibleDescription("Must not be empty");
-            expect(page.getByLabelText("Email")).toHaveAccessibleDescription("Must not be empty");
-         });
-      });
-
       it("If the credentials are wrong, should show the following error", async () => {
          const page = customRender(<SignIn />);
          const user = userEvent.setup();

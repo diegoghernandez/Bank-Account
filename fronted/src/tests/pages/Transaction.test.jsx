@@ -26,28 +26,16 @@ describe("Transaction page tests", () => {
 
    describe("After clicking", () =>  {
       it("Should show the following error, if no type is chosen", async () => {
-         const { user, typeInput, makeButton } = getElements();
-         
+         const { user, typeInput, amountInput, makeButton } = getElements();
+
+         await user.type(amountInput, "543543");
          await user.click(makeButton);
    
          expect(typeInput).toBeInvalid();
          expect(typeInput).toHaveAccessibleDescription("You must choose one");
       });
 
-      it("Should show the following error individually if some value is not passed", async () => {
-         const { page, user, typeInput, amountInput, transferInput, makeButton } = getElements();
-
-         await user.click(typeInput);
-         await user.click(page.getByText("Deposit"));
-         
-         await user.click(makeButton);
-   
-         expect(amountInput).toBeInvalid();
-         expect(amountInput).toHaveAccessibleDescription("Must not be empty");
-         expect(transferInput).not.toHaveAccessibleErrorMessage("Must not be empty");
-      });
-
-      it("Should show an error if there is a problem with a value", async () => {
+      it("Should show an error, if there is a problem with a value", async () => {
          const { page, user, spyTransaction, typeInput, amountInput, transferInput, makeButton} = getElements();
 
          await user.click(typeInput);

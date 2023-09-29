@@ -1,6 +1,7 @@
 import { Traduction } from "../constants/Traduction";
 import modal from "../i18n/modal.json";
 import navbar from "../i18n/navbar.json";
+import loader from "../i18n/loader.json";
 import transactionType from "../i18n/transaction-types.json";
 import accountPage from "../i18n/account-page.json";
 import automationPage from "../i18n/automation-page.json";
@@ -20,6 +21,8 @@ export const getTraduction = (wantedTranslation) => {
          return modal[availableLanguage];
       case Traduction.NAVBAR:
          return navbar[availableLanguage];
+      case Traduction.LOADER:
+         return loader[availableLanguage];
       case Traduction.TRANSACTION_TYPE:
          return transactionType[availableLanguage];
       case Traduction.ACCOUNT_PAGE: 

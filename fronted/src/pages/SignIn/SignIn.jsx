@@ -9,12 +9,14 @@ import { login as logUser } from "../_services/auth";
 import { useState } from "react";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
+import { Bar } from "../../components/Loader/Bar/Bar";
 
 export const SignIn = () => {
+   const [error, setError] = useState("");
+   const [isLoading, setIsLoading] = useState(false);
    const { login } = useAuth();
    const navigate = useNavigate();
    const { state } = useLocation();
-   const [error, setError] = useState("");
    const t = getTraduction(Traduction.SIGN_IN_PAGE);
 
    const handleSubmit = (event) => {
@@ -22,22 +24,21 @@ export const SignIn = () => {
       const email = event?.target?.elements[0]?.value;
       const password = event?.target?.elements[1]?.value;
 
-      if (!email || !password) {
-         setError(t.errorMessage);
-      } else {
-         logUser(email, password)
-            .then((token) => {
-               localStorage.setItem("token", "Bearer " + token);
-               getAccountData(email)
-                  .then(() => {
-                     login();
-                     navigate(state?.location?.pathname ?? "/");
-                  });
-            }).catch((e) => {
-               const message = e.message;
-               setError(message);
-            });
-      }
+      setIsLoading(true);
+
+      logUser(email, password)
+         .then((token) => {
+            localStorage.setItem("token", "Bearer " + token);
+            getAccountData(email)
+               .then(() => {
+                  login();
+                  navigate(state?.location?.pathname ?? "/");
+               });
+         }).catch((e) => {
+            const message = e.message;
+            setIsLoading(false);
+            setError(message);
+         });
    };
 
    return (
@@ -53,6 +54,7 @@ export const SignIn = () => {
                inputType={InputTypes.Email}
                supportiveText={error}
                isError={error}
+               isDisable={isLoading}
                />
             <TextField
                label={t.labels[1]}
@@ -60,9 +62,11 @@ export const SignIn = () => {
                inputType={InputTypes.Password}
                supportiveText={error}
                isError={error}
+               isDisable={isLoading}
                />
-            <Filled label={t.accept} />
+            <Filled label={t.accept} isDisable={isLoading} />
          </form>
+         {isLoading && <Bar />}
       </section>
    );
 };

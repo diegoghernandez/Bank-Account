@@ -5,16 +5,20 @@ import { TextField } from "../../components/TextField/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { saveTransaction } from "../_services/transactions";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { TransactionType } from "../../constants/TransactionType";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
+import { Bar } from "../../components/Loader/Bar/Bar";
 
 export const Transaction = () => {
    const [error, setError] = useState({});
+   const [isLoading, setIsLoading] = useState(false);
+   const [isActive, setIsActive] = useState(false);
    const navigate = useNavigate();
    const { state } = useLocation();
    const t = getTraduction(Traduction.TRANSACTION_PAGE);
+   const typeReference = useRef();
 
    const handleSubmit = (event) => {
       event.preventDefault();
@@ -30,15 +34,9 @@ export const Transaction = () => {
       }
 
       const typeValue = elements[0].value;
-      const limit = (typeValue === "Deposit") ? 2 : 3; 
       if (!typeValue) setError({type: t.errorMessages[0]});
-      else if (Array.from(elements).slice(0,limit).some((element) => !element.value)) {
-         const emptyError = t.errorMessages[1];
-         setError({
-            amount: !elements[1].value ? emptyError : "",
-            desc: (!elements[2].value && limit == 3) ? emptyError : "",
-         });
-      } else {
+      else {
+         setIsLoading(true);
          saveTransaction({
             idAccount,
             "idTransferAccount": Number(elements[2].value),
@@ -47,8 +45,19 @@ export const Transaction = () => {
          }, email).then(() => navigate(state?.location?.pathname ?? "/"))
          .catch((e) => {
             const message = JSON.parse(e.message);
+            setIsLoading(false);
             setError(message);
          });
+      }
+   };
+
+   const handleChange = () => {
+      const type = typeReference.current?.value;
+      
+      if ((type === TransactionType.WIRE_TRANSFER.description) || (type === TransactionType.ONLINE_PAYMENT.description)) {
+         setIsActive(true);
+      } else {
+         setIsActive(false);
       }
    };
 
@@ -57,15 +66,18 @@ export const Transaction = () => {
          <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
          <form 
             className="flex flex-col items-center gap-3 w-full"
-            onSubmit={handleSubmit}   
+            onSubmit={handleSubmit}  
          >
             <TextField
+               valueRef={typeReference}
                label={t.labels[0]}
                type={TextFieldTypes.Menu}
                inputType={InputTypes.Text}
                supportiveText={error.type}
                isError={error.type}
+               isDisable={isLoading}
                menuParameters={Object.values(TransactionType).map((type) => type.description)}
+               functionToUpdate={handleChange}
             />
             <TextField
                label={t.labels[1]}
@@ -73,6 +85,7 @@ export const Transaction = () => {
                inputType={InputTypes.Number}
                supportiveText={error.amount}
                isError={error.amount}
+               isDisable={isLoading}
             />
             <TextField
                label={t.labels[2]}
@@ -80,13 +93,16 @@ export const Transaction = () => {
                inputType={InputTypes.Number}
                supportiveText={error.desc}
                isError={error.desc}
+               isDisable={(isLoading) ? isLoading : !isActive}
             />
-            <Filled label={t.accept} />
+            <Filled label={t.accept} isDisable={isLoading} />
          </form>
 
          <Link className="w-full" to="/">
-            <Outline label={t.cancel} />
+            <Outline label={t.cancel} isDisable={isLoading} />
          </Link>
+
+         {isLoading && <Bar />}
       </section>
    );
 };

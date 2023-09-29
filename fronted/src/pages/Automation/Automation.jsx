@@ -8,9 +8,11 @@ import { saveAutomation } from "../_services/automation";
 import { useState } from "react";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
+import { Bar } from "../../components/Loader/Bar/Bar";
 
 export const Automation = () => {
    const [error, setError] = useState({});
+   const [isLoading, setIsLoading] = useState(false);
    const navigate = useNavigate();
    const t = getTraduction(Traduction.AUTOMATION_PAGE);
 
@@ -20,29 +22,22 @@ export const Automation = () => {
       const { idAccount } = JSON.parse(localStorage.getItem("account"));
       const elements = event.target.elements;
 
-      if (Array.from(elements).slice(0,4).some((element) => !element.value)) {
-         const emptyError = t.errorMessage;
-         setError({
-            name: !elements[0].value ? emptyError : "",
-            amount: !elements[1].value ? emptyError : "",
-            desc: !elements[2].value ? emptyError : "",
-            hoursToNextExecution: !elements[3].value ? emptyError : ""
-         });
-      } else {
-         const hours = Number(elements[3].value.split(" ")[1]);
-   
-         saveAutomation({
-            idAccount,
-            "name": elements[0].value,
-            "amount": Number(elements[1].value),
-            "idTransferAccount": Number(elements[2].value),
-            "hoursToNextExecution": hours,
-         }).then(() => navigate("/automations"))
-         .catch((e) => {
-            const message = (JSON.parse(e.message));
-            setError(message);
-         });
-      }
+      const hours = Number(elements[3].value.split(" ")[1]);
+
+      setIsLoading(true);
+
+      saveAutomation({
+         idAccount,
+         "name": elements[0].value,
+         "amount": Number(elements[1].value),
+         "idTransferAccount": Number(elements[2].value),
+         "hoursToNextExecution": hours,
+      }).then(() => navigate("/automations"))
+      .catch((e) => {
+         const message = (JSON.parse(e.message));
+         setIsLoading(false);
+         setError(message);
+      });
       
    };
 
@@ -59,6 +54,7 @@ export const Automation = () => {
                inputType={InputTypes.Text}
                isError={error.name}
                supportiveText={error.name}
+               isDisable={isLoading}
             />
             <TextField
                label={t.labels[1]}
@@ -66,6 +62,7 @@ export const Automation = () => {
                inputType={InputTypes.Number}
                isError={error.amount}
                supportiveText={error.amount}
+               isDisable={isLoading}
             />
             <TextField
                label={t.labels[2]}
@@ -73,6 +70,7 @@ export const Automation = () => {
                inputType={InputTypes.Number}
                isError={error.desc}
                supportiveText={error.desc ?? t.description}
+               isDisable={isLoading}
             />
             <TextField
                label={t.labels[3]}
@@ -85,13 +83,16 @@ export const Automation = () => {
                   [t.modalParameters[1]]: [0, 1, 2, 3, 4, 5, 6],
                   [t.modalParameters[2]]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
                }}
+               isDisable={isLoading}
             />
-            <Filled label={t.accept} />
+            <Filled label={t.accept} isDisable={isLoading} />
          </form>
 
          <Link className="w-full" to="/automations">
-            <Outline label={t.cancel} />
+            <Outline label={t.cancel} isDisable={isLoading} />
          </Link>
+
+         {isLoading && <Bar />}
       </section>
    );
 };

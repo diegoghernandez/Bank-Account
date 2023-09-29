@@ -29,22 +29,6 @@ describe("Automation page tests", () => {
    });
 
    describe("After clicking", () => {
-      it("If some value is not passed, should show the following error individually", async () => {
-         const { user, makeButton, nameInput, amountInput, transferInput, timeInput, } = getElements();
-
-         await user.type(nameInput, "Name");
-         await user.type(transferInput, "124124");
-
-         await user.click(makeButton);
-
-         await waitFor(() => {
-            expect(nameInput).not.toHaveAccessibleDescription("Must not be empty");
-            expect(amountInput).toHaveAccessibleDescription("Must not be empty");
-            expect(transferInput).not.toHaveAccessibleDescription("Must not be empty");
-            expect(timeInput).toHaveAccessibleDescription("Must not be empty");
-         });
-      });
-
       it("Should show an error if there is a problem with a value", async () => {
          const { page, user, spyAutomation, makeButton, nameInput, amountInput, transferInput, timeInput, } = getElements();
 
