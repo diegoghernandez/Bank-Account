@@ -30,6 +30,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("dev")
@@ -84,9 +85,6 @@ public class TransactionControllerForTypesTest {
     @Test
     @DisplayName("Should save one DEPOSIT transactionDto in json format using the service or return an unauthorized if doesn't have permission")
     void saveDepositTransaction() throws Exception {
-        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(0), false))
-                .thenReturn(transactionEntity.build());
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -97,7 +95,8 @@ public class TransactionControllerForTypesTest {
                                 .content(objectMapper.writeValueAsString(transactionDtoList.get(0)))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
-                        .andExpect(status().isCreated()),
+                        .andExpect(status().isCreated())
+                        .andExpect(content().string("Transaction made successfully")),
 
                 () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/save")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,9 +109,6 @@ public class TransactionControllerForTypesTest {
     @Test
     @DisplayName("Should save one ONLINE_PAYMENT transactionDto in json format using the service or return an unauthorized if doesn't have permission")
     void saveOnlinePaymentTransaction() throws Exception {
-        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(1), false))
-                .thenReturn(transactionEntity.build());
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -123,7 +119,8 @@ public class TransactionControllerForTypesTest {
                                 .content(objectMapper.writeValueAsString(transactionDtoList.get(1)))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
-                        .andExpect(status().isCreated()),
+                        .andExpect(status().isCreated())
+                        .andExpect(content().string("Transaction made successfully")),
 
                 () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/save")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -136,9 +133,6 @@ public class TransactionControllerForTypesTest {
     @Test
     @DisplayName("Should save one WIRE_TRANSFER transactionDto in json format using the service or return an unauthorized if doesn't have permission")
     void saveWireTransferTransaction() throws Exception {
-        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(2), false))
-                .thenReturn(transactionEntity.build());
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -149,7 +143,8 @@ public class TransactionControllerForTypesTest {
                                 .content(objectMapper.writeValueAsString(transactionDtoList.get(2)))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
-                        .andExpect(status().isCreated()),
+                        .andExpect(status().isCreated())
+                        .andExpect(content().string("Transaction made successfully")),
 
                 () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/save")
                                 .contentType(MediaType.APPLICATION_JSON)

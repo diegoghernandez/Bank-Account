@@ -173,9 +173,7 @@ public class AutomationServiceTest {
         Mockito.when(accountRepository.getAccountById(321))
                 .thenReturn(Optional.of(AccountEntity.builder().build()));
 
-        Mockito.when(automationRepository.saveAutomation(ArgumentMatchers.any())).thenReturn(automationEntity);
-
-        AutomationEntity automationSave = automationService.saveAutomation(automationDto);
+        automationService.saveAutomation(automationDto);
 
         Exception exception = assertThrows(NotFoundException.class, () ->
                 automationService.saveAutomation(automationError));
@@ -184,11 +182,7 @@ public class AutomationServiceTest {
         String actualMessage = exception.getMessage();
 
         assertAll(
-                () -> assertThat(automationSave.getIdAccount()).isEqualTo(automationDto.idAccount()),
-                () -> assertThat(automationSave.getName()).isEqualTo(automationDto.name()),
-                () -> assertThat(automationSave.getAmount()).isEqualTo(automationDto.amount()),
-                () -> assertThat(automationSave.getIdTransferAccount()).isEqualTo(automationDto.idTransferAccount()),
-                () -> assertThat(automationSave.getHoursToNextExecution()).isEqualTo(automationDto.hoursToNextExecution()),
+                () -> Mockito.verify(automationRepository, Mockito.times(1)).saveAutomation(Mockito.any(AutomationEntity.class)),
                 () -> assertTrue(actualMessage.contentEquals(expectedMessage))
         );
     }

@@ -70,7 +70,8 @@ public class TransactionController {
     }
 
     @PostMapping(value = "/save", consumes = {"application/json"})
-    public ResponseEntity<TransactionEntity> saveDepositTransaction(@RequestBody @Valid TransactionDto transactionDto) throws Exception {
-        return new ResponseEntity<>(transactionTypeService.saveTransaction(transactionDto, false), HttpStatus.CREATED);
+    public ResponseEntity<String> saveDepositTransaction(@RequestBody @Valid TransactionDto transactionDto) throws Exception {
+        transactionTypeService.saveTransaction(transactionDto, false);
+        return new ResponseEntity<>("Transaction made successfully", HttpStatus.CREATED);
     }
 }

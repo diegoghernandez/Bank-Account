@@ -34,8 +34,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("dev")
 @WebMvcTest(AutomationController.class)
@@ -226,9 +225,6 @@ public class AutomationControllerTest {
                 54
         );
 
-        Mockito.when(automationService.saveAutomation(ArgumentMatchers.any()))
-                .thenReturn(AutomationEntity.builder().build());
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -239,7 +235,8 @@ public class AutomationControllerTest {
                                 .content(objectMapper.writeValueAsString(automationDto))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
-                        .andExpect(status().isCreated()),
+                        .andExpect(status().isCreated())
+                        .andExpect(content().string("Automation created successfully")),
 
                 () -> mockMvc.perform(MockMvcRequestBuilders.post("/automations/save")
                                 .contentType(MediaType.APPLICATION_JSON)

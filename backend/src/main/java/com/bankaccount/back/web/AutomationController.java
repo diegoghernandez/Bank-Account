@@ -44,7 +44,8 @@ public class AutomationController {
     }
 
     @PostMapping(value = "/save", consumes = {"application/json"})
-    public ResponseEntity<AutomationEntity> saveAutomation(@RequestBody @Valid AutomationDto automationDto) throws NotFoundException {
-        return new ResponseEntity<>(automationService.saveAutomation(automationDto), HttpStatus.CREATED);
+    public ResponseEntity<String> saveAutomation(@RequestBody @Valid AutomationDto automationDto) throws NotFoundException {
+        automationService.saveAutomation(automationDto);
+        return new ResponseEntity<>("Automation created successfully", HttpStatus.CREATED);
     }
 }

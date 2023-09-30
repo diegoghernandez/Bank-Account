@@ -180,17 +180,10 @@ public class AutomationRepositoryImplTest {
 
         Mockito.when(automationCrudRepository.save(ArgumentMatchers.any())).thenReturn(automationEntity);
 
-        AutomationEntity automationSave = automationRepository.saveAutomation(automationEntity);
+        automationRepository.saveAutomation(automationEntity);
 
         assertAll(
-                () -> assertThat(automationSave.getIdAutomation()).isEqualTo(automationEntity.getIdAutomation()),
-                () -> assertThat(automationSave.getIdAccount()).isEqualTo(automationEntity.getIdAccount()),
-                () -> assertThat(automationSave.getName()).isEqualTo(automationEntity.getName()),
-                () -> assertThat(automationSave.getAmount()).isEqualTo(automationEntity.getAmount()),
-                () -> assertThat(automationSave.getIdTransferAccount()).isEqualTo(automationEntity.getIdTransferAccount()),
-                () -> assertThat(automationSave.getHoursToNextExecution()).isEqualTo(automationEntity.getHoursToNextExecution()),
-                () -> assertThat(automationSave.getExecutionTime()).isEqualTo(automationEntity.getExecutionTime()),
-                () -> assertThat(automationSave.getStatus()).isEqualTo(automationEntity.getStatus())
+                () -> Mockito.verify(automationCrudRepository, Mockito.times(1)).save(automationEntity)
         );
     }
 }

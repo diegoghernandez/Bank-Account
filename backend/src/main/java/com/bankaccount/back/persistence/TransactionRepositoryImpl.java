@@ -55,8 +55,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public TransactionEntity saveTransaction(TransactionEntity transactionEntity) {
-        return transactionCrudRepository.save(transactionEntity);
+    public void saveTransaction(TransactionEntity transactionEntity) {
+        transactionCrudRepository.save(transactionEntity);
     }
 
     @Override

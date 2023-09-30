@@ -45,7 +45,7 @@ public class AutomationService {
         if (status) automationRepository.updateExecutionTimeById(LocalDateTime.now(), id);
     }
 
-    public AutomationEntity saveAutomation(AutomationDto automationDto) throws NotFoundException {
+    public void saveAutomation(AutomationDto automationDto) throws NotFoundException {
         Optional<AccountEntity> isAccount = accountRepository.getAccountById(automationDto.idAccount());
         Optional<AccountEntity> isAccountTransfer = accountRepository.getAccountById(automationDto.idTransferAccount());
 
@@ -63,6 +63,6 @@ public class AutomationService {
                 .status(true)
                 .build();
 
-        return automationRepository.saveAutomation(automationEntity);
+        automationRepository.saveAutomation(automationEntity);
     }
 }

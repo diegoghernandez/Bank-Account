@@ -47,7 +47,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
     }
 
     @Override
-    public AutomationEntity saveAutomation(AutomationEntity automationEntity) {
-        return automationCrudRepository.save(automationEntity);
+    public void saveAutomation(AutomationEntity automationEntity) {
+        automationCrudRepository.save(automationEntity);
     }
 }

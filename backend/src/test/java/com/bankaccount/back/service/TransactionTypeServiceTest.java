@@ -125,8 +125,8 @@ public class TransactionTypeServiceTest {
         assertTrue(actualMessage.contentEquals(expectedMessage));
     }
 
-        @Test
-    @DisplayName("Should convert one transactionDto to transactionEntity with DEPOSIT type to repository and return one transactionDto and add to account's current balance")
+    @Test
+    @DisplayName("Should convert one transactionDto to transactionEntity with DEPOSIT type and save it into the repository one time, adding the respective amount to the owner")
     void saveDepositTransaction() throws Exception {
         transactionDto = new TransactionDto(
                 87658,
@@ -136,25 +136,19 @@ public class TransactionTypeServiceTest {
 
         transactionEntity.transactionType(TransactionType.DEPOSIT);
 
-        Mockito.when(transactionRepository.saveTransaction(ArgumentMatchers.any())).thenReturn(transactionEntity.build());
-
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("30000.45"), 87658);
 
-        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto, false);
-        System.out.println(transactionSave.toString());
+        transactionTypeService.saveTransaction(transactionDto, false);
 
         assertAll(
-                () -> assertEquals(transactionDto.idAccount(), transactionSave.getIdAccount()),
-                () -> assertEquals(transactionDto.idTransferAccount(), transactionSave.getIdTransferAccount()),
-                () -> assertEquals("Random345778", transactionSave.getReceiverName()),
-                () -> assertEquals(transactionDto.amount(), transactionSave.getTransactionAmount()),
-                () -> assertEquals(transactionDto.transactionType(), transactionSave.getTransactionType()),
-                () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("30000.45"), 87658)
+                () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("30000.45"), 87658),
+                () -> Mockito.verify(transactionRepository, Mockito.times(1)).saveTransaction(Mockito.any(TransactionEntity.class))
         );
     }
 
     @Test
-    @DisplayName("Should convert one transactionDto to transactionEntity with ONLINE_PAYMENT type to repository and return one transactionDto and subtract to account's current balance")
+    @DisplayName("Should convert one transactionDto to transactionEntity with ONLINE_PAYMENT type and save it into the repository two times, one " +
+            "to subtract the amount from the owner, and the second to add it to the receiver")
     void saveOnlinePaymentTransaction() throws Exception {
         transactionDto = new TransactionDto(
                 87658,
@@ -164,24 +158,19 @@ public class TransactionTypeServiceTest {
 
         transactionEntity.transactionType(TransactionType.ONLINE_PAYMENT);
 
-        Mockito.when(transactionRepository.saveTransaction(ArgumentMatchers.any())).thenReturn(transactionEntity.build());
-
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("9999.55"), 87658);
 
-        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto, false);
+        transactionTypeService.saveTransaction(transactionDto, false);
 
         assertAll(
-                () -> assertEquals(transactionDto.idAccount(), transactionSave.getIdAccount()),
-                () -> assertEquals(transactionDto.idTransferAccount(), transactionSave.getIdTransferAccount()),
-                () -> assertEquals("Random345778", transactionSave.getReceiverName()),
-                () -> assertEquals(transactionDto.amount(), transactionSave.getTransactionAmount()),
-                () -> assertEquals(transactionDto.transactionType(), transactionSave.getTransactionType()),
-                () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("9999.55"), 87658)
+                () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("9999.55"), 87658),
+                () -> Mockito.verify(transactionRepository, Mockito.times(2)).saveTransaction(Mockito.any(TransactionEntity.class))
         );
     }
 
     @Test
-    @DisplayName("Should convert one transactionDto to transactionEntity with WIRE_TRANSFER type to repository and return one transactionDto and subtract to account's current balance")
+    @DisplayName("Should convert one transactionDto to transactionEntity with WIRE_TRANSFER type and save it into the repository two times, one " +
+            "to subtract the amount from the owner, and the second to add it to the receiver")
     void saveWireTransferTransaction() throws Exception {
         transactionDto = new TransactionDto(
                 87658,
@@ -191,19 +180,13 @@ public class TransactionTypeServiceTest {
 
         transactionEntity.transactionType(TransactionType.WIRE_TRANSFER);
 
-        Mockito.when(transactionRepository.saveTransaction(ArgumentMatchers.any())).thenReturn(transactionEntity.build());
-
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("9999.55"), 87658);
 
-        TransactionEntity transactionSave = transactionTypeService.saveTransaction(transactionDto, false);
+        transactionTypeService.saveTransaction(transactionDto, false);
 
         assertAll(
-                () -> assertEquals(transactionDto.idAccount(), transactionSave.getIdAccount()),
-                () -> assertEquals(transactionDto.idTransferAccount(), transactionSave.getIdTransferAccount()),
-                () -> assertEquals("Random345778", transactionSave.getReceiverName()),
-                () -> assertEquals(transactionDto.amount(), transactionSave.getTransactionAmount()),
-                () -> assertEquals(transactionDto.transactionType(), transactionSave.getTransactionType()),
-                () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("9999.55"), 87658)
+                () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("9999.55"), 87658),
+                () -> Mockito.verify(transactionRepository, Mockito.times(2)).saveTransaction(Mockito.any(TransactionEntity.class))
         );
     }
 }

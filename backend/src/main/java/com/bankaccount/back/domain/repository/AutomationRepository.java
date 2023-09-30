@@ -20,5 +20,5 @@ public interface AutomationRepository {
 
     void updateStatusById(boolean status, long id);
 
-    AutomationEntity saveAutomation(AutomationEntity automationEntity);
+    void saveAutomation(AutomationEntity automationEntity);
 }

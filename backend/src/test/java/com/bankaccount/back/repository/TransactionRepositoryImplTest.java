@@ -2,6 +2,7 @@ package com.bankaccount.back.repository;
 
 import com.bankaccount.back.domain.repository.TransactionRepository;
 import com.bankaccount.back.persistence.crud.TransactionCrudRepository;
+import com.bankaccount.back.persistence.entity.AutomationEntity;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -146,13 +147,9 @@ public class TransactionRepositoryImplTest {
 
         Mockito.when(transactionCrudRepository.save(ArgumentMatchers.any())).thenReturn(transactionEntity);
 
-        TransactionEntity transactionSave = transactionRepository.saveTransaction(transactionEntity);
+        transactionRepository.saveTransaction(transactionEntity);
 
-        assertAll(
-                () -> assertEquals(transactionEntity.getIdTransaction(), transactionSave.getIdTransaction()),
-                () -> assertEquals(transactionEntity.getTransactionAmount(), transactionSave.getTransactionAmount()),
-                () -> assertEquals(transactionEntity.getTransactionTimestamp(), transactionSave.getTransactionTimestamp())
-        );
+        Mockito.verify(transactionCrudRepository, Mockito.times(1)).save(transactionEntity);
     }
 
     @Test

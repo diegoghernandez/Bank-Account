@@ -23,7 +23,7 @@ public class TransactionTypeService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public TransactionEntity saveTransaction(TransactionDto transactionDto, boolean isAutomated) throws NotFoundException, NotAllowedException {
+    public void saveTransaction(TransactionDto transactionDto, boolean isAutomated) throws NotFoundException, NotAllowedException {
         int id = transactionDto.idAccount();
         int idTransfer = transactionDto.idTransferAccount();
         BigDecimal amount = transactionDto.amount();
@@ -73,6 +73,6 @@ public class TransactionTypeService {
             default -> throw new NoSuchFieldError("Transaction not supported");
         }
 
-        return transactionRepository.saveTransaction(transactionEntity.build());
+        transactionRepository.saveTransaction(transactionEntity.build());
     }
 }
