@@ -78,9 +78,7 @@ describe("Automation page tests", () => {
             });
          });
 
-         await waitFor(() => {
-            expect(transferInput).not.toHaveAccessibleDescription("Account not found 124124");
-         });
+         await waitFor(() => expect(page.getByText("Automation created successfully")).toBeInTheDocument());
       });
    });
 });

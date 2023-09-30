@@ -1,10 +1,12 @@
 {
    "en": {
+      "formatText": ["Each", "hour(s)"],
       "errorMessage": "Must not be empty",
       "cancel": "Cancel",
       "accept": "Accept"
    },
    "es": {
+      "formatText": ["Cada", "hora(s)"],
       "errorMessage": "No debe estar vació",
       "cancel": "Cancelar",
       "accept": "Aceptar"

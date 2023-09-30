@@ -81,9 +81,7 @@ describe("Transaction page tests", () => {
             }, "juan@names.com");
          });
 
-         await waitFor(() => {
-            expect(amountInput).not.toHaveAccessibleErrorMessage("Not enough balance");
-         });
+         await waitFor(() => expect(page.getByText("Transaction made successfully")).toBeInTheDocument());
       });
    });
 });

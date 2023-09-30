@@ -68,12 +68,10 @@ export const saveTransaction = async (transaction, email) => {
       body: JSON.stringify(transaction)
    });
 
-   const data = await response.json();
-
    if (response.ok) {
       getAccountData(email);
-      return data;   
+      return await response.text();   
    } else {
-      throw new StatusError(JSON.stringify(data), response.status);
+      throw new StatusError(JSON.stringify(await response.json()), response.status);
    }
 };

@@ -123,15 +123,7 @@ describe("Transactions tests", () => {
             "transactionType": "ONLINE_PAYMENT"
          });
          
-         expect(content).toStrictEqual({
-            "idTransaction": 1,
-            "idTransferAccount": 432,
-            "receiverName": "juan",
-            "transactionAmount": 1400.00,
-            "transactionType": "ONLINE_PAYMENT",
-            "transactionTimestamp": "2023-07-15T19:13:13.295080043",
-            "isAutomated": false
-         });
+         expect(content).toStrictEqual("Transaction made successfully");
       });
    });
 });

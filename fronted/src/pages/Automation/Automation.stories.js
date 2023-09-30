@@ -22,7 +22,7 @@ export default {
 export const Default = {};
 
 export const Error = {
-   play: async ({ canvasElement }) => { 
+   play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);
       const t = getTraduction(Traduction.AUTOMATION_PAGE);
       const tModal = getTraduction(Traduction.MODAL);
@@ -32,31 +32,39 @@ export const Error = {
       const transferInput = canvas.getByLabelText(t.labels[2]);
       const timeInput = canvas.getByLabelText(t.labels[3]);
 
-      await userEvent.type(nameInput, "Mal");
-      await userEvent.type(amountInput, "2321313312.32");
-      await userEvent.type(transferInput, "4132423");
-
-      await userEvent.click(timeInput);
-      await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
-      await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
-      
-      await userEvent.click(canvas.getByRole("button", { name: t.accept }));
-
-      await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
-      
-      await waitFor(async () => {
-         await expect(nameInput).toBeDisabled();
-         await expect(amountInput).toBeDisabled();
-         await expect(transferInput).toBeDisabled();
-         await expect(timeInput).toBeDisabled();
+      await step("Enter and submit necessary data", async () => {
+         await userEvent.type(nameInput, "Mal");
+         await userEvent.type(amountInput, "2321313312.32");
+         await userEvent.type(transferInput, "4132423");
+   
+         await userEvent.click(timeInput);
+         await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
+         await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
+         
+         await userEvent.click(canvas.getByRole("button", { name: t.accept }));
       });
 
-      await waitFor(async () => {
-         await expect(nameInput).toBeInvalid();
-         await expect(amountInput).toBeInvalid();
-         await expect(transferInput).toBeInvalid();
-         await expect(timeInput).toBeInvalid();
+      
+      await step("Initialize load state", async () => {
+         await waitFor(async () => {
+            await expect(nameInput).toBeDisabled();
+            await expect(amountInput).toBeDisabled();
+            await expect(transferInput).toBeDisabled();
+            await expect(timeInput).toBeDisabled();
+
+            await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+         });
       });
+
+      await step("Initialize fail state", async () => {
+         await waitFor(async () => {
+            await expect(nameInput).toBeInvalid();
+            await expect(amountInput).toBeInvalid();
+            await expect(transferInput).toBeInvalid();
+            await expect(timeInput).toBeInvalid();
+         });
+      });
+
    },
    parameters: {
       msw: [
@@ -73,7 +81,7 @@ export const Error = {
 };
 
 export const Load = {
-   play: async ({ canvasElement }) => { 
+   play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);
       const t = getTraduction(Traduction.AUTOMATION_PAGE);
       const tModal = getTraduction(Traduction.MODAL);
@@ -86,31 +94,89 @@ export const Load = {
       const cancelButton = canvas.getByRole("button", { name: t.cancel });
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
-      await userEvent.type(nameInput, "Mal");
-      await userEvent.type(amountInput, "2321313312.32");
-      await userEvent.type(transferInput, "4132423");
+      await step("Enter and submit necessary data", async () => {
+         await userEvent.type(nameInput, "Mal");
+         await userEvent.type(amountInput, "2321313312.32");
+         await userEvent.type(transferInput, "4132423");
+   
+         await userEvent.click(timeInput);
+         await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
+         await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
+         
+         await userEvent.click(canvas.getByRole("button", { name: t.accept }));
+      });
 
-      await userEvent.click(timeInput);
-      await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
-      await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
-      
-      await userEvent.click(canvas.getByRole("button", { name: t.accept }));
-
-      await waitFor(async () => {
-         await expect(nameInput).toBeDisabled();
-         await expect(amountInput).toBeDisabled();
-         await expect(transferInput).toBeDisabled();
-         await expect(timeInput).toBeDisabled();
-         await expect(acceptButton).toBeDisabled();
-         await expect(cancelButton).toBeDisabled();
-
-         await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+      await step("Initialize load state", async () => {
+         await waitFor(async () => {
+            await expect(nameInput).toBeDisabled();
+            await expect(amountInput).toBeDisabled();
+            await expect(transferInput).toBeDisabled();
+            await expect(timeInput).toBeDisabled();
+            await expect(acceptButton).toBeDisabled();
+            await expect(cancelButton).toBeDisabled();
+   
+            await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+         });
       });
    },
    parameters: {
       msw: [
          rest.post("http://localhost:8090/automations/save", (req, res, ctx) => {
             return res(ctx.delay("infinite"));
+         }),
+      ],
+   },
+};
+
+export const Successful = {
+   play: async ({ canvasElement, step }) => { 
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.AUTOMATION_PAGE);
+      const tModal = getTraduction(Traduction.MODAL);
+      
+      const nameInput = canvas.getByLabelText(t.labels[0]);
+      const amountInput = canvas.getByLabelText(t.labels[1]);
+      const transferInput = canvas.getByLabelText(t.labels[2]);
+      const timeInput = canvas.getByLabelText(t.labels[3]);
+
+      const cancelButton = canvas.getByRole("button", { name: t.cancel });
+      const acceptButton = canvas.getByRole("button", { name: t.accept });
+
+      await step("Enter and submit necessary data", async () => {
+         await userEvent.type(nameInput, "Mal");
+         await userEvent.type(amountInput, "2321313312.32");
+         await userEvent.type(transferInput, "4132423");
+   
+         await userEvent.click(timeInput);
+         await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
+         await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
+         
+         await userEvent.click(canvas.getByRole("button", { name: t.accept }));
+      });
+
+      await step("Initialize load state", async () => {
+         await waitFor(async () => {
+            await expect(nameInput).toBeDisabled();
+            await expect(amountInput).toBeDisabled();
+            await expect(transferInput).toBeDisabled();
+            await expect(timeInput).toBeDisabled();
+            await expect(acceptButton).toBeDisabled();
+            await expect(cancelButton).toBeDisabled();
+   
+            await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+         });
+      });
+
+      await step("See successful response", async () => {
+         setTimeout(async () => {
+            await expect(await canvas.findByText("Automation created successfully")).toBeInTheDocument();
+         }, 1500);
+      });
+   },
+   parameters: {
+      msw: [
+         rest.post("http://localhost:8090/automations/save", (req, res, ctx) => {
+            return res(ctx.status(200), ctx.delay(1500), ctx.text("Automation created successfully"));
          }),
       ],
    },

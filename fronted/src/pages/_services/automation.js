@@ -47,11 +47,9 @@ export const saveAutomation = async (automation) => {
       body: JSON.stringify(automation)
    });
 
-   const data = await response.json();
-
    if (response.ok) {
-      return data;
+      return await response.text();
    } else {
-      throw new StatusError(JSON.stringify(data), response.status);
+      throw new StatusError(JSON.stringify(await response.json()), response.status);
    }
 };

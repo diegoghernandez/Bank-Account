@@ -3,12 +3,14 @@
       "labels": ["Automation Status", "Name"],
       "menuParameters": ["Active", "Disable"],
       "notFound": "No automations found",
-      "fab": "Automation"
+      "fab": "Automation",
+      "period": ["Each ", "week(s)", "day(s)", "hour(s)"]
    },
    "es": {
       "labels": ["Estado de la automatización", "Nombre"],
       "menuParameters": ["Activa", "Deshabilitada"],
       "notFound": "Sin automatizaciones",
-      "fab": "Automatización"
+      "fab": "Automatización",
+      "period": ["Cada ", "semana(s)", "día(s)", "hora(s)"]
    }
 }

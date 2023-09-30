@@ -133,14 +133,6 @@ export const transactionHandler = [
          }));
       }
 
-      return res(ctx.status(200), ctx.json({
-         "idTransaction": 1,
-         "idTransferAccount": 432,
-         "receiverName": "juan",
-         "transactionAmount": 1400.00,
-         "transactionType": "ONLINE_PAYMENT",
-         "transactionTimestamp": "2023-07-15T19:13:13.295080043",
-         "isAutomated": false
-      }));
+      return res(ctx.status(200), ctx.text("Transaction made successfully"));
    })
 ];

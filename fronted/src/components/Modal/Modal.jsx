@@ -106,7 +106,8 @@ export const Modal = ({
    messageUtils
 }) => {
    const storyRef = useRef();
-   const { errorMessage, cancel, accept } = getTraduction(Traduction.MODAL);
+   const { formatText, errorMessage, cancel, accept } = getTraduction(Traduction.MODAL);
+   const { modalParameters } = getTraduction(Traduction.AUTOMATION_PAGE);
 
    const handleValues = () => {
       const values = [];
@@ -121,12 +122,12 @@ export const Modal = ({
             }
          }
    
-         if (listUtils?.parameters.weeks) {
+         if (listUtils?.parameters[modalParameters[0]]) {
             formattedValue = Number(values[0]) * 168;
             formattedValue = formattedValue + Number(values[1]) * 24;
             formattedValue = formattedValue + Number(values[2]);
             
-            formattedValue = `Each ${formattedValue} hour(s)`;
+            formattedValue = `${formatText[0]} ${formattedValue} ${formatText[1]}`;
          }
    
          listUtils?.setValue(formattedValue ?? values.join().replace(",", " "));

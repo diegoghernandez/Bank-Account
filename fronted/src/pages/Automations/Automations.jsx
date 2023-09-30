@@ -10,7 +10,7 @@ import { getAutomations } from "../_services/automation";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 
-const getTimePeriod = (hoursToNextExecution) => {
+const getTimePeriod = (textTime, hoursToNextExecution) => {
    let hours = hoursToNextExecution;
    let days = (hours / 24).toFixed();
    let weeks = (days / 7 > 1) ? (days / 7).toFixed() : 0;
@@ -18,16 +18,13 @@ const getTimePeriod = (hoursToNextExecution) => {
    hours = hours - (days * 24);
    days = days - (weeks * 7);
 
-   let text = "Each ";
+   let text = textTime[0];
 
-   if (weeks == 1)  text = text.concat(weeks, " week/");
-   else if (weeks > 1)  text = text.concat(weeks, " weeks/");
+   if (weeks >= 1)  text = text.concat(weeks, ` ${textTime[1]}/`);
    
-   if (days == 1) text = text.concat(days, " day/");
-   else if (days > 1)  text = text.concat(days, " days/");
+   if (days >= 1) text = text.concat(days, ` ${textTime[2]}/`);
    
-   if (hours == 1)  text = text.concat(hours, " hour");
-   else if (hours > 1)  text = text.concat(hours, " hours");
+   if (hours >= 1)  text = text.concat(hours, ` ${textTime[3]}`);
 
    return text;
 };
@@ -98,7 +95,7 @@ export const Automations = () => {
                      key={automation.idAutomation}
                      name={automation.name}
                      money={automation.amount}
-                     period={getTimePeriod(automation.hoursToNextExecution)}
+                     period={getTimePeriod(t.period, automation.hoursToNextExecution)}
                      isDisable={!automation.status}
                   />
                );

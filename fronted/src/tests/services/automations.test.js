@@ -54,15 +54,7 @@ describe("Automations tests", () => {
             "hoursToNextExecution": 3
          });
          
-         expect(content).toStrictEqual({
-            "idAutomation": 238589851,
-            "name": "New automation",
-            "amount": 2000.00,
-            "idTransferAccount": 2132,
-            "hoursToNextExecution": 1,
-            "executionTime": "2024-07-15T17:52:54.894278577",
-            "status": true
-         });
+         expect(content).toStrictEqual("Automation created successfully");
       });
    });
 });

@@ -22,7 +22,7 @@ export default {
 export const Default = {};
 
 export const Error = {
-   play: async ({ canvasElement }) => { 
+   play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);
       const t = getTraduction(Traduction.SIGN_IN_PAGE);
       
@@ -30,23 +30,31 @@ export const Error = {
       const passwordInput = canvas.getByLabelText(t.labels[1]);
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
-      await userEvent.type(emailInput, "wrong@email.com");
-      await userEvent.type(passwordInput, "W0rng PAsswrOd");
-      
-      await userEvent.click(canvas.getByRole("button", { name: t.accept }));
-
-      await waitFor(async () => {
-         await expect(emailInput).toBeDisabled();
-         await expect(passwordInput).toBeDisabled();
-         await expect(acceptButton).toBeDisabled();
-
-         await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+      await step("Enter and submit necessary data", async () => {
+         await userEvent.type(emailInput, "wrong@email.com");
+         await userEvent.type(passwordInput, "W0rng PAsswrOd");
+         
+         await userEvent.click(canvas.getByRole("button", { name: t.accept }));
       });
 
-      await waitFor(async () => {
-         await expect(emailInput).toBeInvalid();
-         await expect(passwordInput).toBeInvalid();
+      await step("Initialize load state", async () => {
+         await waitFor(async () => {
+            await expect(emailInput).toBeDisabled();
+            await expect(passwordInput).toBeDisabled();
+            await expect(acceptButton).toBeDisabled();
+   
+            await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+         });
       });
+
+
+      await step("Initialize fail state", async () => {
+         await waitFor(async () => {
+            await expect(emailInput).toBeInvalid();
+            await expect(passwordInput).toBeInvalid();
+         });
+      });
+
    },
    parameters: {
       msw: [
@@ -58,7 +66,7 @@ export const Error = {
 };
 
 export const Load = {
-   play: async ({ canvasElement }) => { 
+   play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);
       const t = getTraduction(Traduction.SIGN_IN_PAGE);
       
@@ -66,18 +74,24 @@ export const Load = {
       const passwordInput = canvas.getByLabelText(t.labels[1]);
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
-      await userEvent.type(emailInput, "loading@email.com");
-      await userEvent.type(passwordInput, "Loading.....");
-      
-      await userEvent.click(canvas.getByRole("button", { name: t.accept }));
-
-      await waitFor(async () => {
-         await expect(emailInput).toBeDisabled();
-         await expect(passwordInput).toBeDisabled();
-         await expect(acceptButton).toBeDisabled();
-
-         await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+      await step("Enter and submit necessary data", async () => {
+         await userEvent.type(emailInput, "loading@email.com");
+         await userEvent.type(passwordInput, "Loading.....");
+         
+         await userEvent.click(canvas.getByRole("button", { name: t.accept }));
       });
+
+
+      await step("Initialize load state", async () => {
+         await waitFor(async () => {
+            await expect(emailInput).toBeDisabled();
+            await expect(passwordInput).toBeDisabled();
+            await expect(acceptButton).toBeDisabled();
+   
+            await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+         });
+      });
+
    },
    parameters: {
       msw: [
