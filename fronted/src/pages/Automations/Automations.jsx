@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { getAutomations } from "../_services/automation";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
+import { Spin } from "../../components/Loader/Spin/Spin";
 
 const getTimePeriod = (textTime, hoursToNextExecution) => {
    let hours = hoursToNextExecution;
@@ -33,6 +34,7 @@ export const Automations = () => {
    const [status, setStatus] = useState("");
    const [automations, setAutomations] = useState([]);
    const [notFound, setNotFound] = useState(false); 
+   const [loading, setLoading] = useState(true);
    const [text, setText] = useState("");
    const t = getTraduction(Traduction.AUTOMATIONS_PAGE);
 
@@ -46,7 +48,9 @@ export const Automations = () => {
          .then((data) => {
             setAutomations(data, ...automations);
             setNotFound(false);
+            setLoading(false);
          }).catch(() => {
+            setLoading(false);
             setNotFound(true);
          });
    }, []);
@@ -101,6 +105,7 @@ export const Automations = () => {
                      />
                   );
                })}
+               {loading && <Spin />}
             </div>
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">

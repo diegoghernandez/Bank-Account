@@ -18,6 +18,6 @@ export default {
 
 export const Default = {
    args: {
-      page: Page.Home
+      page: Page.HOME
    }
 };

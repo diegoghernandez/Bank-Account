@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Modal } from "../../Modal/Modal";
+import { ChevronIcon } from "../../../assets/chevron_right";
 
 export const DividerField = ({ label, modalUtils }) => {
    const dialogRef = useRef();
@@ -15,10 +16,7 @@ export const DividerField = ({ label, modalUtils }) => {
             onClick={showModal}
          >
             {label}
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-               <rect width="24" height="24"/>
-               <path d="M12.6 12L8 7.4L9.4 6L15.4 12L9.4 18L8 16.6L12.6 12Z" fill="#1C1B1F"/>
-            </svg>
+            <ChevronIcon fillClass={"fill-onSurface"} />
 
          </button>
          {modalUtils && <Modal 

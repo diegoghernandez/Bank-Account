@@ -5,6 +5,7 @@ import { Page } from "../../constants/Page";
 import { getAutomations } from "../_services/automation";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
+import { Spin } from "../../components/Loader/Spin/Spin";
 
 const getTimePeriod = (textTime, executionTime) => {
    const startTime = new Date().getTime();
@@ -33,16 +34,26 @@ const getTimePeriod = (textTime, executionTime) => {
 export const Home = () => {
    const [automations, setAutomations] = useState([]);
    const [notFound, setNotFound] = useState(false); 
+   const [loading, setLoading] = useState(true);
    const t = getTraduction(Traduction.HOME_PAGE);
 
    const account = JSON.parse(localStorage.getItem("account"));
 
    useEffect(() => {
+      setLoading(true);
+
       getAutomations(account?.idAccount, account?.email)
          .then((data) => {
-            setAutomations(data);
-            setNotFound(false);
+            setLoading(false);
+            
+            if (data.filter((automation) => automation.status === true).length === 0) {
+               setNotFound(true);
+            } else {
+               setAutomations(data);
+               setNotFound(false);
+            }
          }).catch(() => {
+            setLoading(false);
             setNotFound(true);
          });
    }, []);
@@ -73,8 +84,8 @@ export const Home = () => {
                      );
                   }
                })}
+               {loading && <Spin />}
             </div>
-
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">
             <Navbar page={Page.Home} />

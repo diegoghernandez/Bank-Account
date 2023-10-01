@@ -11,6 +11,7 @@ import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Link } from "react-router-dom";
 import { Fab } from "../../components/Buttons/FAB/FAB";
+import { Spin } from "../../components/Loader/Spin/Spin";
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -255,11 +256,7 @@ export const Transactions = () => {
                      </>
                   );
                })}
-               {loading && 
-               <div className="w-full h-12 flex justify-center items-center">
-                  <figure className="rounded-full border-r-primary border-4 border-outline h-10 w-10 animate-spin"></figure>
-               </div>
-               }
+               {loading && <Spin />}
             </div>
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">

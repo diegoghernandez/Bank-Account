@@ -31,7 +31,7 @@ export const Default = {
    parameters: {
       msw: [
          rest.get("http://localhost:8090/automations/account", (req, res, ctx) => {
-            return res(ctx.json(automations));
+            return res(ctx.delay(1000), ctx.json(automations));
          }),
       ],
    },
@@ -42,14 +42,16 @@ export const NotFound = {
       const canvas = within(canvasElement);
       const t = getTraduction(Traduction.HOME_PAGE);
       
-      await waitFor(async () => {
-         await expect(canvas.getByText(t.notFound)).toBeInTheDocument();
+      await waitFor(() => {
+         setTimeout(async () => {
+            await expect(await canvas.findByText(t.notFound)).toBeInTheDocument();
+         }, 900);
       });
    },
    parameters: {
       msw: [
          rest.get("http://localhost:8090/automations/account", (req, res, ctx) => {
-            return res(ctx.status(404));
+            return res(ctx.delay(1000), ctx.status(404));
          }),
       ],
    },
