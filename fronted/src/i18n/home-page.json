@@ -4,15 +4,13 @@
       "balance": "Active balance",
       "activeAutomation": "Active automations",
       "notFound": "No automations found",
-      "period": ["Missing ", "week(s)", "day(s)", "hour(s)"],
-      "fab": "Transaction"
+      "period": ["Missing ", "week(s)", "day(s)", "hour(s)"]
    },
    "es": {
       "greeting": "Hola",
       "balance": "Balance disponible",
       "activeAutomation": "Automatizaciones activas",
       "notFound": "Sin automatizaciones encontradas",
-      "period": ["Faltan ", "semana(s)", "día(s)", "hora(s)"],
-      "fab": "Transacción"
+      "period": ["Faltan ", "semana(s)", "día(s)", "hora(s)"]
    }
 }

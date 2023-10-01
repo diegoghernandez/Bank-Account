@@ -3,8 +3,6 @@ import { Card } from "../../components/Card/Card";
 import { Navbar } from "../../components/Navbar/Navbar";
 import { Page } from "../../constants/Page";
 import { getAutomations } from "../_services/automation";
-import { Fab } from "../../components/Buttons/FAB/FAB";
-import { Link } from "react-router-dom";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 
@@ -51,35 +49,34 @@ export const Home = () => {
 
 
    return (
-      <section className="flex flex-col px-4 pt-4 will-change-scroll">
-         <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans">
-            <p className="text-sm">{t.greeting} {account?.accountName}</p>
-            <p className="text-base">{t.balance}:</p>
-            <p className="text-2xl">{account?.currentBalance.toFixed(2)}</p>
-         </div>
+      <section className="md:flex md:flex-row-reverse">
+         <div className="flex flex-col px-4 pt-4 md:p-0 will-change-scroll w-full">
+            <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans md:px-6 md:pt-4">
+               <p className="text-sm">{t.greeting} {account?.accountName}</p>
+               <p className="text-base">{t.balance}:</p>
+               <p className="text-2xl">{account?.currentBalance.toFixed(2)}</p>
+            </div>
 
-         <p className="text-base font-semibold font-sans mb-3">{t.activeAutomation}:</p>
-         <div className="flex flex-col w-full gap-2">
-            {notFound && <p>{t.notFound}</p>}
-            {automations?.map((automation) => {
-               if (automation.status) {
-                  return (
-                     <Card 
-                        key={automation.idAutomation}
-                        name={automation.name}
-                        money={automation.amount}
-                        period={getTimePeriod(t.period, automation.executionTime)}
-                        disable={automation.status}
-                     />
-                  );
-               }
-            })}
-         </div>
+            <p className="text-base font-semibold font-sans mb-3 md:mb-0 md:px-6">{t.activeAutomation}:</p>
+            <div className="inline-flex flex-col w-full gap-2 md:pt-3 md:px-6 md:h-[calc(100%-8rem)] md:overflow-y-scroll">
+               {notFound && <p>{t.notFound}</p>}
+               {automations?.map((automation) => {
+                  if (automation.status) {
+                     return (
+                        <Card 
+                           key={automation.idAutomation}
+                           name={automation.name}
+                           money={automation.amount}
+                           period={getTimePeriod(t.period, automation.executionTime)}
+                           disable={automation.status}
+                        />
+                     );
+                  }
+               })}
+            </div>
 
-         <Link className="group/fab" to="/transaction">
-            <Fab label={t.fab} />
-         </Link>
-         <div className="w-full h-20">
+         </div>
+         <div className="w-full h-20 md:w-fit md:h-fit">
             <Navbar page={Page.Home} />
          </div>
       </section>

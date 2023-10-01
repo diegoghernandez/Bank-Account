@@ -48,8 +48,6 @@ const getActive = (isActive) => isActive
    ? ["bg-secondary-container", "group-hover/nav:bg-onSurface/8 group-focus/nav:bg-onSurface-variant/8", "text-onSurface", "#191B2B"]
    : ["", "group-hover/nav:bg-onSurface/12 group-focus/nav:bg-onSurface-variant/12", "text-onSurface-variant", "#45454E"];
 
-const BASE_BUTTON_CLASSES = "flex flex-col justify-center items-center cursor-pointer pt-3";
-
 const BASE_INDICATOR_CLASSES = "flex justify-center items-center w-16 h-8 rounded-2xl";
 
 const Nav = ({
@@ -64,7 +62,7 @@ const Nav = ({
    const pageElements = getPage(page, svgColor);
 
    return (
-      <div className={`${BASE_BUTTON_CLASSES}`}>
+      <div className={"flex flex-col justify-center items-center cursor-pointer pt-3"}>
          <div className={`${BASE_INDICATOR_CLASSES} ${svgContainer} mb-1`}>
             <div className={`${BASE_INDICATOR_CLASSES} ${stateLayer}`}>
                {pageElements.svg}
@@ -77,10 +75,12 @@ const Nav = ({
 
 export const Navbar = ({ 
    page = Page.Home,
+   children
 }) => {   
    return (
-      <nav className="fixed flex justify-center items-center left-0 bottom-0 w-full h-20 bg-surface-container pt-3 pb-4">
-         <ul className="flex flex-row gap-2 justify-center items-center">
+      <nav className="fixed flex flex-col justify-center items-center left-0 bottom-0 w-full h-20 bg-surface-container pt-3 pb-4 
+         md:sticky md:h-screen md:w-fit md:justify-start md:px-3">
+         <ul className="flex flex-row md:flex-col gap-2 md:gap-3 justify-center items-center">
             <li>
                <Link className="group/nav" to="/">
                   <Nav
@@ -114,6 +114,7 @@ export const Navbar = ({
                </Link>
             </li>
          </ul>
+         {children}
       </nav>
    );
 }; 

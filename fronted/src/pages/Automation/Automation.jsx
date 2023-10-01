@@ -48,7 +48,7 @@ export const Automation = () => {
    };
 
    return (
-      <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
+      <section className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-screen px-4 mx-auto">
          {!successMessage && <>
             <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
             <form 

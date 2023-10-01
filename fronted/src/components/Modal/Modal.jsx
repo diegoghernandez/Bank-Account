@@ -158,7 +158,7 @@ export const Modal = ({
          {dialogRef === undefined && <button onClick={showModal}>Modal</button>}
          <dialog 
             ref={dialogRef ?? storyRef} 
-            className="w-72 p-0 shadow-md rounded-[1.75rem]"
+            className="w-[calc(100%-1rem)] min-w-[11rem] max-w-[24rem] shadow-md rounded-[1.75rem]"
             onClose={(formUtils?.inputs[0].match("email") && formUtils?.successMessage) ? formUtils?.closeSession : clearModal}
          >
             {listUtils && <ListModal 

@@ -42,7 +42,7 @@ export const SignIn = () => {
    };
 
    return (
-      <section className="flex flex-col gap-4 w-full h-screen px-4 justify-center items-center">
+      <section className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-screen px-4 mx-auto">
          <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
          <form
             className="flex flex-col items-center gap-3 w-full"

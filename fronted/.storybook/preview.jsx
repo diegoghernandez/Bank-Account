@@ -31,9 +31,6 @@ const preview = {
         date: /Date$/,
       },
     },
-    viewport: {
-      viewports: INITIAL_VIEWPORTS,
-    },
     msw: [
       rest.get("http://localhost:8090/accounts/email/:email", (req, res, ctx) => {
         return res(ctx.json({

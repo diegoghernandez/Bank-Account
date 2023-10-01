@@ -57,85 +57,86 @@ export const Account = () => {
    };
 
    return (
-      <section>
-         <h1 className="ml-4 mt-8 text-4xl font-sans font-bold">{accountName}</h1>
-         <p className="ml-4 mt-3 text-base font-sans font-normal">{t.accountNumber}: {idAccount}</p>
+      <section className="flex flex-row-reverse">
+         <div className="w-full">
+            <h1 className="ml-4 md:ml-6 mt-8 text-4xl font-sans font-bold">{accountName}</h1>
+            <p className="ml-4 md:ml-6 mt-3 text-base font-sans font-normal">{t.accountNumber}: {idAccount}</p>
 
-         <div className="w-full px-4 py-2 mt-8 border-b border-outline-variant">
-            <Switch 
-               label={t.dark}
-               isDisable={false}
-               checked={false}
+            <div className="w-full px-4 py-2 mt-8 border-b border-outline-variant">
+               <Switch 
+                  label={t.dark}
+                  isDisable={false}
+                  checked={false}
+               />
+            </div>
+            <DividerField 
+               label= {t.change.language.label}
+               modalUtils={{
+                  messageUtils: {
+                     message: t.change.language.message,
+                     changeLanguage
+                  }
+               }}
+            />
+            <DividerField 
+               label={t.change.name.label}
+               modalUtils={{
+                  formUtils: {
+                     inputs: t.change.name.inputs,
+                     handle: handleName,
+                     successMessage,
+                     setSuccessMessage,
+                     setError,
+                     errorParameters: {
+                        first: error?.name ?? "",
+                        second: error?.newPassword ?? ""
+                     }
+                  }
+               }}
+            />
+            <DividerField 
+               label={t.change.password.label}
+               modalUtils={{
+                  formUtils: {
+                     inputs: t.change.password.inputs,
+                     handle: handlePassword,
+                     successMessage,
+                     setSuccessMessage,
+                     setError,
+                     errorParameters: {
+                        first: error?.oldPassword ?? "",
+                        second: error?.newPassword ?? ""
+                     }
+                  }
+               }}
+            />
+            <DividerField 
+               label={t.change.email.label}
+               modalUtils={{
+                  formUtils: {
+                     inputs: t.change.email.inputs,
+                     handle: handleEmail,
+                     successMessage,
+                     setSuccessMessage,
+                     setError,
+                     errorParameters: {
+                        first: error?.email ?? "",
+                        second: error?.newPassword ?? ""
+                     },
+                     closeSession
+                  }
+               }}
+            />
+            <DividerField 
+               label= {t.logout.label}
+               modalUtils={{
+                  messageUtils: {
+                     message: t.logout.message,
+                     closeSession
+                  }
+               }}
             />
          </div>
-         <DividerField 
-            label= {t.change.language.label}
-            modalUtils={{
-               messageUtils: {
-                  message: t.change.language.message,
-                  changeLanguage
-               }
-            }}
-         />
-         <DividerField 
-            label={t.change.name.label}
-            modalUtils={{
-               formUtils: {
-                  inputs: t.change.name.inputs,
-                  handle: handleName,
-                  successMessage,
-                  setSuccessMessage,
-                  setError,
-                  errorParameters: {
-                     first: error?.name ?? "",
-                     second: error?.newPassword ?? ""
-                  }
-               }
-            }}
-         />
-         <DividerField 
-            label={t.change.password.label}
-            modalUtils={{
-               formUtils: {
-                  inputs: t.change.password.inputs,
-                  handle: handlePassword,
-                  successMessage,
-                  setSuccessMessage,
-                  setError,
-                  errorParameters: {
-                     first: error?.oldPassword ?? "",
-                     second: error?.newPassword ?? ""
-                  }
-               }
-            }}
-         />
-         <DividerField 
-            label={t.change.email.label}
-            modalUtils={{
-               formUtils: {
-                  inputs: t.change.email.inputs,
-                  handle: handleEmail,
-                  successMessage,
-                  setSuccessMessage,
-                  setError,
-                  errorParameters: {
-                     first: error?.email ?? "",
-                     second: error?.newPassword ?? ""
-                  },
-                  closeSession
-               }
-            }}
-         />
-         <DividerField 
-            label= {t.logout.label}
-            modalUtils={{
-               messageUtils: {
-                  message: t.logout.message,
-                  closeSession
-               }
-            }}
-         />
-
          <Navbar page={Page.Account} />
       </section>
    );

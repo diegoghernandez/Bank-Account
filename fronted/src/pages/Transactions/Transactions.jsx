@@ -9,6 +9,8 @@ import { TransactionType } from "../../constants/TransactionType";
 import { StatusError } from "../../errors/StatusError";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
+import { Link } from "react-router-dom";
+import { Fab } from "../../components/Buttons/FAB/FAB";
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -61,6 +63,9 @@ export const Transactions = () => {
    const typeReference = useRef();
    const textReference = useRef();
    const dateReference = useRef();
+   const transactionsContainer = useRef();
+
+   const whichContainer = (globalThis.matchMedia("(min-width: 768px)").matches) ? transactionsContainer.current : globalThis;
 
    const { idAccount } = JSON.parse(localStorage.getItem("account"));
 
@@ -82,7 +87,7 @@ export const Transactions = () => {
          date: date.split(" ")
       });
 
-      globalThis.removeEventListener("scrollend", () => setPage({
+      whichContainer?.removeEventListener?.("scrollend", () => setPage({
          ...page,
          search: page.search + 1
       }));
@@ -100,7 +105,7 @@ export const Transactions = () => {
             let pageContent = page[type] + 1;
    
             if (texts.date[0] || texts.name) {
-               globalThis.removeEventListener("scrollend", () => setPage({
+               whichContainer?.removeEventListener?.("scrollend", () => setPage({
                   ...page,
                   default: page.default + 1
                }));
@@ -159,18 +164,18 @@ export const Transactions = () => {
             setLoading(false);
             if (last) {
                setLoading(false);
-               globalThis.removeEventListener("scrollend", () => setPage({
+               whichContainer?.removeEventListener?.("scrollend", () => setPage({
                   ...page,
                   [type]: pageContent
                }));
             } else {
-               globalThis.addEventListener("scrollend", () => setPage({
+               whichContainer?.addEventListener?.("scrollend", () => setPage({
                   ...page,
                   [type]: pageContent
                }));
    
                if (texts.name || texts.date) {
-                  globalThis.removeEventListener("scrollend", () => setPage({
+                  whichContainer?.removeEventListener?.("scrollend", () => setPage({
                      ...page,
                      default: page.default + 1
                   }));
@@ -195,70 +200,75 @@ export const Transactions = () => {
    else if (texts.name) transactions = allTransactions.search;
 
    return (
-      <main>
-         <form className="flex flex-col gap-3 pt-3 px-4 mb-3" >
-            <TextField
-               label={t.labels[0]}
-               type={TextFieldTypes.Menu}
-               valueRef={typeReference}
-               functionToUpdate={handleChange}
-               menuParameters={Object.values(TransactionType).map((type) => type.description)}
-            />
-            <TextField 
-               label={t.labels[1]}
-               type={TextFieldTypes.Search}
-               valueRef={textReference}
-               functionToUpdate={handleChange}
-            />
-            <TextField 
-               label={t.labels[2]}
-               type={TextFieldTypes.Modal}
-               valueRef={dateReference}
-               functionToUpdate={handleChange}
-               modalParameters={{
-                  year: [2023, 2022, 2021, 2020, 2019],
-                  month: ["", ...months].flat(),
-                  day: ["", "01", "02", "03", "04", "05"]
-               }}
-            />
-         </form>
-         <h2 className="text-lg font-medium font-sans ml-4 underline">{t.title}</h2>
-         {notFound && <p>{t.notFound}</p>}
-         {transactions?.map((transaction) => {
-            const formattedType = TransactionType[transaction?.transactionType]?.description;
-            const isTextType = formattedType?.includes(texts.type);
-            return (
-               <>
-                  {(transaction?.date) &&
-                  <div key={transaction?.date} className="mt-3 pl-4 pb-1 border-b border-primary">
-                     <h3 className="text-sm font-medium font-sans">{transaction?.date}</h3>
-                  </div>
-                  }
-                  {(isTextType) &&
-                     <DividerCard 
-                        key={transaction?.idTransaction}
-                        transferAccount={transaction?.idTransferAccount}
-                        name={transaction?.receiverName}
-                        amount={transaction?.transactionAmount?.toFixed(2)}
-                        type={formattedType}
-                        time={transaction?.transactionTimestamp}
-                        automated={transaction?.isAutomated}
-                     />
-                  }
-               </>
-            );
-         })}
-
-         {loading && 
-            <div className="w-full h-12 flex justify-center items-center">
-               <figure className="rounded-full border-r-primary border-4 border-outline h-10 w-10 animate-spin"></figure>
+      <section className="md:flex md:flex-row-reverse md:h-screen">
+         <div className="w-full">
+            <form className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3" >
+               <TextField
+                  label={t.labels[0]}
+                  type={TextFieldTypes.Menu}
+                  valueRef={typeReference}
+                  functionToUpdate={handleChange}
+                  menuParameters={Object.values(TransactionType).map((type) => type.description)}
+               />
+               <TextField 
+                  label={t.labels[1]}
+                  type={TextFieldTypes.Search}
+                  valueRef={textReference}
+                  functionToUpdate={handleChange}
+               />
+               <TextField 
+                  label={t.labels[2]}
+                  type={TextFieldTypes.Modal}
+                  valueRef={dateReference}
+                  functionToUpdate={handleChange}
+                  modalParameters={{
+                     year: [2023, 2022, 2021, 2020, 2019],
+                     month: ["", ...months].flat(),
+                     day: ["", "01", "02", "03", "04", "05"]
+                  }}
+               />
+            </form>
+            <h2 className="text-lg font-medium font-sans ml-4 underline">{t.title}</h2>
+            {notFound && <p>{t.notFound}</p>}
+            <div ref={transactionsContainer}  className="md:h-[calc(100%-16rem)] md:overflow-y-scroll">
+               {transactions?.map((transaction) => {
+                  const formattedType = TransactionType[transaction?.transactionType]?.description;
+                  const isTextType = formattedType?.includes(texts.type);
+                  return (
+                     <>
+                        {(transaction?.date) &&
+                        <div key={transaction?.date} className="mt-3 pl-4 pb-1 border-b border-primary">
+                           <h3 className="text-sm font-medium font-sans">{transaction?.date}</h3>
+                        </div>
+                        }
+                        {(isTextType) &&
+                           <DividerCard 
+                              key={transaction?.idTransaction}
+                              transferAccount={transaction?.idTransferAccount}
+                              name={transaction?.receiverName}
+                              amount={transaction?.transactionAmount?.toFixed(2)}
+                              type={formattedType}
+                              time={transaction?.transactionTimestamp}
+                              automated={transaction?.isAutomated}
+                           />
+                        }
+                     </>
+                  );
+               })}
+               {loading && 
+               <div className="w-full h-12 flex justify-center items-center">
+                  <figure className="rounded-full border-r-primary border-4 border-outline h-10 w-10 animate-spin"></figure>
+               </div>
+               }
             </div>
-         }
-
-
-         <div className="w-full h-20">
-            <Navbar page={Page.Transactions} />
          </div>
-      </main>
+         <div className="w-full h-20 md:w-fit md:h-fit">
+            <Navbar page={Page.Transactions} >
+               <Link className="group/fab" to="/transaction">
+                  <Fab label={t.fab} />
+               </Link>
+            </Navbar>
+         </div>
+      </section>
    );
 };

@@ -8,9 +8,6 @@ export default {
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",
-      viewport: {
-         defaultViewport: "iphone5"
-      }
    }
 };
 

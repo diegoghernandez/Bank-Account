@@ -58,56 +58,58 @@ export const Automations = () => {
 
 
    return (
-      <main className="flex flex-col gap-3 pt-3 px-4 mb-3">
-         <form 
-            className="flex flex-col gap-3"
-            onChange={handleChange}   
-         >
-            <TextField
-               label={t.labels[0]}
-               type={TextFieldTypes.Menu}
-               valueRef={typeReference}
-               functionToUpdate={handleChange}
-               menuParameters={t.menuParameters}
-            />
-            <TextField 
-               label={t.labels[1]}
-               type = {TextFieldTypes.Search}
-               valueRef={textReference}
-               functionToUpdate={handleChange}
-            />
-         </form>
+      <section className="md:flex md:flex-row-reverse">
+         <div className="w-full flex flex-col gap-3 pt-3 px-4 md:p-0 mb-3 md:m-0">
+            <form 
+               className="flex flex-col gap-3 md:pt-3 md:px-6"
+               onChange={handleChange}   
+            >
+               <TextField
+                  label={t.labels[0]}
+                  type={TextFieldTypes.Menu}
+                  valueRef={typeReference}
+                  functionToUpdate={handleChange}
+                  menuParameters={t.menuParameters}
+               />
+               <TextField 
+                  label={t.labels[1]}
+                  type = {TextFieldTypes.Search}
+                  valueRef={textReference}
+                  functionToUpdate={handleChange}
+               />
+            </form>
 
-         <div className="flex flex-col w-full gap-2">
-            {notFound && <p>{t.notFound}</p>}
-            {automations?.map((automation) => {
-               const isTextName = automation.name.toLowerCase().includes(text.toLowerCase());
-               let isTextType = true;
+            <div className="flex flex-col w-full gap-2 md:pt-3 md:px-6 md:h-[calc(100%-8rem)] md:overflow-y-scroll">
+               {notFound && <p>{t.notFound}</p>}
+               {automations?.map((automation) => {
+                  const isTextName = automation.name.toLowerCase().includes(text.toLowerCase());
+                  let isTextType = true;
 
-               if (status) {
-                  isTextType = status === (t.menuParameters[0])
-                     ? automation.status === true 
-                     : automation.status === false;
-               }
-               return (
-                  (isTextName && isTextType) &&
-                  <Card 
-                     key={automation.idAutomation}
-                     name={automation.name}
-                     money={automation.amount}
-                     period={getTimePeriod(t.period, automation.hoursToNextExecution)}
-                     isDisable={!automation.status}
-                  />
-               );
-            })}
+                  if (status) {
+                     isTextType = status === (t.menuParameters[0])
+                        ? automation.status === true 
+                        : automation.status === false;
+                  }
+                  return (
+                     (isTextName && isTextType) &&
+                     <Card 
+                        key={automation.idAutomation}
+                        name={automation.name}
+                        money={automation.amount}
+                        period={getTimePeriod(t.period, automation.hoursToNextExecution)}
+                        isDisable={!automation.status}
+                     />
+                  );
+               })}
+            </div>
          </div>
-
-         <Link className="group/fab" to="/automation">
-            <Fab label={t.fab} />
-         </Link>
-         <div className="w-full h-20">
-            <Navbar page={Page.Automation} />
+         <div className="w-full h-20 md:w-fit md:h-fit">
+            <Navbar page={Page.Automation} >
+               <Link className="group/fab" to="/automation">
+                  <Fab label={t.fab} />
+               </Link>
+            </Navbar>
          </div>
-      </main>
+      </section>
    );
 };
