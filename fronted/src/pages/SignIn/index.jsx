@@ -52,16 +52,16 @@ export const SignIn = () => {
          >
             <TextField
                label={t.labels[0]}
-               type={TextFieldTypes.Default}
-               inputType={InputTypes.Email}
+               type={TextFieldTypes.DEFAULT}
+               inputType={InputTypes.EMAIL}
                supportiveText={error}
                isError={error}
                isDisable={isLoading}
                />
             <TextField
                label={t.labels[1]}
-               type={TextFieldTypes.Default}
-               inputType={InputTypes.Password}
+               type={TextFieldTypes.DEFAULT}
+               inputType={InputTypes.PASSWORD}
                supportiveText={error}
                isError={error}
                isDisable={isLoading}

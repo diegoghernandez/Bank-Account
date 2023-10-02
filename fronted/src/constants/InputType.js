@@ -1,6 +1,6 @@
 export const InputTypes = Object.freeze({
-   Email: Symbol("email"),
-   Number: Symbol("number"),
-   Password: Symbol("password"),
-   Text: Symbol("text"),
+   EMAIL: Symbol("email"),
+   NUMBER: Symbol("number"),
+   PASSWORD: Symbol("password"),
+   TEXT: Symbol("text"),
 });

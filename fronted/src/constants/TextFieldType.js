@@ -1,6 +1,6 @@
 export const TextFieldTypes = Object.freeze({
-   Default: Symbol("default"),
-   Search: Symbol("search"),
-   Menu: Symbol("menu"),
-   Modal: Symbol("modal"),
+   DEFAULT: Symbol("default"),
+   SEARCH: Symbol("search"),
+   MENU: Symbol("menu"),
+   MODAL: Symbol("modal"),
 });

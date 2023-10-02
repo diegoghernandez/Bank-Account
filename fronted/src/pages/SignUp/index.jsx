@@ -10,26 +10,26 @@ export const SignUp = () => {
          <div className="flex flex-col items-center gap-3 w-full">
             <TextField
                label="Name"
-               type={TextFieldTypes.Default}
-               inputType={InputTypes.Text}
+               type={TextFieldTypes.DEFAULT}
+               inputType={InputTypes.TEXT}
                needSupportive={false}
                />
             <TextField
                label="Email"
-               type={TextFieldTypes.Default}
-               inputType={InputTypes.Email}
+               type={TextFieldTypes.DEFAULT}
+               inputType={InputTypes.EMAIL}
                needSupportive={false}
                />
             <TextField
                label="Password"
-               type={TextFieldTypes.Default}
-               inputType={InputTypes.Password}
+               type={TextFieldTypes.DEFAULT}
+               inputType={InputTypes.PASSWORD}
                needSupportive={false}
                />
             <TextField
                label="Confirmation"
-               type={TextFieldTypes.Default}
-               inputType={InputTypes.Password}
+               type={TextFieldTypes.DEFAULT}
+               inputType={InputTypes.PASSWORD}
                needSupportive={false}
                />
          </div>

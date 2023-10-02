@@ -79,8 +79,8 @@ export const Transaction = () => {
                <TextField
                   valueRef={typeReference}
                   label={t.labels[0]}
-                  type={TextFieldTypes.Menu}
-                  inputType={InputTypes.Text}
+                  type={TextFieldTypes.MENU}
+                  inputType={InputTypes.TEXT}
                   supportiveText={error.type}
                   isError={error.type}
                   isDisable={isLoading}
@@ -89,16 +89,16 @@ export const Transaction = () => {
                />
                <TextField
                   label={t.labels[1]}
-                  type={TextFieldTypes.Default}
-                  inputType={InputTypes.Number}
+                  type={TextFieldTypes.DEFAULT}
+                  inputType={InputTypes.NUMBER}
                   supportiveText={error.amount}
                   isError={error.amount}
                   isDisable={isLoading}
                />
                <TextField
                   label={t.labels[2]}
-                  type={TextFieldTypes.Default}
-                  inputType={InputTypes.Number}
+                  type={TextFieldTypes.DEFAULT}
+                  inputType={InputTypes.NUMBER}
                   supportiveText={error.desc}
                   isError={error.desc}
                   isDisable={(isLoading) ? isLoading : !isActive}

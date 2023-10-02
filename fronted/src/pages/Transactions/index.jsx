@@ -208,20 +208,20 @@ export const Transactions = () => {
             <form className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3" >
                <TextField
                   label={t.labels[0]}
-                  type={TextFieldTypes.Menu}
+                  type={TextFieldTypes.MENU}
                   valueRef={typeReference}
                   functionToUpdate={handleChange}
                   menuParameters={Object.values(TransactionType).map((type) => type.description)}
                />
                <TextField 
                   label={t.labels[1]}
-                  type={TextFieldTypes.Search}
+                  type={TextFieldTypes.SEARCH}
                   valueRef={textReference}
                   functionToUpdate={handleChange}
                />
                <TextField 
                   label={t.labels[2]}
-                  type={TextFieldTypes.Modal}
+                  type={TextFieldTypes.MODAL}
                   valueRef={dateReference}
                   functionToUpdate={handleChange}
                   modalParameters={{

@@ -72,14 +72,14 @@ export const Automations = () => {
             >
                <TextField
                   label={t.labels[0]}
-                  type={TextFieldTypes.Menu}
+                  type={TextFieldTypes.MENU}
                   valueRef={typeReference}
                   functionToUpdate={handleChange}
                   menuParameters={t.menuParameters}
                />
                <TextField 
                   label={t.labels[1]}
-                  type = {TextFieldTypes.Search}
+                  type = {TextFieldTypes.SEARCH}
                   valueRef={textReference}
                   functionToUpdate={handleChange}
                />

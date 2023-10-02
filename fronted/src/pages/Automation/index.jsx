@@ -59,32 +59,32 @@ export const Automation = () => {
             >
                <TextField
                   label={t.labels[0]}
-                  type={TextFieldTypes.Default}
-                  inputType={InputTypes.Text}
+                  type={TextFieldTypes.DEFAULT}
+                  inputType={InputTypes.TEXT}
                   isError={error.name}
                   supportiveText={error.name}
                   isDisable={isLoading}
                />
                <TextField
                   label={t.labels[1]}
-                  type={TextFieldTypes.Default}
-                  inputType={InputTypes.Number}
+                  type={TextFieldTypes.DEFAULT}
+                  inputType={InputTypes.NUMBER}
                   isError={error.amount}
                   supportiveText={error.amount}
                   isDisable={isLoading}
                />
                <TextField
                   label={t.labels[2]}
-                  type={TextFieldTypes.Default}
-                  inputType={InputTypes.Number}
+                  type={TextFieldTypes.DEFAULT}
+                  inputType={InputTypes.NUMBER}
                   isError={error.desc}
                   supportiveText={error.desc ?? t.description}
                   isDisable={isLoading}
                />
                <TextField
                   label={t.labels[3]}
-                  type={TextFieldTypes.Modal}
-                  inputType={InputTypes.Text}
+                  type={TextFieldTypes.MODAL}
+                  inputType={InputTypes.TEXT}
                   isError={error.hoursToNextExecution}
                   supportiveText={error.hoursToNextExecution}
                   modalParameters={{

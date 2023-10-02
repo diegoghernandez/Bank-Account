@@ -39,8 +39,8 @@ const getColors = (isDisable, isError) => {
 
 export const TextField = ({
    label,
-   type = TextFieldTypes.Default,
-   inputType = InputTypes.Text,
+   type = TextFieldTypes.DEFAULT,
+   inputType = InputTypes.TEXT,
    supportiveText = "",
    isError = false,
    isDisable = false,
@@ -71,8 +71,8 @@ export const TextField = ({
    
    const onClear = () => setValue("");
 
-   const notMenu = type !== TextFieldTypes.Menu;
-   const notModal = type !== TextFieldTypes.Modal;
+   const notMenu = type !== TextFieldTypes.MENU;
+   const notModal = type !== TextFieldTypes.MODAL;
    let isReadOnly = (!notModal || !notMenu) ? true : false;
 
 
@@ -86,7 +86,7 @@ export const TextField = ({
    return (
       <div ref={ref} className="inline-flex flex-col w-full group/text">
          <label htmlFor={textFieldId} className={`bg-white w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
-         ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base ${textLabelColor[3]} ${(type === TextFieldTypes.Search && !value) && "ml-6"}`}
+         ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base ${textLabelColor[3]} ${(type === TextFieldTypes.SEARCH && !value) && "ml-6"}`}
          ${(value.length > 0) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
             {label}
          </label>
@@ -95,7 +95,7 @@ export const TextField = ({
          ${isError ? "caret-error" : "caret-primary"}
          ${isClicked ? `outline-2 ${outlineColor[1]}` : `outline-1 ${outlineColor[0]} ${outlineColor[2]}`}`}>
 
-            {type === TextFieldTypes.Search && <SearchIcon fillClass={"ml-3"} />}
+            {type === TextFieldTypes.SEARCH && <SearchIcon fillClass={"ml-3"} />}
 
             <input 
                id={textFieldId}
