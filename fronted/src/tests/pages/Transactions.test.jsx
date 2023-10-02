@@ -14,8 +14,9 @@ describe("Transactions page tests", () => {
       page.getByLabelText("Name");
       page.getByLabelText("Date");
       page.getByRole("heading", { name: "Transactions", level: 2});
+      page.getByRole("link", { name: "Transaction"});
 
-      await waitForElementToBeRemoved(() => page.getAllByRole("figure"));
+      await waitForElementToBeRemoved(() => page.getAllByRole("progressbar"));
       
       await waitFor(() => {
          expect(spyTransaction).toHaveBeenCalledTimes(2);
@@ -34,7 +35,7 @@ describe("Transactions page tests", () => {
       const typeInput = page.getByLabelText("Transaction Type");
 
       await waitForElementToBeRemoved(() => 
-         page.getAllByRole("figure")
+         page.getAllByRole("progressbar")
       );
 
       await user.click(typeInput);
@@ -53,7 +54,7 @@ describe("Transactions page tests", () => {
          const nameInput = page.getByLabelText("Name");
    
          await waitForElementToBeRemoved(() => 
-            page.getAllByRole("figure")
+            page.getAllByRole("progressbar")
          );
    
          await user.type(nameInput, "new");
@@ -82,7 +83,7 @@ describe("Transactions page tests", () => {
          const nameInput = page.getByLabelText("Name");
    
          await waitForElementToBeRemoved(() => 
-            page.getAllByRole("figure")
+            page.getAllByRole("progressbar")
          );
    
          await user.type(nameInput, "test name");
@@ -114,7 +115,7 @@ describe("Transactions page tests", () => {
          const dateInput = page.getByLabelText("Date");
    
          await waitForElementToBeRemoved(() => 
-            page.getAllByRole("figure")
+            page.getAllByRole("progressbar")
          );
    
          await user.click(dateInput);
@@ -143,7 +144,7 @@ describe("Transactions page tests", () => {
          const dateInput = page.getByLabelText("Date");
    
          await waitForElementToBeRemoved(() => 
-            page.getAllByRole("figure")
+            page.getAllByRole("progressbar")
          );
    
          await user.click(dateInput);

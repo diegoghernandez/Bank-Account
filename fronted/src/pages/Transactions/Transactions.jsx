@@ -67,7 +67,7 @@ export const Transactions = () => {
    const dateReference = useRef();
    const transactionsContainer = useRef();
 
-   const whichContainer = (globalThis.matchMedia("(min-width: 768px)").matches) ? transactionsContainer.current : globalThis;
+   const whichContainer = (globalThis.matchMedia?.("(min-width: 768px)").matches) ? transactionsContainer.current : globalThis;
 
    const { idAccount } = JSON.parse(localStorage.getItem("account"));
 

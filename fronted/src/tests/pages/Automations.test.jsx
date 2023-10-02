@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Automations } from "../../pages/Automations/Automations";
 import * as automation from "../../pages/_services/automation";
 import { customRender } from "../../utils/renderTest";
-import { waitFor } from "@testing-library/dom";
+import { waitFor, waitForElementToBeRemoved } from "@testing-library/dom";
 import userEvent from "@testing-library/user-event";
 
 describe("Automations page tests", () => {
@@ -12,6 +12,8 @@ describe("Automations page tests", () => {
       expect(statusInput).toBeInTheDocument();
       expect(nameInput).toBeInTheDocument();
       expect(automationLink).toBeInTheDocument();
+
+      await waitForElementToBeRemoved(() => page.getByRole("progressbar"));
 
       await waitFor(() => {
          expect(spyAutomation).toHaveBeenCalledTimes(1);
@@ -29,7 +31,7 @@ describe("Automations page tests", () => {
             await user.click(page.getByText("Active"));
 
             await waitFor(() => {
-               expect(page.getAllByText("New automation")).length(2);
+               expect(page.getAllByRole("article")).length(2);
             });
          });
 
@@ -40,7 +42,7 @@ describe("Automations page tests", () => {
             await user.click(page.getByText("Disable"));
 
             await waitFor(() => {
-               expect(page.getAllByText("New automation")).length(1);
+               expect(page.getAllByRole("article")).length(1);
             });
          });
       });
@@ -52,7 +54,7 @@ describe("Automations page tests", () => {
             await user.type(nameInput, "auto");
 
             await waitFor(() => {
-               expect(page.getAllByText("New automation")).length(3);
+               expect(page.getAllByRole("article")).length(3);
             });
 
          });

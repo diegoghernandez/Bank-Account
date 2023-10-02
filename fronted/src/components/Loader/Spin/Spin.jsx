@@ -1,7 +1,14 @@
+import { Traduction } from "../../../constants/Traduction";
+import { getTraduction } from "../../../utils/getTraduction";
+
 export const Spin = () => {
+   const { title } = getTraduction(Traduction.LOADER);
    return (
       <div className="w-full h-12 flex justify-center items-center">
-         <figure className="rounded-full border-r-primary border-4 border-outline h-10 w-10 animate-spin"></figure>
+         <figure 
+            title={title}
+            role="progressbar"   
+            className="rounded-full border-r-primary border-4 border-outline h-10 w-10 animate-spin"></figure>
       </div>
    );
 };
