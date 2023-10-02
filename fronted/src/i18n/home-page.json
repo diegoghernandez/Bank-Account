@@ -1,5 +1,9 @@
 {
    "en": {
+      "seo": {
+         "title": "Home | Bank",
+         "description": "Hello. Active balance. Active automations."
+      },
       "greeting": "Hello",
       "balance": "Active balance",
       "activeAutomation": "Active automations",
@@ -7,6 +11,10 @@
       "period": ["Missing ", "week(s)", "day(s)", "hour(s)"]
    },
    "es": {
+      "seo": {
+         "title": "Inicio | Bank",
+         "description": "Hola. Balance disponible. Automatizaciones activas."
+      },
       "greeting": "Hola",
       "balance": "Balance disponible",
       "activeAutomation": "Automatizaciones activas",

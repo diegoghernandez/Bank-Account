@@ -6,6 +6,7 @@ import { getAutomations } from "../_services/automation";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Spin } from "../../components/Loader/Spin/Spin";
+import { SEO } from "../../utils/SEO";
 
 const getTimePeriod = (textTime, executionTime) => {
    const startTime = new Date().getTime();
@@ -61,6 +62,7 @@ export const Home = () => {
 
    return (
       <section className="md:flex md:flex-row-reverse">
+         <SEO title={t.seo.title} description={t.seo.description} />
          <div className="flex flex-col px-4 pt-4 md:p-0 will-change-scroll w-full">
             <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans md:px-6 md:pt-4">
                <p className="text-sm">{t.greeting} {account?.accountName}</p>
@@ -88,7 +90,7 @@ export const Home = () => {
             </div>
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">
-            <Navbar page={Page.Home} />
+            <Navbar page={Page.HOME} />
          </div>
       </section>
    );

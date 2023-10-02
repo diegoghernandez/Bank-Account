@@ -1,11 +1,19 @@
 {
    "en": {
+      "seo": {
+         "title": "Transactions | Bank",
+         "description": "Transaction Type. Name. Date. Transactions. Transaction"
+      },
       "labels": ["Transaction Type", "Name", "Date"],
       "title": "Transactions",
       "notFound": "No transactions found",
       "fab": "Transaction"
    },
    "es": {
+      "seo": {
+         "title": "Transacciones | Bank",
+         "description": "Tipo de transacción. Nombre. Fecha. Transacciones. Transacción"
+      },
       "labels": ["Tipo de transacción", "Nombre", "Fecha"],
       "title": "Transacciones",
       "notFound": "Sin transacciones",

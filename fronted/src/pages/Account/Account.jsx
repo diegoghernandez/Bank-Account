@@ -7,6 +7,7 @@ import { changeEmail, changeName, changePassword } from "../_services/auth";
 import { useNavigate } from "react-router-dom";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
+import { SEO } from "../../utils/SEO";
 
 export const Account = () => {
    const [error, setError] = useState({});
@@ -58,6 +59,7 @@ export const Account = () => {
 
    return (
       <section className="flex flex-row-reverse">
+         <SEO title={t.seo.title} description={t.seo.description} />
          <div className="w-full">
             <h1 className="ml-4 md:ml-6 mt-8 text-4xl font-sans font-bold">{accountName}</h1>
             <p className="ml-4 md:ml-6 mt-3 text-base font-sans font-normal">{t.accountNumber}: {idAccount}</p>

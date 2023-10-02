@@ -1,11 +1,19 @@
 {
    "en": {
+      "seo": {
+         "title": "Sign In | Bank",
+         "description": "Email. Password. Sign In."
+      },
       "errorMessage": "Must not be empty",
       "title": "Sign In",
       "labels": ["Email", "Password"],
       "accept": "Sign In"
    },
    "es": {
+      "seo": {
+         "title": "Iniciar sesión | Bank",
+         "description": "Email. Contraseña. Iniciar sesión."
+      },
       "errorMessage": "No debe estar vació",
       "title": "Iniciar sesión",
       "labels": ["Email", "Contraseña"],

@@ -10,6 +10,7 @@ import { TransactionType } from "../../constants/TransactionType";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Bar } from "../../components/Loader/Bar/Bar";
+import { SEO } from "../../utils/SEO";
 
 export const Transaction = () => {
    const [error, setError] = useState({});
@@ -68,6 +69,7 @@ export const Transaction = () => {
 
    return (
       <section className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-screen px-4 mx-auto">
+         <SEO title={t.seo.title} description={t.seo.description} />
          {!successMessage && <>
             <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
             <form 

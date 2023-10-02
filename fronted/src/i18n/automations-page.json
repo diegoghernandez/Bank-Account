@@ -1,5 +1,9 @@
 {
    "en": {
+      "seo": {
+         "title": "Automations | Bank",
+         "description": "Automation Status. Name. Automation."
+      },
       "labels": ["Automation Status", "Name"],
       "menuParameters": ["Active", "Disable"],
       "notFound": "No automations found",
@@ -7,6 +11,10 @@
       "period": ["Each ", "week(s)", "day(s)", "hour(s)"]
    },
    "es": {
+      "seo": {
+         "title": "Automatizaciones | Bank",
+         "description": "Estado de la automatización. Nombre. Automatización."
+      },
       "labels": ["Estado de la automatización", "Nombre"],
       "menuParameters": ["Activa", "Deshabilitada"],
       "notFound": "Sin automatizaciones",

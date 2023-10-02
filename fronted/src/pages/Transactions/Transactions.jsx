@@ -12,6 +12,7 @@ import { Traduction } from "../../constants/Traduction";
 import { Link } from "react-router-dom";
 import { Fab } from "../../components/Buttons/FAB/FAB";
 import { Spin } from "../../components/Loader/Spin/Spin";
+import { SEO } from "../../utils/SEO";
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -202,6 +203,7 @@ export const Transactions = () => {
 
    return (
       <section className="md:flex md:flex-row-reverse md:h-screen">
+         <SEO title={t.seo.title} description={t.seo.description} />
          <div className="w-full">
             <form className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3" >
                <TextField
@@ -260,7 +262,7 @@ export const Transactions = () => {
             </div>
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">
-            <Navbar page={Page.Transactions} >
+            <Navbar page={Page.TRANSACTIONS} >
                <Link className="group/fab" to="/transaction">
                   <Fab label={t.fab} />
                </Link>

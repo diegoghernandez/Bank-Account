@@ -10,6 +10,7 @@ import { getAutomations } from "../_services/automation";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Spin } from "../../components/Loader/Spin/Spin";
+import { SEO } from "../../utils/SEO";
 
 const getTimePeriod = (textTime, hoursToNextExecution) => {
    let hours = hoursToNextExecution;
@@ -63,6 +64,7 @@ export const Automations = () => {
 
    return (
       <section className="md:flex md:flex-row-reverse">
+         <SEO title={t.seo.title} description={t.seo.description} />
          <div className="w-full flex flex-col gap-3 pt-3 px-4 md:p-0 mb-3 md:m-0">
             <form 
                className="flex flex-col gap-3 md:pt-3 md:px-6"
@@ -109,7 +111,7 @@ export const Automations = () => {
             </div>
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">
-            <Navbar page={Page.Automation} >
+            <Navbar page={Page.AUTOMATIONS} >
                <Link className="group/fab" to="/automation">
                   <Fab label={t.fab} />
                </Link>
