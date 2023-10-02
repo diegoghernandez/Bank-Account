@@ -1,5 +1,5 @@
 import { withRouter } from "storybook-addon-react-router-v6";
-import { Account } from "./Account";
+import { Account } from ".";
 
 export default {
    title: "Pages/Account",

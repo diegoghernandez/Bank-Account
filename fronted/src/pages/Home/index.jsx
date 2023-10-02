@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Card } from "../../components/Card/Card";
-import { Navbar } from "../../components/Navbar/Navbar";
+import { Card } from "../../components/Card";
+import { Navbar } from "../../components/Navbar";
 import { Page } from "../../constants/Page";
 import { getAutomations } from "../_services/automation";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
-import { Spin } from "../../components/Loader/Spin/Spin";
+import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 
 const getTimePeriod = (textTime, executionTime) => {

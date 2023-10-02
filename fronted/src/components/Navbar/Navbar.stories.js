@@ -1,6 +1,6 @@
 import { withRouter } from "storybook-addon-react-router-v6";
 import { Page } from "../../constants/Page";
-import { Navbar } from "./Navbar";
+import { Navbar } from ".";
 
 export default {
    title: "Navbar",

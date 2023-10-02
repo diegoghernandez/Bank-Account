@@ -1,4 +1,4 @@
-import { DividerCard } from "./DividerCard";
+import { DividerCard } from ".";
 
 export default {
    title: "Divider/DividerCard",

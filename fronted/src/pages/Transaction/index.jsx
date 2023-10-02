@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Filled } from "../../components/Buttons/Filled/Filled";
-import { Outline } from "../../components/Buttons/Outline/Outline";
-import { TextField } from "../../components/TextField/TextField";
+import { Filled } from "../../components/Buttons/Filled";
+import { Outline } from "../../components/Buttons/Outline";
+import { TextField } from "../../components/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { saveTransaction } from "../_services/transactions";
@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 import { TransactionType } from "../../constants/TransactionType";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
-import { Bar } from "../../components/Loader/Bar/Bar";
+import { Bar } from "../../components/Loader/Bar";
 import { SEO } from "../../utils/SEO";
 
 export const Transaction = () => {

@@ -1,5 +1,5 @@
-import { Filled } from "../../components/Buttons/Filled/Filled";
-import { TextField } from "../../components/TextField/TextField";
+import { Filled } from "../../components/Buttons/Filled";
+import { TextField } from "../../components/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 

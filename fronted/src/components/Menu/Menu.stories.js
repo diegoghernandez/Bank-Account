@@ -1,4 +1,4 @@
-import { Menu } from "./Menu";
+import { Menu } from ".";
 
 export default {
    title: "Menu",

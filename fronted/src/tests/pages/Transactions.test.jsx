@@ -1,6 +1,6 @@
 import { describe, it, vi } from "vitest";
 import { customRender } from "../../utils/renderTest";
-import { Transactions } from "../../pages/Transactions/Transactions";
+import { Transactions } from "../../pages/Transactions";
 import * as transactions from "../../pages/_services/transactions";
 import { waitFor, waitForElementToBeRemoved } from "@testing-library/dom";
 import { userEvent } from "@storybook/testing-library";

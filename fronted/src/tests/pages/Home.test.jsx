@@ -1,5 +1,5 @@
 import { expect, vi } from "vitest";
-import { Home } from "../../pages/Home/Home";
+import { Home } from "../../pages/Home";
 import { customRender } from "../../utils/renderTest";
 import * as automation from "../../pages/_services/automation";
 import { waitFor, waitForElementToBeRemoved } from "@testing-library/dom";

@@ -1,4 +1,4 @@
-import { Fab } from "./FAB";
+import { Fab } from ".";
 
 export default {
    title: "Buttons/FAB",

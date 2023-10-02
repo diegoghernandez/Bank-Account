@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { DividerCard } from "../../components/Divider/DividerCard/DividerCard";
+import { DividerCard } from "../../components/Divider/DividerCard";
 
 describe("DividerCard component tests", () => {
    it("Should render correctly", () => {

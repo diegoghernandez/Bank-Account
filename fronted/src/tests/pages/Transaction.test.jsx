@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { Transaction } from "../../pages/Transaction/Transaction";
+import { Transaction } from "../../pages/Transaction";
 import { customRender } from "../../utils/renderTest";
 import userEvent from "@testing-library/user-event";
 import * as transaction from "../../pages/_services/transactions";

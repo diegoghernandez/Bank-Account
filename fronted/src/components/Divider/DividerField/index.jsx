@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Modal } from "../../Modal/Modal";
+import { Modal } from "../../Modal";
 import { ChevronIcon } from "../../../assets/chevron_right";
 
 export const DividerField = ({ label, modalUtils }) => {

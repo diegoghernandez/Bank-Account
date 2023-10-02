@@ -1,5 +1,5 @@
 import { withRouter } from "storybook-addon-react-router-v6";
-import { SignUp } from "./SignUp";
+import { SignUp } from ".";
 
 export default {
    title: "Pages/SignUp",

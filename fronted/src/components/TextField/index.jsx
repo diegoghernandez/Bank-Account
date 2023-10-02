@@ -1,10 +1,10 @@
 import { useId, useRef, useState } from "react";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { InputTypes } from "../../constants/InputType";
-import { Menu } from "../Menu/Menu";
+import { Menu } from "../Menu";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { useEffect } from "react";
-import { Modal } from "../Modal/Modal";
+import { Modal } from "../Modal";
 import "./TextField.css";
 import { ArrowDownIcon } from "../../assets/arrow_drop_down";
 import { ArrowUpIcon } from "../../assets/arrow_drop_up";

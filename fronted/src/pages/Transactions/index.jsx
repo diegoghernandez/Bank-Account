@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { DividerCard } from "../../components/Divider/DividerCard/DividerCard";
-import { Navbar } from "../../components/Navbar/Navbar";
-import { TextField } from "../../components/TextField/TextField";
+import { DividerCard } from "../../components/Divider/DividerCard";
+import { Navbar } from "../../components/Navbar";
+import { TextField } from "../../components/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { getTransactions, getTransactionsByName, getTransactionsByDateAndName } from "../_services/transactions";
@@ -10,8 +10,8 @@ import { StatusError } from "../../errors/StatusError";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Link } from "react-router-dom";
-import { Fab } from "../../components/Buttons/FAB/FAB";
-import { Spin } from "../../components/Loader/Spin/Spin";
+import { Fab } from "../../components/Buttons/FAB";
+import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it } from "vitest";
-import { Bar } from "../../components/Loader/Bar/Bar";
+import { Bar } from "../../components/Loader/Bar";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 

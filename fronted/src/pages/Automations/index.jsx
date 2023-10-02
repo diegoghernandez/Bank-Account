@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { Fab } from "../../components/Buttons/FAB/FAB";
-import { Card } from "../../components/Card/Card";
-import { Navbar } from "../../components/Navbar/Navbar";
-import { TextField } from "../../components/TextField/TextField";
+import { Fab } from "../../components/Buttons/FAB";
+import { Card } from "../../components/Card";
+import { Navbar } from "../../components/Navbar";
+import { TextField } from "../../components/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Link } from "react-router-dom";
 import { getAutomations } from "../_services/automation";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
-import { Spin } from "../../components/Loader/Spin/Spin";
+import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 
 const getTimePeriod = (textTime, hoursToNextExecution) => {

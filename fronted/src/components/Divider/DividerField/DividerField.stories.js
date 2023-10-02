@@ -1,4 +1,4 @@
-import { DividerField } from "./DividerField";
+import { DividerField } from ".";
 
 export default {
    title: "Divider/DividerField",

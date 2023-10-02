@@ -1,4 +1,4 @@
-import { Filled } from "./Filled";
+import { Filled } from ".";
 
 export default {
    title: "Buttons/Filled",

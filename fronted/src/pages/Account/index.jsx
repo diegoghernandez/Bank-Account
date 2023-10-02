@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { DividerField } from "../../components/Divider/DividerField/DividerField";
-import { Navbar } from "../../components/Navbar/Navbar";
-import { Switch } from "../../components/Switch/Switch";
+import { DividerField } from "../../components/Divider/DividerField";
+import { Navbar } from "../../components/Navbar";
+import { Switch } from "../../components/Switch";
 import { Page } from "../../constants/Page";
 import { changeEmail, changeName, changePassword } from "../_services/auth";
 import { useNavigate } from "react-router-dom";

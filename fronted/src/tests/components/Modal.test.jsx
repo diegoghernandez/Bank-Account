@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Modal } from "../../components/Modal/Modal";
+import { Modal } from "../../components/Modal";
 import userEvent from "@testing-library/user-event";
 
 describe("Modal component test", () => {

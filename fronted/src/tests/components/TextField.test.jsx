@@ -3,7 +3,7 @@ import { describe, expect } from "vitest";
 import { composeStories } from "@storybook/react";
 import * as stories from "../../components/TextField/TextField.stories";
 import userEvent from "@testing-library/user-event";
-import { TextField } from "../../components/TextField/TextField";
+import { TextField } from "../../components/TextField";
 
 const { Default, Menu, Modal } = composeStories(stories);
 

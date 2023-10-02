@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { Automation } from "../../pages/Automation/Automation";
+import { Automation } from "../../pages/Automation";
 import { customRender } from "../../utils/renderTest";
 import userEvent from "@testing-library/user-event";
 import { waitFor } from "@testing-library/dom";

@@ -1,5 +1,5 @@
 import { withRouter } from "storybook-addon-react-router-v6";
-import { Automations } from "./Automations";
+import { Automations } from ".";
 import { rest } from "msw";
 import automations from "../../mocks/fixtures/automations.json";
 import { waitFor, within } from "@storybook/testing-library";
@@ -25,13 +25,15 @@ export const Default = {
       const canvas = within(canvasElement);
 
       await waitFor(() => {
-         expect(canvas.getAllByRole("article")).toHaveLength(3);
+         setTimeout(async() => {
+            await expect(await canvas.findAllByRole("article")).toHaveLength(3);
+         }, 1000);
       });
    },
    parameters: {
       msw: [
          rest.get("http://localhost:8090/automations/account", (req, res, ctx) => {
-            return res(ctx.json(automations));
+            return res(ctx.delay(1000), ctx.json(automations));
          }),
       ],
    },

@@ -1,4 +1,4 @@
-import { Bar } from "./Bar";
+import { Bar } from ".";
 
 export default {
    title: "Loader/Bar",

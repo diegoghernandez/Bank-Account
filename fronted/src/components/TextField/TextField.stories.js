@@ -1,6 +1,6 @@
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { TextField } from "./TextField";
+import { TextField } from ".";
 
 export default {
    title: "TextField",

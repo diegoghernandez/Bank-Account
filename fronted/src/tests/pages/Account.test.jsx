@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { customRender } from "../../utils/renderTest";
-import { Account } from "../../pages/Account/Account";
+import { Account } from "../../pages/Account";
 import userEvent from "@testing-library/user-event";
 import { waitFor } from "@testing-library/dom";
 import * as auth from "../../pages/_services/auth";

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Spin } from "../../components/Loader/Spin/Spin";
+import { Spin } from "../../components/Loader/Spin";
 import { Traduction } from "../../constants/Traduction";
 import { getTraduction } from "../../utils/getTraduction";
 

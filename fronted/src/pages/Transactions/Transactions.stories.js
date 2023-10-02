@@ -1,5 +1,5 @@
 import { withRouter } from "storybook-addon-react-router-v6";
-import { Transactions } from "./Transactions";
+import { Transactions } from ".";
 import { rest } from "msw";
 import transactions from "../../mocks/fixtures/transactions.json";
 import { waitFor, within } from "@storybook/testing-library";
@@ -24,14 +24,16 @@ export const Default = {
    play: async ({ canvasElement }) => { 
       const canvas = within(canvasElement);
 
-      await waitFor(async () => {
-         await expect(canvas.getAllByRole("article")).toHaveLength(3);
+      await waitFor(() => {
+         setTimeout(async () => {
+            await expect(await canvas.findAllByRole("article")).toHaveLength(3);
+         }, 1000);
       });
    },
    parameters: {
       msw: [
          rest.get("http://localhost:8090/transactions/account", (req, res, ctx) => {
-            return res(ctx.json(transactions));
+            return res(ctx.delay(1000), ctx.json(transactions));
          }),
       ],
    },

@@ -3,6 +3,7 @@ import { AuthProvider } from "../src/hooks/useAuth";
 import "../src/index.css"
 import { initialize, mswDecorator } from "msw-storybook-addon";
 import { rest } from "msw";
+import { HelmetProvider } from "react-helmet-async";
 
 initialize({
   onUnhandledRequest: "bypass"
@@ -13,9 +14,11 @@ const preview = {
   decorators: [
     mswDecorator,
     (Story) => (
-      <AuthProvider theme="default">
-        <Story />
-      </AuthProvider>
+      <HelmetProvider theme="default">
+        <AuthProvider theme="default">
+          <Story />
+        </AuthProvider>
+      </HelmetProvider>
     ),
   ],
   loaders: [

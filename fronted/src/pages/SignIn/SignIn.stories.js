@@ -1,5 +1,5 @@
 import { withRouter } from "storybook-addon-react-router-v6";
-import { SignIn } from "./SignIn";
+import { SignIn } from ".";
 import { rest } from "msw";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
 import { getTraduction } from "../../utils/getTraduction";

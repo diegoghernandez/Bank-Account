@@ -1,5 +1,5 @@
-import { fireEvent, waitFor } from "@testing-library/react";
-import { SignIn } from "../../pages/SignIn/SignIn";
+import { waitFor } from "@testing-library/react";
+import { SignIn } from "../../pages/SignIn";
 import userEvent from "@testing-library/user-event";
 import { expect, vi } from "vitest";
 import * as auth from "../../pages/_services/auth";

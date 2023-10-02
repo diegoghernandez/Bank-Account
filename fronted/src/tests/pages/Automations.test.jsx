@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { Automations } from "../../pages/Automations/Automations";
+import { Automations } from "../../pages/Automations";
 import * as automation from "../../pages/_services/automation";
 import { customRender } from "../../utils/renderTest";
 import { waitFor, waitForElementToBeRemoved } from "@testing-library/dom";

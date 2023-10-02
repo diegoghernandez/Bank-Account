@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Menu } from "../../components/Menu/Menu";
+import { Menu } from "../../components/Menu";
 
 describe("Menu component test", () => {
    it("Should render correctly", () => {

@@ -1,5 +1,5 @@
 import { withRouter } from "storybook-addon-react-router-v6";
-import { Automation } from "./Automation";
+import { Automation } from ".";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";

@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { Home } from "./pages/Home/Home";
-import { Transactions } from "./pages/Transactions/Transactions";
-import { Automations } from "./pages/Automations/Automations";
-import { Account } from "./pages/Account/Account";
-import { Automation } from "./pages/Automation/Automation";
-import { Transaction } from "./pages/Transaction/Transaction";
+import { Home } from "./pages/Home";
+import { Transactions } from "./pages/Transactions";
+import { Automations } from "./pages/Automations";
+import { Account } from "./pages/Account";
+import { Automation } from "./pages/Automation";
+import { Transaction } from "./pages/Transaction";
 import { useAuth } from "./hooks/useAuth";
-import { SignIn } from "./pages/SignIn/SignIn";
-import { SignUp } from "./pages/SignUp/SignUp";
+import { SignIn } from "./pages/SignIn";
+import { SignUp } from "./pages/SignUp";
 
 const ProtectedRoute = ({ children }) => {
    const { isAuthenticated } = useAuth();

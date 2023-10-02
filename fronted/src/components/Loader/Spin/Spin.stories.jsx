@@ -1,4 +1,4 @@
-import { Spin } from "./Spin";
+import { Spin } from ".";
 
 export default {
    title: "Loader/Spin",

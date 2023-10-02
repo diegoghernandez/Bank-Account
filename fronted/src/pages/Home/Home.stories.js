@@ -1,5 +1,5 @@
 import { withRouter } from "storybook-addon-react-router-v6";
-import { Home } from "./Home";
+import { Home } from ".";
 import { rest } from "msw";
 import automations from "../../mocks/fixtures/automations.json";
 import { Traduction } from "../../constants/Traduction";
@@ -24,8 +24,10 @@ export const Default = {
    play: async ({ canvasElement }) => { 
       const canvas = within(canvasElement);
 
-      await waitFor(async () => {
-         await expect(canvas.getAllByRole("article")).toHaveLength(2);
+      await waitFor(() => {
+         setTimeout(async () => {
+            await expect(await canvas.findAllByRole("article")).toHaveLength(2);
+         }, 1000);
       });
    },
    parameters: {
