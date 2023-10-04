@@ -22,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,7 +119,7 @@ public class AccountServiceTest {
 
         Mockito.when(accountRepository.saveAccount(ArgumentMatchers.any())).thenReturn(accountEntity);
 
-        AccountEntity accountSave = accountService.saveAccount(accountDto);
+        AccountEntity accountSave = accountService.saveAccount(accountDto, Locale.getDefault());
 
         assertAll(
                 () -> assertThat(accountSave.getAccountName()).isEqualTo(accountDto.name()),
@@ -137,17 +138,17 @@ public class AccountServiceTest {
         Mockito.doNothing().when(transactionRepository).updateTransactionsName(Mockito.isA(Integer.class), Mockito.isA(String.class));
         Mockito.when(accountRepository.idExist(1)).thenReturn(true);
 
-        String accept = accountService.changeName("newTest", passwordDto);
-        String reject = accountService.changeName("newError", new PasswordDto(1, "", "", ""));
+        String accept = accountService.changeName("newTest", passwordDto, Locale.getDefault());
+        String reject = accountService.changeName("newError", new PasswordDto(1, "", "", ""), Locale.getDefault());
 
         Exception exception = assertThrows(Exception.class, () ->
-                accountService.changeName("new", new PasswordDto(3, "te", "s", "t")));
+                accountService.changeName("new", new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
 
-        String expectedMessage = "Account not found 3";
+        String expectedMessage = "Account not found";
         String actualMessage = exception.getMessage();
 
         assertAll(
-                () -> assertThat(accept).isEqualTo("Change name successfully"),
+                () -> assertThat(accept).isEqualTo("Name changed successfully"),
                 () -> assertThat(reject).isEqualTo("Invalid password"),
                 () -> Mockito.verify(accountRepository, Mockito.times(1)).updateName("newTest", 1),
                 () -> Mockito.verify(transactionRepository, Mockito.times(1)).updateTransactionsName(1, "newTest"),
@@ -164,13 +165,13 @@ public class AccountServiceTest {
         Mockito.doNothing().when(accountRepository).updatePassword(Mockito.isA(String.class), Mockito.isA(Integer.class));
         Mockito.when(accountRepository.idExist(1)).thenReturn(true);
 
-        String accept = accountService.changePassword(passwordDto);
-        String reject = accountService.changePassword(new PasswordDto(1, "", "", ""));
+        String accept = accountService.changePassword(passwordDto, Locale.getDefault());
+        String reject = accountService.changePassword(new PasswordDto(1, "", "", ""), Locale.getDefault());
 
         Exception exception = assertThrows(Exception.class, () ->
-                accountService.changePassword(new PasswordDto(3, "te", "s", "t")));
+                accountService.changePassword(new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
 
-        String expectedMessage = "Account not found 3";
+        String expectedMessage = "Account not found";
         String actualMessage = exception.getMessage();
 
         assertAll(
@@ -191,21 +192,21 @@ public class AccountServiceTest {
         Mockito.when(accountRepository.emailExist("newTest@test.com")).thenReturn(false);
         Mockito.when(accountRepository.emailExist("error@test.com")).thenReturn(true);
 
-        String accept = accountService.changeEmail(passwordDto);
-        String reject = accountService.changeEmail(new PasswordDto(1, "newTest@test.com", "", ""));
+        String accept = accountService.changeEmail(passwordDto, Locale.getDefault());
+        String reject = accountService.changeEmail(new PasswordDto(1, "newTest@test.com", "", ""), Locale.getDefault());
 
         NotFoundException accountException = assertThrows(NotFoundException.class, () ->
-                accountService.changeEmail(new PasswordDto(3, "te", "s", "t")));
+                accountService.changeEmail(new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
 
         NotAllowedException emailException = assertThrows(NotAllowedException.class, () ->
-                accountService.changeEmail(new PasswordDto(1, "error@test.com", "s", "t")));
+                accountService.changeEmail(new PasswordDto(1, "error@test.com", "s", "t"), Locale.getDefault()));
 
         assertAll(
-                () -> assertThat(accept).isEqualTo("Change email successfully"),
+                () -> assertThat(accept).isEqualTo("Email changed successfully"),
                 () -> assertThat(reject).isEqualTo("Invalid password"),
                 () -> Mockito.verify(accountRepository, Mockito.times(1)).updateEmail("newTest@test.com", 1),
-                () -> assertTrue(accountException.getMessage().contentEquals("Account not found 3")),
-                () -> assertTrue(emailException.getMessage().contentEquals("There is an account with that email address: error@test.com"))
+                () -> assertTrue(accountException.getMessage().contentEquals("Account not found")),
+                () -> assertTrue(emailException.getMessage().contentEquals("There is an account with that email address"))
         );
     }
 }

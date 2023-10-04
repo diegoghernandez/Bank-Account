@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -134,6 +135,9 @@ public class TransactionControllerTest {
                 .thenReturn(Optional.of(new PageImpl<>(
                         List.of(transactionEntityList.get(0), transactionEntityList.get(1), transactionEntityList.get(2)))));
 
+        Mockito.when(transactionService.getByIdAccount(885748, 1))
+                .thenReturn(Optional.of(new PageImpl<>(List.of())));
+
         assertAll(
                 () -> mockMvc.perform(get("/transactions/account")
                                 .param("id", "885748")
@@ -171,6 +175,13 @@ public class TransactionControllerTest {
                         .andExpect(jsonPath("$.content[2].transactionType")
                                 .value(transactionEntityList.get(2).getTransactionType().toString())),
 
+                () -> mockMvc.perform(get("/transactions/account")
+                                .param("id", "885748")
+                                .param("page", "1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(user("user").roles(USER)))
+                        .andExpect(status().isNotFound()),
+
                 () -> mockMvc.perform(get("/transactions/account/885748")
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnauthorized())
@@ -183,6 +194,9 @@ public class TransactionControllerTest {
         Mockito.when(transactionService.getByIdAccountAndName(885748, "ma", 0))
                 .thenReturn(Optional.of(new PageImpl<>(
                         List.of(transactionEntityList.get(1), transactionEntityList.get(2)))));
+
+        Mockito.when(transactionService.getByIdAccountAndName(885748, "ma", 1))
+                .thenReturn(Optional.of(new PageImpl<>(List.of())));
 
         assertAll(
                 () -> mockMvc.perform(get("/transactions/name")
@@ -213,6 +227,14 @@ public class TransactionControllerTest {
                         .andExpect(jsonPath("$.content[1].transactionType")
                                 .value(transactionEntityList.get(2).getTransactionType().toString())),
 
+                () -> mockMvc.perform(get("/transactions/name")
+                                .param("id", "885748")
+                                .param("name", "ma")
+                                .param("page", "1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(user("user").roles(USER)))
+                        .andExpect(status().isNotFound()),
+
                 () -> mockMvc.perform(get("/transactions/account/885748")
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isUnauthorized())
@@ -225,6 +247,9 @@ public class TransactionControllerTest {
         Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Optional.of(Month.JANUARY), "ma", 0))
                 .thenReturn(Optional.of(new PageImpl<>(
                         Collections.singletonList(transactionEntityList.get(1)))));
+
+        Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Optional.of(Month.JANUARY), "ma", 1))
+                .thenReturn(Optional.of(new PageImpl<>(List.of())));
 
         assertAll(
                 () -> mockMvc.perform(get("/transactions/date")
@@ -249,6 +274,16 @@ public class TransactionControllerTest {
                                 .value(transactionEntityList.get(1).getTransactionType().toString()))
                         .andExpect(jsonPath("$.content[0].transactionTimestamp")
                                 .value(transactionEntityList.get(1).getTransactionTimestamp().toString())),
+
+                () -> mockMvc.perform(get("/transactions/date")
+                                .param("id", "54365")
+                                .param("year", "2021")
+                                .param("month", "JANUARY")
+                                .param("name", "ma")
+                                .param("page", "1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .with(user("user").roles(USER)))
+                        .andExpect(status().isNotFound()),
 
                 () -> mockMvc.perform(get("/transactions/date")
                                 .param("id", "423")

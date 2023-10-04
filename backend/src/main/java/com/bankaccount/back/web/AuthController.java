@@ -5,6 +5,7 @@ import com.bankaccount.back.domain.service.AccountService;
 import com.bankaccount.back.domain.service.TokenService;
 import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.exception.NotFoundException;
+import com.bankaccount.back.helpers.Messages;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.VerificationToken;
 import com.bankaccount.back.web.config.JwtUtil;
@@ -14,6 +15,7 @@ import com.bankaccount.back.web.dto.PasswordDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,10 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -58,39 +57,51 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register", consumes = {"application/json"})
-    public ResponseEntity<String> registerAccount(@RequestBody @Valid AccountDto accountDto, final HttpServletRequest request) throws NotAllowedException {
+    public ResponseEntity<String> registerAccount(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestBody @Valid AccountDto accountDto,
+            final HttpServletRequest request) throws NotAllowedException {
         if (!accountDto.password().equals(accountDto.matchingPassword())) {
-            return new ResponseEntity<>("Passwords don't match", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(
+                    Messages.getMessageForLocale("controller.auth.register.error", locale),
+                    HttpStatus.BAD_REQUEST);
         }
 
-        AccountEntity account = accountService.saveAccount(accountDto);
+        AccountEntity account = accountService.saveAccount(accountDto, locale);
 
         publisher.publishEvent(new RegistrationCompleteEvent(
                 account,
                 applicationUrl(request)
         ));
 
-        return new ResponseEntity<>("Success", HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                Messages.getMessageForLocale("controller.auth.register.success", locale),
+                HttpStatus.CREATED);
     }
     @GetMapping("/verify-registration")
-    public String verifyRegistration(@RequestParam String token) {
+    public String verifyRegistration(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestParam String token) {
         String result = tokenService.validateVerificationToken(token);
         if (result.equalsIgnoreCase("valid")) {
             tokenService.deleteVerificationToken(token);
-            return "Account verifies successfully";
+            return Messages.getMessageForLocale("controller.auth.verify.success", locale);
         }
 
-        return "Bad account";
+        return Messages.getMessageForLocale("controller.auth.verify.error", locale);
     }
 
     @GetMapping("/resend-token")
-    public String resendVerificationToken(@RequestParam("token") String oldToken, HttpServletRequest request) {
+    public String resendVerificationToken(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestParam("token") String oldToken,
+            HttpServletRequest request) {
         VerificationToken verificationToken = tokenService.generateNewVerificationToken(oldToken);
 
         AccountEntity account = verificationToken.getAccountEntity();
         resendVerificationTokenEmail(account, applicationUrl(request), verificationToken);
 
-        return "Verification Link Sent";
+        return Messages.getMessageForLocale("controller.auth.resend", locale);
     }
 
     @PostMapping("/reset-password")
@@ -111,32 +122,38 @@ public class AuthController {
     }
 
     @PostMapping("/save-password")
-    private String savePassword(@RequestParam("token") String token, @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+    private String savePassword(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestParam String token,
+            @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
         String result = tokenService.validatePasswordResetToken(token);
         if (!result.equalsIgnoreCase("valid")) {
-            return "Invalid token";
+            return Messages.getMessageForLocale("controller.auth.save-password.error", locale);
         }
 
         Optional<AccountEntity> accountEntity = tokenService.getAccountByPasswordResetToken(token);
         if (accountEntity.isPresent()) {
-            accountService.changePassword(passwordDto);
-            return "Password Reset Successfully";
+            accountService.changePassword(passwordDto, locale);
+            return Messages.getMessageForLocale("controller.auth.save-password.success", locale);
         }
 
-        return "Invalid token";
+        return Messages.getMessageForLocale("controller.auth.save-password.error", locale);
     }
 
     @PostMapping("/secure/change-name")
-    public ResponseEntity<Map<String, String>> changeName(@RequestParam String name, @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> changeName(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestParam String name,
+            @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
         Map<String, String> response = new HashMap<>();
         if (name.isEmpty()) {
-            response.put("name", "Name must not be empty");
+            response.put("name", Messages.getMessageForLocale("controller.auth.change-name.error", locale));
             return ResponseEntity.badRequest().body(response);
         }
 
-        String result = accountService.changeName(name, passwordDto);
+        String result = accountService.changeName(name, passwordDto, locale);
 
-        if (result.contains("Change")) {
+        if (result.contains(Messages.getMessageForLocale("service.account.change-name.success", locale))) {
             response.put("result", result);
             return ResponseEntity.ok().body(response);
         }
@@ -146,11 +163,13 @@ public class AuthController {
     }
 
     @PostMapping("/secure/change-password")
-    public ResponseEntity<Map<String, String>> changePassword(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+    public ResponseEntity<Map<String, String>> changePassword(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
         Map<String, String> response = new HashMap<>();
-        String result = accountService.changePassword(passwordDto);
+        String result = accountService.changePassword(passwordDto, locale);
 
-        if (result.contains("changed")) {
+        if (result.contains(Messages.getMessageForLocale("service.account.change-password.success", locale))) {
             response.put("result", result);
             return ResponseEntity.ok().body(response);
         }
@@ -160,11 +179,13 @@ public class AuthController {
     }
 
     @PostMapping("/secure/change-email")
-    public ResponseEntity<Map<String, String>> changeEmail(@RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
+    public ResponseEntity<Map<String, String>> changeEmail(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
         Map<String, String> response = new HashMap<>();
-        String result = accountService.changeEmail(passwordDto);
+        String result = accountService.changeEmail(passwordDto, locale);
 
-        if (result.contains("Change")) {
+        if (result.contains(Messages.getMessageForLocale("service.account.change-email.success", locale))) {
             response.put("result", result);
             return ResponseEntity.ok().body(response);
         }

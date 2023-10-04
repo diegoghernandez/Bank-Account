@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -91,6 +92,7 @@ public class TransactionControllerForTypesTest {
 
         assertAll(
                 () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/save")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(transactionDtoList.get(0)))
                                 .with(user("user").roles(USER))
@@ -115,6 +117,7 @@ public class TransactionControllerForTypesTest {
 
         assertAll(
                 () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/save")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(transactionDtoList.get(1)))
                                 .with(user("user").roles(USER))
@@ -139,6 +142,7 @@ public class TransactionControllerForTypesTest {
 
         assertAll(
                 () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/save")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(transactionDtoList.get(2)))
                                 .with(user("user").roles(USER))

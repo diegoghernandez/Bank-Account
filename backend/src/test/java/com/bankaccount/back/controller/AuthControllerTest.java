@@ -9,11 +9,13 @@ import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.VerificationToken;
 import com.bankaccount.back.web.AuthController;
 import com.bankaccount.back.web.config.JwtUtil;
+import com.bankaccount.back.web.dto.AccountDto;
 import com.bankaccount.back.web.dto.LoginDto;
 import com.bankaccount.back.web.dto.PasswordDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.hamcrest.text.MatchesPattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,12 +23,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -84,28 +88,47 @@ public class AuthControllerTest {
 
     @Test
     @DisplayName("Should register an account correctly")
-    void registerAccount() {
-//        Mockito.when(transactionTypeService.saveTransaction(transactionDtoList.get(1)))
-//                .thenReturn(ArgumentMatchers.any());
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.registerModule(new JavaTimeModule());
-//        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//
-//        assertAll(
-//                () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/register")
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .content(objectMapper.writeValueAsString(transactionDtoList.get(1)))
-//                                .with(user("user").roles(USER))
-//                                .with(csrf()))
-//                        .andExpect(status().isCreated()),
-//
-//                () -> mockMvc.perform(MockMvcRequestBuilders.post("/transactions/save")
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .content(objectMapper.writeValueAsString(transactionDtoList.get(1)))
-//                                .with(csrf()))
-//                        .andExpect(status().isUnauthorized())
-//        );
+    void registerAccount() throws NotAllowedException {
+        AccountDto accountError = new AccountDto(
+                "Test",
+                "1234",
+                "4321",
+                "test@names.com"
+        );
+
+        AccountDto accountSuccess = new AccountDto(
+                "Test",
+                "1234",
+                "1234",
+                "test@names.com"
+        );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        Mockito.when(accountService.saveAccount(Mockito.any(AccountDto.class), Mockito.any(Locale.class)))
+                        .thenReturn(AccountEntity.builder().build());
+
+        assertAll(
+                () -> mockMvc.perform(post("/auth/register")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(accountError))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().string("Passwords don't match")),
+
+                () -> mockMvc.perform(post("/auth/register")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(accountSuccess))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isCreated())
+                        .andExpect(content().string("Success"))
+        );
     }
 
     @Test
@@ -119,6 +142,7 @@ public class AuthControllerTest {
 
         assertAll(
                 () -> mockMvc.perform(get("/auth/verify-registration")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(USER)))
@@ -126,6 +150,7 @@ public class AuthControllerTest {
                         .andExpect(content().string("Account verifies successfully")),
 
                 () -> mockMvc.perform(get("/auth/verify-registration")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .param("token", "hello")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(USER)))
@@ -154,6 +179,7 @@ public class AuthControllerTest {
 
         assertAll(
                 () -> mockMvc.perform(get("/auth/resend-token")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user("user").roles(USER)))
@@ -194,6 +220,8 @@ public class AuthControllerTest {
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
+                        .andExpect(content().string(MatchesPattern.matchesPattern("http://.*")))
+
         );
     }
 
@@ -219,16 +247,48 @@ public class AuthControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        Mockito.when(accountService.getAccountByEmail("user@user.com"))
+        Mockito.when(tokenService.validatePasswordResetToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+                .thenReturn("valid");
+
+        Mockito.when(tokenService.validatePasswordResetToken("53535"))
+                .thenReturn("invalid");
+
+        Mockito.when(tokenService.validatePasswordResetToken("nu3v3-9b58-41ae-8723-29d7ff675a30"))
+                .thenReturn("valid");
+
+        Mockito.when(tokenService.getAccountByPasswordResetToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
                 .thenReturn(Optional.of(account));
 
         assertAll(
-                () -> mockMvc.perform(post("/auth/reset-password")
+                () -> mockMvc.perform(post("/auth/save-password")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                                .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(passwordDto))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
+                        .andExpect(content().string("Password Reset Successfully")),
+
+                () -> mockMvc.perform(post("/auth/save-password")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                                .param("token", "53535")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(passwordDto))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Invalid token")),
+
+                () -> mockMvc.perform(post("/auth/save-password")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                                .param("token", "nu3v3-9b58-41ae-8723-29d7ff675a30")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(passwordDto))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("Invalid token"))
         );
     }
 
@@ -261,23 +321,35 @@ public class AuthControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        Mockito.when(accountService.changeName("newName", password))
-                .thenReturn("Change name successfully");
+        Mockito.when(accountService.changeName("newName", password, Locale.getDefault()))
+                .thenReturn("Name changed successfully");
 
-        Mockito.when(accountService.changeName("newError", passwordError))
+        Mockito.when(accountService.changeName("newError", passwordError, Locale.getDefault()))
                 .thenReturn("Invalid password");
 
         assertAll(
                 () -> mockMvc.perform(post("/auth/secure/change-name")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                                .param("name", "")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(password))
+                                .with(user("user").roles(USER))
+                                .with(csrf()))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.name").value("Name must not be empty")),
+
+                () -> mockMvc.perform(post("/auth/secure/change-name")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .param("name", "newName")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(password))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.result").value("Change name successfully")),
+                        .andExpect(jsonPath("$.result").value("Name changed successfully")),
 
                 () -> mockMvc.perform(post("/auth/secure/change-name")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .param("name", "newError")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(passwordError))
@@ -317,14 +389,15 @@ public class AuthControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        Mockito.when(accountService.changePassword(password))
+        Mockito.when(accountService.changePassword(password, Locale.getDefault()))
                 .thenReturn("Password changed successfully");
 
-        Mockito.when(accountService.changePassword(passwordError))
+        Mockito.when(accountService.changePassword(passwordError, Locale.getDefault()))
                 .thenReturn("Invalid old password");
 
         assertAll(
                 () -> mockMvc.perform(post("/auth/secure/change-password")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(password))
                                 .with(user("user").roles(USER))
@@ -333,6 +406,7 @@ public class AuthControllerTest {
                         .andExpect(jsonPath("$.result").value("Password changed successfully")),
 
                 () -> mockMvc.perform(post("/auth/secure/change-password")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(passwordError))
                                 .with(user("user").roles(USER))
@@ -371,22 +445,24 @@ public class AuthControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        Mockito.when(accountService.changeEmail(password))
-                .thenReturn("Change email successfully");
+        Mockito.when(accountService.changeEmail(password, Locale.getDefault()))
+                .thenReturn("Email changed successfully");
 
-        Mockito.when(accountService.changeEmail(passwordError))
+        Mockito.when(accountService.changeEmail(passwordError, Locale.getDefault()))
                 .thenReturn("Invalid password");
 
         assertAll(
                 () -> mockMvc.perform(post("/auth/secure/change-email")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(password))
                                 .with(user("user").roles(USER))
                                 .with(csrf()))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.result").value("Change email successfully")),
+                        .andExpect(jsonPath("$.result").value("Email changed successfully")),
 
                 () -> mockMvc.perform(post("/auth/secure/change-email")
+                                .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(passwordError))
                                 .with(user("user").roles(USER))

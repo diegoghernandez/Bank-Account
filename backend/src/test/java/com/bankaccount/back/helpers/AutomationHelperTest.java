@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -80,7 +81,7 @@ public class AutomationHelperTest {
 
         assertAll(
                 () -> Mockito.verify(transactionTypeService, Mockito.times(2))
-                        .saveTransaction(Mockito.isA(TransactionDto.class), Mockito.eq(true)),
+                        .saveTransaction(Mockito.isA(TransactionDto.class), Mockito.eq(true), Mockito.isA(Locale.class)),
                 () -> Mockito.verify(automationRepository, Mockito.times(2))
                         .updateExecutionTimeById(Mockito.isA(LocalDateTime.class), Mockito.isA(Long.class)),
 

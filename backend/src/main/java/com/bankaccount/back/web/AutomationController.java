@@ -2,15 +2,18 @@ package com.bankaccount.back.web;
 
 import com.bankaccount.back.domain.service.AutomationService;
 import com.bankaccount.back.exception.NotFoundException;
+import com.bankaccount.back.helpers.Messages;
 import com.bankaccount.back.persistence.entity.AutomationEntity;
 import com.bankaccount.back.web.dto.AutomationDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/automations")
@@ -44,8 +47,12 @@ public class AutomationController {
     }
 
     @PostMapping(value = "/save", consumes = {"application/json"})
-    public ResponseEntity<String> saveAutomation(@RequestBody @Valid AutomationDto automationDto) throws NotFoundException {
-        automationService.saveAutomation(automationDto);
-        return new ResponseEntity<>("Automation created successfully", HttpStatus.CREATED);
+    public ResponseEntity<String> saveAutomation(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestBody @Valid AutomationDto automationDto) throws NotFoundException {
+        automationService.saveAutomation(automationDto, locale);
+        return new ResponseEntity<>(
+                Messages.getMessageForLocale("controller.automation.save", locale),
+                HttpStatus.CREATED);
     }
 }

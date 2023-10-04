@@ -3,6 +3,7 @@ import modal from "../i18n/modal.json";
 import navbar from "../i18n/navbar.json";
 import loader from "../i18n/loader.json";
 import transactionType from "../i18n/transaction-types.json";
+import auth from "../i18n/auth.json";
 import accountPage from "../i18n/account-page.json";
 import automationPage from "../i18n/automation-page.json";
 import automationsPage from "../i18n/automations-page.json";
@@ -25,6 +26,8 @@ export const getTraduction = (wantedTranslation) => {
          return loader[availableLanguage];
       case Traduction.TRANSACTION_TYPE:
          return transactionType[availableLanguage];
+      case Traduction.LOGIN:
+         return auth[availableLanguage];
       case Traduction.ACCOUNT_PAGE: 
          return accountPage[availableLanguage];
       case Traduction.AUTOMATION_PAGE: 

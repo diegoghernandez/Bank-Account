@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -23,7 +24,7 @@ public class TransactionTypeService {
     @Autowired
     private AccountRepository accountRepository;
 
-    public void saveTransaction(TransactionDto transactionDto, boolean isAutomated) throws NotFoundException, NotAllowedException {
+    public void saveTransaction(TransactionDto transactionDto, boolean isAutomated, Locale locale) throws NotFoundException, NotAllowedException {
         int id = transactionDto.idAccount();
         int idTransfer = transactionDto.idTransferAccount();
         BigDecimal amount = transactionDto.amount();
@@ -32,8 +33,8 @@ public class TransactionTypeService {
         Optional<AccountEntity> isAccount = accountRepository.getAccountById(id);
         Optional<AccountEntity> isAccountTransfer = accountRepository.getAccountById(idTransfer);
 
-        if (isAccount.isEmpty()) throw new NotFoundException("Account not found " + id);
-        else if (idTransfer != 0 && isAccountTransfer.isEmpty()) throw new NotFoundException("Account to transfer not found " + idTransfer);
+        if (isAccount.isEmpty()) throw new NotFoundException("account.error", locale);
+        else if (idTransfer != 0 && isAccountTransfer.isEmpty()) throw new NotFoundException("service.transaction-type.error.transfer", locale);
 
         AccountEntity account = isAccount.get();
 
@@ -60,17 +61,17 @@ public class TransactionTypeService {
                 BigDecimal currentBalance = account.getCurrentBalance();
 
                 if (currentBalance.compareTo(amount) < 0) {
-                    throw new NotAllowedException("amount", "Not enough balance");
+                    throw new NotAllowedException("amount", "service.transaction-type.error.balance", locale);
                 } else {
                     currentBalance = currentBalance.subtract(amount);
 
                     accountRepository.updateBalance(currentBalance, id);
 
                     saveTransaction(new TransactionDto(
-                            idTransfer, id, amount, TransactionType.DEPOSIT), false);
+                            idTransfer, id, amount, TransactionType.DEPOSIT), false, locale);
                 }
             }
-            default -> throw new NoSuchFieldError("Transaction not supported");
+            default -> throw new NotAllowedException("type", "service.transaction-type.error.support", locale);
         }
 
         transactionRepository.saveTransaction(transactionEntity.build());

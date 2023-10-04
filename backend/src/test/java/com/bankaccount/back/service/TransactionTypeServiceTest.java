@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -90,15 +91,15 @@ public class TransactionTypeServiceTest {
                 TransactionType.ONLINE_PAYMENT);
 
         Exception exceptionAccount = assertThrows(NotFoundException.class, () ->
-                transactionTypeService.saveTransaction(transactionAccountError, false));
+                transactionTypeService.saveTransaction(transactionAccountError, false, Locale.getDefault()));
 
         Exception exceptionTransfer = assertThrows(NotFoundException.class, () ->
-                transactionTypeService.saveTransaction(transactionTransferError, false));
+                transactionTypeService.saveTransaction(transactionTransferError, false, Locale.getDefault()));
 
-        String expectedAccountMessage = "Account not found 432";
+        String expectedAccountMessage = "Account not found";
         String actualAccountMessage = exceptionAccount.getMessage();
 
-        String expectedTransferMessage = "Account to transfer not found 365421";
+        String expectedTransferMessage = "Account to transfer not found";
         String actualTransferMessage = exceptionTransfer.getMessage();
 
         assertAll(
@@ -117,7 +118,7 @@ public class TransactionTypeServiceTest {
                 TransactionType.ONLINE_PAYMENT);
 
         Exception exception = assertThrows(Exception.class, () ->
-                transactionTypeService.saveTransaction(transactionError, false));
+                transactionTypeService.saveTransaction(transactionError, false, Locale.getDefault()));
 
         String expectedMessage = "Not enough balance";
         String actualMessage = exception.getMessage();
@@ -138,7 +139,7 @@ public class TransactionTypeServiceTest {
 
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("30000.45"), 87658);
 
-        transactionTypeService.saveTransaction(transactionDto, false);
+        transactionTypeService.saveTransaction(transactionDto, false, Locale.getDefault());
 
         assertAll(
                 () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("30000.45"), 87658),
@@ -160,7 +161,7 @@ public class TransactionTypeServiceTest {
 
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("9999.55"), 87658);
 
-        transactionTypeService.saveTransaction(transactionDto, false);
+        transactionTypeService.saveTransaction(transactionDto, false, Locale.getDefault());
 
         assertAll(
                 () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("9999.55"), 87658),
@@ -182,7 +183,7 @@ public class TransactionTypeServiceTest {
 
         Mockito.doNothing().when(accountRepository).updateBalance(new BigDecimal("9999.55"), 87658);
 
-        transactionTypeService.saveTransaction(transactionDto, false);
+        transactionTypeService.saveTransaction(transactionDto, false, Locale.getDefault());
 
         assertAll(
                 () -> Mockito.verify(accountRepository, Mockito.times(1)).updateBalance(new BigDecimal("9999.55"), 87658),

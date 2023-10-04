@@ -4,6 +4,7 @@ import com.bankaccount.back.domain.repository.AccountRepository;
 import com.bankaccount.back.domain.repository.TransactionRepository;
 import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.exception.NotFoundException;
+import com.bankaccount.back.helpers.Messages;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.web.dto.AccountDto;
 import com.bankaccount.back.web.dto.PasswordDto;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -33,9 +35,9 @@ public class AccountService {
         return accountRepository.getAccountByEmail(email);
     }
 
-    public AccountEntity saveAccount(AccountDto accountDto) throws NotAllowedException {
+    public AccountEntity saveAccount(AccountDto accountDto, Locale locale) throws NotAllowedException {
         if (accountRepository.emailExist(accountDto.email())) {
-            throw new NotAllowedException("email", "There is an account with that email address: " + accountDto.email());
+            throw new NotAllowedException("email", "service.account.error.email", locale);
         }
         AccountEntity accountEntity = AccountEntity.builder()
                 .idAccount(idGenerator())
@@ -47,42 +49,42 @@ public class AccountService {
         return accountRepository.saveAccount(accountEntity);
     }
 
-    public String changeName(String newName, PasswordDto passwordDto) throws NotFoundException {
+    public String changeName(String newName, PasswordDto passwordDto, Locale locale) throws NotFoundException {
         int idAccount = passwordDto.idAccount();
 
         if (checkIfValidPassword(idAccount, passwordDto.newPassword())) {
             accountRepository.updateName(newName, idAccount);
             transactionRepository.updateTransactionsName(idAccount, newName);
-            return "Change name successfully";
+            return Messages.getMessageForLocale("service.account.change-name.success", locale);
         } else {
-            return "Invalid password";
+            return Messages.getMessageForLocale("service.account.error.password", locale);
         }
     }
 
-    public String changePassword(PasswordDto passwordDto) throws NotFoundException {
+    public String changePassword(PasswordDto passwordDto, Locale locale) throws NotFoundException {
         int idAccount = passwordDto.idAccount();
 
         if (checkIfValidPassword(idAccount, passwordDto.oldPassword())) {
             accountRepository.updatePassword(passwordEncoder.encode(passwordDto.newPassword()), idAccount);
-            return "Password changed successfully";
+            return Messages.getMessageForLocale("service.account.change-password.success", locale);
         } else {
-            return "Invalid old password";
+            return Messages.getMessageForLocale("service.account.change-password.error", locale);
         }
     }
 
-    public String changeEmail(PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
+    public String changeEmail(PasswordDto passwordDto, Locale locale) throws NotFoundException, NotAllowedException {
         int idAccount = passwordDto.idAccount();
         String newEmail = passwordDto.email();
 
         if (!accountRepository.emailExist(newEmail)) {
             if (checkIfValidPassword(idAccount, passwordDto.newPassword())) {
                 accountRepository.updateEmail(newEmail, idAccount);
-                return "Change email successfully";
+                return Messages.getMessageForLocale("service.account.change-email.success", locale);
             } else {
-                return "Invalid password";
+                return Messages.getMessageForLocale("service.account.error.password", locale);
             }
         } else {
-            throw new NotAllowedException("email", "There is an account with that email address: " + newEmail);
+            throw new NotAllowedException("email", "service.account.error.email", locale);
         }
     }
 
@@ -92,7 +94,7 @@ public class AccountService {
         if (accountEntity.isPresent()) {
             return passwordEncoder.matches(password, accountEntity.get().getPassword());
         } else {
-            throw new NotFoundException("Account not found " + id);
+            throw new NotFoundException("account.error");
         }
 
     }

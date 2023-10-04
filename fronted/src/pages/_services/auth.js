@@ -1,13 +1,18 @@
+import { Traduction } from "../../constants/Traduction";
 import { StatusError } from "../../errors/StatusError";
+import { getTraduction } from "../../utils/getTraduction";
 import { getAccountData } from "./account";
 
 const API = "http://localhost:8090/auth";
 
 const TOKEN = localStorage.getItem("token");
 const { idAccount, email } = JSON.parse(localStorage.getItem("account")) ?? "";
+const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
 
 
 export const login = async (email, password) => {
+   const { login } = getTraduction(Traduction.LOGIN);
+
    const response = await fetch(`${API}/login`, {
       method: "POST",
       headers: {
@@ -19,7 +24,7 @@ export const login = async (email, password) => {
    if (response.ok) {
       return await response.text();
    } else {
-      throw new StatusError("Incorrect authentication credentials", response.status);
+      throw new StatusError(login, response.status);
    }
 };
 
@@ -28,7 +33,8 @@ export const changeName = async (newName, password) => {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
-         "Authorization": TOKEN
+         "Authorization": TOKEN,
+         "Accept-Language": LANGUAGE
       },
       body: JSON.stringify({
          idAccount,
@@ -53,7 +59,8 @@ export const changePassword = async (oldPassword, newPassword) => {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
-         "Authorization": TOKEN
+         "Authorization": TOKEN,
+         "Accept-Language": LANGUAGE
       },
       body: JSON.stringify({
          idAccount,
@@ -78,7 +85,8 @@ export const changeEmail = async (newEmail, password) => {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
-         "Authorization": TOKEN
+         "Authorization": TOKEN,
+         "Accept-Language": LANGUAGE
       },
       body: JSON.stringify({
          idAccount,

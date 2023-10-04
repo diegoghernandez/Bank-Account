@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class AutomationHelper {
@@ -30,7 +31,7 @@ public class AutomationHelper {
                             automation.getIdAccount(),
                             automation.getIdTransferAccount(),
                             automation.getAmount(),
-                            TransactionType.WIRE_TRANSFER), true);
+                            TransactionType.WIRE_TRANSFER), true, Locale.getDefault());
 
                     automationRepository.updateExecutionTimeById(
                             automation.getExecutionTime().plusHours(automation.getHoursToNextExecution()), automation.getIdAutomation());

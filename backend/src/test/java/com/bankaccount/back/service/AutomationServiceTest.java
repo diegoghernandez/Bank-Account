@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -126,7 +127,7 @@ public class AutomationServiceTest {
         Exception exception = assertThrows(NotFoundException.class, () ->
                 automationService.updateStatusById(false, 23L));
 
-        String expectedMessage = "Automation not found 23";
+        String expectedMessage = "Automation not found";
         String actualMessage = exception.getMessage();
 
         assertAll(
@@ -173,10 +174,10 @@ public class AutomationServiceTest {
         Mockito.when(accountRepository.getAccountById(321))
                 .thenReturn(Optional.of(AccountEntity.builder().build()));
 
-        automationService.saveAutomation(automationDto);
+        automationService.saveAutomation(automationDto, Locale.getDefault());
 
         Exception exception = assertThrows(NotFoundException.class, () ->
-                automationService.saveAutomation(automationError));
+                automationService.saveAutomation(automationError, Locale.getDefault()));
 
         String expectedMessage = "Account not found";
         String actualMessage = exception.getMessage();

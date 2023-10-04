@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -38,18 +39,18 @@ public class AutomationService {
 
     public void updateStatusById(boolean status, long id) throws NotFoundException {
         Optional<AutomationEntity> isAccount = automationRepository.getAutomationById(id);
-        if (isAccount.isEmpty()) throw new NotFoundException("Automation not found " + id);
+        if (isAccount.isEmpty()) throw new NotFoundException("service.automation.error.automation");
 
         automationRepository.updateStatusById(status, id);
 
         if (status) automationRepository.updateExecutionTimeById(LocalDateTime.now(), id);
     }
 
-    public void saveAutomation(AutomationDto automationDto) throws NotFoundException {
+    public void saveAutomation(AutomationDto automationDto, Locale locale) throws NotFoundException {
         Optional<AccountEntity> isAccount = accountRepository.getAccountById(automationDto.idAccount());
         Optional<AccountEntity> isAccountTransfer = accountRepository.getAccountById(automationDto.idTransferAccount());
 
-        if (isAccount.isEmpty() || isAccountTransfer.isEmpty()) throw new NotFoundException("Account not found");
+        if (isAccount.isEmpty() || isAccountTransfer.isEmpty()) throw new NotFoundException("account.error", locale);
 
         LocalDateTime localDateTime = LocalDateTime.now().plusHours(automationDto.hoursToNextExecution());
 

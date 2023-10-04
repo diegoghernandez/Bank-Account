@@ -3,6 +3,7 @@ import { getAccountData } from "./account";
 
 const API = "http://localhost:8090/transactions";
 const TOKEN = localStorage.getItem("token");
+const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
 
 export const getTransactions = async (id, page, signal) => {
    const response = await fetch(`${API}/account?id=${id}&page=${page}`, {
@@ -63,7 +64,8 @@ export const saveTransaction = async (transaction, email) => {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
-         "Authorization": TOKEN
+         "Authorization": TOKEN,
+         "Accept-Language": LANGUAGE
       },
       body: JSON.stringify(transaction)
    });

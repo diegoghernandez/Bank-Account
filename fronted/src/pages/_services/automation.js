@@ -3,6 +3,7 @@ import { getAccountData } from "./account";
 
 const API = "http://localhost:8090/automations";
 const TOKEN = localStorage.getItem("token");
+const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
 
 export const getAutomations = async (id, email) => {
    const response = await fetch(`${API}/account?id=${id}`, {
@@ -42,7 +43,8 @@ export const saveAutomation = async (automation) => {
       method: "POST",
       headers: {
          "Content-Type": "application/json",
-         "Authorization": TOKEN
+         "Authorization": TOKEN,
+         "Accept-Language": LANGUAGE
       },
       body: JSON.stringify(automation)
    });
