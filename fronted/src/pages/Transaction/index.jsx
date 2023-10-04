@@ -38,22 +38,25 @@ export const Transaction = () => {
       if (!typeValue) setError({type: t.errorMessages[0]});
       else {
          setIsLoading(true);
-         saveTransaction({
-            idAccount,
-            "idTransferAccount": Number(elements[2].value),
-            "amount": Number(elements[1].value),
-            "transactionType": transactionType
-         }, email).then((data) => {
-            setSuccessMessage(data);
 
-            setTimeout(() => {
-               navigate("/");
-            }, 1000);
-         }).catch((e) => {
-            const message = JSON.parse(e.message);
-            setIsLoading(false);
-            setError(message);
-         });
+         setTimeout(() => {
+            saveTransaction({
+               idAccount,
+               "idTransferAccount": Number(elements[2].value),
+               "amount": Number(elements[1].value),
+               "transactionType": transactionType
+            }, email).then((data) => {
+               setSuccessMessage(data);
+   
+               setTimeout(() => {
+                  navigate("/");
+               }, 1000);
+            }).catch((e) => {
+               const message = JSON.parse(e.message);
+               setIsLoading(false);
+               setError(message);
+            });
+         }, 1000);
       }
    };
 

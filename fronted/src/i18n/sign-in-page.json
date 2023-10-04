@@ -1,7 +1,7 @@
 {
    "en": {
       "seo": {
-         "title": "Sign In | Bank",
+         "title": "Sign In",
          "description": "Email. Password. Sign In."
       },
       "errorMessage": "Must not be empty",
@@ -11,7 +11,7 @@
    },
    "es": {
       "seo": {
-         "title": "Iniciar sesión | Bank",
+         "title": "Iniciar sesión",
          "description": "Email. Contraseña. Iniciar sesión."
       },
       "errorMessage": "No debe estar vació",

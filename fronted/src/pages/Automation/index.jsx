@@ -28,24 +28,25 @@ export const Automation = () => {
 
       setIsLoading(true);
 
-      saveAutomation({
-         idAccount,
-         "name": elements[0].value,
-         "amount": Number(elements[1].value),
-         "idTransferAccount": Number(elements[2].value),
-         "hoursToNextExecution": hours,
-      }).then((data) => {
-         setSuccessMessage(data);
-
-         setTimeout(() => {
-            navigate("/automations");
-         }, 1000);
-      }).catch((e) => {
-         const message = (JSON.parse(e.message));
-         setIsLoading(false);
-         setError(message);
-      });
-      
+      setTimeout(() => {
+         saveAutomation({
+            idAccount,
+            "name": elements[0].value,
+            "amount": Number(elements[1].value),
+            "idTransferAccount": Number(elements[2].value),
+            "hoursToNextExecution": hours,
+         }).then((data) => {
+            setSuccessMessage(data);
+   
+            setTimeout(() => {
+               navigate("/automations");
+            }, 1000);
+         }).catch((e) => {
+            const message = (JSON.parse(e.message));
+            setIsLoading(false);
+            setError(message);
+         });
+      }, 1000);      
    };
 
    return (

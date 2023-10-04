@@ -1,7 +1,7 @@
 {
    "en": {
       "seo": {
-         "title": "Automations | Bank",
+         "title": "Automations",
          "description": "Automation Status. Name. Automation."
       },
       "labels": ["Automation Status", "Name"],
@@ -12,7 +12,7 @@
    },
    "es": {
       "seo": {
-         "title": "Automatizaciones | Bank",
+         "title": "Automatizaciones",
          "description": "Estado de la automatización. Nombre. Automatización."
       },
       "labels": ["Estado de la automatización", "Nombre"],

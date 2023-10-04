@@ -1,7 +1,7 @@
 {
    "en": {
       "seo": {
-         "title": "Home | Bank",
+         "title": "Home",
          "description": "Hello. Active balance. Active automations."
       },
       "greeting": "Hello",
@@ -12,7 +12,7 @@
    },
    "es": {
       "seo": {
-         "title": "Inicio | Bank",
+         "title": "Inicio",
          "description": "Hola. Balance disponible. Automatizaciones activas."
       },
       "greeting": "Hola",

@@ -27,19 +27,22 @@ export const SignIn = () => {
 
       setIsLoading(true);
 
-      logUser(email, password)
-         .then((token) => {
-            localStorage.setItem("token", "Bearer " + token);
-            getAccountData(email)
-               .then(() => {
-                  login();
-                  navigate(state?.location?.pathname ?? "/");
-               });
-         }).catch((e) => {
-            const message = e.message;
-            setIsLoading(false);
-            setError(message);
-         });
+      setTimeout(() => {
+         logUser(email, password)
+            .then((token) => {
+               localStorage.setItem("token", "Bearer " + token);
+               getAccountData(email)
+                  .then(() => {
+                     login();
+                     navigate(state?.location?.pathname ?? "/");
+                  });
+            }).catch((e) => {
+               const message = e.message;
+               setIsLoading(false);
+               setError(message);
+            });
+      }, 1000);
+
    };
 
    return (

@@ -1,7 +1,7 @@
 {
    "en": {
       "seo": {
-         "title": "Transaction | Bank",
+         "title": "Transaction",
          "description": "Transaction Type. Amount. Account to transfer. Cancel. Make transaction"
       },
       "errorMessages": ["You must choose one", "Must not be empty"],
@@ -12,7 +12,7 @@
    },
    "es": {
       "seo": {
-         "title": "Transacción | Bank",
+         "title": "Transacción",
          "description": "Tipo de transacción. Monto. Cuenta a transferir. Cancelar. Hacer transacción"
       },
       "errorMessages": ["Debes escoger una", "No debe estar vació"],

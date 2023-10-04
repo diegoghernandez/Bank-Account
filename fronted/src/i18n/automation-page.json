@@ -1,7 +1,7 @@
 {
    "en": {
       "seo": {
-         "title": "Automation | Bank",
+         "title": "Automation",
          "description": "Name. Amount. Account to transfer. Add the nine account numbers. Period of time. Cancel. Make automation."
       },
       "errorMessage": "Must not be empty",
@@ -14,7 +14,7 @@
    },
    "es": {
       "seo": {
-         "title": "Automatización | Bank",
+         "title": "Automatización",
          "description": "Nombre. Monto. Cuenta a transferir. Agrega los nueve números de la cuenta. Periodo de tiempo. Cancelar. Crear automatización."
       },
       "errorMessage": "No debe estar vació",

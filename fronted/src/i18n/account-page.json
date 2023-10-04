@@ -1,7 +1,7 @@
 {
    "en": {
       "seo": {
-         "title": "Account | Bank",
+         "title": "Account",
          "description": "Account Number. Dark Mode. Change language. Change name. Change password. Change email. Logout"
       },
       "accountNumber": "Account Number",
@@ -31,7 +31,7 @@
    },
    "es": {
       "seo": {
-         "title": "Cuenta | Bank",
+         "title": "Cuenta",
          "description": "Número de cuenta. Modo oscuro. Cambiar idioma. Cambiar nombre. Cambiar contraseña. Cambiar email. Cerrar sesión"
       },
       "accountNumber": "Número de cuenta",

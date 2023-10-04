@@ -1,7 +1,7 @@
 {
    "en": {
       "seo": {
-         "title": "Transactions | Bank",
+         "title": "Transactions",
          "description": "Transaction Type. Name. Date. Transactions. Transaction"
       },
       "labels": ["Transaction Type", "Name", "Date"],
@@ -11,7 +11,7 @@
    },
    "es": {
       "seo": {
-         "title": "Transacciones | Bank",
+         "title": "Transacciones",
          "description": "Tipo de transacción. Nombre. Fecha. Transacciones. Transacción"
       },
       "labels": ["Tipo de transacción", "Nombre", "Fecha"],
