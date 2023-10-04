@@ -78,6 +78,7 @@ public class AuthController {
                 Messages.getMessageForLocale("controller.auth.register.success", locale),
                 HttpStatus.CREATED);
     }
+
     @GetMapping("/verify-registration")
     public String verifyRegistration(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,

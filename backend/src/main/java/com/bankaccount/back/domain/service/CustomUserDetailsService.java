@@ -17,45 +17,45 @@ import java.util.List;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private AccountCrudRepository accountCrudRepository;
+   @Autowired
+   private AccountCrudRepository accountCrudRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AccountEntity accountEntity = accountCrudRepository.findByEmail( email)
-                .orElseThrow(() -> new UsernameNotFoundException("User " + email + " not found"));
+   @Override
+   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+      AccountEntity accountEntity = accountCrudRepository.findByEmail(email)
+              .orElseThrow(() -> new UsernameNotFoundException("User " + email + " not found"));
 
-        String[] roles = accountEntity.getRoles().stream()
-                .map(account -> account.getRole().toString()).toArray(String[]::new);
+      String[] roles = accountEntity.getRoles().stream()
+              .map(account -> account.getRole().toString()).toArray(String[]::new);
 
 
-        return User.builder()
-                .username(accountEntity.getEmail())
-                .password(accountEntity.getPassword())
-                .disabled(!accountEntity.getEnabled())
-                .authorities(this.grantedAuthorities(roles))
-                .build();
-    }
+      return User.builder()
+              .username(accountEntity.getEmail())
+              .password(accountEntity.getPassword())
+              .disabled(!accountEntity.getEnabled())
+              .authorities(this.grantedAuthorities(roles))
+              .build();
+   }
 
-    private String[] getAuthorities(String role) {
-        if ("ADMIN".equals(role) || "USER".equals(role)) {
-            return new String[] {"random_user"};
-        }
+   private String[] getAuthorities(String role) {
+      if ("ADMIN".equals(role) || "USER".equals(role)) {
+         return new String[]{"random_user"};
+      }
 
-        return new String[] {};
-    }
+      return new String[]{};
+   }
 
-    private List<GrantedAuthority> grantedAuthorities(String[] roles) {
-        List<GrantedAuthority> authorities = new ArrayList<>(roles.length);
+   private List<GrantedAuthority> grantedAuthorities(String[] roles) {
+      List<GrantedAuthority> authorities = new ArrayList<>(roles.length);
 
-        for (String role: roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+      for (String role : roles) {
+         authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
-            for (String authority: this.getAuthorities(role)) {
-                authorities.add(new SimpleGrantedAuthority(authority));
-            }
-        }
+         for (String authority : this.getAuthorities(role)) {
+            authorities.add(new SimpleGrantedAuthority(authority));
+         }
+      }
 
-        return authorities;
-    }
+      return authorities;
+   }
 }

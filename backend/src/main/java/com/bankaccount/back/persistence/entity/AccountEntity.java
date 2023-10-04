@@ -17,26 +17,26 @@ import java.util.List;
 @Table(name = "account")
 public class AccountEntity {
 
-    @Id
-    @Column(name = "id_account")
-    private Integer idAccount;
+   @Id
+   @Column(name = "id_account")
+   private Integer idAccount;
 
-    @Column(name = "account_name", length = 50, nullable = false)
-    private String accountName;
+   @Column(name = "account_name", length = 50, nullable = false)
+   private String accountName;
 
-    @Column(length = 100, unique = true, nullable = false)
-    private String email;
+   @Column(length = 100, unique = true, nullable = false)
+   private String email;
 
-    @Column(length = 60, nullable = false)
-    private String password;
+   @Column(length = 60, nullable = false)
+   private String password;
 
-    @Builder.Default
-    @Column(name = "current_balance", nullable = false, columnDefinition = "DECIMAL(14,2)")
-    private BigDecimal currentBalance = new BigDecimal("1.00");
+   @Builder.Default
+   @Column(name = "current_balance", nullable = false, columnDefinition = "DECIMAL(14,2)")
+   private BigDecimal currentBalance = new BigDecimal("1.00");
 
-    @Builder.Default
-    private Boolean enabled = false;
+   @Builder.Default
+   private Boolean enabled = false;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<AccountRoleEntity> roles;
+   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   private List<AccountRoleEntity> roles;
 }

@@ -6,9 +6,10 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record AutomationDto(
-    @NotNull int idAccount,
-    @NotBlank String name,
-    @NotNull @Min(1) BigDecimal amount,
-    @NotNull int idTransferAccount,
-    @NotNull @Min(1) int hoursToNextExecution
-) {}
+        @NotNull int idAccount,
+        @NotBlank String name,
+        @NotNull @Min(1) BigDecimal amount,
+        @NotNull int idTransferAccount,
+        @NotNull @Min(1) int hoursToNextExecution
+) {
+}

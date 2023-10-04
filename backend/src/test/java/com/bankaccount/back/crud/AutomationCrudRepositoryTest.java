@@ -22,194 +22,195 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("dev")
 public class AutomationCrudRepositoryTest {
 
-    @Autowired
-    private AutomationCrudRepository automationCrudRepository;
+   @Autowired
+   private AutomationCrudRepository automationCrudRepository;
 
-    @Test
-    @Sql("/db/bankaccount_data.sql")
-    @DisplayName("Should return a automationEntity with a specific id of the data.sql")
-    public void findById() {
-        AutomationEntity automationEntity = automationCrudRepository.findById(1L).get();
+   @Test
+   @Sql("/db/bankaccount_data.sql")
+   @DisplayName("Should return a automationEntity with a specific id of the data.sql")
+   public void findById() {
+      AutomationEntity automationEntity = automationCrudRepository.findById(1L).get();
 
-        Optional<AutomationEntity> errorAutomationEntity = automationCrudRepository.findById(453L);
+      Optional<AutomationEntity> errorAutomationEntity = automationCrudRepository.findById(453L);
 
-        assertAll(
-                () -> assertFalse(errorAutomationEntity.isPresent()),
-                () -> assertThat(automationEntity.getIdAutomation()).isEqualTo(1L),
-                () -> assertThat(automationEntity.getIdAccount()).isEqualTo(3),
-                () -> assertThat(automationEntity.getName()).isEqualTo("Automation"),
-                () -> assertThat(automationEntity.getAmount().toString()).isEqualTo("2000.00"),
-                () -> assertThat(automationEntity.getIdTransferAccount()).isEqualTo(43),
-                () -> assertThat(automationEntity.getHoursToNextExecution()).isEqualTo(12),
-                () -> assertThat(automationEntity.getExecutionTime()).isEqualTo(
-                        LocalDateTime.of(2023, 10, 9, 20, 10, 12)
-                ),
-                () -> assertThat(automationEntity.getStatus()).isEqualTo(true)
-        );
-    }
+      assertAll(
+              () -> assertFalse(errorAutomationEntity.isPresent()),
+              () -> assertThat(automationEntity.getIdAutomation()).isEqualTo(1L),
+              () -> assertThat(automationEntity.getIdAccount()).isEqualTo(3),
+              () -> assertThat(automationEntity.getName()).isEqualTo("Automation"),
+              () -> assertThat(automationEntity.getAmount().toString()).isEqualTo("2000.00"),
+              () -> assertThat(automationEntity.getIdTransferAccount()).isEqualTo(43),
+              () -> assertThat(automationEntity.getHoursToNextExecution()).isEqualTo(12),
+              () -> assertThat(automationEntity.getExecutionTime()).isEqualTo(
+                      LocalDateTime.of(2023, 10, 9, 20, 10, 12)
+              ),
+              () -> assertThat(automationEntity.getStatus()).isEqualTo(true)
+      );
+   }
 
-    @Test
-    @Sql("/db/bankaccount_data.sql")
-    @DisplayName("Should return all automationEntity with a specific id of the data.sql")
-    public void findByIdAccount() {
-        List<AutomationEntity> automationEntityList = automationCrudRepository.findByIdAccount(2);
+   @Test
+   @Sql("/db/bankaccount_data.sql")
+   @DisplayName("Should return all automationEntity with a specific id of the data.sql")
+   public void findByIdAccount() {
+      List<AutomationEntity> automationEntityList = automationCrudRepository.findByIdAccount(2);
 
-        List<AutomationEntity> errorAutomationEntity = automationCrudRepository.findByIdAccount(453);
+      List<AutomationEntity> errorAutomationEntity = automationCrudRepository.findByIdAccount(453);
 
-        assertAll(
-                () -> assertTrue(errorAutomationEntity.isEmpty()),
-                () -> assertEquals(List.of(2L, 3L, 4L, 7L),
-                        automationEntityList.stream().map(AutomationEntity::getIdAutomation).toList()),
-                () -> assertEquals(List.of(2, 2, 2, 2),
-                        automationEntityList.stream().map(AutomationEntity::getIdAccount).toList()),
-                () -> assertEquals(List.of("Automation", "Automation", "Automation", "Automation"),
-                        automationEntityList.stream().map(AutomationEntity::getName).toList()),
-                () -> assertEquals(List.of("2000.00", "2000.00", "2000.00", "2000.00"),
-                        automationEntityList.stream().map(automation -> automation.getAmount().toString()).toList()),
-                () -> assertEquals(List.of(43, 43, 43, 43),
-                        automationEntityList.stream().map(AutomationEntity::getIdTransferAccount).toList()),
-                () -> assertEquals(List.of(12, 32, 2, 62),
-                        automationEntityList.stream().map(AutomationEntity::getHoursToNextExecution).toList()),
-                () -> assertEquals(List.of(
-                                LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
-                                LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
-                                LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
-                                LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
-                        automationEntityList.stream().map(AutomationEntity::getExecutionTime).toList()),
-                () -> assertEquals(List.of(true, true, false, true),
-                        automationEntityList.stream().map(AutomationEntity::getStatus).toList())
-        );
-    }
+      assertAll(
+              () -> assertTrue(errorAutomationEntity.isEmpty()),
+              () -> assertEquals(List.of(2L, 3L, 4L, 7L),
+                      automationEntityList.stream().map(AutomationEntity::getIdAutomation).toList()),
+              () -> assertEquals(List.of(2, 2, 2, 2),
+                      automationEntityList.stream().map(AutomationEntity::getIdAccount).toList()),
+              () -> assertEquals(List.of("Automation", "Automation", "Automation", "Automation"),
+                      automationEntityList.stream().map(AutomationEntity::getName).toList()),
+              () -> assertEquals(List.of("2000.00", "2000.00", "2000.00", "2000.00"),
+                      automationEntityList.stream().map(automation -> automation.getAmount().toString()).toList()),
+              () -> assertEquals(List.of(43, 43, 43, 43),
+                      automationEntityList.stream().map(AutomationEntity::getIdTransferAccount).toList()),
+              () -> assertEquals(List.of(12, 32, 2, 62),
+                      automationEntityList.stream().map(AutomationEntity::getHoursToNextExecution).toList()),
+              () -> assertEquals(List.of(
+                              LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
+                              LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
+                              LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
+                              LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
+                      automationEntityList.stream().map(AutomationEntity::getExecutionTime).toList()),
+              () -> assertEquals(List.of(true, true, false, true),
+                      automationEntityList.stream().map(AutomationEntity::getStatus).toList())
+      );
+   }
 
-    @Test
-    @Sql("/db/bankaccount_data.sql")
-    @DisplayName("Should return all automationEntity with a specific status of the data.sql")
-    public void findByStatus() {
-        List<AutomationEntity> automationEntityFalse = automationCrudRepository.findByStatus(false);
-        List<AutomationEntity> automationEntityTrue = automationCrudRepository.findByStatus(true);
+   @Test
+   @Sql("/db/bankaccount_data.sql")
+   @DisplayName("Should return all automationEntity with a specific status of the data.sql")
+   public void findByStatus() {
+      List<AutomationEntity> automationEntityFalse = automationCrudRepository.findByStatus(false);
+      List<AutomationEntity> automationEntityTrue = automationCrudRepository.findByStatus(true);
 
-        assertAll(
-                () -> assertEquals(2, automationEntityFalse.size()),
-                () -> assertEquals(5, automationEntityTrue.size()),
-                () -> assertEquals(List.of(4L, 6L),
-                        automationEntityFalse.stream().map(AutomationEntity::getIdAutomation).toList()),
-                () -> assertEquals(List.of(2, 3),
-                        automationEntityFalse.stream().map(AutomationEntity::getIdAccount).toList()),
-                () -> assertEquals(List.of("Automation", "Automation"),
-                        automationEntityFalse.stream().map(AutomationEntity::getName).toList()),
-                () -> assertEquals(List.of("2000.00", "2000.00"),
-                        automationEntityFalse.stream().map(automation -> automation.getAmount().toString()).toList()),
-                () -> assertEquals(List.of(43, 43),
-                        automationEntityFalse.stream().map(AutomationEntity::getIdTransferAccount).toList()),
-                () -> assertEquals(List.of(2, 12),
-                        automationEntityFalse.stream().map(AutomationEntity::getHoursToNextExecution).toList()),
-                () -> assertEquals(List.of(
-                                LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
-                                LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
-                        automationEntityFalse.stream().map(AutomationEntity::getExecutionTime).toList()),
-                () -> assertEquals(List.of(false, false),
-                        automationEntityFalse.stream().map(AutomationEntity::getStatus).toList())
-        );
-    }
-    @Test
-    @Sql("/db/bankaccount_data.sql")
-    @DisplayName("Should return all automationEntity with a specific id and status of the data.sql")
-    public void findByIdAccountAndStatus() {
-        List<AutomationEntity> automationEntityList = automationCrudRepository.findByIdAccountAndStatus(3, true);
-        List<AutomationEntity> automationEntityListFalse = automationCrudRepository.findByIdAccountAndStatus(3, false);
+      assertAll(
+              () -> assertEquals(2, automationEntityFalse.size()),
+              () -> assertEquals(5, automationEntityTrue.size()),
+              () -> assertEquals(List.of(4L, 6L),
+                      automationEntityFalse.stream().map(AutomationEntity::getIdAutomation).toList()),
+              () -> assertEquals(List.of(2, 3),
+                      automationEntityFalse.stream().map(AutomationEntity::getIdAccount).toList()),
+              () -> assertEquals(List.of("Automation", "Automation"),
+                      automationEntityFalse.stream().map(AutomationEntity::getName).toList()),
+              () -> assertEquals(List.of("2000.00", "2000.00"),
+                      automationEntityFalse.stream().map(automation -> automation.getAmount().toString()).toList()),
+              () -> assertEquals(List.of(43, 43),
+                      automationEntityFalse.stream().map(AutomationEntity::getIdTransferAccount).toList()),
+              () -> assertEquals(List.of(2, 12),
+                      automationEntityFalse.stream().map(AutomationEntity::getHoursToNextExecution).toList()),
+              () -> assertEquals(List.of(
+                              LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
+                              LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
+                      automationEntityFalse.stream().map(AutomationEntity::getExecutionTime).toList()),
+              () -> assertEquals(List.of(false, false),
+                      automationEntityFalse.stream().map(AutomationEntity::getStatus).toList())
+      );
+   }
 
-        assertAll(
-                () -> assertEquals(2, automationEntityList.size()),
-                () -> assertEquals(1, automationEntityListFalse.size()),
-                () -> assertEquals(List.of(1L, 5L),
-                        automationEntityList.stream().map(AutomationEntity::getIdAutomation).toList()),
-                () -> assertEquals(List.of(3, 3),
-                        automationEntityList.stream().map(AutomationEntity::getIdAccount).toList()),
-                () -> assertEquals(List.of("Automation", "Automation"),
-                        automationEntityList.stream().map(AutomationEntity::getName).toList()),
-                () -> assertEquals(List.of("2000.00", "2000.00"),
-                        automationEntityList.stream().map(automation -> automation.getAmount().toString()).toList()),
-                () -> assertEquals(List.of(43, 43),
-                        automationEntityList.stream().map(AutomationEntity::getIdTransferAccount).toList()),
-                () -> assertEquals(List.of(12, 52),
-                        automationEntityList.stream().map(AutomationEntity::getHoursToNextExecution).toList()),
-                () -> assertEquals(List.of(
-                                LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
-                                LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
-                        automationEntityList.stream().map(AutomationEntity::getExecutionTime).toList()),
-                () -> assertEquals(List.of(true, true),
-                        automationEntityList.stream().map(AutomationEntity::getStatus).toList())
-        );
-    }
+   @Test
+   @Sql("/db/bankaccount_data.sql")
+   @DisplayName("Should return all automationEntity with a specific id and status of the data.sql")
+   public void findByIdAccountAndStatus() {
+      List<AutomationEntity> automationEntityList = automationCrudRepository.findByIdAccountAndStatus(3, true);
+      List<AutomationEntity> automationEntityListFalse = automationCrudRepository.findByIdAccountAndStatus(3, false);
 
-    @Test
-    @Sql("/db/bankaccount_data.sql")
-    @DisplayName("Should update the executionTime from a specific automationEntity with a specific id of the data.sql")
-    public void updateExecutionTimeById() {
-        LocalDateTime timeStamp = LocalDateTime.now();
-        automationCrudRepository.updateExecutionTimeById(timeStamp, 1);
+      assertAll(
+              () -> assertEquals(2, automationEntityList.size()),
+              () -> assertEquals(1, automationEntityListFalse.size()),
+              () -> assertEquals(List.of(1L, 5L),
+                      automationEntityList.stream().map(AutomationEntity::getIdAutomation).toList()),
+              () -> assertEquals(List.of(3, 3),
+                      automationEntityList.stream().map(AutomationEntity::getIdAccount).toList()),
+              () -> assertEquals(List.of("Automation", "Automation"),
+                      automationEntityList.stream().map(AutomationEntity::getName).toList()),
+              () -> assertEquals(List.of("2000.00", "2000.00"),
+                      automationEntityList.stream().map(automation -> automation.getAmount().toString()).toList()),
+              () -> assertEquals(List.of(43, 43),
+                      automationEntityList.stream().map(AutomationEntity::getIdTransferAccount).toList()),
+              () -> assertEquals(List.of(12, 52),
+                      automationEntityList.stream().map(AutomationEntity::getHoursToNextExecution).toList()),
+              () -> assertEquals(List.of(
+                              LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12),
+                              LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
+                      automationEntityList.stream().map(AutomationEntity::getExecutionTime).toList()),
+              () -> assertEquals(List.of(true, true),
+                      automationEntityList.stream().map(AutomationEntity::getStatus).toList())
+      );
+   }
 
-        AutomationEntity automationEntity = automationCrudRepository.findById(1L).get();
+   @Test
+   @Sql("/db/bankaccount_data.sql")
+   @DisplayName("Should update the executionTime from a specific automationEntity with a specific id of the data.sql")
+   public void updateExecutionTimeById() {
+      LocalDateTime timeStamp = LocalDateTime.now();
+      automationCrudRepository.updateExecutionTimeById(timeStamp, 1);
 
-        assertAll(
-                () -> assertThat(automationEntity.getIdAutomation()).isEqualTo(1L),
-                () -> assertThat(automationEntity.getIdAccount()).isEqualTo(3),
-                () -> assertThat(automationEntity.getName()).isEqualTo("Automation"),
-                () -> assertThat(automationEntity.getAmount()).isEqualTo("2000.00"),
-                () -> assertThat(automationEntity.getIdTransferAccount()).isEqualTo(43),
-                () -> assertThat(automationEntity.getHoursToNextExecution()).isEqualTo(12),
-                () -> assertThat(automationEntity.getExecutionTime()).isEqualToIgnoringNanos(timeStamp),
-                () -> assertThat(automationEntity.getStatus()).isEqualTo(true)
-        );
-    }
+      AutomationEntity automationEntity = automationCrudRepository.findById(1L).get();
 
-    @Test
-    @Sql("/db/bankaccount_data.sql")
-    @DisplayName("Should update the status from a specific automationEntity with a specific id of the data.sql")
-    public void updateStatusById() {
-        automationCrudRepository.updateStatusById(false, 7);
+      assertAll(
+              () -> assertThat(automationEntity.getIdAutomation()).isEqualTo(1L),
+              () -> assertThat(automationEntity.getIdAccount()).isEqualTo(3),
+              () -> assertThat(automationEntity.getName()).isEqualTo("Automation"),
+              () -> assertThat(automationEntity.getAmount()).isEqualTo("2000.00"),
+              () -> assertThat(automationEntity.getIdTransferAccount()).isEqualTo(43),
+              () -> assertThat(automationEntity.getHoursToNextExecution()).isEqualTo(12),
+              () -> assertThat(automationEntity.getExecutionTime()).isEqualToIgnoringNanos(timeStamp),
+              () -> assertThat(automationEntity.getStatus()).isEqualTo(true)
+      );
+   }
 
-        AutomationEntity automationEntity = automationCrudRepository.findById(7L).get();
+   @Test
+   @Sql("/db/bankaccount_data.sql")
+   @DisplayName("Should update the status from a specific automationEntity with a specific id of the data.sql")
+   public void updateStatusById() {
+      automationCrudRepository.updateStatusById(false, 7);
 
-        assertAll(
-                () -> assertThat(automationEntity.getIdAutomation()).isEqualTo(7L),
-                () -> assertThat(automationEntity.getIdAccount()).isEqualTo(2),
-                () -> assertThat(automationEntity.getName()).isEqualTo("Automation"),
-                () -> assertThat(automationEntity.getAmount()).isEqualTo("2000.00"),
-                () -> assertThat(automationEntity.getIdTransferAccount()).isEqualTo(43),
-                () -> assertThat(automationEntity.getHoursToNextExecution()).isEqualTo(62),
-                () -> assertThat(automationEntity.getExecutionTime()).isEqualTo(
-                        LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
-                () -> assertThat(automationEntity.getStatus()).isEqualTo(false)
-        );
-    }
+      AutomationEntity automationEntity = automationCrudRepository.findById(7L).get();
 
-    @Test
-    @DisplayName("Should save an automation in the database")
-    public void saveAutomation() {
-        LocalDateTime localDateTime = LocalDateTime.now();
+      assertAll(
+              () -> assertThat(automationEntity.getIdAutomation()).isEqualTo(7L),
+              () -> assertThat(automationEntity.getIdAccount()).isEqualTo(2),
+              () -> assertThat(automationEntity.getName()).isEqualTo("Automation"),
+              () -> assertThat(automationEntity.getAmount()).isEqualTo("2000.00"),
+              () -> assertThat(automationEntity.getIdTransferAccount()).isEqualTo(43),
+              () -> assertThat(automationEntity.getHoursToNextExecution()).isEqualTo(62),
+              () -> assertThat(automationEntity.getExecutionTime()).isEqualTo(
+                      LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
+              () -> assertThat(automationEntity.getStatus()).isEqualTo(false)
+      );
+   }
 
-        AutomationEntity automationEntity = AutomationEntity.builder()
-                .idAccount(32)
-                .name("For testing")
-                .amount(new BigDecimal("43242.94"))
-                .idTransferAccount(12)
-                .hoursToNextExecution(4)
-                .executionTime(localDateTime)
-                .status(true)
-                .build();
+   @Test
+   @DisplayName("Should save an automation in the database")
+   public void saveAutomation() {
+      LocalDateTime localDateTime = LocalDateTime.now();
 
-        AutomationEntity saveAutomation = automationCrudRepository.save(automationEntity);
+      AutomationEntity automationEntity = AutomationEntity.builder()
+              .idAccount(32)
+              .name("For testing")
+              .amount(new BigDecimal("43242.94"))
+              .idTransferAccount(12)
+              .hoursToNextExecution(4)
+              .executionTime(localDateTime)
+              .status(true)
+              .build();
 
-        assertAll(
-                () -> assertThat(saveAutomation.getIdAutomation()).isEqualTo(1L),
-                () -> assertThat(saveAutomation.getIdAccount()).isEqualTo(automationEntity.getIdAccount()),
-                () -> assertThat(saveAutomation.getName()).isEqualTo(automationEntity.getName()),
-                () -> assertThat(saveAutomation.getAmount()).isEqualTo(automationEntity.getAmount()),
-                () -> assertThat(saveAutomation.getIdTransferAccount()).isEqualTo(automationEntity.getIdTransferAccount()),
-                () -> assertThat(saveAutomation.getHoursToNextExecution()).isEqualTo(automationEntity.getHoursToNextExecution()),
-                () -> assertThat(saveAutomation.getExecutionTime()).isEqualTo(automationEntity.getExecutionTime()),
-                () -> assertThat(saveAutomation.getStatus()).isEqualTo(automationEntity.getStatus())
-        );
-    }
+      AutomationEntity saveAutomation = automationCrudRepository.save(automationEntity);
+
+      assertAll(
+              () -> assertThat(saveAutomation.getIdAutomation()).isEqualTo(1L),
+              () -> assertThat(saveAutomation.getIdAccount()).isEqualTo(automationEntity.getIdAccount()),
+              () -> assertThat(saveAutomation.getName()).isEqualTo(automationEntity.getName()),
+              () -> assertThat(saveAutomation.getAmount()).isEqualTo(automationEntity.getAmount()),
+              () -> assertThat(saveAutomation.getIdTransferAccount()).isEqualTo(automationEntity.getIdTransferAccount()),
+              () -> assertThat(saveAutomation.getHoursToNextExecution()).isEqualTo(automationEntity.getHoursToNextExecution()),
+              () -> assertThat(saveAutomation.getExecutionTime()).isEqualTo(automationEntity.getExecutionTime()),
+              () -> assertThat(saveAutomation.getStatus()).isEqualTo(automationEntity.getStatus())
+      );
+   }
 }

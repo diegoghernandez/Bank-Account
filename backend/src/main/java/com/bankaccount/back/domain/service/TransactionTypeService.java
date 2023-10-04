@@ -18,62 +18,63 @@ import java.util.Optional;
 @Service
 public class TransactionTypeService {
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+   @Autowired
+   private TransactionRepository transactionRepository;
 
-    @Autowired
-    private AccountRepository accountRepository;
+   @Autowired
+   private AccountRepository accountRepository;
 
-    public void saveTransaction(TransactionDto transactionDto, boolean isAutomated, Locale locale) throws NotFoundException, NotAllowedException {
-        int id = transactionDto.idAccount();
-        int idTransfer = transactionDto.idTransferAccount();
-        BigDecimal amount = transactionDto.amount();
-        TransactionType type = transactionDto.transactionType();
+   public void saveTransaction(TransactionDto transactionDto, boolean isAutomated, Locale locale) throws NotFoundException, NotAllowedException {
+      int id = transactionDto.idAccount();
+      int idTransfer = transactionDto.idTransferAccount();
+      BigDecimal amount = transactionDto.amount();
+      TransactionType type = transactionDto.transactionType();
 
-        Optional<AccountEntity> isAccount = accountRepository.getAccountById(id);
-        Optional<AccountEntity> isAccountTransfer = accountRepository.getAccountById(idTransfer);
+      Optional<AccountEntity> isAccount = accountRepository.getAccountById(id);
+      Optional<AccountEntity> isAccountTransfer = accountRepository.getAccountById(idTransfer);
 
-        if (isAccount.isEmpty()) throw new NotFoundException("account.error", locale);
-        else if (idTransfer != 0 && isAccountTransfer.isEmpty()) throw new NotFoundException("service.transaction-type.error.transfer", locale);
+      if (isAccount.isEmpty()) throw new NotFoundException("account.error", locale);
+      else if (idTransfer != 0 && isAccountTransfer.isEmpty())
+         throw new NotFoundException("service.transaction-type.error.transfer", locale);
 
-        AccountEntity account = isAccount.get();
+      AccountEntity account = isAccount.get();
 
-        String name = (isAccountTransfer.isPresent()) ?
-                isAccountTransfer.get().getAccountName() : account.getAccountName();
+      String name = (isAccountTransfer.isPresent()) ?
+              isAccountTransfer.get().getAccountName() : account.getAccountName();
 
-        TransactionEntity.TransactionEntityBuilder transactionEntity = TransactionEntity.builder();
-        transactionEntity.idAccount(id);
-        transactionEntity.idTransferAccount(idTransfer);
-        transactionEntity.receiverName(name);
-        transactionEntity.transactionAmount(amount);
-        transactionEntity.transactionType(type);
-        transactionEntity.isAutomated(isAutomated);
+      TransactionEntity.TransactionEntityBuilder transactionEntity = TransactionEntity.builder();
+      transactionEntity.idAccount(id);
+      transactionEntity.idTransferAccount(idTransfer);
+      transactionEntity.receiverName(name);
+      transactionEntity.transactionAmount(amount);
+      transactionEntity.transactionType(type);
+      transactionEntity.isAutomated(isAutomated);
 
-        switch (type) {
-            case DEPOSIT -> {
-                BigDecimal currentBalance = account.getCurrentBalance();
+      switch (type) {
+         case DEPOSIT -> {
+            BigDecimal currentBalance = account.getCurrentBalance();
 
-                currentBalance = currentBalance.add(amount);
+            currentBalance = currentBalance.add(amount);
 
-                accountRepository.updateBalance(currentBalance, id);
+            accountRepository.updateBalance(currentBalance, id);
+         }
+         case WIRE_TRANSFER, ONLINE_PAYMENT -> {
+            BigDecimal currentBalance = account.getCurrentBalance();
+
+            if (currentBalance.compareTo(amount) < 0) {
+               throw new NotAllowedException("amount", "service.transaction-type.error.balance", locale);
+            } else {
+               currentBalance = currentBalance.subtract(amount);
+
+               accountRepository.updateBalance(currentBalance, id);
+
+               saveTransaction(new TransactionDto(
+                       idTransfer, id, amount, TransactionType.DEPOSIT), false, locale);
             }
-            case WIRE_TRANSFER, ONLINE_PAYMENT -> {
-                BigDecimal currentBalance = account.getCurrentBalance();
+         }
+         default -> throw new NotAllowedException("type", "service.transaction-type.error.support", locale);
+      }
 
-                if (currentBalance.compareTo(amount) < 0) {
-                    throw new NotAllowedException("amount", "service.transaction-type.error.balance", locale);
-                } else {
-                    currentBalance = currentBalance.subtract(amount);
-
-                    accountRepository.updateBalance(currentBalance, id);
-
-                    saveTransaction(new TransactionDto(
-                            idTransfer, id, amount, TransactionType.DEPOSIT), false, locale);
-                }
-            }
-            default -> throw new NotAllowedException("type", "service.transaction-type.error.support", locale);
-        }
-
-        transactionRepository.saveTransaction(transactionEntity.build());
-    }
+      transactionRepository.saveTransaction(transactionEntity.build());
+   }
 }

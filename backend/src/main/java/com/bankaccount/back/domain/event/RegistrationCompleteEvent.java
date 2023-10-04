@@ -1,6 +1,5 @@
 package com.bankaccount.back.domain.event;
 
-import com.bankaccount.back.domain.AccountDomain;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,13 +9,13 @@ import org.springframework.context.ApplicationEvent;
 @Setter
 public class RegistrationCompleteEvent extends ApplicationEvent {
 
-    private AccountEntity accountEntity;
+   private AccountEntity accountEntity;
 
-    private String applicationUrl;
+   private String applicationUrl;
 
-    public RegistrationCompleteEvent(AccountEntity accountEntity, String applicationUrl) {
-        super(accountEntity);
-        this.accountEntity = accountEntity;
-        this.applicationUrl = applicationUrl;
-    }
+   public RegistrationCompleteEvent(AccountEntity accountEntity, String applicationUrl) {
+      super(accountEntity);
+      this.accountEntity = accountEntity;
+      this.applicationUrl = applicationUrl;
+   }
 }

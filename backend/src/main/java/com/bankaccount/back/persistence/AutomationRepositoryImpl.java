@@ -13,41 +13,41 @@ import java.util.Optional;
 @Repository
 public class AutomationRepositoryImpl implements AutomationRepository {
 
-    @Autowired
-    private AutomationCrudRepository automationCrudRepository;
+   @Autowired
+   private AutomationCrudRepository automationCrudRepository;
 
-    @Override
-    public Optional<AutomationEntity> getAutomationById(long id) {
-        return automationCrudRepository.findById(id);
-    }
+   @Override
+   public Optional<AutomationEntity> getAutomationById(long id) {
+      return automationCrudRepository.findById(id);
+   }
 
-    @Override
-    public List<AutomationEntity> getByIdAccount(int idAccount) {
-        return automationCrudRepository.findByIdAccount(idAccount);
-    }
+   @Override
+   public List<AutomationEntity> getByIdAccount(int idAccount) {
+      return automationCrudRepository.findByIdAccount(idAccount);
+   }
 
-    @Override
-    public List<AutomationEntity> getByStatus(boolean status) {
-        return automationCrudRepository.findByStatus(status);
-    }
+   @Override
+   public List<AutomationEntity> getByStatus(boolean status) {
+      return automationCrudRepository.findByStatus(status);
+   }
 
-    @Override
-    public List<AutomationEntity> getByIdAccountAndStatus(int idAccount, boolean status) {
-        return automationCrudRepository.findByIdAccountAndStatus(idAccount, status);
-    }
+   @Override
+   public List<AutomationEntity> getByIdAccountAndStatus(int idAccount, boolean status) {
+      return automationCrudRepository.findByIdAccountAndStatus(idAccount, status);
+   }
 
-    @Override
-    public void updateExecutionTimeById(LocalDateTime newTime, long id) {
-        automationCrudRepository.updateExecutionTimeById(newTime, id);
-    }
+   @Override
+   public void updateExecutionTimeById(LocalDateTime newTime, long id) {
+      automationCrudRepository.updateExecutionTimeById(newTime, id);
+   }
 
-    @Override
-    public void updateStatusById(boolean status, long id) {
-        automationCrudRepository.updateStatusById(status, id);
-    }
+   @Override
+   public void updateStatusById(boolean status, long id) {
+      automationCrudRepository.updateStatusById(status, id);
+   }
 
-    @Override
-    public void saveAutomation(AutomationEntity automationEntity) {
-        automationCrudRepository.save(automationEntity);
-    }
+   @Override
+   public void saveAutomation(AutomationEntity automationEntity) {
+      automationCrudRepository.save(automationEntity);
+   }
 }

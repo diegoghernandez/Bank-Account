@@ -32,181 +32,181 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("dev")
 public class AccountServiceTest {
 
-    @Autowired
-    private AccountService accountService;
+   @Autowired
+   private AccountService accountService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+   @Autowired
+   private PasswordEncoder passwordEncoder;
 
-    @MockBean
-    private AccountRepository accountRepository;
+   @MockBean
+   private AccountRepository accountRepository;
 
-    @MockBean
-    private TransactionRepository transactionRepository;
+   @MockBean
+   private TransactionRepository transactionRepository;
 
-    private PasswordDto passwordDto;
+   private PasswordDto passwordDto;
 
-    private List<AccountEntity> accountEntityList;
+   private List<AccountEntity> accountEntityList;
 
-    @BeforeEach
-    void setUp() {
-        AccountEntity accountEntity1 = AccountEntity.builder()
-                .idAccount(687452786)
-                .accountName("Random634675")
-                .email("random@names.com")
-                .password("1234567")
-                .currentBalance(new BigDecimal("654316.76"))
-                .build();
+   @BeforeEach
+   void setUp() {
+      AccountEntity accountEntity1 = AccountEntity.builder()
+              .idAccount(687452786)
+              .accountName("Random634675")
+              .email("random@names.com")
+              .password("1234567")
+              .currentBalance(new BigDecimal("654316.76"))
+              .build();
 
-        AccountEntity accountEntity2 = AccountEntity.builder()
-                .idAccount(75347)
-                .accountName("Random345778")
-                .email("user@names.com")
-                .password("1234567")
-                .currentBalance(new BigDecimal("543256.00"))
-                .build();
+      AccountEntity accountEntity2 = AccountEntity.builder()
+              .idAccount(75347)
+              .accountName("Random345778")
+              .email("user@names.com")
+              .password("1234567")
+              .currentBalance(new BigDecimal("543256.00"))
+              .build();
 
-        passwordDto = new PasswordDto(
-                1,
-                "newTest@test.com",
-                "1234567",
-                "1234567"
+      passwordDto = new PasswordDto(
+              1,
+              "newTest@test.com",
+              "1234567",
+              "1234567"
 
-        );
+      );
 
-        accountEntityList = Arrays.asList(accountEntity1, accountEntity2);
-    }
+      accountEntityList = Arrays.asList(accountEntity1, accountEntity2);
+   }
 
-    @Test
-    @DisplayName("Should return one accountEntity with the specific id using the repository")
-    void getAccountById() {
-        Mockito.when(accountRepository.getAccountById(687452786))
-                .thenReturn(Optional.of(accountEntityList.get(0)));
+   @Test
+   @DisplayName("Should return one accountEntity with the specific id using the repository")
+   void getAccountById() {
+      Mockito.when(accountRepository.getAccountById(687452786))
+              .thenReturn(Optional.of(accountEntityList.get(0)));
 
-        AccountEntity accountEntity = accountService.getAccountById(687452786).get();
+      AccountEntity accountEntity = accountService.getAccountById(687452786).get();
 
-        assertEquals(687452786, accountEntity.getIdAccount());
-    }
+      assertEquals(687452786, accountEntity.getIdAccount());
+   }
 
-    @Test
-    @DisplayName("Should return one accountEntity with the specific email using the repository")
-    void getAccountByEmail() {
-        Mockito.when(accountRepository.getAccountByEmail("user@names.com"))
-                .thenReturn(Optional.of(accountEntityList.get(1)));
+   @Test
+   @DisplayName("Should return one accountEntity with the specific email using the repository")
+   void getAccountByEmail() {
+      Mockito.when(accountRepository.getAccountByEmail("user@names.com"))
+              .thenReturn(Optional.of(accountEntityList.get(1)));
 
-        AccountEntity accountEntity = accountService.getAccountByEmail("user@names.com").get();
+      AccountEntity accountEntity = accountService.getAccountByEmail("user@names.com").get();
 
-        assertEquals("user@names.com", accountEntity.getEmail());
-    }
+      assertEquals("user@names.com", accountEntity.getEmail());
+   }
 
-    @Test
-    @DisplayName("Should convert one accountDto to accountEntity to send to the repository and return it")
-    public void saveAutomation() throws NotAllowedException {
-        AccountDto accountDto = new AccountDto(
-                "Random634675",
-                "1234567",
-                "1234567",
-                "random@names.com"
-        );
+   @Test
+   @DisplayName("Should convert one accountDto to accountEntity to send to the repository and return it")
+   public void saveAutomation() throws NotAllowedException {
+      AccountDto accountDto = new AccountDto(
+              "Random634675",
+              "1234567",
+              "1234567",
+              "random@names.com"
+      );
 
-        AccountEntity accountEntity = AccountEntity.builder()
-                .idAccount(687452786)
-                .accountName("Random634675")
-                .email("random@names.com")
-                .password("1234567")
-                .currentBalance(new BigDecimal("654316.76"))
-                .build();
+      AccountEntity accountEntity = AccountEntity.builder()
+              .idAccount(687452786)
+              .accountName("Random634675")
+              .email("random@names.com")
+              .password("1234567")
+              .currentBalance(new BigDecimal("654316.76"))
+              .build();
 
-        Mockito.when(accountRepository.saveAccount(ArgumentMatchers.any())).thenReturn(accountEntity);
+      Mockito.when(accountRepository.saveAccount(ArgumentMatchers.any())).thenReturn(accountEntity);
 
-        AccountEntity accountSave = accountService.saveAccount(accountDto, Locale.getDefault());
+      AccountEntity accountSave = accountService.saveAccount(accountDto, Locale.getDefault());
 
-        assertAll(
-                () -> assertThat(accountSave.getAccountName()).isEqualTo(accountDto.name()),
-                () -> assertThat(accountSave.getPassword()).isEqualTo(accountDto.password()),
-                () -> assertThat(accountSave.getEmail()).isEqualTo(accountDto.email())
-        );
-    }
+      assertAll(
+              () -> assertThat(accountSave.getAccountName()).isEqualTo(accountDto.name()),
+              () -> assertThat(accountSave.getPassword()).isEqualTo(accountDto.password()),
+              () -> assertThat(accountSave.getEmail()).isEqualTo(accountDto.email())
+      );
+   }
 
-    @Test
-    @DisplayName("Should update the name of an accountEntity using the repository with the specific id")
-    void changeName() throws NotFoundException {
-        Mockito.when(accountService.getAccountById(1))
-                .thenReturn(Optional.of(AccountEntity.builder().idAccount(1).password(passwordEncoder.encode("1234567")).build()));
+   @Test
+   @DisplayName("Should update the name of an accountEntity using the repository with the specific id")
+   void changeName() throws NotFoundException {
+      Mockito.when(accountService.getAccountById(1))
+              .thenReturn(Optional.of(AccountEntity.builder().idAccount(1).password(passwordEncoder.encode("1234567")).build()));
 
-        Mockito.doNothing().when(accountRepository).updateName(Mockito.isA(String.class), Mockito.isA(Integer.class));
-        Mockito.doNothing().when(transactionRepository).updateTransactionsName(Mockito.isA(Integer.class), Mockito.isA(String.class));
-        Mockito.when(accountRepository.idExist(1)).thenReturn(true);
+      Mockito.doNothing().when(accountRepository).updateName(Mockito.isA(String.class), Mockito.isA(Integer.class));
+      Mockito.doNothing().when(transactionRepository).updateTransactionsName(Mockito.isA(Integer.class), Mockito.isA(String.class));
+      Mockito.when(accountRepository.idExist(1)).thenReturn(true);
 
-        String accept = accountService.changeName("newTest", passwordDto, Locale.getDefault());
-        String reject = accountService.changeName("newError", new PasswordDto(1, "", "", ""), Locale.getDefault());
+      String accept = accountService.changeName("newTest", passwordDto, Locale.getDefault());
+      String reject = accountService.changeName("newError", new PasswordDto(1, "", "", ""), Locale.getDefault());
 
-        Exception exception = assertThrows(Exception.class, () ->
-                accountService.changeName("new", new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
+      Exception exception = assertThrows(Exception.class, () ->
+              accountService.changeName("new", new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
 
-        String expectedMessage = "Account not found";
-        String actualMessage = exception.getMessage();
+      String expectedMessage = "Account not found";
+      String actualMessage = exception.getMessage();
 
-        assertAll(
-                () -> assertThat(accept).isEqualTo("Name changed successfully"),
-                () -> assertThat(reject).isEqualTo("Invalid password"),
-                () -> Mockito.verify(accountRepository, Mockito.times(1)).updateName("newTest", 1),
-                () -> Mockito.verify(transactionRepository, Mockito.times(1)).updateTransactionsName(1, "newTest"),
-                () -> assertTrue(actualMessage.contentEquals(expectedMessage))
-        );
-    }
+      assertAll(
+              () -> assertThat(accept).isEqualTo("Name changed successfully"),
+              () -> assertThat(reject).isEqualTo("Invalid password"),
+              () -> Mockito.verify(accountRepository, Mockito.times(1)).updateName("newTest", 1),
+              () -> Mockito.verify(transactionRepository, Mockito.times(1)).updateTransactionsName(1, "newTest"),
+              () -> assertTrue(actualMessage.contentEquals(expectedMessage))
+      );
+   }
 
-    @Test
-    @DisplayName("Should update the password of an accountEntity using the repository with the specific id")
-    void changePassword() throws NotFoundException {
-        Mockito.when(accountService.getAccountById(1))
-                .thenReturn(Optional.of(AccountEntity.builder().idAccount(1).password(passwordEncoder.encode("1234567")).build()));
+   @Test
+   @DisplayName("Should update the password of an accountEntity using the repository with the specific id")
+   void changePassword() throws NotFoundException {
+      Mockito.when(accountService.getAccountById(1))
+              .thenReturn(Optional.of(AccountEntity.builder().idAccount(1).password(passwordEncoder.encode("1234567")).build()));
 
-        Mockito.doNothing().when(accountRepository).updatePassword(Mockito.isA(String.class), Mockito.isA(Integer.class));
-        Mockito.when(accountRepository.idExist(1)).thenReturn(true);
+      Mockito.doNothing().when(accountRepository).updatePassword(Mockito.isA(String.class), Mockito.isA(Integer.class));
+      Mockito.when(accountRepository.idExist(1)).thenReturn(true);
 
-        String accept = accountService.changePassword(passwordDto, Locale.getDefault());
-        String reject = accountService.changePassword(new PasswordDto(1, "", "", ""), Locale.getDefault());
+      String accept = accountService.changePassword(passwordDto, Locale.getDefault());
+      String reject = accountService.changePassword(new PasswordDto(1, "", "", ""), Locale.getDefault());
 
-        Exception exception = assertThrows(Exception.class, () ->
-                accountService.changePassword(new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
+      Exception exception = assertThrows(Exception.class, () ->
+              accountService.changePassword(new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
 
-        String expectedMessage = "Account not found";
-        String actualMessage = exception.getMessage();
+      String expectedMessage = "Account not found";
+      String actualMessage = exception.getMessage();
 
-        assertAll(
-                () -> assertThat(accept).isEqualTo("Password changed successfully"),
-                () -> assertThat(reject).isEqualTo("Invalid old password"),
-                () -> Mockito.verify(accountRepository, Mockito.times(1)).updatePassword(Mockito.isA(String.class), Mockito.eq( 1)),
-                () -> assertTrue(actualMessage.contentEquals(expectedMessage))
-        );
-    }
+      assertAll(
+              () -> assertThat(accept).isEqualTo("Password changed successfully"),
+              () -> assertThat(reject).isEqualTo("Invalid old password"),
+              () -> Mockito.verify(accountRepository, Mockito.times(1)).updatePassword(Mockito.isA(String.class), Mockito.eq(1)),
+              () -> assertTrue(actualMessage.contentEquals(expectedMessage))
+      );
+   }
 
-    @Test
-    @DisplayName("Should update the email of an accountEntity using the repository with the specific id")
-    void changeEmail() throws NotAllowedException, NotFoundException {
-        Mockito.when(accountService.getAccountById(1))
-                .thenReturn(Optional.of(AccountEntity.builder().idAccount(1).password(passwordEncoder.encode("1234567")).build()));
-        Mockito.doNothing().when(accountRepository).updateEmail(Mockito.isA(String.class), Mockito.isA(Integer.class));
-        Mockito.when(accountRepository.idExist(1)).thenReturn(true);
-        Mockito.when(accountRepository.emailExist("newTest@test.com")).thenReturn(false);
-        Mockito.when(accountRepository.emailExist("error@test.com")).thenReturn(true);
+   @Test
+   @DisplayName("Should update the email of an accountEntity using the repository with the specific id")
+   void changeEmail() throws NotAllowedException, NotFoundException {
+      Mockito.when(accountService.getAccountById(1))
+              .thenReturn(Optional.of(AccountEntity.builder().idAccount(1).password(passwordEncoder.encode("1234567")).build()));
+      Mockito.doNothing().when(accountRepository).updateEmail(Mockito.isA(String.class), Mockito.isA(Integer.class));
+      Mockito.when(accountRepository.idExist(1)).thenReturn(true);
+      Mockito.when(accountRepository.emailExist("newTest@test.com")).thenReturn(false);
+      Mockito.when(accountRepository.emailExist("error@test.com")).thenReturn(true);
 
-        String accept = accountService.changeEmail(passwordDto, Locale.getDefault());
-        String reject = accountService.changeEmail(new PasswordDto(1, "newTest@test.com", "", ""), Locale.getDefault());
+      String accept = accountService.changeEmail(passwordDto, Locale.getDefault());
+      String reject = accountService.changeEmail(new PasswordDto(1, "newTest@test.com", "", ""), Locale.getDefault());
 
-        NotFoundException accountException = assertThrows(NotFoundException.class, () ->
-                accountService.changeEmail(new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
+      NotFoundException accountException = assertThrows(NotFoundException.class, () ->
+              accountService.changeEmail(new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
 
-        NotAllowedException emailException = assertThrows(NotAllowedException.class, () ->
-                accountService.changeEmail(new PasswordDto(1, "error@test.com", "s", "t"), Locale.getDefault()));
+      NotAllowedException emailException = assertThrows(NotAllowedException.class, () ->
+              accountService.changeEmail(new PasswordDto(1, "error@test.com", "s", "t"), Locale.getDefault()));
 
-        assertAll(
-                () -> assertThat(accept).isEqualTo("Email changed successfully"),
-                () -> assertThat(reject).isEqualTo("Invalid password"),
-                () -> Mockito.verify(accountRepository, Mockito.times(1)).updateEmail("newTest@test.com", 1),
-                () -> assertTrue(accountException.getMessage().contentEquals("Account not found")),
-                () -> assertTrue(emailException.getMessage().contentEquals("There is an account with that email address"))
-        );
-    }
+      assertAll(
+              () -> assertThat(accept).isEqualTo("Email changed successfully"),
+              () -> assertThat(reject).isEqualTo("Invalid password"),
+              () -> Mockito.verify(accountRepository, Mockito.times(1)).updateEmail("newTest@test.com", 1),
+              () -> assertTrue(accountException.getMessage().contentEquals("Account not found")),
+              () -> assertTrue(emailException.getMessage().contentEquals("There is an account with that email address"))
+      );
+   }
 }

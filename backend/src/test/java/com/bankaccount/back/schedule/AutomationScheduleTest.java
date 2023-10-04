@@ -16,12 +16,12 @@ import static org.mockito.Mockito.verify;
 @ActiveProfiles("dev")
 class AutomationScheduleTest {
 
-    @SpyBean
-    private AutomationSchedule automationSchedule;
+   @SpyBean
+   private AutomationSchedule automationSchedule;
 
-    @Test
-    void executeAutomationHelper() {
-        await().atMost(Duration.ofHours(1))
-                .untilAsserted(() -> verify(automationSchedule, times(1)).executeAutomationHelper());
-    }
+   @Test
+   void executeAutomationHelper() {
+      await().atMost(Duration.ofHours(1))
+              .untilAsserted(() -> verify(automationSchedule, times(1)).executeAutomationHelper());
+   }
 }

@@ -12,19 +12,19 @@ import java.util.List;
 
 public interface AutomationCrudRepository extends CrudRepository<AutomationEntity, Long> {
 
-    List<AutomationEntity> findByIdAccount(int idAccount);
+   List<AutomationEntity> findByIdAccount(int idAccount);
 
-    List<AutomationEntity> findByStatus(boolean status);
+   List<AutomationEntity> findByStatus(boolean status);
 
-    List<AutomationEntity> findByIdAccountAndStatus(int idAccount, boolean status);
+   List<AutomationEntity> findByIdAccountAndStatus(int idAccount, boolean status);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE AutomationEntity AS aut SET aut.executionTime = :new WHERE aut.idAutomation = :id")
-    void updateExecutionTimeById(@Param("new") LocalDateTime newExecutionTime, long id);
+   @Modifying
+   @Transactional
+   @Query("UPDATE AutomationEntity AS aut SET aut.executionTime = :new WHERE aut.idAutomation = :id")
+   void updateExecutionTimeById(@Param("new") LocalDateTime newExecutionTime, long id);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE AutomationEntity AS aut SET aut.status = :status WHERE aut.idAutomation = :id")
-    void updateStatusById(boolean status, long id);
+   @Modifying
+   @Transactional
+   @Query("UPDATE AutomationEntity AS aut SET aut.status = :status WHERE aut.idAutomation = :id")
+   void updateStatusById(boolean status, long id);
 }

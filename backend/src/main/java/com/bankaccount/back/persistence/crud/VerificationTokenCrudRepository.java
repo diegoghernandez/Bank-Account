@@ -10,13 +10,13 @@ import javax.transaction.Transactional;
 
 public interface VerificationTokenCrudRepository extends CrudRepository<VerificationToken, Long> {
 
-    VerificationToken findByToken(String token);
+   VerificationToken findByToken(String token);
 
-    @Transactional
-    void deleteByToken(String token);
+   @Transactional
+   void deleteByToken(String token);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE VerificationToken AS vt SET vt.token = :newToken WHERE vt.token = :oldToken")
-    void updateTokenByToken(@Param("newToken") String newToken, @Param("oldToken") String oldToken);
+   @Modifying
+   @Transactional
+   @Query("UPDATE VerificationToken AS vt SET vt.token = :newToken WHERE vt.token = :oldToken")
+   void updateTokenByToken(@Param("newToken") String newToken, @Param("oldToken") String oldToken);
 }

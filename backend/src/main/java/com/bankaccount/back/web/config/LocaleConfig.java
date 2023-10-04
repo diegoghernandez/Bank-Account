@@ -10,16 +10,17 @@ import java.util.Locale;
 @Configuration
 public class LocaleConfig {
 
-    @Bean
-    public AcceptHeaderLocaleResolver localeResolver() {
-        final AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
-        resolver.setDefaultLocale(Locale.US);
-        return resolver;
-    }
-    @Bean
-    public ResourceBundleMessageSource messageSource() {
-        final ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-        source.setBasename("internationalization/lang");
-        return source;
-    }
+   @Bean
+   public AcceptHeaderLocaleResolver localeResolver() {
+      final AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
+      resolver.setDefaultLocale(Locale.US);
+      return resolver;
+   }
+
+   @Bean
+   public ResourceBundleMessageSource messageSource() {
+      final ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+      source.setBasename("internationalization/lang");
+      return source;
+   }
 }

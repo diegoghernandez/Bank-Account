@@ -8,17 +8,17 @@ import java.util.Optional;
 
 public interface AutomationRepository {
 
-    Optional<AutomationEntity> getAutomationById(long id);
+   Optional<AutomationEntity> getAutomationById(long id);
 
-    List<AutomationEntity> getByIdAccount(int idAccount);
+   List<AutomationEntity> getByIdAccount(int idAccount);
 
-    List<AutomationEntity> getByStatus(boolean status);
+   List<AutomationEntity> getByStatus(boolean status);
 
-    List<AutomationEntity> getByIdAccountAndStatus(int idAccount, boolean status);
+   List<AutomationEntity> getByIdAccountAndStatus(int idAccount, boolean status);
 
-    void updateExecutionTimeById(LocalDateTime newTime, long id);
+   void updateExecutionTimeById(LocalDateTime newTime, long id);
 
-    void updateStatusById(boolean status, long id);
+   void updateStatusById(boolean status, long id);
 
-    void saveAutomation(AutomationEntity automationEntity);
+   void saveAutomation(AutomationEntity automationEntity);
 }

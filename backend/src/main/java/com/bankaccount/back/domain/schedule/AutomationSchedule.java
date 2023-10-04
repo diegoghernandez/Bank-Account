@@ -12,17 +12,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 @EnableScheduling
 public class AutomationSchedule {
 
-    @Autowired
-    private AutomationRepository automationRepository;
+   @Autowired
+   private AutomationRepository automationRepository;
 
-    @Autowired
-    private TransactionTypeService transactionTypeService;
+   @Autowired
+   private TransactionTypeService transactionTypeService;
 
-    @Autowired
-    private AutomationHelper automationHelper;
+   @Autowired
+   private AutomationHelper automationHelper;
 
-    @Scheduled(fixedRateString = "PT1H")
-    public void executeAutomationHelper() {
-        automationHelper.useAutomations(automationRepository.getByStatus(true));
-    }
+   @Scheduled(fixedRateString = "PT1H")
+   public void executeAutomationHelper() {
+      automationHelper.useAutomations(automationRepository.getByStatus(true));
+   }
 }

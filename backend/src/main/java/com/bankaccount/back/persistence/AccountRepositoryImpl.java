@@ -14,69 +14,69 @@ import java.util.Optional;
 @Repository
 public class AccountRepositoryImpl implements AccountRepository {
 
-    @Autowired
-    private AccountCrudRepository accountCrudRepository;
+   @Autowired
+   private AccountCrudRepository accountCrudRepository;
 
-    @Autowired
-    private VerificationTokenCrudRepository tokenCrudRepository;
+   @Autowired
+   private VerificationTokenCrudRepository tokenCrudRepository;
 
-    @Override
-    public Optional<AccountEntity> getAccountById(int id) {
-        return accountCrudRepository.findById(id);
-    }
+   @Override
+   public Optional<AccountEntity> getAccountById(int id) {
+      return accountCrudRepository.findById(id);
+   }
 
-    @Override
-    public Optional<AccountEntity> getAccountByEmail(String email) {
-        return accountCrudRepository.findByEmail(email);
-    }
+   @Override
+   public Optional<AccountEntity> getAccountByEmail(String email) {
+      return accountCrudRepository.findByEmail(email);
+   }
 
-    @Override
-    public void updateBalance(BigDecimal bigDecimal, int id) {
-        accountCrudRepository.updateBalanceById(bigDecimal, id);
-    }
+   @Override
+   public void updateBalance(BigDecimal bigDecimal, int id) {
+      accountCrudRepository.updateBalanceById(bigDecimal, id);
+   }
 
-    @Override
-    public void updateStatus(int id) {
-        accountCrudRepository.updateStatusById(id);
-    }
+   @Override
+   public void updateStatus(int id) {
+      accountCrudRepository.updateStatusById(id);
+   }
 
-    @Override
-    public void updateName(String newName, int id) {
-        accountCrudRepository.updateName(newName, id);
-    }
+   @Override
+   public void updateName(String newName, int id) {
+      accountCrudRepository.updateName(newName, id);
+   }
 
-    @Override
-    public void updatePassword(String newPassword, int id) {
-        accountCrudRepository.updatePassword(newPassword, id);
-    }
+   @Override
+   public void updatePassword(String newPassword, int id) {
+      accountCrudRepository.updatePassword(newPassword, id);
+   }
 
-    @Override
-    public void updateEmail(String newEmail, int id) {
-        accountCrudRepository.updateEmail(newEmail, id);
-    }
+   @Override
+   public void updateEmail(String newEmail, int id) {
+      accountCrudRepository.updateEmail(newEmail, id);
+   }
 
-    @Override
-    public AccountEntity saveAccount(AccountEntity accountEntity) {
-        return accountCrudRepository.save(accountEntity);
-    }
+   @Override
+   public AccountEntity saveAccount(AccountEntity accountEntity) {
+      return accountCrudRepository.save(accountEntity);
+   }
 
-    @Override
-    public void saveVerificationToken(String token, AccountEntity accountEntity) {
-        VerificationToken verificationToken = VerificationToken.builder()
-                .accountEntity(accountEntity)
-                .token(token)
-                .build();
+   @Override
+   public void saveVerificationToken(String token, AccountEntity accountEntity) {
+      VerificationToken verificationToken = VerificationToken.builder()
+              .accountEntity(accountEntity)
+              .token(token)
+              .build();
 
-        tokenCrudRepository.save(verificationToken);
-    }
+      tokenCrudRepository.save(verificationToken);
+   }
 
-    @Override
-    public boolean emailExist(String email) {
-        return accountCrudRepository.existsByEmail(email);
-    }
+   @Override
+   public boolean emailExist(String email) {
+      return accountCrudRepository.existsByEmail(email);
+   }
 
-    @Override
-    public boolean idExist(int id) {
-        return accountCrudRepository.existsById(id);
-    }
+   @Override
+   public boolean idExist(int id) {
+      return accountCrudRepository.existsById(id);
+   }
 }

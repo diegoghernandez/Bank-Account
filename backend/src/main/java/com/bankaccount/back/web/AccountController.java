@@ -11,35 +11,33 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+   @Autowired
+   private AccountService accountService;
 
-    @GetMapping("/id/{id}")
-    public ResponseEntity<AccountDomain> getAccountById(@PathVariable int id) {
-        return accountService.getAccountById(id)
-                .map(account -> new ResponseEntity<>(mapper(account), HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
+   @GetMapping("/id/{id}")
+   public ResponseEntity<AccountDomain> getAccountById(@PathVariable int id) {
+      return accountService.getAccountById(id)
+              .map(account -> new ResponseEntity<>(mapper(account), HttpStatus.OK))
+              .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+   }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<AccountDomain> getAccountByEmail(@PathVariable String email) {
-        return accountService.getAccountByEmail(email)
-                .map(account -> new ResponseEntity<>(mapper(account), HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
+   @GetMapping("/email/{email}")
+   public ResponseEntity<AccountDomain> getAccountByEmail(@PathVariable String email) {
+      return accountService.getAccountByEmail(email)
+              .map(account -> new ResponseEntity<>(mapper(account), HttpStatus.OK))
+              .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+   }
 
-    private AccountDomain mapper(AccountEntity accountEntity) {
-        return new AccountDomain(
-                accountEntity.getIdAccount(),
-                accountEntity.getAccountName(),
-                accountEntity.getEmail(),
-                accountEntity.getCurrentBalance()
-        );
-    }
+   private AccountDomain mapper(AccountEntity accountEntity) {
+      return new AccountDomain(
+              accountEntity.getIdAccount(),
+              accountEntity.getAccountName(),
+              accountEntity.getEmail(),
+              accountEntity.getCurrentBalance()
+      );
+   }
 }

@@ -18,94 +18,94 @@ import java.util.Optional;
 @Service
 public class AccountService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+   @Autowired
+   private AccountRepository accountRepository;
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+   @Autowired
+   private TransactionRepository transactionRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+   @Autowired
+   private PasswordEncoder passwordEncoder;
 
-    public Optional<AccountEntity> getAccountById(int id) {
-        return accountRepository.getAccountById(id);
-    }
+   public Optional<AccountEntity> getAccountById(int id) {
+      return accountRepository.getAccountById(id);
+   }
 
-    public Optional<AccountEntity> getAccountByEmail(String email) {
-        return accountRepository.getAccountByEmail(email);
-    }
+   public Optional<AccountEntity> getAccountByEmail(String email) {
+      return accountRepository.getAccountByEmail(email);
+   }
 
-    public AccountEntity saveAccount(AccountDto accountDto, Locale locale) throws NotAllowedException {
-        if (accountRepository.emailExist(accountDto.email())) {
-            throw new NotAllowedException("email", "service.account.error.email", locale);
-        }
-        AccountEntity accountEntity = AccountEntity.builder()
-                .idAccount(idGenerator())
-                .accountName(accountDto.name())
-                .email(accountDto.email())
-                .password(passwordEncoder.encode(accountDto.password()))
-                .build();
+   public AccountEntity saveAccount(AccountDto accountDto, Locale locale) throws NotAllowedException {
+      if (accountRepository.emailExist(accountDto.email())) {
+         throw new NotAllowedException("email", "service.account.error.email", locale);
+      }
+      AccountEntity accountEntity = AccountEntity.builder()
+              .idAccount(idGenerator())
+              .accountName(accountDto.name())
+              .email(accountDto.email())
+              .password(passwordEncoder.encode(accountDto.password()))
+              .build();
 
-        return accountRepository.saveAccount(accountEntity);
-    }
+      return accountRepository.saveAccount(accountEntity);
+   }
 
-    public String changeName(String newName, PasswordDto passwordDto, Locale locale) throws NotFoundException {
-        int idAccount = passwordDto.idAccount();
+   public String changeName(String newName, PasswordDto passwordDto, Locale locale) throws NotFoundException {
+      int idAccount = passwordDto.idAccount();
 
-        if (checkIfValidPassword(idAccount, passwordDto.newPassword())) {
-            accountRepository.updateName(newName, idAccount);
-            transactionRepository.updateTransactionsName(idAccount, newName);
-            return Messages.getMessageForLocale("service.account.change-name.success", locale);
-        } else {
+      if (checkIfValidPassword(idAccount, passwordDto.newPassword())) {
+         accountRepository.updateName(newName, idAccount);
+         transactionRepository.updateTransactionsName(idAccount, newName);
+         return Messages.getMessageForLocale("service.account.change-name.success", locale);
+      } else {
+         return Messages.getMessageForLocale("service.account.error.password", locale);
+      }
+   }
+
+   public String changePassword(PasswordDto passwordDto, Locale locale) throws NotFoundException {
+      int idAccount = passwordDto.idAccount();
+
+      if (checkIfValidPassword(idAccount, passwordDto.oldPassword())) {
+         accountRepository.updatePassword(passwordEncoder.encode(passwordDto.newPassword()), idAccount);
+         return Messages.getMessageForLocale("service.account.change-password.success", locale);
+      } else {
+         return Messages.getMessageForLocale("service.account.change-password.error", locale);
+      }
+   }
+
+   public String changeEmail(PasswordDto passwordDto, Locale locale) throws NotFoundException, NotAllowedException {
+      int idAccount = passwordDto.idAccount();
+      String newEmail = passwordDto.email();
+
+      if (!accountRepository.emailExist(newEmail)) {
+         if (checkIfValidPassword(idAccount, passwordDto.newPassword())) {
+            accountRepository.updateEmail(newEmail, idAccount);
+            return Messages.getMessageForLocale("service.account.change-email.success", locale);
+         } else {
             return Messages.getMessageForLocale("service.account.error.password", locale);
-        }
-    }
+         }
+      } else {
+         throw new NotAllowedException("email", "service.account.error.email", locale);
+      }
+   }
 
-    public String changePassword(PasswordDto passwordDto, Locale locale) throws NotFoundException {
-        int idAccount = passwordDto.idAccount();
+   private boolean checkIfValidPassword(int id, String password) throws NotFoundException {
+      Optional<AccountEntity> accountEntity = accountRepository.getAccountById(id);
 
-        if (checkIfValidPassword(idAccount, passwordDto.oldPassword())) {
-            accountRepository.updatePassword(passwordEncoder.encode(passwordDto.newPassword()), idAccount);
-            return Messages.getMessageForLocale("service.account.change-password.success", locale);
-        } else {
-            return Messages.getMessageForLocale("service.account.change-password.error", locale);
-        }
-    }
+      if (accountEntity.isPresent()) {
+         return passwordEncoder.matches(password, accountEntity.get().getPassword());
+      } else {
+         throw new NotFoundException("account.error");
+      }
 
-    public String changeEmail(PasswordDto passwordDto, Locale locale) throws NotFoundException, NotAllowedException {
-        int idAccount = passwordDto.idAccount();
-        String newEmail = passwordDto.email();
+   }
 
-        if (!accountRepository.emailExist(newEmail)) {
-            if (checkIfValidPassword(idAccount, passwordDto.newPassword())) {
-                accountRepository.updateEmail(newEmail, idAccount);
-                return Messages.getMessageForLocale("service.account.change-email.success", locale);
-            } else {
-                return Messages.getMessageForLocale("service.account.error.password", locale);
-            }
-        } else {
-            throw new NotAllowedException("email", "service.account.error.email", locale);
-        }
-    }
+   private int idGenerator() {
+      int id = (int) (Math.random() * (999999999 - 100000000 + 1) + 100000000);
 
-    private boolean checkIfValidPassword(int id, String password) throws NotFoundException {
-        Optional<AccountEntity> accountEntity = accountRepository.getAccountById(id);
+      while (accountRepository.idExist(id)) {
+         id = (int) (Math.random() * (999999999 - 100000000 + 1) + 100000000);
+      }
 
-        if (accountEntity.isPresent()) {
-            return passwordEncoder.matches(password, accountEntity.get().getPassword());
-        } else {
-            throw new NotFoundException("account.error");
-        }
-
-    }
-
-    private int idGenerator() {
-        int id = (int) (Math.random()*(999999999 - 100000000 + 1) + 100000000);
-
-        while (accountRepository.idExist(id)) {
-            id = (int) (Math.random()*(999999999 - 100000000 + 1) + 100000000);
-        }
-
-        return id;
-    }
+      return id;
+   }
 }

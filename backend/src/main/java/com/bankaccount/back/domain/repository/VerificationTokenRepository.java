@@ -4,11 +4,11 @@ import com.bankaccount.back.persistence.entity.VerificationToken;
 
 public interface VerificationTokenRepository {
 
-    VerificationToken getByToken(String token);
+   VerificationToken getByToken(String token);
 
-    void delete(VerificationToken verificationToken);
+   void delete(VerificationToken verificationToken);
 
-    void deleteByToken(String token);
+   void deleteByToken(String token);
 
-    VerificationToken updateToken(String newToken, String oldToken);
+   VerificationToken updateToken(String newToken, String oldToken);
 }

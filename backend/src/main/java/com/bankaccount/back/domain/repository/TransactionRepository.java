@@ -8,15 +8,15 @@ import java.util.Optional;
 
 public interface TransactionRepository {
 
-    Optional<TransactionEntity> getTransactionById(long id);
+   Optional<TransactionEntity> getTransactionById(long id);
 
-    Optional<Page<TransactionEntity>> getByIdAccount(int idAccount, int page);
+   Optional<Page<TransactionEntity>> getByIdAccount(int idAccount, int page);
 
-    Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, String name, int page);
+   Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, String name, int page);
 
-    Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Optional<Month> month, String name, int page);
+   Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Optional<Month> month, String name, int page);
 
-    void saveTransaction(TransactionEntity transactionEntity);
+   void saveTransaction(TransactionEntity transactionEntity);
 
-    void updateTransactionsName(int id, String name);
+   void updateTransactionsName(int id, String name);
 }

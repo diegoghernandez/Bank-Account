@@ -6,5 +6,5 @@ public record AccountDomain(
         int idAccount,
         String accountName,
         String email,
-        BigDecimal currentBalance)
-{}
+        BigDecimal currentBalance) {
+}

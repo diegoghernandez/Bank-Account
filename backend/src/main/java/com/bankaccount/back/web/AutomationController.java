@@ -19,40 +19,40 @@ import java.util.Locale;
 @RequestMapping("/automations")
 public class AutomationController {
 
-    @Autowired
-    private AutomationService automationService;
+   @Autowired
+   private AutomationService automationService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AutomationEntity> getAutomationById(@PathVariable long id) {
-        return automationService.getAutomationById(id)
-                .map(automation -> new ResponseEntity<>(automation, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
+   @GetMapping("/{id}")
+   public ResponseEntity<AutomationEntity> getAutomationById(@PathVariable long id) {
+      return automationService.getAutomationById(id)
+              .map(automation -> new ResponseEntity<>(automation, HttpStatus.OK))
+              .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+   }
 
-    @GetMapping("/account")
-    public ResponseEntity<List<AutomationEntity>> getByIdAccount(@RequestParam(name = "id") int idAccount) {
-        List<AutomationEntity> automationList = automationService.getByIdAccount(idAccount);
+   @GetMapping("/account")
+   public ResponseEntity<List<AutomationEntity>> getByIdAccount(@RequestParam(name = "id") int idAccount) {
+      List<AutomationEntity> automationList = automationService.getByIdAccount(idAccount);
 
-        if (!automationList.isEmpty()) {
-            return new ResponseEntity<>(automationList, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+      if (!automationList.isEmpty()) {
+         return new ResponseEntity<>(automationList, HttpStatus.OK);
+      }
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+   }
 
-    @PutMapping("/status")
-    public ResponseEntity<Void> updateStatusById(@RequestParam boolean status, @RequestParam long id) throws NotFoundException {
-        automationService.updateStatusById(status, id);
+   @PutMapping("/status")
+   public ResponseEntity<Void> updateStatusById(@RequestParam boolean status, @RequestParam long id) throws NotFoundException {
+      automationService.updateStatusById(status, id);
 
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+      return new ResponseEntity<>(HttpStatus.OK);
+   }
 
-    @PostMapping(value = "/save", consumes = {"application/json"})
-    public ResponseEntity<String> saveAutomation(
-            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestBody @Valid AutomationDto automationDto) throws NotFoundException {
-        automationService.saveAutomation(automationDto, locale);
-        return new ResponseEntity<>(
-                Messages.getMessageForLocale("controller.automation.save", locale),
-                HttpStatus.CREATED);
-    }
+   @PostMapping(value = "/save", consumes = {"application/json"})
+   public ResponseEntity<String> saveAutomation(
+           @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+           @RequestBody @Valid AutomationDto automationDto) throws NotFoundException {
+      automationService.saveAutomation(automationDto, locale);
+      return new ResponseEntity<>(
+              Messages.getMessageForLocale("controller.automation.save", locale),
+              HttpStatus.CREATED);
+   }
 }

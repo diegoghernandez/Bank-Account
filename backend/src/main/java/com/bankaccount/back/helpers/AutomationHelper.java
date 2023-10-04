@@ -17,28 +17,28 @@ import java.util.Locale;
 @Component
 public class AutomationHelper {
 
-    @Autowired
-    private AutomationRepository automationRepository;
+   @Autowired
+   private AutomationRepository automationRepository;
 
-    @Autowired
-    private TransactionTypeService transactionTypeService;
+   @Autowired
+   private TransactionTypeService transactionTypeService;
 
-    public void useAutomations(List<AutomationEntity> list) {
-        for (var automation : list) {
-            if (automation.getExecutionTime().isBefore(LocalDateTime.now())) {
-                try {
-                    transactionTypeService.saveTransaction(new TransactionDto(
-                            automation.getIdAccount(),
-                            automation.getIdTransferAccount(),
-                            automation.getAmount(),
-                            TransactionType.WIRE_TRANSFER), true, Locale.getDefault());
+   public void useAutomations(List<AutomationEntity> list) {
+      for (var automation : list) {
+         if (automation.getExecutionTime().isBefore(LocalDateTime.now())) {
+            try {
+               transactionTypeService.saveTransaction(new TransactionDto(
+                       automation.getIdAccount(),
+                       automation.getIdTransferAccount(),
+                       automation.getAmount(),
+                       TransactionType.WIRE_TRANSFER), true, Locale.getDefault());
 
-                    automationRepository.updateExecutionTimeById(
-                            automation.getExecutionTime().plusHours(automation.getHoursToNextExecution()), automation.getIdAutomation());
-                } catch (NotAllowedException | NotFoundException e) {
-                    automationRepository.updateStatusById(false, automation.getIdAutomation());
-                }
+               automationRepository.updateExecutionTimeById(
+                       automation.getExecutionTime().plusHours(automation.getHoursToNextExecution()), automation.getIdAutomation());
+            } catch (NotAllowedException | NotFoundException e) {
+               automationRepository.updateStatusById(false, automation.getIdAutomation());
             }
-        }
-    }
+         }
+      }
+   }
 }

@@ -22,75 +22,75 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("dev")
 public class VerificationTokenRepositoryImplTest {
 
-    @Autowired
-    private VerificationTokenRepository verificationTokenRepository;
+   @Autowired
+   private VerificationTokenRepository verificationTokenRepository;
 
-    @MockBean
-    private VerificationTokenCrudRepository verificationTokenCrud;
+   @MockBean
+   private VerificationTokenCrudRepository verificationTokenCrud;
 
-    private List<VerificationToken> verificationTokenList;
+   private List<VerificationToken> verificationTokenList;
 
-    @BeforeEach
-    void setUp() {
-        VerificationToken verificationToken1 = VerificationToken.builder()
-                .idToken(5435L)
-                .token("er143ge8-9b58-41ae-8723-29d7ff675a30")
-                .build();
+   @BeforeEach
+   void setUp() {
+      VerificationToken verificationToken1 = VerificationToken.builder()
+              .idToken(5435L)
+              .token("er143ge8-9b58-41ae-8723-29d7ff675a30")
+              .build();
 
-        VerificationToken verificationToken2 = VerificationToken.builder()
-                .idToken(63987L)
-                .token("er143ge8-34gr-41ae-8723-237a3f675a30")
-                .build();
+      VerificationToken verificationToken2 = VerificationToken.builder()
+              .idToken(63987L)
+              .token("er143ge8-34gr-41ae-8723-237a3f675a30")
+              .build();
 
-        verificationTokenList = Arrays.asList(verificationToken1, verificationToken2);
-    }
+      verificationTokenList = Arrays.asList(verificationToken1, verificationToken2);
+   }
 
-    @Test
-    @DisplayName("Should return a verificationToken with the specific token value of the database")
-    void getByToken() {
-        Mockito.when(verificationTokenCrud.findByToken("er143ge8-34gr-41ae-8723-237a3f675a30"))
-                .thenReturn(verificationTokenList.get(1));
+   @Test
+   @DisplayName("Should return a verificationToken with the specific token value of the database")
+   void getByToken() {
+      Mockito.when(verificationTokenCrud.findByToken("er143ge8-34gr-41ae-8723-237a3f675a30"))
+              .thenReturn(verificationTokenList.get(1));
 
-        VerificationToken verificationToken = verificationTokenRepository.getByToken("er143ge8-34gr-41ae-8723-237a3f675a30");
+      VerificationToken verificationToken = verificationTokenRepository.getByToken("er143ge8-34gr-41ae-8723-237a3f675a30");
 
-        assertAll(
-                () -> assertEquals(63987L, verificationToken.getIdToken()),
-                () -> assertEquals("er143ge8-34gr-41ae-8723-237a3f675a30", verificationToken.getToken())
-        );
-    }
+      assertAll(
+              () -> assertEquals(63987L, verificationToken.getIdToken()),
+              () -> assertEquals("er143ge8-34gr-41ae-8723-237a3f675a30", verificationToken.getToken())
+      );
+   }
 
-    @Test
-    @DisplayName("Should delete a verificationToken with the specific id in the database")
-    void delete() {
-        Mockito.doNothing().when(verificationTokenCrud)
-                .delete(verificationTokenList.get(0));
+   @Test
+   @DisplayName("Should delete a verificationToken with the specific id in the database")
+   void delete() {
+      Mockito.doNothing().when(verificationTokenCrud)
+              .delete(verificationTokenList.get(0));
 
-        verificationTokenRepository.delete(verificationTokenList.get(0));
+      verificationTokenRepository.delete(verificationTokenList.get(0));
 
-        Mockito.verify(verificationTokenCrud, Mockito.times(1)).delete(verificationTokenList.get(0));
-    }
+      Mockito.verify(verificationTokenCrud, Mockito.times(1)).delete(verificationTokenList.get(0));
+   }
 
-    @Test
-    @DisplayName("Should update a verificationToken with the specific token value and the new token in the database")
-    void updateToken() {
-        Mockito.doNothing().when(verificationTokenCrud)
-                .updateTokenByToken(Mockito.isA(String.class), Mockito.eq("er143ge8-34gr-41ae-8723-237a3f675a30"));
+   @Test
+   @DisplayName("Should update a verificationToken with the specific token value and the new token in the database")
+   void updateToken() {
+      Mockito.doNothing().when(verificationTokenCrud)
+              .updateTokenByToken(Mockito.isA(String.class), Mockito.eq("er143ge8-34gr-41ae-8723-237a3f675a30"));
 
-        VerificationToken verificationTokenById = VerificationToken.builder()
-                .idToken(63987L)
-                .token("po43do45-34gr-41ae-8723-237a3f675a30")
-                .build();
+      VerificationToken verificationTokenById = VerificationToken.builder()
+              .idToken(63987L)
+              .token("po43do45-34gr-41ae-8723-237a3f675a30")
+              .build();
 
-        Mockito.when(verificationTokenCrud.findByToken("po43do45-34gr-41ae-8723-237a3f675a30"))
-                .thenReturn(verificationTokenById);
+      Mockito.when(verificationTokenCrud.findByToken("po43do45-34gr-41ae-8723-237a3f675a30"))
+              .thenReturn(verificationTokenById);
 
-        VerificationToken verificationToken = verificationTokenRepository.updateToken("po43do45-34gr-41ae-8723-237a3f675a30", "er143ge8-34gr-41ae-8723-237a3f675a30");
+      VerificationToken verificationToken = verificationTokenRepository.updateToken("po43do45-34gr-41ae-8723-237a3f675a30", "er143ge8-34gr-41ae-8723-237a3f675a30");
 
-        assertAll(
-                () -> Mockito.verify(verificationTokenCrud, Mockito.times(1))
-                        .updateTokenByToken(Mockito.isA(String.class), Mockito.eq("er143ge8-34gr-41ae-8723-237a3f675a30")),
-                () -> assertEquals(verificationTokenById.getIdToken(), verificationToken.getIdToken()),
-                () -> assertEquals(verificationTokenById.getToken(), verificationToken.getToken())
-        );
-    }
+      assertAll(
+              () -> Mockito.verify(verificationTokenCrud, Mockito.times(1))
+                      .updateTokenByToken(Mockito.isA(String.class), Mockito.eq("er143ge8-34gr-41ae-8723-237a3f675a30")),
+              () -> assertEquals(verificationTokenById.getIdToken(), verificationToken.getIdToken()),
+              () -> assertEquals(verificationTokenById.getToken(), verificationToken.getToken())
+      );
+   }
 }
