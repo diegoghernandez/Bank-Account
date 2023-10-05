@@ -7,6 +7,7 @@ import auth from "../i18n/auth.json";
 import accountPage from "../i18n/account-page.json";
 import automationPage from "../i18n/automation-page.json";
 import automationsPage from "../i18n/automations-page.json";
+import updateAutomationPage from "../i18n/update-automation-page.json";
 import homePage from "../i18n/home-page.json";
 import signInPage from "../i18n/sign-in-page.json";
 import transactionPage from "../i18n/transaction-page.json";
@@ -34,6 +35,8 @@ export const getTraduction = (wantedTranslation) => {
          return automationPage[availableLanguage];
       case Traduction.AUTOMATIONS_PAGE: 
          return automationsPage[availableLanguage];
+      case Traduction.UPDATE_AUTOMATION_PAGE: 
+         return updateAutomationPage[availableLanguage];
       case Traduction.HOME_PAGE: 
          return homePage[availableLanguage];
       case Traduction.SIGN_IN_PAGE: 

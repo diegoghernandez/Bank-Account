@@ -7,6 +7,7 @@ export const Traduction = Object.freeze({
    ACCOUNT_PAGE: Symbol("account"),
    AUTOMATION_PAGE: Symbol("automation"),
    AUTOMATIONS_PAGE: Symbol("automations"),
+   UPDATE_AUTOMATION_PAGE: Symbol("update-automation"),
    HOME_PAGE: Symbol("home"),
    SIGN_IN_PAGE: Symbol("signIn"),
    TRANSACTION_PAGE: Symbol("transaction"),

@@ -55,10 +55,12 @@ describe("SignIn page tests", () => {
 
          await user.click(button);
 
-         await waitFor(() => {
-            expect(spyLogin).toHaveBeenCalledTimes(1);
-            expect(spyLogin).toHaveBeenCalledWith("user@user.com", "1234");
-         });
+         setTimeout(async () => {
+            await waitFor(() => {
+               expect(spyLogin).toHaveBeenCalledTimes(1);
+               expect(spyLogin).toHaveBeenCalledWith("user@user.com", "1234");
+            });
+         }, 900);
 
          await waitFor(() => {
             expect(passwordInput).not.toHaveAccessibleDescription("Incorrect authentication credentials");

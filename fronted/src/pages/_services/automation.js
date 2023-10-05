@@ -22,19 +22,20 @@ export const getAutomations = async (id, email) => {
    }
 };
 
-export const updateStatus = async (id, status) => {
-   const response = await fetch(`${API}/status?id=${id}&status=${status}`, {
+export const updateAutomation = async (automation) => {
+   const response = await fetch(`${API}/update`, {
       method: "PUT",
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN
       },
+      body: JSON.stringify(automation)
    });
 
    if (response.ok) {
-      return "Update correctly";
+      return await response.text();
    } else {
-      throw new StatusError("No automations found", 404);
+      throw new StatusError(JSON.stringify(await response.json()), 400);
    }
 };
 

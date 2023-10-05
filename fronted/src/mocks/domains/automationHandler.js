@@ -14,14 +14,19 @@ export const automationHandler = [
       return res(ctx.status(404));
    }),
 
-   rest.put(`${API}/status`, (req, res, ctx) => {
-      const id = req.url.searchParams.get("id");
-
-      if (id == 1) {
-         return res(ctx.status(200));
+   rest.put(`${API}/update`, async (req, res, ctx) => {
+      const { idAutomation } = await req.json();
+      
+      if (idAutomation == 4234) {
+         return res(ctx.status(400), ctx.json({
+            name: "Incorrect name",
+            amount: "Not enough balance",
+            desc: "Account not found",
+            hoursToNextExecution: "So much hours"
+         }));
+      } else {
+         return res(ctx.status(200), ctx.text("Automation updated successfully"));
       }
-
-      return res(ctx.status(404));
    }),
 
    rest.post(`${API}/save`, async (req, res, ctx) => {
@@ -29,7 +34,7 @@ export const automationHandler = [
 
       if (idTransferAccount == 124124) {
          return res(ctx.status(404), ctx.json({
-            desc: "Account not found 124124"
+            desc: "Account not found"
          }));
       } else {
          return res(ctx.status(200), ctx.text("Automation created successfully"));

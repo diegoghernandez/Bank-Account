@@ -1,0 +1,30 @@
+{
+   "en": {
+      "seo": {
+         "title": "Update Automation",
+         "description": "Name. Amount. Account to transfer. Add the nine account numbers. Period of time. Status. Cancel. Make automation."
+      },
+      "errorMessage": "Must not be empty",
+      "title": "Update Automation",
+      "labels": ["Name", "Amount", "Account to transfer", "Period of time", "Status"],
+      "description": "Add the nine account numbers",
+      "modalParameters": ["weeks", "days", "hours"],
+      "modalValue": ["Each", "hour(s)"],
+      "cancel": "Cancel",
+      "accept": "Make automation"
+   },
+   "es": {
+      "seo": {
+         "title": "Actualizar Automatización",
+         "description": "Nombre. Monto. Cuenta a transferir. Agrega los nueve números de la cuenta. Periodo de tiempo. Estado. Cancelar. Crear automatización."
+      },
+      "errorMessage": "No debe estar vació",
+      "title": "Actualizar Automatización",
+      "labels": ["Nombre", "Monto", "Cuenta a transferir", "Periodo de tiempo", "Estado"],
+      "description": "Agrega los nueve números de la cuenta",
+      "modalParameters": ["semanas", "días", "horas"],
+      "modalValue": ["Cada", "hora(s)"],
+      "cancel": "Cancelar",
+      "accept": "Crear automatización"
+   }
+}

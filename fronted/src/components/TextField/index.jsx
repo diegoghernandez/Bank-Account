@@ -39,6 +39,7 @@ const getColors = (isDisable, isError) => {
 
 export const TextField = ({
    label,
+   initialValue = "",
    type = TextFieldTypes.DEFAULT,
    inputType = InputTypes.TEXT,
    supportiveText = "",
@@ -51,7 +52,7 @@ export const TextField = ({
 }) => {
 
    const [isClicked, setIsClicked] = useState(false);
-   const [value, setValue] = useState("");
+   const [value, setValue] = useState(initialValue);
    const [isChange, setIsChange] = useState(false);
    const [isShowMenu, setIsShowMenu] = useState(false);
    const textFieldId = useId();
@@ -87,7 +88,7 @@ export const TextField = ({
       <div ref={ref} className="inline-flex flex-col w-full group/text">
          <label htmlFor={textFieldId} className={`bg-white w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
          ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base ${textLabelColor[3]} ${(type === TextFieldTypes.SEARCH && !value) && "ml-6"}`}
-         ${(value.length > 0) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
+         ${(value) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
             {label}
          </label>
             

@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { getAutomations, saveAutomation, updateStatus } from "../../pages/_services/automation";
+import { getAutomations, saveAutomation, updateAutomation } from "../../pages/_services/automation";
 import automations from "../../mocks/fixtures/automations.json";
 
 describe("Automations tests", () => {
@@ -22,21 +22,47 @@ describe("Automations tests", () => {
       });
    });
 
-   describe("updateStatus test", () => {
+   describe("updateAutomation test", () => {
       it("Should be a function", () => {
-         expect(typeof updateStatus).toBe("function");
+         expect(typeof updateAutomation).toBe("function");
       });
 
       it("Should throw an StatusError if there is no element", async () => {
-         await expect(updateStatus(21, true))
-            .rejects.toThrow(StatusError);
-         await expect(updateStatus(21, true))
-            .rejects.toThrow("No automations found");
+         await expect(updateAutomation({
+            idAutomation: 4234,
+            idAccount: 325423,
+            name: "New automation",
+            amount: 2000.00,
+            idTransferAccount: 419670285,
+            hoursToNextExecution: 6,
+            executionTime: "2023-07-15T17:51:36.986827",
+            status: true
+         })).rejects.toThrow(StatusError);
+
+         await expect(updateAutomation({
+            idAutomation: 4234,
+            idAccount: 325423,
+            name: "New automation",
+            amount: 2000.00,
+            idTransferAccount: 419670285,
+            hoursToNextExecution: 6,
+            executionTime: "2023-07-15T17:51:36.986827",
+            status: true
+         })).rejects.toThrow('{"name":"Incorrect name","amount":"Not enough balance","desc":"Account not found","hoursToNextExecution":"So much hours"}');
       });
 
       it("Should give the right content", async () => {
-         const content = await updateStatus(1, false);
-         expect(content).toStrictEqual("Update correctly");
+         const content = await updateAutomation({
+            idAutomation: 42342,
+            idAccount: 325423,
+            name: "New automation",
+            amount: 2000.00,
+            idTransferAccount: 419670285,
+            hoursToNextExecution: 6,
+            executionTime: "2023-07-15T17:51:36.986827",
+            status: true
+         });
+         expect(content).toStrictEqual("Automation updated successfully");
       });
    });
 

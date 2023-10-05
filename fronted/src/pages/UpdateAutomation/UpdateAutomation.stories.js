@@ -1,20 +1,28 @@
 import { withRouter } from "storybook-addon-react-router-v6";
-import { Automation } from ".";
+import { UpdateAutomation } from ".";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
-import { getTraduction } from "../../utils/getTraduction";
-import { Traduction } from "../../constants/Traduction";
 import { expect } from "@storybook/jest";
 import { rest } from "msw";
+import { getTraduction } from "../../utils/getTraduction";
+import { Traduction } from "../../constants/Traduction";
 
 export default {
-   title: "Pages/Automation",
-   component: Automation,
-   tags: ["autodocs"],
+   title: "Pages/UpdateAutomation",
+   component: UpdateAutomation,
    decorators: [withRouter],
+   tags: ["autodocs"],
    parameters: {
       layout: "fullscreen",
-      viewport: {
-         defaultViewport: "iphone5"
+   },
+   args: {
+      automation: {
+         idAutomation: 5425,
+         name: "New automation",
+         amount: 2000.00,
+         idTransferAccount: 419670285,
+         hoursToNextExecution: 6,
+         executionTime: "2023-07-15T17:51:36.986827",
+         status: true
       }
    }
 };
@@ -24,25 +32,29 @@ export const Default = {};
 export const Load = {
    play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);
-      const t = getTraduction(Traduction.AUTOMATION_PAGE);
+      const t = getTraduction(Traduction.UPDATE_AUTOMATION_PAGE);
       const tModal = getTraduction(Traduction.MODAL);
       
       const nameInput = canvas.getByLabelText(t.labels[0]);
       const amountInput = canvas.getByLabelText(t.labels[1]);
       const transferInput = canvas.getByLabelText(t.labels[2]);
       const timeInput = canvas.getByLabelText(t.labels[3]);
+      const statusSwitch = canvas.getByLabelText(t.labels[4]);
 
       const cancelButton = canvas.getByRole("button", { name: t.cancel });
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
-      await step("Enter and submit necessary data", async () => {
-         await userEvent.type(nameInput, "Mal");
+      await step("Modify and submit necessary data", async () => {
+         await userEvent.clear(nameInput);
+         await userEvent.type(nameInput, "Load");
+         await userEvent.clear(amountInput);
          await userEvent.type(amountInput, "2321313312.32");
-         await userEvent.type(transferInput, "4132423");
    
          await userEvent.click(timeInput);
          await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
          await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
+
+         await userEvent.click(statusSwitch);
          
          await userEvent.click(canvas.getByRole("button", { name: t.accept }));
       });
@@ -53,6 +65,7 @@ export const Load = {
             await expect(amountInput).toBeDisabled();
             await expect(transferInput).toBeDisabled();
             await expect(timeInput).toBeDisabled();
+            await expect(statusSwitch).toBeDisabled();
             await expect(acceptButton).toBeDisabled();
             await expect(cancelButton).toBeDisabled();
    
@@ -62,7 +75,7 @@ export const Load = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/automations/save", (req, res, ctx) => {
+         rest.post("http://localhost:8090/automations/update", (req, res, ctx) => {
             return res(ctx.delay("infinite"));
          }),
       ],
@@ -72,34 +85,43 @@ export const Load = {
 export const Error = {
    play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);
-      const t = getTraduction(Traduction.AUTOMATION_PAGE);
+      const t = getTraduction(Traduction.UPDATE_AUTOMATION_PAGE);
       const tModal = getTraduction(Traduction.MODAL);
       
       const nameInput = canvas.getByLabelText(t.labels[0]);
       const amountInput = canvas.getByLabelText(t.labels[1]);
       const transferInput = canvas.getByLabelText(t.labels[2]);
       const timeInput = canvas.getByLabelText(t.labels[3]);
+      const statusSwitch = canvas.getByLabelText(t.labels[4]);
 
-      await step("Enter and submit necessary data", async () => {
+      const cancelButton = canvas.getByRole("button", { name: t.cancel });
+      const acceptButton = canvas.getByRole("button", { name: t.accept });
+
+      await step("Modify and submit necessary data", async () => {
+         await userEvent.clear(nameInput);
          await userEvent.type(nameInput, "Mal");
+         await userEvent.clear(amountInput);
          await userEvent.type(amountInput, "2321313312.32");
-         await userEvent.type(transferInput, "4132423");
    
          await userEvent.click(timeInput);
          await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
          await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
+
+         await userEvent.click(statusSwitch);
          
          await userEvent.click(canvas.getByRole("button", { name: t.accept }));
       });
 
-      
       await step("Initialize load state", async () => {
          await waitFor(async () => {
             await expect(nameInput).toBeDisabled();
             await expect(amountInput).toBeDisabled();
             await expect(transferInput).toBeDisabled();
             await expect(timeInput).toBeDisabled();
-
+            await expect(statusSwitch).toBeDisabled();
+            await expect(acceptButton).toBeDisabled();
+            await expect(cancelButton).toBeDisabled();
+   
             await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
          });
       });
@@ -114,11 +136,10 @@ export const Error = {
             });
          }, 900);
       });
-
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/automations/save", (req, res, ctx) => {
+         rest.put("http://localhost:8090/automations/update", (req, res, ctx) => {
             return res(ctx.status(400), ctx.json({
                name: "Incorrect name",
                amount: "Not enough balance",
@@ -133,25 +154,29 @@ export const Error = {
 export const Successful = {
    play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);
-      const t = getTraduction(Traduction.AUTOMATION_PAGE);
+      const t = getTraduction(Traduction.UPDATE_AUTOMATION_PAGE);
       const tModal = getTraduction(Traduction.MODAL);
       
       const nameInput = canvas.getByLabelText(t.labels[0]);
       const amountInput = canvas.getByLabelText(t.labels[1]);
       const transferInput = canvas.getByLabelText(t.labels[2]);
       const timeInput = canvas.getByLabelText(t.labels[3]);
+      const statusSwitch = canvas.getByLabelText(t.labels[4]);
 
       const cancelButton = canvas.getByRole("button", { name: t.cancel });
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
-      await step("Enter and submit necessary data", async () => {
-         await userEvent.type(nameInput, "Mal");
+      await step("Modify and submit necessary data", async () => {
+         await userEvent.clear(nameInput);
+         await userEvent.type(nameInput, "Success");
+         await userEvent.clear(amountInput);
          await userEvent.type(amountInput, "2321313312.32");
-         await userEvent.type(transferInput, "4132423");
    
          await userEvent.click(timeInput);
          await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
          await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
+
+         await userEvent.click(statusSwitch);
          
          await userEvent.click(canvas.getByRole("button", { name: t.accept }));
       });
@@ -162,6 +187,7 @@ export const Successful = {
             await expect(amountInput).toBeDisabled();
             await expect(transferInput).toBeDisabled();
             await expect(timeInput).toBeDisabled();
+            await expect(statusSwitch).toBeDisabled();
             await expect(acceptButton).toBeDisabled();
             await expect(cancelButton).toBeDisabled();
    
@@ -169,16 +195,16 @@ export const Successful = {
          });
       });
 
-      await step("See successful response", async () => {
+      await step("See successful response", () => {
          setTimeout(async () => {
-            await expect(await canvas.findByText("Automation created successfully")).toBeInTheDocument();
-         }, 1500);
+            await expect(await canvas.findByText("Automation updated successfully")).toBeInTheDocument();
+         }, 1000);
       });
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/automations/save", (req, res, ctx) => {
-            return res(ctx.status(200), ctx.delay(1500), ctx.text("Automation created successfully"));
+         rest.put("http://localhost:8090/automations/update", (req, res, ctx) => {
+            return res(ctx.status(200), ctx.delay(1000), ctx.text("Automation updated successfully"));
          }),
       ],
    },

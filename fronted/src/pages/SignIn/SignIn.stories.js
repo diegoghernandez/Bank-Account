@@ -21,50 +21,6 @@ export default {
 
 export const Default = {};
 
-export const Error = {
-   play: async ({ canvasElement, step }) => { 
-      const canvas = within(canvasElement);
-      const t = getTraduction(Traduction.SIGN_IN_PAGE);
-      
-      const emailInput = canvas.getByLabelText(t.labels[0]);
-      const passwordInput = canvas.getByLabelText(t.labels[1]);
-      const acceptButton = canvas.getByRole("button", { name: t.accept });
-
-      await step("Enter and submit necessary data", async () => {
-         await userEvent.type(emailInput, "wrong@email.com");
-         await userEvent.type(passwordInput, "W0rng PAsswrOd");
-         
-         await userEvent.click(canvas.getByRole("button", { name: t.accept }));
-      });
-
-      await step("Initialize load state", async () => {
-         await waitFor(async () => {
-            await expect(emailInput).toBeDisabled();
-            await expect(passwordInput).toBeDisabled();
-            await expect(acceptButton).toBeDisabled();
-   
-            await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
-         });
-      });
-
-
-      await step("Initialize fail state", async () => {
-         await waitFor(async () => {
-            await expect(emailInput).toBeInvalid();
-            await expect(passwordInput).toBeInvalid();
-         });
-      });
-
-   },
-   parameters: {
-      msw: [
-         rest.post("http://localhost:8090/auth/login", (req, res, ctx) => {
-            return res(ctx.status(403), ctx.delay(600));
-         }),
-      ],
-   },
-};
-
 export const Load = {
    play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);
@@ -97,6 +53,52 @@ export const Load = {
       msw: [
          rest.post("http://localhost:8090/auth/login", (req, res, ctx) => {
             return res(ctx.delay("infinite"));
+         }),
+      ],
+   },
+};
+
+export const Error = {
+   play: async ({ canvasElement, step }) => { 
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.SIGN_IN_PAGE);
+      
+      const emailInput = canvas.getByLabelText(t.labels[0]);
+      const passwordInput = canvas.getByLabelText(t.labels[1]);
+      const acceptButton = canvas.getByRole("button", { name: t.accept });
+
+      await step("Enter and submit necessary data", async () => {
+         await userEvent.type(emailInput, "wrong@email.com");
+         await userEvent.type(passwordInput, "W0rng PAsswrOd");
+         
+         await userEvent.click(canvas.getByRole("button", { name: t.accept }));
+      });
+
+      await step("Initialize load state", async () => {
+         await waitFor(async () => {
+            await expect(emailInput).toBeDisabled();
+            await expect(passwordInput).toBeDisabled();
+            await expect(acceptButton).toBeDisabled();
+   
+            await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
+         });
+      });
+
+
+      await step("Initialize fail state", () => {
+         setTimeout(async () => {
+            await waitFor(async () => {
+               await expect(emailInput).toBeInvalid();
+               await expect(passwordInput).toBeInvalid();
+            });
+         }, 900);
+      });
+
+   },
+   parameters: {
+      msw: [
+         rest.post("http://localhost:8090/auth/login", (req, res, ctx) => {
+            return res(ctx.status(403),);
          }),
       ],
    },

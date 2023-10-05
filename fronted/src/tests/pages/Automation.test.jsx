@@ -52,7 +52,7 @@ describe("Automation page tests", () => {
          });
 
          await waitFor(() => {
-            expect(transferInput).toHaveAccessibleDescription("Account not found 124124");
+            expect(transferInput).toHaveAccessibleDescription("Account not found");
          });
       });
 
