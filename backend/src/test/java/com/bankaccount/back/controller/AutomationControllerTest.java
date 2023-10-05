@@ -194,22 +194,37 @@ public class AutomationControllerTest {
    }
 
    @Test
-   @DisplayName("Should update one automationEntity with a specific id and status using the service if authorized")
-   void updateStatusById() throws Exception {
+   @DisplayName("Should update one automationEntity with another automationEntity with the wanted changes using the service if authorized")
+   void updateAutomation() throws Exception {
+      AutomationEntity automationEntity = AutomationEntity.builder()
+              .idAutomation(3123L)
+              .idAccount(54)
+              .name("For testing")
+              .amount(new BigDecimal("4324.43"))
+              .idTransferAccount(321)
+              .hoursToNextExecution(213)
+              .executionTime(LocalDateTime.of(2023, Month.DECEMBER, 11, 13, 12, 0))
+              .status(true)
+              .build();
+
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
       assertAll(
-              () -> mockMvc.perform(put("/automations/status")
+              () -> mockMvc.perform(MockMvcRequestBuilders.put("/automations/update")
+                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .param("id", "32")
-                              .param("status", "true")
+                              .content(objectMapper.writeValueAsString(automationEntity))
                               .with(user("user").roles(USER))
                               .with(csrf()))
-                      .andExpect(status().isOk()),
-              () -> Mockito.verify(automationService, Mockito.times(1)).updateStatusById(true, 32L),
+                      .andExpect(status().isOk())
+                      .andExpect(content().string("Automation updated successfully")),
 
-              () -> mockMvc.perform(get("/automations/status")
-                              .param("id", "3245325")
-                              .param("status", "true")
-                              .contentType(MediaType.APPLICATION_JSON))
+              () -> mockMvc.perform(MockMvcRequestBuilders.put("/automations/update")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsString(automationEntity))
+                              .with(csrf()))
                       .andExpect(status().isUnauthorized())
       );
    }

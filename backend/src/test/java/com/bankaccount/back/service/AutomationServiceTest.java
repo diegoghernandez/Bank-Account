@@ -115,25 +115,37 @@ public class AutomationServiceTest {
    }
 
    @Test
-   @DisplayName("Should update the status of an automationEntity by id using the repository")
-   void updateStatusById() throws NotFoundException {
-      Mockito.when(automationRepository.getAutomationById(76L))
-              .thenReturn(Optional.of(AutomationEntity.builder().build()));
-      Mockito.doNothing().when(automationRepository).updateStatusById(Mockito.isA(Boolean.class), Mockito.isA(Long.class));
+   @DisplayName("Should update an automation using the repository")
+   public void updateAutomation() throws NotFoundException {
+      AutomationEntity automationEntity = AutomationEntity.builder()
+              .idAutomation(3123L)
+              .idAccount(54)
+              .name("For testing")
+              .amount(new BigDecimal("4324.43"))
+              .idTransferAccount(321)
+              .hoursToNextExecution(213)
+              .executionTime(LocalDateTime.of(2023, Month.DECEMBER, 11, 13, 12, 0))
+              .status(true)
+              .build();
 
-      automationService.updateStatusById(true, 76L);
+      Mockito.when(automationRepository.existsById(3123L)).thenReturn(true);
+      Mockito.when(accountRepository.idExist(54)).thenReturn(true);
+      Mockito.when(accountRepository.idExist(321)).thenReturn(true);
 
-      Exception exception = assertThrows(NotFoundException.class, () ->
-              automationService.updateStatusById(false, 23L));
+      automationService.updateAutomation(automationEntity, Locale.getDefault());
 
-      String expectedMessage = "Automation not found";
-      String actualMessage = exception.getMessage();
+      Exception exceptionAutomation = assertThrows(NotFoundException.class, () ->
+              automationService.updateAutomation(
+                      AutomationEntity.builder().idAutomation(4324234L).build(), Locale.getDefault()));
+
+      Exception exceptionAccount = assertThrows(NotFoundException.class, () ->
+              automationService.updateAutomation(
+                      AutomationEntity.builder().idAutomation(3123L).idAccount(54353).build(), Locale.getDefault()));
 
       assertAll(
-              () -> Mockito.verify(automationRepository, Mockito.times(1)).updateStatusById(true, 76L),
-              () -> Mockito.verify(automationRepository, Mockito.times(1))
-                      .updateExecutionTimeById(Mockito.any(LocalDateTime.class), Mockito.eq(76L)),
-              () -> assertTrue(actualMessage.contentEquals(expectedMessage))
+              () -> Mockito.verify(automationRepository, Mockito.times(1)).saveAutomation(Mockito.any(AutomationEntity.class)),
+              () -> assertEquals(exceptionAutomation.getMessage(), "Automation not found"),
+              () -> assertEquals(exceptionAccount.getMessage(), "Account not found")
       );
    }
 

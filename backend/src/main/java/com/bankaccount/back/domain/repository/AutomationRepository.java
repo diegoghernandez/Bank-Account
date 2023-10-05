@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface AutomationRepository {
 
+   boolean existsById(long id);
+
    Optional<AutomationEntity> getAutomationById(long id);
 
    List<AutomationEntity> getByIdAccount(int idAccount);

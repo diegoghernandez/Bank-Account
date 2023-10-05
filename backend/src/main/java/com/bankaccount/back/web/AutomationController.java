@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,11 +40,15 @@ public class AutomationController {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
    }
 
-   @PutMapping("/status")
-   public ResponseEntity<Void> updateStatusById(@RequestParam boolean status, @RequestParam long id) throws NotFoundException {
-      automationService.updateStatusById(status, id);
+   @PutMapping("/update")
+   public ResponseEntity<String> updateAutomation(
+           @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+           @RequestBody AutomationEntity automationEntity) throws NotFoundException {
 
-      return new ResponseEntity<>(HttpStatus.OK);
+      automationService.updateAutomation(automationEntity, locale);
+
+      return new ResponseEntity<>(Messages.getMessageForLocale("controller.automation.update", locale),
+              HttpStatus.OK);
    }
 
    @PostMapping(value = "/save", consumes = {"application/json"})

@@ -17,6 +17,11 @@ public class AutomationRepositoryImpl implements AutomationRepository {
    private AutomationCrudRepository automationCrudRepository;
 
    @Override
+   public boolean existsById(long id) {
+      return automationCrudRepository.existsById(id);
+   }
+
+   @Override
    public Optional<AutomationEntity> getAutomationById(long id) {
       return automationCrudRepository.findById(id);
    }

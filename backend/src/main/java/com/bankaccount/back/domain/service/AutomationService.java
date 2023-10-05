@@ -6,6 +6,7 @@ import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.helpers.AutomationHelper;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.AutomationEntity;
+import com.bankaccount.back.persistence.entity.TransactionEntity;
 import com.bankaccount.back.web.dto.AutomationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +38,24 @@ public class AutomationService {
       return automationRepository.getByIdAccount(idAccount);
    }
 
-   public void updateStatusById(boolean status, long id) throws NotFoundException {
-      Optional<AutomationEntity> isAccount = automationRepository.getAutomationById(id);
-      if (isAccount.isEmpty()) throw new NotFoundException("service.automation.error.automation");
+   public void updateAutomation(AutomationEntity automationEntity, Locale locale) throws NotFoundException {
+      if (!automationRepository.existsById(automationEntity.getIdAutomation()))
+         throw new NotFoundException("service.automation.error.automation", locale);
+      else if (!accountRepository.idExist(automationEntity.getIdAccount()) || !accountRepository.idExist(automationEntity.getIdTransferAccount()))
+         throw new NotFoundException("account.error", locale);
 
-      automationRepository.updateStatusById(status, id);
+      AutomationEntity automationBuilder = AutomationEntity.builder()
+              .idAutomation(automationEntity.getIdAutomation())
+              .idAccount(automationEntity.getIdAccount())
+              .name(automationEntity.getName())
+              .amount(automationEntity.getAmount())
+              .idTransferAccount(automationEntity.getIdTransferAccount())
+              .hoursToNextExecution(automationEntity.getHoursToNextExecution())
+              .executionTime(automationEntity.getExecutionTime())
+              .status(automationEntity.getStatus())
+              .build();
 
-      if (status) automationRepository.updateExecutionTimeById(LocalDateTime.now(), id);
+      automationRepository.saveAutomation(automationBuilder);
    }
 
    public void saveAutomation(AutomationDto automationDto, Locale locale) throws NotFoundException {

@@ -1,6 +1,7 @@
 package com.bankaccount.back.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class AutomationEntity {
    @Column(name = "id_automation")
    private Long idAutomation;
 
-   @JsonIgnore
+   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
    @Column(name = "id_account", nullable = false)
    private Integer idAccount;
 
