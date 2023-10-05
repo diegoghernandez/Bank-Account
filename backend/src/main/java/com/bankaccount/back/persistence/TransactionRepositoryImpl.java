@@ -38,11 +38,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
    }
 
    @Override
-   public Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Optional<Month> month, String name, int page) {
+   public Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Month month, String name, int page) {
       LocalDateTime startDate;
       LocalDateTime endDate;
-      if (month.isPresent()) {
-         startDate = LocalDateTime.of(year, month.get(), 1, 0, 0, 0);
+      if (month != null) {
+         startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
          endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
       } else {
          startDate = LocalDateTime.of(year, Month.JANUARY, 1, 0, 0, 0);

@@ -124,11 +124,11 @@ public class TransactionServiceTest {
    @Test
    @DisplayName("Should return all transactionEntity with the specific idAccount and year using the repository")
    void getByIdAccountAndDateAndName() {
-      Mockito.when(transactionRepository.getByIdAccountAndDateAndName(1, 2021, Optional.of(Month.JANUARY), "ma", 0))
+      Mockito.when(transactionRepository.getByIdAccountAndDateAndName(1, 2021, Month.JANUARY, "ma", 0))
               .thenReturn(Optional.of(new PageImpl<>(
                       Collections.singletonList(transactionEntityList.get(1)))));
 
-      Page<TransactionEntity> transactionList = transactionService.getByIdAccountAndDateAndName(1, 2021, Optional.of(Month.JANUARY), "ma", 0).get();
+      Page<TransactionEntity> transactionList = transactionService.getByIdAccountAndDateAndName(1, 2021, Month.JANUARY, "ma", 0).get();
 
       assertAll(
               () -> assertThat(transactionList.getSize()).isEqualTo(1),

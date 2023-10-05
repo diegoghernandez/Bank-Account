@@ -242,11 +242,11 @@ public class TransactionControllerTest {
    @Test
    @DisplayName("Should return all transactionEntities in json format with a specific idAccount and with the timestamp condition using the service or return a not found if authorized")
    void getByIdAccountAndDateAndName() {
-      Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Optional.of(Month.JANUARY), "ma", 0))
+      Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Month.JANUARY, "ma", 0))
               .thenReturn(Optional.of(new PageImpl<>(
                       Collections.singletonList(transactionEntityList.get(1)))));
 
-      Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Optional.of(Month.JANUARY), "ma", 1))
+      Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Month.JANUARY, "ma", 1))
               .thenReturn(Optional.of(new PageImpl<>(List.of())));
 
       assertAll(

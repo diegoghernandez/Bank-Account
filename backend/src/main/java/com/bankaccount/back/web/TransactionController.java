@@ -59,7 +59,7 @@ public class TransactionController {
    @GetMapping("/date")
    public ResponseEntity<Page<TransactionEntity>> getByIdAccountAndDateAndName(@RequestParam(name = "id") int idAccount,
                                                                                @RequestParam int year,
-                                                                               @RequestParam Optional<Month> month,
+                                                                               @RequestParam(required = false) Month month,
                                                                                @RequestParam String name,
                                                                                @RequestParam int page) {
       Page<TransactionEntity> transactionDomainList = transactionService.getByIdAccountAndDateAndName(idAccount, year, month, name, page).get();
