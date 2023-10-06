@@ -148,7 +148,7 @@ export const TextField = ({
             />
 
             {(notMenu && notModal) && <CancelIcon 
-               fillClass={`mr-3 ${(isClicked || value) ? `${svgFill} cursor-pointer` : "fill-none"}`} 
+               fillClass={`mr-3 ${(isClicked || value) ? `${svgFill}` : "fill-none"} ${(!isDisable) ? "cursor-pointer" : "cursor-default"}`} 
                onClick={() => {
                   if (!isDisable) {
                      onClear();

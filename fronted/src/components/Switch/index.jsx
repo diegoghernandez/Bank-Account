@@ -26,10 +26,6 @@ export const Switch = ({
 }) => {
    const [isChecked, setIsChecked] = useState(checked);
 
-   const handleClick = () => {
-      setIsChecked(!isChecked);
-   };
-
    const textColor = getTextColor(isDisable);
    const trackColor = getStyles({ isDisable, checked: isChecked })[0];
    const thumbColor = getStyles({ isDisable, checked: isChecked })[1];
@@ -41,10 +37,10 @@ export const Switch = ({
             <input 
                id="switch"
                type="checkbox"
+               defaultChecked={checked}
                disabled={isDisable}
-               checked={isChecked}
                className="absolute w-[3.3rem] h-8 appearance-none"
-               onClick={handleClick}
+               onClick={() => setIsChecked(!isChecked)}
             >
             </input>
             <span className={`${trackColor} w-[3.25rem] h-8 rounded-full inline-flex items-center`}>
