@@ -33,7 +33,7 @@ describe("Automations tests", () => {
             idAccount: 325423,
             name: "New automation",
             amount: 2000.00,
-            idTransferAccount: 419670285,
+            idTransferAccount: 124124,
             hoursToNextExecution: 6,
             executionTime: "2023-07-15T17:51:36.986827",
             status: true
@@ -44,7 +44,7 @@ describe("Automations tests", () => {
             idAccount: 325423,
             name: "New automation",
             amount: 2000.00,
-            idTransferAccount: 419670285,
+            idTransferAccount: 124124,
             hoursToNextExecution: 6,
             executionTime: "2023-07-15T17:51:36.986827",
             status: true
@@ -57,7 +57,7 @@ describe("Automations tests", () => {
             idAccount: 325423,
             name: "New automation",
             amount: 2000.00,
-            idTransferAccount: 419670285,
+            idTransferAccount: 534532,
             hoursToNextExecution: 6,
             executionTime: "2023-07-15T17:51:36.986827",
             status: true

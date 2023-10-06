@@ -7,16 +7,18 @@ import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Traduction } from "../../constants/Traduction";
 import { SEO } from "../../utils/SEO";
 import { getTraduction } from "../../utils/getTraduction";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Outline } from "../../components/Buttons/Outline";
 import { Switch } from "../../components/Switch";
 import { updateAutomation } from "../_services/automation";
 
-export const UpdateAutomation = ({ automation }) => {
+export const UpdateAutomation = () => {
    const [error, setError] = useState({});
    const [isLoading, setIsLoading] = useState(false);
    const [successMessage, setSuccessMessage] = useState("");
    const navigate = useNavigate();
+   const { state } = useLocation();
+   const { automation } = state;
    const t = getTraduction(Traduction.UPDATE_AUTOMATION_PAGE);
 
    const handleSubmit = (event) => {
@@ -37,12 +39,13 @@ export const UpdateAutomation = ({ automation }) => {
             "amount": Number(elements[1].value),
             "idTransferAccount": Number(elements[2].value),
             "hoursToNextExecution": hours,
+            "executionTime": automation.executionTime,
             "status": elements[9].checked
          }).then((data) => {
             setSuccessMessage(data);
    
             setTimeout(() => {
-               navigate("/automations");
+               navigate(-1);
             }, 1000);
          }).catch((e) => {
             const message = (JSON.parse(e.message));
@@ -112,7 +115,7 @@ export const UpdateAutomation = ({ automation }) => {
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
 
-            <Link className="w-full" to="/automations">
+            <Link className="w-full" to={-1}>
                <Outline label={t.cancel} isDisable={isLoading} />
             </Link>
 

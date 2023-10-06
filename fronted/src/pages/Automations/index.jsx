@@ -5,7 +5,7 @@ import { Navbar } from "../../components/Navbar";
 import { TextField } from "../../components/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAutomations } from "../_services/automation";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
@@ -37,6 +37,7 @@ export const Automations = () => {
    const [notFound, setNotFound] = useState(false); 
    const [loading, setLoading] = useState(true);
    const [text, setText] = useState("");
+   const navigate = useNavigate();
    const t = getTraduction(Traduction.AUTOMATIONS_PAGE);
 
    const typeReference = useRef();
@@ -61,6 +62,9 @@ export const Automations = () => {
       setStatus(typeReference.current?.value);
    };
 
+   const handleAutomation = (automation) => {
+      navigate("/update-automation", { state: { automation } });
+   };
 
    return (
       <section className="md:flex md:flex-row-reverse">
@@ -104,6 +108,7 @@ export const Automations = () => {
                         money={automation.amount}
                         period={getTimePeriod(t.period, automation.hoursToNextExecution)}
                         isDisable={!automation.status}
+                        handleFunction={() => handleAutomation(automation)}
                      />
                   );
                })}

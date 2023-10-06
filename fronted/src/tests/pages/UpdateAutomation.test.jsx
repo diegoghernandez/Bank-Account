@@ -58,11 +58,12 @@ describe("Update Automation page tests", () => {
             expect(spyAutomation).toHaveBeenCalledTimes(1);
             expect(spyAutomation).toHaveBeenLastCalledWith({
                "idAutomation": 4234,
-               "amount": 124124,
-               "hoursToNextExecution": 6,
                "idAccount": 238589851,
-               "idTransferAccount": 124124,
                "name": "Name",
+               "amount": 124124,
+               "idTransferAccount": 124124,
+               "hoursToNextExecution": 6,
+               "executionTime": "2023-07-15T17:51:36.986827",
                "status": false,
             });
          });
@@ -87,7 +88,7 @@ describe("Update Automation page tests", () => {
          await user.type(amountInput, "124124");
 
          await user.clear(transferInput);
-         await user.type(transferInput, "124124");
+         await user.type(transferInput, "534532");
 
          await user.click(statusSwitch);
 
@@ -96,12 +97,13 @@ describe("Update Automation page tests", () => {
          await waitFor(() => {
             expect(spyAutomation).toHaveBeenCalledTimes(1);
             expect(spyAutomation).toHaveBeenLastCalledWith({
-               "idAutomation": 75648,
-               "amount": 124124,
-               "hoursToNextExecution": 6,
+               "idAutomation": 4234,
                "idAccount": 238589851,
-               "idTransferAccount": 124124,
                "name": "Name",
+               "amount": 124124,
+               "idTransferAccount": 534532,
+               "hoursToNextExecution": 6,
+               "executionTime": "2023-07-15T17:51:36.986827",
                "status": false,
             });
          });
@@ -111,16 +113,8 @@ describe("Update Automation page tests", () => {
    });
 });
 
-const getElements = (idAutomation = 4234) => {
-   const page = customRender(<UpdateAutomation automation={{
-      idAutomation: idAutomation,
-      name: "New automation",
-      amount: 2000.00,
-      idTransferAccount: 419670285,
-      hoursToNextExecution: 6,
-      executionTime: "2023-07-15T17:51:36.986827",
-      status: true
-   }} />);
+const getElements = () => {
+   const page = customRender(<UpdateAutomation />);
    const user = userEvent.setup();
    const spyAutomation = vi.spyOn(automation, "updateAutomation");
    const t = getTraduction(Traduction.UPDATE_AUTOMATION_PAGE);

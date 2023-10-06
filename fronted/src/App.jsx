@@ -8,6 +8,7 @@ import { Transaction } from "./pages/Transaction";
 import { useAuth } from "./hooks/useAuth";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
+import { UpdateAutomation } from "./pages/UpdateAutomation";
 
 const ProtectedRoute = ({ children }) => {
    const { isAuthenticated } = useAuth();
@@ -29,6 +30,7 @@ function App() {
             <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>}/>
             <Route path="/automations" element={<ProtectedRoute><Automations /></ProtectedRoute>}/>
             <Route path="/automation" element={<ProtectedRoute><Automation /></ProtectedRoute>}/>
+            <Route path="/update-automation" element={<ProtectedRoute><UpdateAutomation /></ProtectedRoute>}/>
             <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>}/>
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />

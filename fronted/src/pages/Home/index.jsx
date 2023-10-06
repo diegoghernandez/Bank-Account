@@ -7,6 +7,7 @@ import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
+import { useNavigate } from "react-router-dom";
 
 const getTimePeriod = (textTime, executionTime) => {
    const startTime = new Date().getTime();
@@ -36,6 +37,7 @@ export const Home = () => {
    const [automations, setAutomations] = useState([]);
    const [notFound, setNotFound] = useState(false); 
    const [loading, setLoading] = useState(true);
+   const navigate = useNavigate();
    const t = getTraduction(Traduction.HOME_PAGE);
 
    const account = JSON.parse(localStorage.getItem("account"));
@@ -59,6 +61,9 @@ export const Home = () => {
          });
    }, []);
 
+   const handleAutomation = (automation) => {
+      navigate("/update-automation", { state: { automation } });
+   };
 
    return (
       <section className="md:flex md:flex-row-reverse">
@@ -82,6 +87,7 @@ export const Home = () => {
                            money={automation.amount}
                            period={getTimePeriod(t.period, automation.executionTime)}
                            disable={automation.status}
+                           handleFunction={() => handleAutomation(automation)}
                         />
                      );
                   }

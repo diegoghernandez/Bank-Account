@@ -27,7 +27,8 @@ export const updateAutomation = async (automation) => {
       method: "PUT",
       headers: {
          "Content-Type": "application/json",
-         "Authorization": TOKEN
+         "Authorization": TOKEN,
+         "Accept-Language": LANGUAGE
       },
       body: JSON.stringify(automation)
    });

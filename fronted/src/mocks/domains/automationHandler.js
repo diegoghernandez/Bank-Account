@@ -15,9 +15,9 @@ export const automationHandler = [
    }),
 
    rest.put(`${API}/update`, async (req, res, ctx) => {
-      const { idAutomation } = await req.json();
+      const { idTransferAccount } = await req.json();
       
-      if (idAutomation == 4234) {
+      if (idTransferAccount == 124124) {
          return res(ctx.status(400), ctx.json({
             name: "Incorrect name",
             amount: "Not enough balance",

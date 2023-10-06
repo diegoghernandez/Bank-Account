@@ -11,7 +11,7 @@
       "modalParameters": ["weeks", "days", "hours"],
       "modalValue": ["Each", "hour(s)"],
       "cancel": "Cancel",
-      "accept": "Make automation"
+      "accept": "Update automation"
    },
    "es": {
       "seo": {
@@ -25,6 +25,6 @@
       "modalParameters": ["semanas", "días", "horas"],
       "modalValue": ["Cada", "hora(s)"],
       "cancel": "Cancelar",
-      "accept": "Crear automatización"
+      "accept": "Actualizar automatización"
    }
 }
