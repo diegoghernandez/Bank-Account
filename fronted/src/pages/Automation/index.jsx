@@ -100,7 +100,7 @@ export const Automation = () => {
                   <Filled label={t.accept} isDisable={isLoading} />
                </form>
 
-               <Link className="w-full" to="/automations">
+               <Link className="w-full group/outline outline-none" to="/automations">
                   <Outline label={t.cancel} isDisable={isLoading} />
                </Link>
 

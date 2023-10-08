@@ -13,6 +13,12 @@ export default {
    tags: ["autodocs"],
    parameters: {
       layout: "fullscreen",
+      backgrounds: {
+         default: "blue",
+         values: [
+            { name: "blue", value: "rgb(247 248 255)"}
+         ]
+      },
       reactRouter: reactRouterParameters({
          location: {
             state: {

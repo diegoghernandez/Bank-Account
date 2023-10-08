@@ -202,9 +202,9 @@ export const Transactions = () => {
    else if (texts.name) transactions = allTransactions.search;
 
    return (
-      <section className="md:flex md:flex-row-reverse md:h-screen md:overflow-hidden">
+      <section className="h-full md:h-screen md:flex md:flex-row-reverse md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full bg-white border border-outline-variant md:rounded-2xl md:mx-6 md:my-4 md:pb-4">
+         <div className="w-full min-h-[calc(100vh-5rem)] bg-white md:border border-outline-variant md:rounded-2xl md:mx-6 md:my-4 md:pb-2">
             <form className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3 md:pt-4">
                <TextField
                   label={t.labels[0]}
@@ -263,7 +263,7 @@ export const Transactions = () => {
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">
             <Navbar page={Page.TRANSACTIONS} >
-               <Link className="group/fab" to="/transaction">
+               <Link className="group/fab outline-none" to="/transaction">
                   <Fab label={(globalThis.matchMedia?.("(min-width: 768px)").matches) ? t.fab.large : t.fab.small} />
                </Link>
             </Navbar>

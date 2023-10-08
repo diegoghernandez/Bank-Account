@@ -67,11 +67,11 @@ export const Automations = () => {
    };
 
    return (
-      <section className="md:flex md:flex-row-reverse md:overflow-hidden md:h-screen">
+      <section className="h-full md:h-screen md:flex md:flex-row-reverse md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full flex flex-col gap-3 pt-3 px-4 pb-3 border border-outline-variant bg-white md:rounded-2xl md:mx-6 md:my-4 md:p-0">
+         <div className="w-full min-h-[calc(100vh-5rem)] flex flex-col gap-3 pt-3 px-4 pb-3 md:border border-outline-variant bg-white md:rounded-2xl md:mx-6 md:my-4 md:p-0">
             <form 
-               className="flex flex-col gap-3 md:pt-6 md:pl-6 md:pr-10"
+               className="flex flex-col gap-3 md:pt-6 md:pl-6 md:pr-8"
                onChange={handleChange}   
             >
                <TextField
@@ -89,7 +89,7 @@ export const Automations = () => {
                />
             </form>
 
-            <div className="flex flex-col w-full gap-2 md:pt-3 md:px-6 md:h-[calc(100%-8rem)] md:overflow-y-scroll">
+            <div className="flex flex-col w-full h-full gap-2 md:py-3 md:pl-6 md:pr-4 md:mb-2 md:h-[calc(100%-8rem)] md:overflow-y-scroll">
                {notFound && <p>{t.notFound}</p>}
                {automations?.map((automation) => {
                   const isTextName = automation.name.toLowerCase().includes(text.toLowerCase());
@@ -117,7 +117,7 @@ export const Automations = () => {
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">
             <Navbar page={Page.AUTOMATIONS} >
-               <Link className="group/fab" to="/automation">
+               <Link className="group/fab outline-none" to="/automation">
                   <Fab label={ (globalThis.matchMedia?.("(min-width: 768px)").matches) ? t.fab.large : t.fab.small } />
                </Link>
             </Navbar>

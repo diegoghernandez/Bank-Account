@@ -70,12 +70,12 @@ export const Navbar = ({
    children
 }) => {   
    return (
-      <nav className="fixed flex flex-col justify-center items-center left-0 bottom-0 w-full h-20 bg-surface
+      <nav className="fixed flex flex-col justify-center items-center left-0 bottom-0 w-full h-20 bg-surface-container md:bg-surface
          md:sticky md:h-screen md:w-20 md:justify-start md:gap-5 md:px-3 md:pt-11 md:border-r md:border-outline-variant">
          {children}
          <ul className="flex flex-row h-full w-full gap-2 justify-center items-start md:flex-col md:gap-3 md:h-fit">
             <li>
-               <Link className="group/nav" to="/">
+               <Link className="group/nav outline-none" to="/">
                   <Nav
                      active={page === Page.HOME}
                      page={Page.HOME}
@@ -83,7 +83,7 @@ export const Navbar = ({
                </Link>
             </li>
             <li>
-               <Link className="group/nav" to="/transactions">
+               <Link className="group/nav outline-none" to="/transactions">
                   <Nav
                      active={page === Page.TRANSACTIONS}
                      page={Page.TRANSACTIONS}
@@ -91,7 +91,7 @@ export const Navbar = ({
                </Link>
             </li>
             <li>
-               <Link className="group/nav" to="/automations">
+               <Link className="group/nav outline-none" to="/automations">
                   <Nav
                      active={page === Page.AUTOMATIONS}
                      page={Page.AUTOMATIONS}
@@ -99,7 +99,7 @@ export const Navbar = ({
                </Link>
             </li>
             <li>
-               <Link className="group/nav" to="/account">
+               <Link className="group/nav outline-none" to="/account">
                   <Nav
                      active={page === Page.ACCOUNT}
                      page={Page.ACCOUNT}

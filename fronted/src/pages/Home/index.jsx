@@ -66,9 +66,9 @@ export const Home = () => {
    };
 
    return (
-      <section className="md:flex md:flex-row-reverse justify-end md:overflow-hidden">
+      <section className="h-full md:h-screen md:flex md:flex-row-reverse md:justify-end md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="flex flex-col px-4 pt-4 will-change-scroll w-full bg-white border border-outline-variant md:rounded-2xl md:mx-6 md:my-4 md:p-0">
+         <div className="w-full min-h-[calc(100vh-5rem)] flex flex-col px-4 pt-4 will-change-scroll bg-white md:border border-outline-variant md:rounded-2xl md:mx-6 md:my-4 md:p-0">
             <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans md:px-6 md:pt-4">
                <p className="text-sm">{t.greeting} {account?.accountName}</p>
                <p className="text-base">{t.balance}:</p>
@@ -76,7 +76,7 @@ export const Home = () => {
             </div>
 
             <p className="text-base font-semibold font-sans mb-3 md:mb-0 md:px-6">{t.activeAutomation}:</p>
-            <div className="inline-flex flex-col w-full gap-2 md:pt-3 md:px-6 md:h-[calc(100%-8rem)] md:overflow-y-scroll">
+            <div className="inline-flex flex-col w-full gap-2 md:py-3 md:px-6 md:mb-2 md:h-[calc(100%-8rem)] md:overflow-y-scroll">
                {notFound && <p>{t.notFound}</p>}
                {automations?.map((automation) => {
                   if (automation.status) {
