@@ -8,8 +8,8 @@ describe("Navbar component test", () => {
       customRender(<Navbar />);
 
       expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/");
-      expect(screen.getByRole("link", { name: "Transactions" })).toHaveAttribute("href", "/transactions");
-      expect(screen.getByRole("link", { name: "Automations" })).toHaveAttribute("href", "/automations");
+      expect(screen.getByRole("link", { name: /^Transac[-\s]*tions$/ })).toHaveAttribute("href", "/transactions");
+      expect(screen.getByRole("link", { name: /^Automa[-\s]*tions$/ })).toHaveAttribute("href", "/automations");
       expect(screen.getByRole("link", { name: "Account" })).toHaveAttribute("href", "/account");
    });
 });

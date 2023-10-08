@@ -6,6 +6,9 @@ describe("FAB component tests", () => {
    it("Should render correctly", () => {
       render(<Fab label="TESTING" />);
 
-      expect(screen.getByText("TESTING")).toBeInTheDocument();
+      const fabs = screen.getAllByText("TESTING");
+
+      expect(fabs[0]).not.toHaveAttribute("hidden");
+      expect(fabs[1]).toHaveAttribute("hidden");
    });
 });

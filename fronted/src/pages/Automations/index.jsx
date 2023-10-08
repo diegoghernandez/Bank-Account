@@ -67,11 +67,11 @@ export const Automations = () => {
    };
 
    return (
-      <section className="md:flex md:flex-row-reverse">
+      <section className="md:flex md:flex-row-reverse md:overflow-hidden md:h-screen">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full flex flex-col gap-3 pt-3 px-4 md:p-0 mb-3 md:m-0">
+         <div className="w-full flex flex-col gap-3 pt-3 px-4 pb-3 border border-outline-variant bg-white md:rounded-2xl md:mx-6 md:my-4 md:p-0">
             <form 
-               className="flex flex-col gap-3 md:pt-3 md:px-6"
+               className="flex flex-col gap-3 md:pt-6 md:pl-6 md:pr-10"
                onChange={handleChange}   
             >
                <TextField
@@ -118,7 +118,7 @@ export const Automations = () => {
          <div className="w-full h-20 md:w-fit md:h-fit">
             <Navbar page={Page.AUTOMATIONS} >
                <Link className="group/fab" to="/automation">
-                  <Fab label={t.fab} />
+                  <Fab label={ (globalThis.matchMedia?.("(min-width: 768px)").matches) ? t.fab.large : t.fab.small } />
                </Link>
             </Navbar>
          </div>

@@ -40,7 +40,7 @@ const getActive = (isActive) => isActive
    ? ["bg-secondary-container", "group-hover/nav:bg-onSurface/8 group-focus/nav:bg-onSurface-variant/8", "text-onSurface", "fill-onSecondary-container"]
    : ["", "group-hover/nav:bg-onSurface/12 group-focus/nav:bg-onSurface-variant/12", "text-onSurface-variant", "fill-onSurface-variant"];
 
-const BASE_INDICATOR_CLASSES = "flex justify-center items-center w-16 h-8 rounded-2xl";
+const BASE_INDICATOR_CLASSES = "flex justify-center items-center w-16 h-8 rounded-2xl md:w-14";
 
 const Nav = ({
    active = false,
@@ -54,13 +54,13 @@ const Nav = ({
    const pageElements = getPage(page, svgColor);
 
    return (
-      <div className={"flex flex-col justify-center items-center cursor-pointer pt-3"}>
+      <div className={"flex flex-col justify-center items-center cursor-pointer pt-3 md:pt-0"}>
          <div className={`${BASE_INDICATOR_CLASSES} ${svgContainer} mb-1`}>
             <div className={`${BASE_INDICATOR_CLASSES} ${stateLayer}`}>
                {pageElements.svg}
             </div>
          </div>
-         <span className={`text-xs font-sans font-medium ${textColor}`}>{pageElements.label}</span>
+         <span className={`text-xs font-sans font-medium ${textColor} w-16  md:w-14 text-center`}>{pageElements.label}</span>
       </div>
    );
 };
@@ -70,9 +70,10 @@ export const Navbar = ({
    children
 }) => {   
    return (
-      <nav className="fixed flex flex-col justify-center items-center left-0 bottom-0 w-full h-20 bg-surface-container pt-3 pb-4 
-         md:sticky md:h-screen md:w-fit md:justify-start md:px-3">
-         <ul className="flex flex-row md:flex-col gap-2 md:gap-3 justify-center items-center">
+      <nav className="fixed flex flex-col justify-center items-center left-0 bottom-0 w-full h-20 bg-surface
+         md:sticky md:h-screen md:w-20 md:justify-start md:gap-5 md:px-3 md:pt-11 md:border-r md:border-outline-variant">
+         {children}
+         <ul className="flex flex-row h-full w-full gap-2 justify-center items-start md:flex-col md:gap-3 md:h-fit">
             <li>
                <Link className="group/nav" to="/">
                   <Nav
@@ -106,7 +107,6 @@ export const Navbar = ({
                </Link>
             </li>
          </ul>
-         {children}
       </nav>
    );
 }; 

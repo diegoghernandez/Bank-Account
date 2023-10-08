@@ -1,14 +1,14 @@
 {
    "en": {
       "home": "Home",
-      "transactions": "Transactions",
-      "automations": "Automations",
+      "transactions": "Transac-\ntions",
+      "automations": "Automa-\ntions",
       "account": "Account"
    },
    "es": {
       "home": "Inicio",
-      "transactions": "Transacciones",
-      "automations": "Automatizaciones",
+      "transactions": "Transac-\nciones",
+      "automations": "Automati-\nzaciones",
       "account": "Cuenta"
    }
 }

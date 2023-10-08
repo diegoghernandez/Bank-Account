@@ -1,4 +1,4 @@
-import { withRouter } from "storybook-addon-react-router-v6";
+import { reactRouterParameters, withRouter } from "storybook-addon-react-router-v6";
 import { UpdateAutomation } from ".";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
@@ -13,17 +13,24 @@ export default {
    tags: ["autodocs"],
    parameters: {
       layout: "fullscreen",
+      reactRouter: reactRouterParameters({
+         location: {
+            state: {
+               automation: {
+                  idAutomation: 5425,
+                  name: "New automation",
+                  amount: 2000.00,
+                  idTransferAccount: 419670285,
+                  hoursToNextExecution: 6,
+                  executionTime: "2023-07-15T17:51:36.986827",
+                  status: true
+               }
+            },
+         },
+      }),
    },
    args: {
-      automation: {
-         idAutomation: 5425,
-         name: "New automation",
-         amount: 2000.00,
-         idTransferAccount: 419670285,
-         hoursToNextExecution: 6,
-         executionTime: "2023-07-15T17:51:36.986827",
-         status: true
-      }
+      
    }
 };
 
@@ -204,7 +211,7 @@ export const Successful = {
    parameters: {
       msw: [
          rest.put("http://localhost:8090/automations/update", (req, res, ctx) => {
-            return res(ctx.status(200), ctx.delay(1000), ctx.text("Automation updated successfully"));
+            return res(ctx.status(200), ctx.text("Automation updated successfully"));
          }),
       ],
    },

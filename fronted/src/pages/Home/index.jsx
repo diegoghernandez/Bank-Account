@@ -66,9 +66,9 @@ export const Home = () => {
    };
 
    return (
-      <section className="md:flex md:flex-row-reverse">
+      <section className="md:flex md:flex-row-reverse justify-end md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="flex flex-col px-4 pt-4 md:p-0 will-change-scroll w-full">
+         <div className="flex flex-col px-4 pt-4 will-change-scroll w-full bg-white border border-outline-variant md:rounded-2xl md:mx-6 md:my-4 md:p-0">
             <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans md:px-6 md:pt-4">
                <p className="text-sm">{t.greeting} {account?.accountName}</p>
                <p className="text-base">{t.balance}:</p>

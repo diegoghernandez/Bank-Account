@@ -14,6 +14,12 @@ export default {
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",
+      backgrounds: {
+         default: "blue",
+         values: [
+            { name: "blue", value: "rgb(247 248 255)"}
+         ]
+      },
       viewport: {
          defaultViewport: "iphone5"
       }

@@ -58,9 +58,9 @@ export const Account = () => {
    };
 
    return (
-      <section className="flex flex-row-reverse">
+      <section className="flex flex-row-reverse w-full justify-end bg-surface">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full">
+         <div className="w-full bg-white border border-outline-variant md:rounded-2xl  md:mx-6 md:my-4">
             <h1 className="ml-4 md:ml-6 mt-8 text-4xl font-sans font-bold">{accountName}</h1>
             <p className="ml-4 md:ml-6 mt-3 text-base font-sans font-normal">{t.accountNumber}: {idAccount}</p>
 

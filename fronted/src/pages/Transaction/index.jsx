@@ -71,51 +71,54 @@ export const Transaction = () => {
    };
 
    return (
-      <section className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-screen px-4 mx-auto">
-         <SEO title={t.seo.title} description={t.seo.description} />
-         {!successMessage && <>
-            <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
-            <form 
-               className="flex flex-col items-center gap-3 w-full"
-               onSubmit={handleSubmit}  
-            >
-               <TextField
-                  valueRef={typeReference}
-                  label={t.labels[0]}
-                  type={TextFieldTypes.MENU}
-                  inputType={InputTypes.TEXT}
-                  supportiveText={error.type}
-                  isError={error.type}
-                  isDisable={isLoading}
-                  menuParameters={Object.values(TransactionType).map((type) => type.description)}
-                  functionToUpdate={handleChange}
-               />
-               <TextField
-                  label={t.labels[1]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.NUMBER}
-                  supportiveText={error.amount}
-                  isError={error.amount}
-                  isDisable={isLoading}
-               />
-               <TextField
-                  label={t.labels[2]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.NUMBER}
-                  supportiveText={error.desc}
-                  isError={error.desc}
-                  isDisable={(isLoading) ? isLoading : !isActive}
-               />
-               <Filled label={t.accept} isDisable={isLoading} />
-            </form>
+      <section className="flex justify-center items-center h-screen">
+         <div className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-full px-4 mx-auto border border-outline-variant
+         bg-white md:rounded-2xl md:px-6 md:py-8 md:h-fit">
+            <SEO title={t.seo.title} description={t.seo.description} />
+            {!successMessage && <>
+               <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
+               <form 
+                  className="flex flex-col items-center gap-3 w-full"
+                  onSubmit={handleSubmit}  
+               >
+                  <TextField
+                     valueRef={typeReference}
+                     label={t.labels[0]}
+                     type={TextFieldTypes.MENU}
+                     inputType={InputTypes.TEXT}
+                     supportiveText={error.type}
+                     isError={error.type}
+                     isDisable={isLoading}
+                     menuParameters={Object.values(TransactionType).map((type) => type.description)}
+                     functionToUpdate={handleChange}
+                  />
+                  <TextField
+                     label={t.labels[1]}
+                     type={TextFieldTypes.DEFAULT}
+                     inputType={InputTypes.NUMBER}
+                     supportiveText={error.amount}
+                     isError={error.amount}
+                     isDisable={isLoading}
+                  />
+                  <TextField
+                     label={t.labels[2]}
+                     type={TextFieldTypes.DEFAULT}
+                     inputType={InputTypes.NUMBER}
+                     supportiveText={error.desc}
+                     isError={error.desc}
+                     isDisable={(isLoading) ? isLoading : !isActive}
+                  />
+                  <Filled label={t.accept} isDisable={isLoading} />
+               </form>
 
-            <Link className="w-full" to="/">
-               <Outline label={t.cancel} isDisable={isLoading} />
-            </Link>
+               <Link className="w-full" to="/transactions">
+                  <Outline label={t.cancel} isDisable={isLoading} />
+               </Link>
 
-            {isLoading && <Bar />}
-         </>}
-         {successMessage && <p>{successMessage}</p>}
+               {isLoading && <Bar />}
+            </>}
+            {successMessage && <p>{successMessage}</p>}
+         </div>
       </section>
    );
 };

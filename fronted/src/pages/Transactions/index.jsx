@@ -202,10 +202,10 @@ export const Transactions = () => {
    else if (texts.name) transactions = allTransactions.search;
 
    return (
-      <section className="md:flex md:flex-row-reverse md:h-screen">
+      <section className="md:flex md:flex-row-reverse md:h-screen md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full">
-            <form className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3" >
+         <div className="w-full bg-white border border-outline-variant md:rounded-2xl md:mx-6 md:my-4 md:pb-4">
+            <form className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3 md:pt-4">
                <TextField
                   label={t.labels[0]}
                   type={TextFieldTypes.MENU}
@@ -231,7 +231,7 @@ export const Transactions = () => {
                   }}
                />
             </form>
-            <h2 className="text-lg font-medium font-sans ml-4 underline">{t.title}</h2>
+            <h2 className="text-lg font-medium font-sans ml-4 underline md:ml-6">{t.title}</h2>
             {notFound && <p>{t.notFound}</p>}
             <div ref={transactionsContainer}  className="md:h-[calc(100%-16rem)] md:overflow-y-scroll">
                {transactions?.map((transaction) => {
@@ -264,7 +264,7 @@ export const Transactions = () => {
          <div className="w-full h-20 md:w-fit md:h-fit">
             <Navbar page={Page.TRANSACTIONS} >
                <Link className="group/fab" to="/transaction">
-                  <Fab label={t.fab} />
+                  <Fab label={(globalThis.matchMedia?.("(min-width: 768px)").matches) ? t.fab.large : t.fab.small} />
                </Link>
             </Navbar>
          </div>
