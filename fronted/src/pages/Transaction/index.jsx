@@ -111,7 +111,7 @@ export const Transaction = () => {
                   <Filled label={t.accept} isDisable={isLoading} />
                </form>
 
-               <Link className="w-full group/outline outline-none" to="/transactions">
+               <Link className={`w-full group/outline outline-none ${(isLoading) ? "cursor-default" : ""}`} to="/transactions">
                   <Outline label={t.cancel} isDisable={isLoading} />
                </Link>
 

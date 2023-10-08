@@ -126,7 +126,7 @@ const getElements = () => {
    const supportiveTransfer = page.getByText(t.description);
    const timeInput = page.getByLabelText(t.labels[3]);
    const statusSwitch = page.getByLabelText(t.labels[4]);
-   const cancelButton = page.getByRole("button", { name: t.cancel });
+   const cancelButton = page.getByRole("link", { name: t.cancel });
    const makeButton = page.getByRole("button", { name: t.accept });
 
    return {

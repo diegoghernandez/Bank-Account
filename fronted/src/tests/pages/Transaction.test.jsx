@@ -96,7 +96,7 @@ const getElements = () => {
    const amountInput = page.getByLabelText("Amount");
    const transferInput = page.getByLabelText("Account to transfer");
    const makeButton = page.getByRole("button", { name: "Make transaction" });
-   const cancelButton = page.getByRole("button", { name: "Cancel" });
+   const cancelButton = page.getByRole("link", { name: "Cancel" });
 
    return {
       page,

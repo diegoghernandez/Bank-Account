@@ -38,7 +38,6 @@ export const Load = {
       const transferInput = canvas.getByLabelText(t.labels[2]);
       const timeInput = canvas.getByLabelText(t.labels[3]);
 
-      const cancelButton = canvas.getByRole("button", { name: t.cancel });
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
       await step("Enter and submit necessary data", async () => {
@@ -60,7 +59,6 @@ export const Load = {
             await expect(transferInput).toBeDisabled();
             await expect(timeInput).toBeDisabled();
             await expect(acceptButton).toBeDisabled();
-            await expect(cancelButton).toBeDisabled();
    
             await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
          });
@@ -147,7 +145,6 @@ export const Successful = {
       const transferInput = canvas.getByLabelText(t.labels[2]);
       const timeInput = canvas.getByLabelText(t.labels[3]);
 
-      const cancelButton = canvas.getByRole("button", { name: t.cancel });
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
       await step("Enter and submit necessary data", async () => {
@@ -169,7 +166,6 @@ export const Successful = {
             await expect(transferInput).toBeDisabled();
             await expect(timeInput).toBeDisabled();
             await expect(acceptButton).toBeDisabled();
-            await expect(cancelButton).toBeDisabled();
    
             await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
          });

@@ -37,7 +37,6 @@ export const Load = {
       const amountInput = canvas.getByLabelText(t.labels[1]);
       const transferInput = canvas.getByLabelText(t.labels[2]);
 
-      const cancelButton = canvas.getByRole("button", { name: t.cancel });
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
       await step("Enter and submit necessary data", async () => {
@@ -55,7 +54,6 @@ export const Load = {
             await expect(amountInput).toBeDisabled();
             await expect(transferInput).toBeDisabled();
             await expect(acceptButton).toBeDisabled();
-            await expect(cancelButton).toBeDisabled();
 
             await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
          });
@@ -80,7 +78,6 @@ export const Error = {
       const amountInput = canvas.getByLabelText(t.labels[1]);
       const transferInput = canvas.getByLabelText(t.labels[2]);
 
-      const cancelButton = canvas.getByRole("button", { name: t.cancel });
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
       await step("Enter and submit necessary data", async () => {
@@ -97,7 +94,6 @@ export const Error = {
             await expect(amountInput).toBeDisabled();
             await expect(transferInput).toBeDisabled();
             await expect(acceptButton).toBeDisabled();
-            await expect(cancelButton).toBeDisabled();
    
             await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
          });
@@ -134,7 +130,6 @@ export const Successful = {
       const amountInput = canvas.getByLabelText(t.labels[1]);
       const transferInput = canvas.getByLabelText(t.labels[2]);
 
-      const cancelButton = canvas.getByRole("button", { name: t.cancel });
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
       await step("Enter and submit necessary data", async () => {
@@ -152,7 +147,6 @@ export const Successful = {
             await expect(amountInput).toBeDisabled();
             await expect(transferInput).toBeDisabled();
             await expect(acceptButton).toBeDisabled();
-            await expect(cancelButton).toBeDisabled();
    
             await expect(canvas.getByRole("progressbar")).toBeInTheDocument();
          });

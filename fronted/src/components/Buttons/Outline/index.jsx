@@ -6,13 +6,13 @@ export const Outline = ({
       isDisable
    }) => {
 
-   const hover = (isDisable) ? "" : "group-hover/outline:bg-primary/8";
+   const colorStyles = (isDisable) ? "border-onSurface/12 text-onSurface/38" : 
+   "group-hover/outline:bg-primary/8 text-primary border-onSurface group-focus/outline:bg-primary/12 group-focus/outline:border-primary";
 
    return (
       <span 
-         disabled={isDisable}
-         className={`${BASE_BUTTON_CLASSES} ${hover} text-primary border-onSurface group-focus/outline:bg-primary/12 
-         group-focus/outline:border-primary px-3 text-sm font-medium border disabled:border-onSurface/12 disabled:text-onSurface/38`}>
+         aria-disabled={isDisable}
+         className={`${BASE_BUTTON_CLASSES} ${colorStyles} px-3 text-sm text-center font-medium border`}>
          {label}
       </span>
    );
