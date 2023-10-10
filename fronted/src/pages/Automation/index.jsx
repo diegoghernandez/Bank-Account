@@ -5,11 +5,12 @@ import { TextField } from "../../components/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { saveAutomation } from "../_services/automation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Bar } from "../../components/Loader/Bar";
 import { SEO } from "../../utils/SEO";
+import { Modal } from "../../components/Modal";
 
 export const Automation = () => {
    const [error, setError] = useState({});
@@ -17,6 +18,7 @@ export const Automation = () => {
    const [successMessage, setSuccessMessage] = useState("");
    const navigate = useNavigate();
    const t = getTraduction(Traduction.AUTOMATION_PAGE);
+   const dialogRef = useRef();
 
    const handleSubmit = (event) => {
       event.preventDefault();
@@ -37,8 +39,10 @@ export const Automation = () => {
             "hoursToNextExecution": hours,
          }).then((data) => {
             setSuccessMessage(data);
+            dialogRef.current?.showModal?.();
    
             setTimeout(() => {
+               dialogRef?.current?.close?.();
                navigate("/automations");
             }, 1000);
          }).catch((e) => {
@@ -54,60 +58,63 @@ export const Automation = () => {
          <div className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-full px-4 mx-auto border border-outline-variant
          bg-white md:rounded-2xl md:px-6 md:py-8 md:h-fit">
             <SEO title={t.seo.title} description={t.seo.description} />
-            {!successMessage && <>
-               <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
-               <form 
-                  className="flex flex-col items-center gap-3 w-full"
-                  onSubmit={handleSubmit}
-               >
-                  <TextField
-                     label={t.labels[0]}
-                     type={TextFieldTypes.DEFAULT}
-                     inputType={InputTypes.TEXT}
-                     isError={error.name}
-                     supportiveText={error.name}
-                     isDisable={isLoading}
-                  />
-                  <TextField
-                     label={t.labels[1]}
-                     type={TextFieldTypes.DEFAULT}
-                     inputType={InputTypes.NUMBER}
-                     isError={error.amount}
-                     supportiveText={error.amount}
-                     isDisable={isLoading}
-                  />
-                  <TextField
-                     label={t.labels[2]}
-                     type={TextFieldTypes.DEFAULT}
-                     inputType={InputTypes.NUMBER}
-                     isError={error.desc}
-                     supportiveText={error.desc ?? t.description}
-                     isDisable={isLoading}
-                  />
-                  <TextField
-                     label={t.labels[3]}
-                     type={TextFieldTypes.MODAL}
-                     inputType={InputTypes.TEXT}
-                     isError={error.hoursToNextExecution}
-                     supportiveText={error.hoursToNextExecution}
-                     modalParameters={{
-                        [t.modalParameters[0]]: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-                        [t.modalParameters[1]]: [0, 1, 2, 3, 4, 5, 6],
-                        [t.modalParameters[2]]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
-                     }}
-                     isDisable={isLoading}
-                  />
-                  <Filled label={t.accept} isDisable={isLoading} />
-               </form>
+            <h1 className="text-4xl font-bold font-sans">{t.title}</h1>
+            <form 
+               className="flex flex-col items-center gap-3 w-full"
+               onSubmit={handleSubmit}
+            >
+               <TextField
+                  label={t.labels[0]}
+                  type={TextFieldTypes.DEFAULT}
+                  inputType={InputTypes.TEXT}
+                  isError={error.name}
+                  supportiveText={error.name}
+                  isDisable={isLoading}
+               />
+               <TextField
+                  label={t.labels[1]}
+                  type={TextFieldTypes.DEFAULT}
+                  inputType={InputTypes.NUMBER}
+                  isError={error.amount}
+                  supportiveText={error.amount}
+                  isDisable={isLoading}
+               />
+               <TextField
+                  label={t.labels[2]}
+                  type={TextFieldTypes.DEFAULT}
+                  inputType={InputTypes.NUMBER}
+                  isError={error.desc}
+                  supportiveText={error.desc ?? t.description}
+                  isDisable={isLoading}
+               />
+               <TextField
+                  label={t.labels[3]}
+                  type={TextFieldTypes.MODAL}
+                  inputType={InputTypes.TEXT}
+                  isError={error.hoursToNextExecution}
+                  supportiveText={error.hoursToNextExecution}
+                  modalParameters={{
+                     [t.modalParameters[0]]: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+                     [t.modalParameters[1]]: [0, 1, 2, 3, 4, 5, 6],
+                     [t.modalParameters[2]]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+                  }}
+                  isDisable={isLoading}
+               />
+               <Filled label={t.accept} isDisable={isLoading} />
+            </form>
 
-               <Link className={`w-full group/outline outline-none ${(isLoading) ? "cursor-default" : ""}`} to="/automations">
-                  <Outline label={t.cancel} isDisable={isLoading} />
-               </Link>
+            <Link className={`w-full group/outline outline-none ${(isLoading) ? "cursor-default" : ""}`} to="/automations">
+               <Outline label={t.cancel} isDisable={isLoading} />
+            </Link>
 
-               {isLoading && <Bar />}
-            </>}
+            {isLoading && <Bar />}
 
-            {successMessage && <p>{successMessage}</p>}
+            <Modal 
+               dialogRef={dialogRef}
+               messageUtils={{
+                  message: successMessage
+               }}
+            />
          </div>
       </section>
    );

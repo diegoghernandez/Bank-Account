@@ -1,6 +1,7 @@
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { TextField } from ".";
+import { TextFieldStyles } from "../../constants/TextFieldStyles";
 
 export default {
    title: "TextField",
@@ -22,9 +23,19 @@ export default {
    }
 };
 
-export const Default = { 
+export const Filled = { 
    args: {
-      label: "Default",
+      styles: TextFieldStyles.FILLED,
+      label: "Filled",
+      type: TextFieldTypes.DEFAULT,
+      inputType: InputTypes.TEXT,
+      supportiveText: "Supportive",
+   }
+};
+
+export const Outline = { 
+   args: {
+      label: "Outline",
       type: TextFieldTypes.DEFAULT,
       inputType: InputTypes.TEXT,
       supportiveText: "Supportive",

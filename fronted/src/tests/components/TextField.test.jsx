@@ -5,51 +5,98 @@ import * as stories from "../../components/TextField/TextField.stories";
 import userEvent from "@testing-library/user-event";
 import { TextField } from "../../components/TextField";
 
-const { Default, Menu, Modal } = composeStories(stories);
+const { Filled, Outline, Menu, Modal } = composeStories(stories);
 
 describe("TextField component tests", () => {
    describe("Default type", () => {
-      it("Should render correctly", async () => {
-         render(<Default />);
-         const textField = screen.getByLabelText("Default");
-
-         await userEvent.type(textField, "new value");
-
-         expect(textField).toBeInTheDocument();
-         expect(textField).toHaveValue("new value");
-         expect(textField).toHaveAttribute("type", "text");
-         expect(textField).not.toHaveAttribute("readOnly");
-         expect(textField).toHaveAccessibleDescription("Supportive");
+      describe("Filled type", () => {
+         it("Should render correctly", async () => {
+            render(<Filled />);
+            const textField = screen.getByLabelText("Filled");
+   
+            await userEvent.type(textField, "new value");
+   
+            expect(textField).toBeInTheDocument();
+            expect(textField).toHaveValue("new value");
+            expect(textField).toHaveAttribute("type", "text");
+            expect(textField).not.toHaveAttribute("readOnly");
+            expect(textField).toHaveAccessibleDescription("Supportive");
+         });
+   
+         it("Should show the error status", async () => {
+            render(<TextField 
+               {...Filled.args}
+               supportiveText="Show error"
+               isError={true}
+            />);
+            const textField = screen.getByLabelText("Filled");
+   
+            await userEvent.type(textField, "new value");
+   
+            expect(textField).toBeInTheDocument();
+            expect(textField).toHaveValue("new value");
+            expect(textField).toHaveAttribute("aria-invalid", "true");
+            expect(textField).toHaveAccessibleDescription("Show error");
+         });
+   
+         it("Should show the disable status", async () => {
+            render(<TextField 
+               {...Filled.args}
+               isDisable={true}
+            />);
+            const textField = screen.getByLabelText("Filled");
+   
+            await userEvent.type(textField, "new value");
+   
+            expect(textField).toBeInTheDocument();
+            expect(textField).toBeDisabled();
+            expect(textField).not.toHaveValue("new value");
+         });
       });
 
-      it("Should show the error status", async () => {
-         render(<TextField 
-            {...Default.args}
-            supportiveText="Show error"
-            isError={true}
-         />);
-         const textField = screen.getByLabelText("Default");
-
-         await userEvent.type(textField, "new value");
-
-         expect(textField).toBeInTheDocument();
-         expect(textField).toHaveValue("new value");
-         expect(textField).toHaveAttribute("aria-invalid", "true");
-         expect(textField).toHaveAccessibleDescription("Show error");
-      });
-
-      it("Should show the disable status", async () => {
-         render(<TextField 
-            {...Default.args}
-            isDisable={true}
-         />);
-         const textField = screen.getByLabelText("Default");
-
-         await userEvent.type(textField, "new value");
-
-         expect(textField).toBeInTheDocument();
-         expect(textField).toBeDisabled();
-         expect(textField).not.toHaveValue("new value");
+      describe("Outline type", () => {
+         it("Should render correctly", async () => {
+            render(<Outline />);
+            const textField = screen.getByLabelText("Outline");
+   
+            await userEvent.type(textField, "new value");
+   
+            expect(textField).toBeInTheDocument();
+            expect(textField).toHaveValue("new value");
+            expect(textField).toHaveAttribute("type", "text");
+            expect(textField).not.toHaveAttribute("readOnly");
+            expect(textField).toHaveAccessibleDescription("Supportive");
+         });
+   
+         it("Should show the error status", async () => {
+            render(<TextField 
+               {...Outline.args}
+               supportiveText="Show error"
+               isError={true}
+            />);
+            const textField = screen.getByLabelText("Outline");
+   
+            await userEvent.type(textField, "new value");
+   
+            expect(textField).toBeInTheDocument();
+            expect(textField).toHaveValue("new value");
+            expect(textField).toHaveAttribute("aria-invalid", "true");
+            expect(textField).toHaveAccessibleDescription("Show error");
+         });
+   
+         it("Should show the disable status", async () => {
+            render(<TextField 
+               {...Outline.args}
+               isDisable={true}
+            />);
+            const textField = screen.getByLabelText("Outline");
+   
+            await userEvent.type(textField, "new value");
+   
+            expect(textField).toBeInTheDocument();
+            expect(textField).toBeDisabled();
+            expect(textField).not.toHaveValue("new value");
+         });
       });
    });
 

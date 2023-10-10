@@ -5,39 +5,65 @@ import { Menu } from "../Menu";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { useEffect } from "react";
 import { Modal } from "../Modal";
-import "./TextField.css";
 import { ArrowDownIcon } from "../../assets/arrow_drop_down";
 import { ArrowUpIcon } from "../../assets/arrow_drop_up";
 import { ModalIcon } from "../../assets/modal";
 import { CancelIcon } from "../../assets/cancel_icon";
 import { SearchIcon } from "../../assets/search_icon";
+import { TextFieldStyles } from "../../constants/TextFieldStyles";
+import "./TextField.css";
 
 const getColors = (isDisable, isError) => {
    if (isDisable) {
       return {
          textLabelColor: ["text-onSurface/38", "text-onSurface/38", "text-onSurface/38", "group-hover/text:text-onSurface/38"],
-         outlineColor: ["outline-onSurface/12", "outline-onSurface/12", "group-hover/text:outline-onSurface/12"],
+         borderColor: ["border-onSurface/12", "border-onSurface/12", "group-hover/text:border-onSurface/12"],
          svgFill: "fill-onSurface/38",
          supportiveColor: "text-onSurface/38"
       };
    } else if (isError) {
       return {
          textLabelColor: ["text-error", "text-error", "text-error", "group-hover/text:text-on-error-container"],
-         outlineColor: ["outline-error", "outline-error", "group-hover/text:outline-on-error-container"],
+         borderColor: ["border-error", "border-error", "group-hover/text:border-on-error-container"],
          svgFill: "fill-onSurface-variant",
          supportiveColor: "text-error"
       };
    } else {
       return {
          textLabelColor: ["text-primary", "text-onSurface", "text-onSurface-variant", "group-hover/text:text-onSurface"],
-         outlineColor: ["outline-outline", "outline-primary", "group-hover/text:outline-onSurface"],
+         borderColor: ["border-outline", "border-primary", "group-hover/text:border-onSurface"],
          svgFill: "fill-onSurface-variant",
          supportiveColor: "text-onSurface-variant"
       };
    }
 };
 
+const textFieldStyles = (styles) => {
+   switch (styles) {
+      case TextFieldStyles.FILLED:
+         return {
+            labelStyle: "bg-transparent",
+            labelPosition: ["label--position--base--filled", "label--position--click--filled"],
+            inputColor: "bg-surface-container-highest",
+            roundedStyle: "rounded-t",
+            borderStyle: ["border-b-2", "border-b", "border-b-1"]
+         };
+
+      case TextFieldStyles.OUTLINE:
+         return {
+            labelStyle: "bg-white",
+            labelPosition: ["label--position--base--outline", "label--position--click--outline"],
+            inputColor: "",
+            roundedStyle: "rounded",
+            borderStyle: ["border-2", "border", "border-1"]
+         };
+      default:
+         break;
+   }
+};
+
 export const TextField = ({
+   styles = TextFieldStyles.OUTLINE,
    label,
    initialValue = "",
    type = TextFieldTypes.DEFAULT,
@@ -78,7 +104,8 @@ export const TextField = ({
 
 
    const svgContainer = "bg-transparent flex justify-center items-center w-6 h-6 mr-3";
-   const { textLabelColor, outlineColor, svgFill, supportiveColor } = getColors(isDisable, isError);
+   const { labelStyle, labelPosition, inputColor, roundedStyle, borderStyle } = textFieldStyles(styles);
+   const { textLabelColor, borderColor, svgFill, supportiveColor } = getColors(isDisable, isError);
 
    useEffect(() => {
       functionToUpdate?.();
@@ -86,22 +113,24 @@ export const TextField = ({
    
    return (
       <div ref={ref} className="inline-flex flex-col w-full group/text">
-         <label htmlFor={textFieldId} className={`bg-white w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
-         ${isClicked ? `label--position--click ${textLabelColor[0]}` : `label--position--base ${textLabelColor[3]} ${(type === TextFieldTypes.SEARCH && !value) && "ml-6"}`}
-         ${(value) ? `label--position--click ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
+         <label htmlFor={textFieldId} className={`${labelStyle} w-fit block absolute origin-top-left z-10 font-sans font-normal text-base cursor-text
+         ${isClicked ? `${labelPosition[1]} ${textLabelColor[0]}` : `${labelPosition[0]} ${textLabelColor[3]} ${(type === TextFieldTypes.SEARCH && !value) && "ml-6"}`}
+         ${(value) ? `${labelPosition[1]} ${textLabelColor[1]}` : `${textLabelColor[2]}`}`}>
             {label}
          </label>
             
-         <div className={`inline-flex relative items-center rounded outline font-sans font-normal text-base cursor-text 
+         <div className={`${inputColor} ${roundedStyle} ${borderStyle[1]} inline-flex relative items-center font-sans font-normal text-base cursor-text 
          ${isError ? "caret-error" : "caret-primary"}
-         ${isClicked ? `outline-2 ${outlineColor[1]}` : `outline-1 ${outlineColor[0]} ${outlineColor[2]}`}`}>
+         ${isClicked ? `${borderStyle[0]} ${borderColor[1]}` : `${borderColor[0]} ${borderColor[2]} 
+         ${((styles === TextFieldStyles.FILLED) && !isDisable && (styles !== TextFieldStyles.OUTLINE)) ? 
+            "group-hover/text:bg-onSurface/38" : "bg-onSurface/4"}`}`}>
 
-            {type === TextFieldTypes.SEARCH && <SearchIcon fillClass={"ml-3"} />}
-
+            {type === TextFieldTypes.SEARCH && <SearchIcon fillClass={"ml-3"} />}   
             <input 
                id={textFieldId}
                value={value}
-               className={`w-full h-14 p-4 bg-transparent outline-none text-onSurface disabled:text-onSurface/38`}
+               className={`w-full h-14 bg-transparent outline-none text-start text text-onSurface disabled:text-onSurface/38 
+                  ${(styles === TextFieldStyles.FILLED) ? "px-4 pt-[1.5rem] pb-2" : "p-4"}`}
                type={inputType.description}
                ref={valueRef}
                autoComplete="off"

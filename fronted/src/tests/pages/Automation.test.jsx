@@ -36,7 +36,7 @@ describe("Automation page tests", () => {
          await user.type(amountInput, "124124");
          await user.type(transferInput, "124124");
          await user.click(timeInput);
-         await user.click(page.getByRole("button", { name: "Accept", hidden: true }));
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[0]);
 
          await user.click(makeButton);
 
@@ -63,7 +63,7 @@ describe("Automation page tests", () => {
          await user.type(amountInput, "2000");
          await user.type(transferInput, "2132");
          await user.click(timeInput);
-         await user.click(page.getByRole("button", { name: "Accept", hidden: true }));
+         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[0]);
 
          await user.click(makeButton);
 
