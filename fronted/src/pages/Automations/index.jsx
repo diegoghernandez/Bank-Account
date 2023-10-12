@@ -80,6 +80,7 @@ export const Automations = () => {
                   valueRef={typeReference}
                   functionToUpdate={handleChange}
                   menuParameters={t.menuParameters}
+                  menuClasses="w-[calc(100%-2rem)] md:w-[calc(100%-11.5rem)]"
                />
                <TextField 
                   label={t.labels[1]}

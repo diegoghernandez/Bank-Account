@@ -93,6 +93,7 @@ export const Transaction = () => {
                   isError={error.type}
                   isDisable={isLoading}
                   menuParameters={Object.values(TransactionType).map((type) => type.description)}
+                  menuClasses="w-[calc(100%-2rem)] md:max-w-[calc(75ch-3rem)]"
                   functionToUpdate={handleChange}
                />
                <TextField

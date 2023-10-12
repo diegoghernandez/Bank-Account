@@ -111,7 +111,7 @@ describe("TextField component tests", () => {
          expect(textField).toHaveAttribute("readOnly");
          expect(textField).toHaveAttribute("type", "text");
          expect(textField).toHaveAccessibleDescription("Supportive");
-         expect(screen.getAllByRole("button")).length(4);
+         expect(screen.getAllByRole("menuitem")).length(3);
       });
 
       it("Should be able to choose some", () => {
@@ -119,7 +119,7 @@ describe("TextField component tests", () => {
          const textField = screen.getByLabelText("Menu");
 
          fireEvent.click(textField);
-         fireEvent.click(screen.getAllByRole("button")[0]);
+         fireEvent.click(screen.getByText("Deposit"));
 
          expect(textField).toBeInTheDocument();
          expect(textField).toHaveValue("Deposit");

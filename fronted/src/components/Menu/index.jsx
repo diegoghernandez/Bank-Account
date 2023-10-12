@@ -1,43 +1,75 @@
+import { useEffect, useRef, useState } from "react";
+
 export const Menu = ({ 
-   parameters, 
+   menuClasses = "w-full",
+   parameters,
    setValue,
-   handleClickOutside,
-   setIsClicked,
-   isChange,
-   setIsChange,
-   setIsShowMenu
+   handleClickOutside
+
 }) => {
-   if (parameters) {
-      const buttons = parameters.map((type) => 
-            <button 
+   const [element, setElement] = useState(-1);
+   const listRef = useRef(null);
+
+   const options = listRef?.current?.getElementsByTagName("li");
+   options?.[element]?.focus();
+
+   const exit = () => {
+      listRef?.current?.blur();
+      handleClickOutside();
+
+   };
+   
+   if (parameters.length - 1 < element || element === -2) {
+      exit();
+   }
+   
+   const handleKeys = (e) => {
+      if (e.key == "ArrowDown") {
+         setElement((prev) => prev + 1);
+      } else if (e.key == "ArrowUp") {
+         setElement((prev) => prev - 1);
+      }
+   };
+
+   useEffect(() => {
+      globalThis.addEventListener("keydown", handleKeys);
+   
+      return () => {
+         globalThis.removeEventListener("keydown", handleKeys);
+      };
+   }, [setElement]);
+   
+
+   return (
+      <ul
+         ref={listRef}
+         tabIndex={-1}
+         role="menu" 
+         className={`absolute ${menuClasses} z-20 translate-y-[3.7rem] flex flex-col bg-surface-container bg rounded`}
+      >
+         {parameters.map((type, index) => (
+            <li 
                key={type} 
                className="hover:bg-onSurface/8 focus:outline-none focus:bg-onSurface/12 flex items-center w-auto h-12 px-3 text-onSurface text-sm font-sans font-medium"
+               tabIndex={(index === element) ? 0 : -1}
+               role="menuitem"
                onClick={() => { 
                   setValue(type); 
-                  setIsChange(!isChange);
+                  handleClickOutside();
                }}
-               onFocus={() => setIsClicked(true)}
-            >{type}</button>
-      );
-
-      return (
-         <div 
-            className="absolute w-[calc(100%-2rem)] z-20 translate-y-[3.7rem] flex flex-col bg-surface-container bg rounded"
-            onClick={() => { 
-               setIsShowMenu(false);
-               handleClickOutside(); 
-            }}
-            onFocus={() => setIsClicked(true)}
-         >
-            {buttons}
-            <button 
-               className="h-0 text-transparent focus:text-xl focus:text-onPrimary focus:bg-onSurface focus:h-auto" 
-               onBlur={() => {
-                  setIsClicked(false);
-                  setIsShowMenu(false);
-               }
-            }>Tab for exit</button>
-         </div>
-      );
-   }
+               onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                     setValue(type);
+                     handleClickOutside();
+                  }
+                  if (e.key === "Tab") {
+                     handleClickOutside();
+                  }
+               }}
+            >
+               {type}
+            </li>
+         ))}
+      </ul>
+   );
 };

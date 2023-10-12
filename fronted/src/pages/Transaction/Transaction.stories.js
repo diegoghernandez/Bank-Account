@@ -18,9 +18,6 @@ export default {
          values: [
             { name: "blue", value: "rgb(247 248 255)"}
          ]
-      },
-      viewport: {
-         defaultViewport: "iphone5"
       }
    }
 };
@@ -41,7 +38,7 @@ export const Load = {
 
       await step("Enter and submit necessary data", async () => {
          await userEvent.click(typeInput);
-         await userEvent.click(canvas.getByRole("button", { name: tType.wireTransfer}));
+         await userEvent.click(canvas.getByText(tType.wireTransfer));
          await userEvent.type(amountInput, "2321313312.32");
          await userEvent.type(transferInput, "4234");
          
@@ -81,8 +78,8 @@ export const Error = {
       const acceptButton = canvas.getByRole("button", { name: t.accept });
 
       await step("Enter and submit necessary data", async () => {
-         await userEvent.click(typeInput);
-         await userEvent.click(canvas.getByRole("button", { name: tType.deposit}));
+         await userEvent.dblClick(typeInput,);
+         await userEvent.click(canvas.getByText(tType.deposit));
          await userEvent.type(amountInput, "2321313312.32");
          
          await userEvent.click(canvas.getByRole("button", { name: t.accept }));
@@ -134,7 +131,7 @@ export const Successful = {
 
       await step("Enter and submit necessary data", async () => {
          await userEvent.click(typeInput);
-         await userEvent.click(canvas.getByRole("button", { name: tType.wireTransfer}));
+         await userEvent.click(canvas.getByText(tType.wireTransfer));
          await userEvent.type(amountInput, "2321313312.32");
          await userEvent.type(transferInput, "4234");
 

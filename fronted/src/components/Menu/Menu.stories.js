@@ -5,7 +5,6 @@ export default {
    component: Menu,
    tags: ["autodocs"],
    args: {
-      text: "",
       parameters: ["Deposit", "Online payment", "Wire Transfer"],
    }
 };

@@ -74,6 +74,7 @@ export const TextField = ({
    valueRef,
    functionToUpdate,
    menuParameters,
+   menuClasses,
    modalParameters
 }) => {
 
@@ -100,7 +101,7 @@ export const TextField = ({
 
    const notMenu = type !== TextFieldTypes.MENU;
    const notModal = type !== TextFieldTypes.MODAL;
-   let isReadOnly = (!notModal || !notMenu) ? true : false;
+   let isReadOnly = (!notMenu || !notModal) ? true : false;
 
 
    const svgContainer = "bg-transparent flex justify-center items-center w-6 h-6 mr-3";
@@ -122,7 +123,7 @@ export const TextField = ({
          <div className={`${inputColor} ${roundedStyle} ${borderStyle[1]} inline-flex relative items-center font-sans font-normal text-base cursor-text 
          ${isError ? "caret-error" : "caret-primary"}
          ${isClicked ? `${borderStyle[0]} ${borderColor[1]}` : `${borderColor[0]} ${borderColor[2]} 
-         ${((styles === TextFieldStyles.FILLED) && !isDisable && (styles !== TextFieldStyles.OUTLINE)) ? 
+         ${(styles === TextFieldStyles.OUTLINE) ? "bg-transparent" : ((styles === TextFieldStyles.FILLED) && !isDisable) ? 
             "group-hover/text:bg-onSurface/38" : "bg-onSurface/4"}`}`}>
 
             {type === TextFieldTypes.SEARCH && <SearchIcon fillClass={"ml-3"} />}   
@@ -172,6 +173,7 @@ export const TextField = ({
                   } 
                   if (e.key === "Tab" && (!notModal || !notMenu)) {
                      setIsClicked(false);
+                     setIsShowMenu(false);
                   }
                }}
             />
@@ -203,14 +205,11 @@ export const TextField = ({
             aria-disabled={isDisable}
          >{supportiveText}</span>}
          
-         {(!notMenu && isShowMenu)  && <Menu 
+         {(!notMenu && isShowMenu)  && <Menu
+            menuClasses={menuClasses}
             parameters={menuParameters}
             setValue={setValue}
             handleClickOutside={handleClickOutside}
-            setIsClicked={setIsClicked}
-            isChange={isChange}
-            setIsChange={setIsChange}
-            setIsShowMenu={setIsShowMenu}
          />}
 
          {!notModal && <Modal 

@@ -212,6 +212,7 @@ export const Transactions = () => {
                   valueRef={typeReference}
                   functionToUpdate={handleChange}
                   menuParameters={Object.values(TransactionType).map((type) => type.description)}
+                  menuClasses="w-[calc(100%-2rem)] md:w-[calc(100%-11rem)]"
                />
                <TextField 
                   label={t.labels[1]}
