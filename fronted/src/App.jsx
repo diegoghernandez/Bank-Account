@@ -5,14 +5,16 @@ import { Automations } from "./pages/Automations";
 import { Account } from "./pages/Account";
 import { Automation } from "./pages/Automation";
 import { Transaction } from "./pages/Transaction";
-import { useAuth } from "./hooks/useAuth";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
 import { UpdateAutomation } from "./pages/UpdateAutomation";
+import { useAuth } from "./hooks/useAuth";
+import { useTheme } from "./hooks/useTheme";
 
 const ProtectedRoute = ({ children }) => {
    const { isAuthenticated } = useAuth();
    const location = useLocation();
+   useTheme();
 
    if (!isAuthenticated) {
       return <Navigate to="/sign-in" state={{ location }} />;

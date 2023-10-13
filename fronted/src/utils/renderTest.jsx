@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { AuthProvider } from "../hooks/useAuth";
+import { AuthProvider } from "../context/auth";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { vi } from "vitest";

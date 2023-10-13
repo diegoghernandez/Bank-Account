@@ -8,10 +8,12 @@ import { useNavigate } from "react-router-dom";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { SEO } from "../../utils/SEO";
+import { useTheme } from "../../hooks/useTheme";
 
 export const Account = () => {
    const [error, setError] = useState({});
    const [successMessage, setSuccessMessage] = useState("");
+   const { isDark, setIsDark } = useTheme();
    const navigate = useNavigate();
 
    const t = getTraduction(Traduction.ACCOUNT_PAGE);
@@ -58,7 +60,7 @@ export const Account = () => {
    };
 
    return (
-      <section className="flex flex-row-reverse w-full justify-end bg-surface dark:bg-surface-dark">
+      <section className="flex flex-row-reverse w-full h-screen justify-end bg-surface dark:bg-surface-dark">
          <SEO title={t.seo.title} description={t.seo.description} />
          <div className="w-full bg-white border border-outline-variant md:rounded-2xl  md:mx-6 md:my-4 dark:bg-black dark:border-outline-variant-dark">
             <h1 className="ml-4 md:ml-6 mt-8 text-4xl font-sans font-bold text-onSurface dark:text-onSurface-dark">{accountName}</h1>
@@ -68,7 +70,8 @@ export const Account = () => {
                <Switch 
                   label={t.dark}
                   isDisable={false}
-                  checked={false}
+                  checked={isDark}
+                  set={setIsDark}
                />
             </div>
             <DividerField 
@@ -139,7 +142,7 @@ export const Account = () => {
                }}
             />
          </div>
-         <Navbar page={Page.Account} />
+         <Navbar page={Page.ACCOUNT} />
       </section>
    );
 };

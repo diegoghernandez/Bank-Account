@@ -1,5 +1,5 @@
 import { INITIAL_VIEWPORTS } from "@storybook/addon-viewport";
-import { AuthProvider } from "../src/hooks/useAuth";
+import { AuthProvider } from "../src/context/auth";
 import "../src/index.css"
 import { initialize, mswDecorator } from "msw-storybook-addon";
 import { rest } from "msw";

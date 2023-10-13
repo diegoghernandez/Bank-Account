@@ -3,7 +3,6 @@ import { Filled } from "../../components/Buttons/Filled";
 import { TextField } from "../../components/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { useAuth } from "../../hooks/useAuth";
 import { getAccountData } from "../_services/account";
 import { login as logUser } from "../_services/auth";
 import { useState } from "react";
@@ -11,6 +10,7 @@ import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Bar } from "../../components/Loader/Bar";
 import { SEO } from "../../utils/SEO";
+import { useAuth } from "../../hooks/useAuth";
 
 export const SignIn = () => {
    const [error, setError] = useState("");

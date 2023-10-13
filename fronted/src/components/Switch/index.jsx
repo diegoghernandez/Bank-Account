@@ -24,13 +24,14 @@ const getStyles = (requirement) => {
 export const Switch = ({ 
    label="",
    isDisable=false,
-   checked=false
+   checked=false,
+   set
 }) => {
    const [isChecked, setIsChecked] = useState(checked);
 
    const textColor = getTextColor(isDisable);
    const trackColor = getStyles({ isDisable, checked: isChecked })[0];
-   const thumbColor = getStyles({ isDisable, checked: isChecked })[1];
+   const thumbColor = getStyles({ isDisable, checked: isChecked })[1];   
 
    return (
       <div className="flex flex-row w-full justify-between ">
@@ -42,7 +43,10 @@ export const Switch = ({
                defaultChecked={checked}
                disabled={isDisable}
                className="absolute w-[3.3rem] h-8 appearance-none"
-               onClick={() => setIsChecked(!isChecked)}
+               onClick={() => {
+                  setIsChecked(!isChecked);
+                  set(!isChecked);
+               }}
             >
             </input>
             <span className={`${trackColor} w-[3.25rem] h-8 rounded-full inline-flex items-center`}>
