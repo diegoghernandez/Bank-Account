@@ -9,9 +9,9 @@ export const Bar = () => {
          <span 
             title={title}
             role="progressbar"
-            className="inline-flex h-1.5 w-full overflow-hidden bg-onPrimary"
+            className="inline-flex h-1.5 w-full overflow-hidden bg-onPrimary dark:bg-onPrimary-dark"
          >
-            <span className="progress inline-flex w-full h-full bg-primary left-right"></span>
+            <span className="progress inline-flex w-full h-full bg-primary dark:bg-primary-dark left-right"></span>
          </span>
       </div>
    );

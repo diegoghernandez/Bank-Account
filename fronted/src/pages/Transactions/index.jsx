@@ -204,7 +204,8 @@ export const Transactions = () => {
    return (
       <section className="h-full md:h-screen md:flex md:flex-row-reverse md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full min-h-[calc(100vh-5rem)] bg-white md:border border-outline-variant md:rounded-2xl md:mx-6 md:my-4 md:pb-2">
+         <div className="w-full min-h-[calc(100vh-5rem)] bg-white border-outline-variant md:border md:rounded-2xl md:mx-6 md:my-4 
+            md:pb-2 dark:bg-black dark:border-outline-variant-dark">
             <form className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3 md:pt-4">
                <TextField
                   label={t.labels[0]}
@@ -232,8 +233,8 @@ export const Transactions = () => {
                   }}
                />
             </form>
-            <h2 className="text-lg font-medium font-sans ml-4 underline md:ml-6">{t.title}</h2>
-            {notFound && <p>{t.notFound}</p>}
+            <h2 className="text-lg font-medium font-sans ml-4 underline md:ml-6 text-onSurface dark:text-onSurface-dark">{t.title}</h2>
+            {notFound && <p className="text-onSurface dark:text-onSurface-dark">{t.notFound}</p>}
             <div ref={transactionsContainer}  className="md:h-[calc(100%-16rem)] md:overflow-y-scroll">
                {transactions?.map((transaction) => {
                   const formattedType = TransactionType[transaction?.transactionType]?.description;
@@ -241,8 +242,8 @@ export const Transactions = () => {
                   return (
                      <>
                         {(transaction?.date) &&
-                        <div key={transaction?.date} className="mt-3 pl-4 pb-1 border-b border-primary">
-                           <h3 className="text-sm font-medium font-sans">{transaction?.date}</h3>
+                        <div key={transaction?.date} className="mt-3 pl-4 pb-1 border-b border-primary dark:border-primary-dark">
+                           <h3 className="text-sm font-medium font-sans text-onSurface dark:text-onSurface-dark">{transaction?.date}</h3>
                         </div>
                         }
                         {(isTextType) &&

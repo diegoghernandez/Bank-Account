@@ -1,20 +1,22 @@
 import { useState } from "react";
 
 const getTextColor = (isDisable) => (isDisable) ? 
-   "text-onSurface/38" : "text-onSurface";
+   "text-onSurface/38 dark:text-onSurface-dark/38" : "text-onSurface dark:text-onSurface-dark";
 
 const getStyles = (requirement) => {
    if (!requirement.isDisable) {
       if (requirement.checked) {
-         return ["justify-end p-1 bg-primary", "w-6 h-6 bg-onPrimary"];
+         return ["justify-end p-1 bg-primary dark:bg-primary-dark", "w-6 h-6 bg-onPrimary dark:bg-onPrimary-dark"];
       } else {
-         return ["justify-start p-2 border-2 bg-surface-container-highest border-outline", "w-4 h-4 bg-outline"];
+         return ["justify-start p-2 border-2 bg-surface-container-highest border-outline dark:bg-surface-container-highest-dark dark:border-outline-dark", 
+            "w-4 h-4 bg-outline dark:bg-outline-dark"];
       }
    } else {
       if (requirement.checked) {
-         return ["cursor-not-allowed justify-end p-1 bg-onSurface/12", "w-6 h-6 bg-surface"];
+         return ["cursor-not-allowed justify-end p-1 bg-onSurface/12 dark:bg-onSurface-dark/12", "w-6 h-6 bg-surface dark:bg-surface-dark"];
       } else {
-         return ["cursor-not-allowed justify-start p-2 border-2 bg-surface-container-highest/12 border-onSurface/12", "w-4 h-4 bg-onSurface/38"];
+         return ["cursor-not-allowed justify-start p-2 border-2 bg-surface-container-highest/12 border-onSurface/12 " +
+            "dark:bg-surface-container-highest-dark/12 dark:border-onSurface-dark/12", "w-4 h-4 bg-onSurface/38 dark:bg-onSurface-dark/38"];
       }
    }
 };

@@ -45,12 +45,13 @@ export const Menu = ({
          ref={listRef}
          tabIndex={-1}
          role="menu" 
-         className={`absolute ${menuClasses} z-20 translate-y-[3.7rem] flex flex-col bg-surface-container bg rounded`}
+         className={`absolute ${menuClasses} z-20 translate-y-[3.7rem] flex flex-col bg-surface-container bg rounded dark:bg-surface-container-dark`}
       >
          {parameters.map((type, index) => (
             <li 
                key={type} 
-               className="hover:bg-onSurface/8 focus:outline-none focus:bg-onSurface/12 flex items-center w-auto h-12 px-3 text-onSurface text-sm font-sans font-medium"
+               className="hover:bg-onSurface/8 focus:outline-none focus:bg-onSurface/12 flex items-center w-auto h-12 px-3 text-onSurface 
+                  text-sm font-sans font-medium dark:text-onSurface-dark dark:hover:bg-onSurface-dark/8 dark:focus:bg-onSurface-dark/12"
                tabIndex={(index === element) ? 0 : -1}
                role="menuitem"
                onClick={() => { 

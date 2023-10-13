@@ -8,7 +8,7 @@ export const Spin = () => {
          <figure 
             title={title}
             role="progressbar"   
-            className="rounded-full border-r-primary border-4 border-outline h-10 w-10 animate-spin"></figure>
+            className="rounded-full border-r-primary border-4 border-outline h-10 w-10 animate-spin dark:border-r-primary-dark dark:border-outline-dark"></figure>
       </div>
    );
 };

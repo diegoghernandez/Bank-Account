@@ -6,8 +6,9 @@ export const Outline = ({
       isDisable
    }) => {
 
-   const colorStyles = (isDisable) ? "border-onSurface/12 text-onSurface/38" : 
-   "group-hover/outline:bg-primary/8 text-primary border-onSurface group-focus/outline:bg-primary/12 group-focus/outline:border-primary";
+   const colorStyles = (isDisable) ? "border-onSurface/12 text-onSurface/38 dark:border-onSurface-dark/12 dark:text-onSurface-dark/38" : 
+   "group-hover/outline:bg-primary/8 text-primary border-onSurface group-focus/outline:bg-primary/12 group-focus/outline:border-primary" + 
+      "dark:group-hover/outline:bg-primary-dark/8 dark:text-primary-dark dark:border-onSurface-dark dark:group-focus/outline:bg-primary-dark/12 dark:group-focus/outline:border-primary-dark";
 
    return (
       <span 

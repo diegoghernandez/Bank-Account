@@ -4,6 +4,8 @@ import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 
 const valueContainer = "bg-surface-container-highest outline-none border-b border-onSurface-variant focus:border-primary caret-primary text-onSurface text-base font-sans font-normal";
+const h2Element = (title) => <h2 className="text-2xl font-normal font-sans text-onSurface mb-4 dark:text-onSurface-dark">{title}</h2>;
+const buttonStyles = "text-sm font-medium font-sans text-primary dark:text-primary-dark";
 
 const ListModal = ({ 
    title, 
@@ -12,7 +14,7 @@ const ListModal = ({
 }) => {
    return (
       <div className="w-full flex flex-col justify-center items-center p-6">
-         <h2 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h2>
+         {h2Element(title)}
          <div className="w-full flex flex-row justify-between">
             {Object.entries(listUtils?.parameters)?.map((array) => (
                <div key={array[0]} className="flex flex-col justify-center items-center">
@@ -62,7 +64,7 @@ const FormModal = ({ title, errorMessage, formUtils, children }) => {
          className="w-full flex flex-col justify-center items-center p-6"
          onSubmit={handleSubmit}
       >
-         <h2 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h2>
+         {h2Element(title)}
          {!formUtils?.successMessage && <>
             <div className="w-full flex flex-col justify-between">
                   <label htmlFor={inputId + "-first"}>{formUtils?.inputs[0]}</label>
@@ -158,7 +160,7 @@ export const Modal = ({
          {dialogRef === undefined && <button onClick={showModal}>Modal</button>}
          <dialog 
             ref={dialogRef ?? storyRef} 
-            className="w-[calc(100%-1rem)] min-w-[11rem] max-w-[24rem] shadow-md rounded-[1.75rem]"
+            className="w-[calc(100%-1rem)] min-w-[11rem] max-w-[24rem] shadow-md rounded-[1.75rem] bg-surface-container-high dark:bg-surface-container-high-dark"
             onClose={(formUtils?.inputs[0].match("email") && formUtils?.successMessage) ? formUtils?.closeSession : clearModal}
          >
             {listUtils && <ListModal 
@@ -171,7 +173,7 @@ export const Modal = ({
                      closeModal();
                      listUtils.setIsClicked?.();
                   }}
-                  className="text-sm font-medium font-sans text-primary"
+                  className={buttonStyles}
                >{cancel}</button>
                <button 
                   type="button"
@@ -181,7 +183,7 @@ export const Modal = ({
                      listUtils?.setIsChange(!listUtils.isChange);
                      listUtils?.setIsClicked(false);
                   }}
-                  className="text-sm font-medium font-sans text-primary"
+                  className={buttonStyles}
                >{accept}</button>
             </ListModal>}
             {formUtils && <FormModal 
@@ -196,11 +198,11 @@ export const Modal = ({
                         closeModal();
                         listUtils?.setIsClicked();
                      }}
-                     className="text-sm font-medium font-sans text-primary"
+                     className={buttonStyles}
                   >{cancel}</button>
                   <button 
                      type="submit"
-                     className="text-sm font-medium font-sans text-primary"
+                     className={buttonStyles}
                   >{accept}</button>
                </>}
                {formUtils?.successMessage && <>
@@ -209,20 +211,20 @@ export const Modal = ({
                      onClick={() => { 
                         closeModal();
                      }}
-                     className="text-sm font-medium font-sans text-primary"
+                     className={buttonStyles}
                   >{accept}</button>
                </>}
             </FormModal>}
             {messageUtils && <div className="w-full flex flex-col justify-center items-center p-6">
-               <h2 className="text-2xl font-normal font-sans text-onSurface mb-4">{title}</h2>
-               <p>{messageUtils?.message}</p>
+               {h2Element(title)}
+               <p className="text-sm font-sans font-normal text-onSurface-variant dark:text-onSurface-variant-dark">{messageUtils?.message}</p>
                <div className="w-full inline-flex justify-center items-center gap-4 mt-6">
                   <button 
                      type="button"
                      onClick={() => { 
                         closeModal();
                      }}
-                     className="text-sm font-medium font-sans text-primary"
+                     className={buttonStyles}
                   >{cancel}</button>
                   <button 
                      type="button"
@@ -231,7 +233,7 @@ export const Modal = ({
                         messageUtils?.closeSession?.();
                         closeModal();
                      }}
-                     className="text-sm font-medium font-sans text-primary"
+                     className={buttonStyles}
                   >{accept}</button>
                </div>
             </div>}

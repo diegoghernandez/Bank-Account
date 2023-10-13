@@ -16,24 +16,30 @@ import "./TextField.css";
 const getColors = (isDisable, isError) => {
    if (isDisable) {
       return {
-         textLabelColor: ["text-onSurface/38", "text-onSurface/38", "text-onSurface/38", "group-hover/text:text-onSurface/38"],
-         borderColor: ["border-onSurface/12", "border-onSurface/12", "group-hover/text:border-onSurface/12"],
-         svgFill: "fill-onSurface/38",
-         supportiveColor: "text-onSurface/38"
+         textLabelColor: ["text-onSurface/38 dark:text-onSurface-dark/38", "text-onSurface/38 dark:text-onSurface-dark/38", 
+            "text-onSurface/38 dark:text-onSurface-dark/38", "group-hover/text:text-onSurface/38 dark:group-hover/text:text-onSurface-dark/38"],
+         borderColor: ["border-onSurface/12 dark:border-onSurface-dark/12", "border-onSurface/12 dark:border-onSurface-dark/12", 
+            "group-hover/text:border-onSurface/12 dark:group-hover/text:border-onSurface-dark/12"],
+         svgFill: "fill-onSurface/38 dark:fill-onSurface-dark/38",
+         supportiveColor: "text-onSurface/38 dark:text-onSurface-dark/38"
       };
    } else if (isError) {
       return {
-         textLabelColor: ["text-error", "text-error", "text-error", "group-hover/text:text-on-error-container"],
-         borderColor: ["border-error", "border-error", "group-hover/text:border-on-error-container"],
-         svgFill: "fill-onSurface-variant",
-         supportiveColor: "text-error"
+         textLabelColor: ["text-error dark:text-error-dark", "text-error dark:text-error-dark", "text-error dark:text-error-dark", 
+            "group-hover/text:text-on-error-container dark:group-hover/text:text-on-error-container-dark"],
+         borderColor: ["border-error dark:border-error-dark", "border-error dark:border-error-dark", 
+            "group-hover/text:border-on-error-container dark:group-hover/text:border-on-error-container-dark"],
+         svgFill: "fill-onSurface-variant dark:fill-onSurface-variant-dark",
+         supportiveColor: "text-error dark:text-error-dark"
       };
    } else {
       return {
-         textLabelColor: ["text-primary", "text-onSurface", "text-onSurface-variant", "group-hover/text:text-onSurface"],
-         borderColor: ["border-outline", "border-primary", "group-hover/text:border-onSurface"],
-         svgFill: "fill-onSurface-variant",
-         supportiveColor: "text-onSurface-variant"
+         textLabelColor: ["text-primary dark:text-primary-dark", "text-onSurface dark:text-onSurface-dark", 
+            "text-onSurface-variant dark:text-onSurface-variant-dark", "group-hover/text:text-onSurface dark:group-hover/text:text-onSurface-dark"],
+         borderColor: ["border-outline dark:border-outline-dark", "border-primary dark:border-primary-dark", 
+            "group-hover/text:border-onSurface dark:group-hover/text:border-onSurface-dark"],
+         svgFill: "fill-onSurface-variant dark:fill-onSurface-variant-dark",
+         supportiveColor: "text-onSurface-variant dark:text-onSurface-variant-dark"
       };
    }
 };
@@ -44,14 +50,14 @@ const textFieldStyles = (styles) => {
          return {
             labelStyle: "bg-transparent",
             labelPosition: ["label--position--base--filled", "label--position--click--filled"],
-            inputColor: "bg-surface-container-highest",
+            inputColor: "bg-surface-container-highest dark:bg-surface-container-highest-dark",
             roundedStyle: "rounded-t",
             borderStyle: ["border-b-2", "border-b", "border-b-1"]
          };
 
       case TextFieldStyles.OUTLINE:
          return {
-            labelStyle: "bg-white",
+            labelStyle: "bg-white dark:bg-black",
             labelPosition: ["label--position--base--outline", "label--position--click--outline"],
             inputColor: "",
             roundedStyle: "rounded",
@@ -121,16 +127,17 @@ export const TextField = ({
          </label>
             
          <div className={`${inputColor} ${roundedStyle} ${borderStyle[1]} inline-flex relative items-center font-sans font-normal text-base cursor-text 
-         ${isError ? "caret-error" : "caret-primary"}
+         ${isError ? "caret-error dark:caret-error-dark" : "caret-primary dark:caret-primary-dark"}
          ${isClicked ? `${borderStyle[0]} ${borderColor[1]}` : `${borderColor[0]} ${borderColor[2]} 
          ${(styles === TextFieldStyles.OUTLINE) ? "bg-transparent" : ((styles === TextFieldStyles.FILLED) && !isDisable) ? 
-            "group-hover/text:bg-onSurface/38" : "bg-onSurface/4"}`}`}>
+            "group-hover/text:bg-onSurface/38 dark:group-hover/text:bg-onSurface-dark/38" : "dark:bg-onSurface-dark/4"}`}`}>
 
             {type === TextFieldTypes.SEARCH && <SearchIcon fillClass={"ml-3"} />}   
             <input 
                id={textFieldId}
                value={value}
                className={`w-full h-14 bg-transparent outline-none text-start text text-onSurface disabled:text-onSurface/38 
+                  dark:text-onSurface-dark dark:disabled:text-onSurface-dark/38 
                   ${(styles === TextFieldStyles.FILLED) ? "px-4 pt-[1.5rem] pb-2" : "p-4"}`}
                type={inputType.description}
                ref={valueRef}
@@ -192,11 +199,11 @@ export const TextField = ({
                <ArrowDownIcon fillClass={svgFill} />
             </div>}
             {(!notMenu  && isClicked) && <div className={svgContainer}>
-               <ArrowUpIcon fillClass={"fill-primary"} />
+               <ArrowUpIcon fillClass={"fill-primary dark:fill-primary-dark"} />
             </div>}
 
             {!notModal && <div className={svgContainer}>
-               <ModalIcon fillClass={`${isDisable ? "stroke-onSurface/38" : "stroke-onSurface-variant"}`} />
+               <ModalIcon fillClass={`${isDisable ? "stroke-onSurface/38 dark:stroke-onSurface-dark/38" : "stroke-onSurface-variant dark:stroke-onSurface-variant-dark"}`} />
             </div>}
          </div>
          {(supportiveText) && <span 

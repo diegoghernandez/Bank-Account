@@ -14,9 +14,10 @@ export default {
    parameters: {
       layout: "fullscreen",
       backgrounds: {
-         default: "blue",
+         default: "dark-blue",
          values: [
-            { name: "blue", value: "rgb(247 248 255)"}
+            { name: "blue", value: "rgb(247 248 255)"},
+            { name: "dark-blue", value: "rgb(18 18 24)"}
          ]
       },
       reactRouter: reactRouterParameters({

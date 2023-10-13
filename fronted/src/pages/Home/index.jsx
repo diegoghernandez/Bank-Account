@@ -68,16 +68,17 @@ export const Home = () => {
    return (
       <section className="h-full md:h-screen md:flex md:flex-row-reverse md:justify-end md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full min-h-[calc(100vh-5rem)] flex flex-col px-4 pt-4 will-change-scroll bg-white md:border border-outline-variant md:rounded-2xl md:mx-6 md:my-4 md:p-0">
-            <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans md:px-6 md:pt-4">
+         <div className="w-full min-h-[calc(100vh-5rem)] flex flex-col px-4 pt-4 will-change-scroll bg-white border-outline-variant md:border
+            md:rounded-2xl md:mx-6 md:my-4 md:p-0 dark:bg-black dark:border-outline-variant-dark">
+            <div className="flex flex-col items-center justify-center gap-2 mb-6 font-normal font-sans text-onSurface dark:text-onSurface-dark md:px-6 md:pt-4">
                <p className="text-sm">{t.greeting} {account?.accountName}</p>
                <p className="text-base">{t.balance}:</p>
                <p className="text-2xl">{account?.currentBalance.toFixed(2)}</p>
             </div>
 
-            <p className="text-base font-semibold font-sans mb-3 md:mb-0 md:px-6">{t.activeAutomation}:</p>
+            <p className="text-base font-semibold font-sans mb-3 md:mb-0 md:px-6 text-onSurface dark:text-onSurface-dark">{t.activeAutomation}:</p>
             <div className="inline-flex flex-col w-full gap-2 md:py-3 md:px-6 md:mb-2 md:h-[calc(100%-8rem)] md:overflow-y-scroll">
-               {notFound && <p>{t.notFound}</p>}
+               {notFound && <p className="text-onSurface dark:text-onSurface-dark">{t.notFound}</p>}
                {automations?.map((automation) => {
                   if (automation.status) {
                      return (

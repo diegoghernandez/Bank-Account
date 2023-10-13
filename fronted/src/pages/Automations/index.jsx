@@ -69,7 +69,8 @@ export const Automations = () => {
    return (
       <section className="h-full md:h-screen md:flex md:flex-row-reverse md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full min-h-[calc(100vh-5rem)] flex flex-col gap-3 pt-3 px-4 pb-3 md:border border-outline-variant bg-white md:rounded-2xl md:mx-6 md:my-4 md:p-0">
+         <div className="w-full min-h-[calc(100vh-5rem)] flex flex-col gap-3 pt-3 px-4 pb-3 md:border border-outline-variant bg-white 
+            md:rounded-2xl md:mx-6 md:my-4 md:p-0 dark:border-outline-variant-dark dark:bg-black">
             <form 
                className="flex flex-col gap-3 md:pt-6 md:pl-6 md:pr-8"
                onChange={handleChange}   
@@ -91,7 +92,7 @@ export const Automations = () => {
             </form>
 
             <div className="flex flex-col w-full h-full gap-2 md:py-3 md:pl-6 md:pr-4 md:mb-2 md:h-[calc(100%-8rem)] md:overflow-y-scroll">
-               {notFound && <p>{t.notFound}</p>}
+               {notFound && <p className="text-onSurface dark:text-onSurface-dark">{t.notFound}</p>}
                {automations?.map((automation) => {
                   const isTextName = automation.name.toLowerCase().includes(text.toLowerCase());
                   let isTextType = true;

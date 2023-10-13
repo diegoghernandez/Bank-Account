@@ -58,13 +58,13 @@ export const Account = () => {
    };
 
    return (
-      <section className="flex flex-row-reverse w-full justify-end bg-surface">
+      <section className="flex flex-row-reverse w-full justify-end bg-surface dark:bg-surface-dark">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full bg-white border border-outline-variant md:rounded-2xl  md:mx-6 md:my-4">
-            <h1 className="ml-4 md:ml-6 mt-8 text-4xl font-sans font-bold">{accountName}</h1>
-            <p className="ml-4 md:ml-6 mt-3 text-base font-sans font-normal">{t.accountNumber}: {idAccount}</p>
+         <div className="w-full bg-white border border-outline-variant md:rounded-2xl  md:mx-6 md:my-4 dark:bg-black dark:border-outline-variant-dark">
+            <h1 className="ml-4 md:ml-6 mt-8 text-4xl font-sans font-bold text-onSurface dark:text-onSurface-dark">{accountName}</h1>
+            <p className="ml-4 md:ml-6 mt-3 text-base font-sans font-normal text-onSurface dark:text-onSurface-dark">{t.accountNumber}: {idAccount}</p>
 
-            <div className="w-full px-4 py-2 mt-8 border-b border-outline-variant">
+            <div className="w-full px-4 py-2 mt-8 border-b border-outline-variant dark:border-outline-variant-dark">
                <Switch 
                   label={t.dark}
                   isDisable={false}
