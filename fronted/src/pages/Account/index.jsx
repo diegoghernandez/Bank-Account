@@ -13,20 +13,26 @@ import { useTheme } from "../../hooks/useTheme";
 export const Account = () => {
    const [error, setError] = useState({});
    const [successMessage, setSuccessMessage] = useState("");
+   const [isLoading, setIsLoading] = useState(false);
    const { isDark, setIsDark } = useTheme();
    const navigate = useNavigate();
 
    const t = getTraduction(Traduction.ACCOUNT_PAGE);
    const { accountName, idAccount } = JSON.parse(localStorage.getItem("account"));
 
-   const handleMethods = async (firstParameter, secondParameter, changeFunction) => {
-      try {
-         const data = await changeFunction(firstParameter, secondParameter);
-         setSuccessMessage(data);
-      } catch (e) {
-         const message = JSON.parse(e.message);
-         setError(message);
-      }
+   const handleMethods = (firstParameter, secondParameter, changeFunction) => {
+      setIsLoading(true);
+
+      setTimeout(async () => {
+         try {
+            const data = await changeFunction(firstParameter, secondParameter);
+            setSuccessMessage(data);
+         } catch (e) {
+            const message = JSON.parse(e.message);
+            setIsLoading(false);
+            setError(message);
+         }
+      }, 1000);
    };
 
    const changeLanguage = () => {
@@ -89,6 +95,7 @@ export const Account = () => {
                   formUtils: {
                      inputs: t.change.name.inputs,
                      handle: handleName,
+                     isLoading,
                      successMessage,
                      setSuccessMessage,
                      setError,
@@ -105,6 +112,7 @@ export const Account = () => {
                   formUtils: {
                      inputs: t.change.password.inputs,
                      handle: handlePassword,
+                     isLoading,
                      successMessage,
                      setSuccessMessage,
                      setError,
@@ -121,6 +129,7 @@ export const Account = () => {
                   formUtils: {
                      inputs: t.change.email.inputs,
                      handle: handleEmail,
+                     isLoading,
                      successMessage,
                      setSuccessMessage,
                      setError,

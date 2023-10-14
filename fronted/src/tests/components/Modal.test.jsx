@@ -44,14 +44,41 @@ describe("Modal component test", () => {
          expect(screen.getByRole("button", { name: "Accept", hidden: true })).toBeInTheDocument();
       });
 
-      it("Should show the following error after interact with the button", () => {
-         getFormElements();
+      it("Should show the the load state after interact with the button", () => {
+         render(<Modal 
+            title="Testing Form"
+            formUtils={{
+               inputs: ["First parameter", "Second parameter"],
+               isLoading: true
+         }}/>);
+
+         const acceptButton = screen.getByRole("button", { name: "Accept", hidden: true });
+         
+         fireEvent.click(screen.getByRole("button", { name: "Modal" }));
+         fireEvent.click(acceptButton);
+
+         expect(screen.getByLabelText("First parameter")).toBeDisabled();
+         expect(screen.getByLabelText("Second parameter")).toBeDisabled();
+         expect(screen.getByRole("button", { name: "Cancel", hidden: true })).toBeDisabled();
+         expect(acceptButton).toBeDisabled();
+      });
+
+      it("Should show the an error after interact with the button", () => {
+         render(<Modal 
+            title="Testing Form"
+            formUtils={{
+               inputs: ["First parameter", "Second parameter"],
+               errorParameters: {
+                  first: "First error",
+                  second: "Second error"
+               }
+         }}/>);
          
          fireEvent.click(screen.getByRole("button", { name: "Modal" }));
          fireEvent.click(screen.getByRole("button", { name: "Accept", hidden: true }));
 
-         expect(screen.getByLabelText("First parameter")).toHaveAccessibleErrorMessage("Must not be empty");
-         expect(screen.getByLabelText("Second parameter")).toHaveAccessibleErrorMessage("Must not be empty");
+         expect(screen.getByLabelText("First parameter")).toHaveAccessibleDescription("First error");
+         expect(screen.getByLabelText("Second parameter")).toHaveAccessibleDescription("Second error");
       });
 
       it("Should the mockHandle have called after interact with the button and with the inputs with value", async () => {

@@ -3,6 +3,7 @@ import { AuthProvider } from "../context/auth";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { vi } from "vitest";
+import { ThemeProvider } from "../context/theme";
 
 vi.mock("react-router-dom", async () => {
    const actual = await vi.importActual("react-router-dom");
@@ -28,7 +29,11 @@ vi.mock("react-router-dom", async () => {
 export const customRender = (ui) => {
    return render(
       <HelmetProvider>
-         <AuthProvider>{ui}</AuthProvider>
+         <AuthProvider>
+            <ThemeProvider>
+               {ui}
+            </ThemeProvider>
+         </AuthProvider>
       </HelmetProvider>,
       {wrapper: BrowserRouter});
 };

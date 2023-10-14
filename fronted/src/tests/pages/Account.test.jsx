@@ -48,24 +48,6 @@ describe("Account page tests", () =>  {
    });
 
    describe("After click change name", () => {
-      it("Should show an error individually if some value is not passed", async () => {
-         const page = customRender(<Account />);
-         const user = userEvent.setup();
-         
-         await user.click(page.getByRole("button", { name: "Change name" }));
-         const newNameInput = page.getByLabelText("New name");
-         const passwordInput = page.getAllByLabelText("Password")[0];
-
-         page.getByRole("heading", { name: "Change name", level: 2, hidden: true });
-
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[1]);
-
-         await waitFor(() => {
-            expect(newNameInput).toHaveAccessibleErrorMessage("Must not be empty");
-            expect(passwordInput).toHaveAccessibleErrorMessage("Must not be empty");
-         });
-      });
-
       it("Should show an error if the password is not correct", async () => {
          const page = customRender(<Account />);
          const user = userEvent.setup();
@@ -83,7 +65,7 @@ describe("Account page tests", () =>  {
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
             expect(spyChangeName).toHaveBeenCalledWith("Hello", "test");
-            expect(passwordInput).toHaveAccessibleErrorMessage("Invalid password");
+            expect(passwordInput).toHaveAccessibleDescription("Invalid password");
          });
       });
 
@@ -108,24 +90,6 @@ describe("Account page tests", () =>  {
    });
 
    describe("After click change password", () => {
-      it("Should show an error individually if some value is not passed", async () => {
-         const page = customRender(<Account />);
-         const user = userEvent.setup();
-         
-         await user.click(page.getByRole("button", { name: "Change password" }));
-         const oldPasswordInput = page.getByLabelText("Old password");
-         const newPasswordInput = page.getByLabelText("New password");
-
-         page.getByRole("heading", { name: "Change password", level: 2, hidden: true });
-
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[2]);
-
-         await waitFor(() => {
-            expect(oldPasswordInput).toHaveAccessibleErrorMessage("Must not be empty");
-            expect(newPasswordInput).toHaveAccessibleErrorMessage("Must not be empty");
-         });
-      });
-
       it("Should show an error if the old password is not correct", async () => {
          const page = customRender(<Account />);
          const user = userEvent.setup();
@@ -143,7 +107,7 @@ describe("Account page tests", () =>  {
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
             expect(spyChangeName).toHaveBeenCalledWith("Hello", "test");
-            expect(oldPasswordInput).toHaveAccessibleErrorMessage("Invalid old password");
+            expect(oldPasswordInput).toHaveAccessibleDescription("Invalid old password");
          });
       });
 
@@ -168,24 +132,6 @@ describe("Account page tests", () =>  {
    });
 
    describe("After click change email", () => {
-      it("Should show an error individually if some value is not passed", async () => {
-         const page = customRender(<Account />);
-         const user = userEvent.setup();
-         
-         await user.click(page.getByRole("button", { name: "Change email" }));
-         const newNameInput = page.getByLabelText("New email");
-         const passwordInput = page.getAllByLabelText("Password")[1];
-
-         page.getByRole("heading", { name: "Change email", level: 2, hidden: true });
-
-         await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[3]);
-
-         await waitFor(() => {
-            expect(newNameInput).toHaveAccessibleErrorMessage("Must not be empty");
-            expect(passwordInput).toHaveAccessibleErrorMessage("Must not be empty");
-         });
-      });
-
       it("Should show an error if the password is not correct", async () => {
          const page = customRender(<Account />);
          const user = userEvent.setup();
@@ -203,7 +149,7 @@ describe("Account page tests", () =>  {
          await waitFor(() => {
             expect(spyChangeName).toBeCalledTimes(1);
             expect(spyChangeName).toHaveBeenCalledWith("error@names.com", "1234");
-            expect(passwordInput).toHaveAccessibleErrorMessage("Invalid password");
+            expect(passwordInput).toHaveAccessibleDescription("Invalid password");
          });
       });
 

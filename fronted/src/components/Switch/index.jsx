@@ -45,7 +45,7 @@ export const Switch = ({
                className="absolute w-[3.3rem] h-8 appearance-none"
                onClick={() => {
                   setIsChecked(!isChecked);
-                  set(!isChecked);
+                  set?.(!isChecked);
                }}
             >
             </input>
