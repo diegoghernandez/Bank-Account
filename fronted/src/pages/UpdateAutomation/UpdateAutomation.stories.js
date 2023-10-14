@@ -64,7 +64,7 @@ export const Load = {
          await userEvent.type(amountInput, "2321313312.32");
    
          await userEvent.click(timeInput);
-         await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
+         await userEvent.type(canvas.getByLabelText(t.modalParameters[0]), "22");
          await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
 
          await userEvent.click(statusSwitch);
@@ -115,7 +115,7 @@ export const Error = {
          await userEvent.type(amountInput, "2321313312.32");
    
          await userEvent.click(timeInput);
-         await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
+         await userEvent.type(canvas.getByLabelText(t.modalParameters[0]), "22");
          await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
 
          await userEvent.click(statusSwitch);
@@ -182,7 +182,7 @@ export const Successful = {
          await userEvent.type(amountInput, "2321313312.32");
    
          await userEvent.click(timeInput);
-         await userEvent.selectOptions(canvas.getByRole("combobox", { name: t.modalParameters[0] }), "22");
+         await userEvent.type(canvas.getByLabelText(t.modalParameters[0]), "22");
          await userEvent.click(canvas.getByRole("button", { name: tModal.accept }));
 
          await userEvent.click(statusSwitch);

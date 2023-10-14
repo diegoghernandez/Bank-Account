@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Modal } from "../../components/Modal";
 import userEvent from "@testing-library/user-event";
+import { TextFieldTypes } from "../../constants/TextFieldType";
 
 describe("Modal component test", () => {
    describe("List modal", () => {
@@ -11,9 +12,8 @@ describe("Modal component test", () => {
          fireEvent.click(screen.getByRole("button", { name: "Modal" }));
 
          expect(screen.getByRole("heading", { hidden: true })).toBeInTheDocument();
-         expect(screen.getByRole("combobox", { name: "year", hidden: true})).toBeInTheDocument();
-         expect(screen.getByRole("combobox", { name: "month", hidden: true})).toBeInTheDocument();
-         expect(screen.getByRole("combobox", { name: "day", hidden: true})).toBeInTheDocument();
+         expect(screen.getByLabelText("year")).toBeInTheDocument();
+         expect(screen.getByLabelText("month")).toBeInTheDocument();
          expect(screen.getByRole("button", { name: "Cancel", hidden: true })).toBeInTheDocument();
          expect(screen.getByRole("button", { name: "Accept", hidden: true })).toBeInTheDocument();
       });
@@ -22,10 +22,15 @@ describe("Modal component test", () => {
          const { mockSetValue, mockSetIsChange, mockSetIsClicked } = getListElements();
 
          fireEvent.click(screen.getByRole("button", { name: "Modal" }));
+
+         await userEvent.click(screen.getByLabelText("year"));
+         await userEvent.click(screen.getByRole("menuitem", { name: "2015", hidden: true }));
+         await userEvent.click(screen.getByLabelText("month"));
+         await userEvent.click(screen.getByRole("menuitem", { name: "December", hidden: true }));
          fireEvent.click(screen.getByRole("button", { name: "Accept", hidden: true }));
 
          expect(mockSetValue).toHaveBeenCalledTimes(1);
-         expect(mockSetValue).toHaveBeenCalledWith("2015 December,1");
+         expect(mockSetValue).toHaveBeenCalledWith("2015 December");
          expect(mockSetIsChange).toHaveBeenCalledTimes(1);
          expect(mockSetIsClicked).toHaveBeenCalledTimes(1);
       });
@@ -129,11 +134,15 @@ const getListElements = () => {
    render(<Modal 
       title="Testing List"
       listUtils={{
-         parameters: {
-            year: [2015, 2016, 2017], 
-            month: ["December", "January", "February"], 
-            day: [1, 2, 3]
-         },
+         parameters: [{
+            label: "year",
+            textFieldType: TextFieldTypes.MENU,
+            menuParameters: [2015, 2016, 2017]
+         }, {
+            label: "month",
+            textFieldType: TextFieldTypes.MENU,
+            menuParameters: ["December", "January", "February"]
+         }],
          setValue: mockSetValue,
          setIsChange: mockSetIsChange,
          setIsClicked: mockSetIsClicked

@@ -1,4 +1,6 @@
 import { Modal } from ".";
+import { InputTypes } from "../../constants/InputType";
+import { TextFieldTypes } from "../../constants/TextFieldType";
 
 export default {
    title: "Modal",
@@ -13,11 +15,20 @@ export default {
 export const ListModal = {
    args: {
       listUtils: {
-         parameters: {
-            year: [2015, 2016, 2017], 
-            month: ["December", "January", "February"], 
-            day: [1, 2, 3]
-         },
+         parameters: [{
+            label: "Name",
+            inputType: InputTypes.TEXT,
+            textFieldType: TextFieldTypes.DEFAULT
+         }, {
+            label: "Month",
+            textFieldType: TextFieldTypes.MENU,
+            menuParameters: ["January", "February", "March"]
+         }, {
+            label: "Weeks",
+            inputType: InputTypes.NUMBER,
+            textFieldType: TextFieldTypes.DEFAULT,
+            max: 6
+         }],
       }
    }
 };

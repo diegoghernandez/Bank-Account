@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { Fab } from "../../components/Buttons/FAB";
 import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
+import { InputTypes } from "../../constants/InputType";
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -226,11 +227,22 @@ export const Transactions = () => {
                   type={TextFieldTypes.MODAL}
                   valueRef={dateReference}
                   functionToUpdate={handleChange}
-                  modalParameters={{
-                     year: [2023, 2022, 2021, 2020, 2019],
-                     month: ["", ...months].flat(),
-                     day: ["", "01", "02", "03", "04", "05"]
-                  }}
+                  modalParameters={[{
+                     label: "year",
+                     inputType: InputTypes.NUMBER,
+                     textFieldType: TextFieldTypes.MENU,
+                     menuParameters: [2023, 2022, 2021, 2020, 2019]
+                  }, {
+                     label: "month",
+                     inputType: InputTypes.TEXT,
+                     textFieldType: TextFieldTypes.MENU,
+                     menuParameters: months
+                  }, {
+                     label: "day",
+                     inputType: InputTypes.NUMBER,
+                     textFieldType: TextFieldTypes.DEFAULT,
+                     max: 31
+                  }]}
                />
             </form>
             <h2 className="text-lg font-medium font-sans ml-4 underline md:ml-6 text-onSurface dark:text-onSurface-dark">{t.title}</h2>

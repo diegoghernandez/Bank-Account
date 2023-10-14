@@ -50,7 +50,7 @@ export const Menu = ({
          {parameters.map((type, index) => (
             <li 
                key={type} 
-               className="hover:bg-onSurface/8 focus:outline-none focus:bg-onSurface/12 flex items-center w-auto h-12 px-3 text-onSurface 
+               className="hover:bg-onSurface/8 focus:outline-none focus:bg-onSurface/12 flex items-center w-auto min-h-[3rem] px-3 text-onSurface 
                   text-sm font-sans font-medium dark:text-onSurface-dark dark:hover:bg-onSurface-dark/8 dark:focus:bg-onSurface-dark/12"
                tabIndex={(index === element) ? 0 : -1}
                role="menuitem"

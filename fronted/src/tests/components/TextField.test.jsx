@@ -164,7 +164,8 @@ describe("TextField component tests", () => {
          expect(textField).toHaveAttribute("type", "text");
          expect(textField).toHaveAccessibleDescription("Supportive");
          expect(screen.getByRole("heading", { hidden: true })).toBeInTheDocument();
-         expect(screen.getAllByRole("combobox", { hidden: true })).length(2);
+         expect(screen.getByLabelText("weeks", { hidden: true })).toBeInTheDocument();
+         expect(screen.getByLabelText("days", { hidden: true })).toBeInTheDocument();
       });
 
       it("Should be able to choose some", () => {
@@ -172,7 +173,7 @@ describe("TextField component tests", () => {
          const textField = screen.getByLabelText("Modal");
 
          fireEvent.click(textField);
-         userEvent.selectOptions(screen.getByRole("combobox", { name: "weeks", hidden: true }), "1");
+         userEvent.type(screen.getByLabelText("weeks", { hidden: true }), "1");
          fireEvent.click(screen.getByRole("button", { name: "Accept", hidden: true }));
 
          expect(textField).toBeInTheDocument();

@@ -81,7 +81,10 @@ export const TextField = ({
    functionToUpdate,
    menuParameters,
    menuClasses,
-   modalParameters
+   modalParameters,
+   required = true,
+   min,
+   max
 }) => {
 
    const [isClicked, setIsClicked] = useState(false);
@@ -140,9 +143,11 @@ export const TextField = ({
                   dark:text-onSurface-dark dark:disabled:text-onSurface-dark/38 
                   ${(styles === TextFieldStyles.FILLED) ? "px-4 pt-[1.5rem] pb-2" : "p-4"}`}
                type={inputType.description}
+               min={min}
+               max={max}
                ref={valueRef}
                autoComplete="off"
-               required
+               required={required}
                readOnly={isReadOnly}
                disabled={isDisable}
                aria-describedby={(supportiveText) ? textFieldId + "-describe" : ""}

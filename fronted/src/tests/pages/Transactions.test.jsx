@@ -119,6 +119,8 @@ describe("Transactions page tests", () => {
          );
    
          await user.click(dateInput);
+         await user.click(page.getByLabelText("year"));
+         await user.click(page.getByRole("menuitem", { name: "2023", hidden: true }));
          await user.click(page.getByRole("button", { name: "Accept", hidden: true }));
    
          const spyTransaction = vi.spyOn(transactions, "getTransactions");
@@ -148,7 +150,8 @@ describe("Transactions page tests", () => {
          );
    
          await user.click(dateInput);
-         await user.selectOptions(page.getByRole("combobox", { name: "year", hidden: true}), "2022");
+         await user.click(page.getByLabelText("year"));
+         await user.click(page.getByRole("menuitem", { name: "2022", hidden: true}));
          await user.click(page.getByRole("button", { name: "Accept", hidden: true }));
    
          const spyTransaction = vi.spyOn(transactions, "getTransactions");

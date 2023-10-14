@@ -8,7 +8,6 @@ import { InputTypes } from "../../constants/InputType";
 import { TextFieldStyles } from "../../constants/TextFieldStyles";
 import { Bar } from "../Loader/Bar";
 
-const valueContainer = "bg-surface-container-highest outline-none border-b border-onSurface-variant focus:border-primary caret-primary text-onSurface text-base font-sans font-normal";
 const h2Element = (title) => <h2 className="text-2xl font-normal font-sans text-onSurface mb-4 dark:text-onSurface-dark">{title}</h2>;
 const supportText = "text-sm font-sans font-normal text-onSurface-variant dark:text-onSurface-variant-dark";
 const buttonStyles = "text-sm font-medium font-sans text-primary dark:text-primary-dark";
@@ -21,20 +20,20 @@ const ListModal = ({
    return (
       <div className="w-full flex flex-col justify-center items-center p-6">
          {h2Element(title)}
-         <div className="w-full flex flex-row justify-between">
-            {Object.entries(listUtils?.parameters)?.map((array) => (
-               <div key={array[0]} className="flex flex-col justify-center items-center">
-                  <label htmlFor={array[0]} className="text-lg font-medium font-sans text-onSurface mb-2">{array[0]}</label>
-                  <select 
-                     id={array[0]} 
-                     name={array[0]}
-                     className={`w-fit pl-1 ${valueContainer}`} type="text"
-                  >
-                     {array[1]?.map((element) => (
-                        <option key={element}>{element}</option>
-                     ))}
-                  </select> 
-               </div>
+         <div className="w-full flex flex-col justify-between gap-2">
+            {listUtils?.parameters?.map?.((parameter) => (
+               <TextField 
+                  key={parameter.label}
+                  styles={TextFieldStyles.FILLED}
+                  label={parameter.label}
+                  required={false}
+                  min={0}
+                  max={parameter?.max}
+                  inputType={parameter.inputType}
+                  type={parameter.textFieldType}
+                  menuParameters={(parameter.textFieldType === TextFieldTypes.MENU) ? parameter?.menuParameters: ""}
+                  menuClasses="w-[calc(100%-3rem)] h-28 overflow-y-scroll"
+               />
             ))}
          </div>
          <div className="w-full inline-flex justify-end items-end gap-4 mt-6">
@@ -114,16 +113,14 @@ export const Modal = ({
       const values = [];
       let formattedValue;
       const reference = dialogRef ?? storyRef;
-      const selects = reference?.current.getElementsByTagName("select");
+      const inputs = reference?.current.getElementsByTagName("input");
 
-      if (selects) {
-         for (const target of selects) {
-            if (target.value) {
-               values.push(target.value);
-            }
+      if (inputs) {
+         for (const target of inputs) {
+            values.push(target.value);
          }
    
-         if (listUtils?.parameters[modalParameters[0]]) {
+         if (listUtils?.parameters[0]?.label == modalParameters[0]) {
             formattedValue = Number(values[0]) * 168;
             formattedValue = formattedValue + Number(values[1]) * 24;
             formattedValue = formattedValue + Number(values[2]);
@@ -131,7 +128,7 @@ export const Modal = ({
             formattedValue = `${formatText[0]} ${formattedValue} ${formatText[1]}`;
          }
    
-         listUtils?.setValue(formattedValue ?? values.join().replace(",", " "));
+         listUtils?.setValue(formattedValue ?? values.join().replaceAll(",", " "));
       }
    };
 

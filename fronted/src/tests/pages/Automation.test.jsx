@@ -36,6 +36,7 @@ describe("Automation page tests", () => {
          await user.type(amountInput, "124124");
          await user.type(transferInput, "124124");
          await user.click(timeInput);
+         await user.type(page.getByLabelText("weeks", { hidden: true }), "1");
          await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[0]);
 
          await user.click(makeButton);
@@ -44,7 +45,7 @@ describe("Automation page tests", () => {
             expect(spyAutomation).toHaveBeenCalledTimes(1);
             expect(spyAutomation).toHaveBeenLastCalledWith({
                "amount": 124124,
-               "hoursToNextExecution": 1,
+               "hoursToNextExecution": 168,
                "idAccount": 238589851,
                "idTransferAccount": 124124,
                "name": "Name"
@@ -63,6 +64,7 @@ describe("Automation page tests", () => {
          await user.type(amountInput, "2000");
          await user.type(transferInput, "2132");
          await user.click(timeInput);
+         await user.type(page.getByLabelText("weeks", { hidden: true }), "1");
          await user.click(page.getAllByRole("button", { name: "Accept", hidden: true })[0]);
 
          await user.click(makeButton);
@@ -71,7 +73,7 @@ describe("Automation page tests", () => {
             expect(spyAutomation).toHaveBeenCalledTimes(1);
             expect(spyAutomation).toHaveBeenLastCalledWith({
                "amount": 2000,
-               "hoursToNextExecution": 1,
+               "hoursToNextExecution": 168,
                "idAccount": 238589851,
                "idTransferAccount": 2132,
                "name": "New automation"
