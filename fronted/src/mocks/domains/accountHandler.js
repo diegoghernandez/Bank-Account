@@ -1,7 +1,7 @@
 import { rest } from "msw";
 
 export const accountHandler = [
-   rest.get("http://localhost:8090/accounts/email/:email", (req, res, ctx) => {
+   rest.get(import.meta.env.VITE_API_URL + "/accounts/email/:email", (req, res, ctx) => {
       const { email } = req.params;
 
       if (email == "user@names.com") {

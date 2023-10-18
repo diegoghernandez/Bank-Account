@@ -26,6 +26,8 @@ export default {
    }
 };
 
+const API = import.meta.env.VITE_API_URL + "/auth/login";
+
 export const Default = {};
 
 export const Load = {
@@ -58,7 +60,7 @@ export const Load = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/auth/login", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.delay("infinite"));
          }),
       ],
@@ -104,7 +106,7 @@ export const Error = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/auth/login", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.status(403),);
          }),
       ],

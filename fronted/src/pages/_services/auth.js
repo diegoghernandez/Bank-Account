@@ -3,7 +3,7 @@ import { StatusError } from "../../errors/StatusError";
 import { getTraduction } from "../../utils/getTraduction";
 import { getAccountData } from "./account";
 
-const API = "http://localhost:8090/auth";
+const API = import.meta.env.VITE_API_URL +  "/auth";
 
 const TOKEN = localStorage.getItem("token");
 const { idAccount, email } = JSON.parse(localStorage.getItem("account")) ?? "";

@@ -1,4 +1,4 @@
-const API = "http://localhost:8090/accounts";
+const API = import.meta.env.VITE_API_URL +  "/accounts";
 
 export const getAccountData = async (email) => {
    const TOKEN = localStorage.getItem("token");

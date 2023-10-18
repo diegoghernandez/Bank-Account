@@ -26,6 +26,8 @@ export default {
    }
 };
 
+const API = import.meta.env.VITE_API_URL + "/automations/save";
+
 export const Default = {};
 
 export const Load = {
@@ -67,7 +69,7 @@ export const Load = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/automations/save", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.delay("infinite"));
          }),
       ],
@@ -123,7 +125,7 @@ export const Error = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/automations/save", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.status(400), ctx.json({
                name: "Incorrect name",
                amount: "Not enough balance",
@@ -180,7 +182,7 @@ export const Successful = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/automations/save", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.status(200), ctx.delay(1500), ctx.text("Automation created successfully"));
          }),
       ],

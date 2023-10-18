@@ -27,6 +27,8 @@ export default {
    }
 };
 
+const API = import.meta.env.VITE_API_URL + "/automations/account";
+
 export const Default = {
    play: async ({ canvasElement }) => { 
       const canvas = within(canvasElement);
@@ -39,7 +41,7 @@ export const Default = {
    },
    parameters: {
       msw: [
-         rest.get("http://localhost:8090/automations/account", (req, res, ctx) => {
+         rest.get(API, (req, res, ctx) => {
             return res(ctx.delay(1000), ctx.json(automations));
          }),
       ],
@@ -59,7 +61,7 @@ export const NotFound = {
    },
    parameters: {
       msw: [
-         rest.get("http://localhost:8090/automations/account", (req, res, ctx) => {
+         rest.get(API, (req, res, ctx) => {
             return res(ctx.delay(1000), ctx.status(404));
          }),
       ],

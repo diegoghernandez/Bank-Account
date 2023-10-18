@@ -1,7 +1,7 @@
 import { StatusError } from "../../errors/StatusError";
 import { getAccountData } from "./account";
 
-const API = "http://localhost:8090/transactions";
+const API = import.meta.env.VITE_API_URL + "/transactions";
 const TOKEN = localStorage.getItem("token");
 const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
 

@@ -41,6 +41,8 @@ export default {
    }
 };
 
+const API = import.meta.env.VITE_API_URL + "/automations/update";
+
 export const Default = {};
 
 export const Load = {
@@ -87,7 +89,7 @@ export const Load = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/automations/update", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.delay("infinite"));
          }),
       ],
@@ -149,7 +151,7 @@ export const Error = {
    },
    parameters: {
       msw: [
-         rest.put("http://localhost:8090/automations/update", (req, res, ctx) => {
+         rest.put(API, (req, res, ctx) => {
             return res(ctx.status(400), ctx.json({
                name: "Incorrect name",
                amount: "Not enough balance",
@@ -211,7 +213,7 @@ export const Successful = {
    },
    parameters: {
       msw: [
-         rest.put("http://localhost:8090/automations/update", (req, res, ctx) => {
+         rest.put(API, (req, res, ctx) => {
             return res(ctx.status(200), ctx.text("Automation updated successfully"));
          }),
       ],

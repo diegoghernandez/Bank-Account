@@ -16,6 +16,8 @@ export default {
    }
 };
 
+const API = import.meta.env.VITE_API_URL + "/auth/secure/change-password";
+
 export const Default = {
    play: async ({ canvasElement }) => {
       const canvas = within(canvasElement);
@@ -63,7 +65,7 @@ export const Load = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/auth/secure/change-password", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.delay("infinite"));
          }),
       ],
@@ -110,7 +112,7 @@ export const Error = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/auth/secure/change-password", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.status(400), ctx.json({ 
                oldPassword: "Wrong",
                newPassword: "Invalid password"
@@ -158,7 +160,7 @@ export const Success = {
    },
    parameters: {
       msw: [
-         rest.post("http://localhost:8090/auth/secure/change-password", (req, res, ctx) => {
+         rest.post(API, (req, res, ctx) => {
             return res(ctx.status(200), ctx.json({ result: "Change password successfully"}));
          }),
       ],
