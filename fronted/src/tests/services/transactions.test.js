@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { getTransactions, getTransactionsByDateAndName, getTransactionsByName,  saveTransaction } from "../../pages/_services/transactions";
+import { getTransactions, getTransactionsByFilter, saveTransaction } from "../../pages/_services/transactions";
 
 const transaction = {
    content: [{
@@ -54,7 +54,6 @@ const transactionByName = {
 describe("Transactions tests", () => {
    
    describe("getTransaction test", () => {
-
       it("Should be a function", () => {
          expect(typeof getTransactions).toBe("function");
       });
@@ -72,40 +71,60 @@ describe("Transactions tests", () => {
       });
    });
 
-   describe("getTransactionByName test", () => {
-
+   describe("getTransactionFilter by name test", () => {
       it("Should be a function", () => {
-         expect(typeof getTransactionsByName).toBe("function");
+         expect(typeof getTransactionsByFilter).toBe("function");
       });
 
       it("Should throw an StatusError if there is no element", async () => {
-         await expect(getTransactionsByName(1, "error", 3))
-            .rejects.toThrow(StatusError);
-         await expect(getTransactionsByName(1, "error", 3))
-            .rejects.toThrow("No transactions found");
+         await expect(getTransactionsByFilter({
+            id: 1, 
+            name: "error", 
+            page: 3,
+            date: {}
+         })).rejects.toThrow(StatusError);
+         await expect(getTransactionsByFilter({
+            id: 1, 
+            name: "error", 
+            page: 3,
+            date: {}
+         })).rejects.toThrow("No transactions found");
       });
 
       it("Should give the right content", async () => {
-         const content = await getTransactionsByName(238589851, "new", 0);
+         const content = await getTransactionsByFilter({
+            id: 238589851, 
+            name: "new", 
+            page: 0
+         });
          expect(content).toStrictEqual(transactionByName);
       });
    });
 
-   describe("getTransactionByYear test", () => {
-
+   describe("getTransactionFilter by date test", () => {
       it("Should be a function", () => {
-         expect(typeof getTransactionsByDateAndName).toBe("function");
+         expect(typeof getTransactionsByFilter).toBe("function");
       });
 
       it("Should throw an StatusError if there is no element", async () => {
-         await expect(getTransactionsByDateAndName(21, 2000, "", "", 0))
-            .rejects.toThrowError(StatusError);
-         await expect(getTransactionsByDateAndName(21, 2000, "", "", 0))
-            .rejects.toThrowError("No transactions found");
+         await expect(getTransactionsByFilter({
+            id: 21, 
+            date: { year: 2020 }, 
+            page: 0
+         })).rejects.toThrowError(StatusError);
+         await expect(getTransactionsByFilter({
+            id: 21, 
+            date: { year: 2020 }, 
+            page: 0
+         })).rejects.toThrowError("No transactions found");
       });
 
       it("Should give the right content by year", async () => {
-         const content = await getTransactionsByDateAndName(238589851, 2023, "", "", 0);
+         const content = await getTransactionsByFilter({
+            id: 238589851, 
+            date: { year: 2023 },
+            page: 0
+         });
          expect(content).toStrictEqual(transactionByName);
       });
    });

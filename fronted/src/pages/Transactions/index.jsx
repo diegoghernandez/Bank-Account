@@ -4,7 +4,7 @@ import { Navbar } from "../../components/Navbar";
 import { TextField } from "../../components/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { getTransactions, getTransactionsByName, getTransactionsByDateAndName } from "../_services/transactions";
+import { getTransactions, getTransactionsByFilter } from "../_services/transactions";
 import { TransactionType } from "../../constants/TransactionType";
 import { StatusError } from "../../errors/StatusError";
 import { getTraduction } from "../../utils/getTraduction";
@@ -15,30 +15,42 @@ import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 import { InputTypes } from "../../constants/InputType";
 
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const language = localStorage.getItem("language") ?? navigator.language;
+
+const months = (language) => (language == "es") ? ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+   : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const getFormattedDate = (date) => {
    const transformDate = Date.parse(date);  
    const newDate = new Date(transformDate);
 
-   return `${months[newDate.getMonth()]} ${newDate.getDate()} ${newDate.getFullYear()}`;
+   return `${months(language)[newDate.getMonth()]} ${newDate.getDate()} ${newDate.getFullYear()}`;
 };
 
-const getDatesAndModifiedContent = (dates, content) => {
-   const modifiedContent = [];
-   const loopDates = [dates].flat();
+const getModifiedContent = (pastTransactions, content) => {
+   const isDupe = pastTransactions?.some((group) => {
+      return group.transactions.some((transaction) => content.some((value) => {
+         return value?.idTransaction === transaction?.idTransaction;
+      }));
+   });
 
-   for (const cont of content) {
-      const newDate = getFormattedDate(cont.transactionTimestamp);
-      if (!loopDates.includes(newDate)) {
-         modifiedContent.push({date: newDate});
-         loopDates.push(newDate);
+   if (!isDupe) {
+      for (const cont of content) {
+         const newDate = getFormattedDate(cont.transactionTimestamp);
+         if (pastTransactions.some((group => group.date === newDate))) {
+            pastTransactions[pastTransactions.length - 1].transactions.push(cont);
+         } else {
+            pastTransactions.push({
+               id: crypto.randomUUID(),
+               date: newDate,
+               transactions: []
+            });
+            pastTransactions[pastTransactions.length - 1].transactions.push(cont);
+         }
       }
-      
-      modifiedContent.push(cont);
    }
-
-   return { loopDates, modifiedContent };
+   
+   return { pastTransactions };
 };
 
 export const Transactions = () => {
@@ -50,10 +62,6 @@ export const Transactions = () => {
       type: "",
       name: "",
       date: ""
-   });
-   const [dates, setDates] = useState({
-      default: [],
-      search: []
    });
    const [page, setPage] = useState({
       default: 0,
@@ -77,7 +85,6 @@ export const Transactions = () => {
       const type = typeReference.current?.value;
       const date = dateReference.current?.value;
 
-      setDates({ ...dates, search: [] });
       setAllTransactions({ ...allTransactions, search: [] });
       setPage({ ...page, search: [0, "", ""] });  
 
@@ -95,9 +102,8 @@ export const Transactions = () => {
          search: page.search + 1
       }));
    };
-   
+
    useEffect(() => {
-      const abortCont = new AbortController();
       setLoading(true);
 
       setTimeout(async () => {         
@@ -107,7 +113,7 @@ export const Transactions = () => {
             let type = "default";
             let pageContent = page[type] + 1;
    
-            if (texts.date[0] || texts.name) {
+            if (texts.date[0] || texts.name || texts.type) {
                whichContainer?.removeEventListener?.("scrollend", () => setPage({
                   ...page,
                   default: page.default + 1
@@ -122,19 +128,39 @@ export const Transactions = () => {
                } 
    
                pageContent = [page.search[0] + 1, page.search[1], page.search[2]];
-   
-               if (texts.date[0]) {
-                  const { content: dateContent, last: dateLast } = await 
-                     getTransactionsByDateAndName(idAccount, texts.date[0], texts.date[1]?.toUpperCase() ?? "", texts.name, actualPage);
-   
-                  content = dateContent;
-                  last = dateLast;
-               } else {
-                  const { content: nameContent, last: nameLast } = await getTransactionsByName(idAccount, texts.name, actualPage);
+
+               let transactionType = "";
+               let formattedMonth;
       
-                  content = nameContent;
-                  last = nameLast;
+               if (texts.type) {
+                  for (const type of Object.entries(TransactionType)) {
+                     if (type[1].description.includes(texts.type)) {
+                        transactionType = type[0];
+                     }
+                  }
                }
+
+               const wantedMonth = months(language);
+
+               for (let i = 0; i < wantedMonth.length - 1; i++) {
+                  if(texts.date[1] == wantedMonth[i]) {
+                     formattedMonth = months("en")[i].toUpperCase();
+                  }
+               }
+
+               const { content: filterContent, last: filterLast } = await getTransactionsByFilter({
+                  id: idAccount,
+                  type: transactionType,
+                  name: texts.name,
+                  date: texts.date[0] ? {
+                     year: Number(texts.date[0]),
+                     month: texts.date[1] ? formattedMonth : null
+                  } : {},
+                  page: actualPage,
+               });
+
+               content = filterContent;
+               last = filterLast;
    
                type = "search";
             } else {
@@ -143,25 +169,13 @@ export const Transactions = () => {
                content = defaultContent;
                last = defaultLast;
             }
+            
+            const { pastTransactions } = getModifiedContent(allTransactions[type], content);
    
-            const { loopDates, modifiedContent } = getDatesAndModifiedContent(dates[type], content);
-   
-            const reverseTransactions = allTransactions[type].toReversed?.();
-            const isDupe = reverseTransactions?.some((transaction) => modifiedContent.some((value) => {
-               if (value?.date) return false;
-               return value?.idTransaction === transaction?.idTransaction;
-            }));
-   
-            if (!isDupe) {
-               setDates({
-                  ...dates,
-                  [type]: loopDates
-               });
-               setAllTransactions({
-                  ...allTransactions,
-                  [type]: [...allTransactions[type], modifiedContent].flat()
-               });  
-            }
+            setAllTransactions({
+               ...allTransactions,
+               [type]: pastTransactions
+            });  
 
             setNotFound(false);
             setLoading(false);
@@ -188,19 +202,22 @@ export const Transactions = () => {
             if (error instanceof StatusError) {
                setNotFound(true);
                setLoading(false);
-               setDates({ ...dates, search: [] });
                setAllTransactions({ ...allTransactions, search: [] });  
             }
          }
       }, 500);
 
-      return () => abortCont.abort();
-   }, [page, texts.name, texts.date]);
+      return () => {
+         whichContainer?.removeEventListener?.("scrollend", () => setPage({
+            ...page,
+            default: page.default + 1
+         }));
+      };
+   }, [page, texts.type, texts.name, texts.date]);
 
-   let transactions = allTransactions.default;
+   let transactionsGroup = allTransactions.default;
 
-   if (texts.date[0]) transactions = allTransactions.search;
-   else if (texts.name) transactions = allTransactions.search;
+   if (texts.date[0] || texts.name || texts.type) transactionsGroup = allTransactions.search;
 
    return (
       <section className="h-full md:h-screen md:flex md:flex-row-reverse md:overflow-hidden">
@@ -236,7 +253,7 @@ export const Transactions = () => {
                      label: "month",
                      inputType: InputTypes.TEXT,
                      textFieldType: TextFieldTypes.MENU,
-                     menuParameters: months
+                     menuParameters: months(language)
                   }, {
                      label: "day",
                      inputType: InputTypes.NUMBER,
@@ -248,30 +265,29 @@ export const Transactions = () => {
             <h2 className="text-lg font-medium font-sans ml-4 underline md:ml-6 text-onSurface dark:text-onSurface-dark">{t.title}</h2>
             {notFound && <p className="text-onSurface dark:text-onSurface-dark">{t.notFound}</p>}
             <div ref={transactionsContainer}  className="md:h-[calc(100%-16rem)] md:overflow-y-scroll">
-               {transactions?.map((transaction) => {
-                  const formattedType = TransactionType[transaction?.transactionType]?.description;
-                  const isTextType = formattedType?.includes(texts.type);
-                  return (
-                     <>
-                        {(transaction?.date) &&
-                        <div key={transaction?.date} className="mt-3 pl-4 pb-1 border-b border-primary dark:border-primary-dark">
-                           <h3 className="text-sm font-medium font-sans text-onSurface dark:text-onSurface-dark">{transaction?.date}</h3>
-                        </div>
-                        }
-                        {(isTextType) &&
-                           <DividerCard 
-                              key={transaction?.idTransaction}
-                              transferAccount={transaction?.idTransferAccount}
-                              name={transaction?.receiverName}
-                              amount={transaction?.transactionAmount?.toFixed(2)}
-                              type={formattedType}
-                              time={transaction?.transactionTimestamp}
-                              automated={transaction?.isAutomated}
-                           />
-                        }
-                     </>
-                  );
-               })}
+               {transactionsGroup?.map((group) => (
+                  <>
+                     <div key={group?.id} className="mt-3 pl-4 pb-1 border-b border-primary dark:border-primary-dark">
+                        <h3 className="text-sm font-medium font-sans text-onSurface dark:text-onSurface-dark">{group?.date}</h3>
+                     </div>
+                     {group?.transactions?.map((transaction) => {
+                        const formattedType = TransactionType[transaction?.transactionType]?.description;
+                        return (
+                           <>
+                              <DividerCard 
+                                 key={transaction?.idTransaction}
+                                 transferAccount={transaction?.idTransferAccount}
+                                 name={transaction?.receiverName}
+                                 amount={transaction?.transactionAmount?.toFixed(2)}
+                                 type={formattedType}
+                                 time={transaction?.transactionTimestamp}
+                                 automated={transaction?.isAutomated}
+                              />
+                           </>
+                        );
+                     })}
+                  </>
+               ))}
                {loading && <Spin />}
             </div>
          </div>

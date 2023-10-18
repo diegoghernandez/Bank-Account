@@ -7,6 +7,10 @@ import com.bankaccount.back.domain.service.TransactionTypeService;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
 import com.bankaccount.back.web.TransactionController;
 import com.bankaccount.back.web.config.JwtUtil;
+import com.bankaccount.back.web.dto.DateDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,8 +32,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -188,21 +194,28 @@ public class TransactionControllerTest {
 
    @Test
    @DisplayName("Should return all transactionEntities in json format with a specific idAccount and name using the service or return a not found if authorized")
-   void getByIdAccountAndName() {
-      Mockito.when(transactionService.getByIdAccountAndName(885748, "ma", 0))
+   void getByFilterWithName() {
+      DateDto dateDto = new DateDto(0, null, null);
+      Mockito.when(transactionService.getByFilter(885748, null, "ma", dateDto, 0))
               .thenReturn(Optional.of(new PageImpl<>(
                       List.of(transactionEntityList.get(1), transactionEntityList.get(2)))));
 
-      Mockito.when(transactionService.getByIdAccountAndName(885748, "ma", 1))
+      Mockito.when(transactionService.getByFilter(885748, null, "ma", dateDto, 1))
               .thenReturn(Optional.of(new PageImpl<>(List.of())));
 
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
       assertAll(
-              () -> mockMvc.perform(get("/transactions/name")
+              () -> mockMvc.perform(post("/transactions/filter")
                               .param("id", "885748")
                               .param("name", "ma")
                               .param("page", "0")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .with(user("user").roles(USER)))
+                              .content(objectMapper.writeValueAsString(dateDto))
+                              .with(user("user").roles(USER))
+                              .with(csrf()))
                       .andExpect(status().isOk())
                       .andExpect(jsonPath("$.totalElements")
                               .value(2))
@@ -225,39 +238,47 @@ public class TransactionControllerTest {
                       .andExpect(jsonPath("$.content[1].transactionType")
                               .value(transactionEntityList.get(2).getTransactionType().toString())),
 
-              () -> mockMvc.perform(get("/transactions/name")
+              () -> mockMvc.perform(post("/transactions/filter")
                               .param("id", "885748")
                               .param("name", "ma")
                               .param("page", "1")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .with(user("user").roles(USER)))
+                              .content(objectMapper.writeValueAsString(dateDto))
+                              .with(user("user").roles(USER))
+                              .with(csrf()))
                       .andExpect(status().isNotFound()),
 
-              () -> mockMvc.perform(get("/transactions/account/885748")
-                              .contentType(MediaType.APPLICATION_JSON))
+              () -> mockMvc.perform(post("/transactions/filter")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .with(csrf()))
                       .andExpect(status().isUnauthorized())
       );
    }
 
    @Test
    @DisplayName("Should return all transactionEntities in json format with a specific idAccount and with the timestamp condition using the service or return a not found if authorized")
-   void getByIdAccountAndDateAndName() {
-      Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Month.JANUARY, "ma", 0))
+   void getByFilterWithDate() {
+      DateDto dateDto = new DateDto(2021, Month.JANUARY, null);
+      Mockito.when(transactionService.getByFilter(54365, null, "ma", dateDto, 0))
               .thenReturn(Optional.of(new PageImpl<>(
                       Collections.singletonList(transactionEntityList.get(1)))));
 
-      Mockito.when(transactionService.getByIdAccountAndDateAndName(54365, 2021, Month.JANUARY, "ma", 1))
+      Mockito.when(transactionService.getByFilter(54365, null, "ma", dateDto,1))
               .thenReturn(Optional.of(new PageImpl<>(List.of())));
 
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
       assertAll(
-              () -> mockMvc.perform(get("/transactions/date")
+              () -> mockMvc.perform(post("/transactions/filter")
                               .param("id", "54365")
-                              .param("year", "2021")
-                              .param("month", "JANUARY")
                               .param("name", "ma")
                               .param("page", "0")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .with(user("user").roles(USER)))
+                              .content(objectMapper.writeValueAsString(dateDto))
+                              .with(user("user").roles(USER))
+                              .with(csrf()))
                       .andExpect(status().isOk())
                       .andExpect(jsonPath("$.totalElements").value(1))
                       .andExpect(jsonPath("$.content[0].idTransaction")
@@ -273,23 +294,23 @@ public class TransactionControllerTest {
                       .andExpect(jsonPath("$.content[0].transactionTimestamp")
                               .value(transactionEntityList.get(1).getTransactionTimestamp().toString())),
 
-              () -> mockMvc.perform(get("/transactions/date")
+              () -> mockMvc.perform(post("/transactions/filter")
                               .param("id", "54365")
-                              .param("year", "2021")
-                              .param("month", "JANUARY")
                               .param("name", "ma")
                               .param("page", "1")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .with(user("user").roles(USER)))
+                              .content(objectMapper.writeValueAsString(dateDto))
+                              .with(user("user").roles(USER))
+                              .with(csrf()))
                       .andExpect(status().isNotFound()),
 
-              () -> mockMvc.perform(get("/transactions/date")
+              () -> mockMvc.perform(post("/transactions/filter")
                               .param("id", "423")
-                              .param("year", "2034")
-                              .param("month", "JANUARY")
                               .param("name", "ma")
                               .param("page", "0")
-                              .contentType(MediaType.APPLICATION_JSON))
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsString(new DateDto(2034, Month.JANUARY, null)))
+                              .with(csrf()))
                       .andExpect(status().isUnauthorized())
       );
    }

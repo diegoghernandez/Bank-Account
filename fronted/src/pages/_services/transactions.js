@@ -23,32 +23,14 @@ export const getTransactions = async (id, page, signal) => {
    }
 };
 
-export const getTransactionsByName = async (id, name, page, signal) => {
-   const response = await fetch(`${API}/name?id=${id}&name=${name}&page=${page}`, {
-      method: "GET",
+export const getTransactionsByFilter = async ({ id, type = "", name, date = {}, page }) => {
+   const response = await fetch(`${API}/filter?id=${id}&type=${type}&name=${name}&page=${page}`, {
+      method: "POST",
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN
       },
-      signal
-   });
-
-   if (response.ok) {
-      const { content, last } = await response.json();
-      return { content, last };
-   } else {
-      throw new StatusError("No transactions found", 404);
-   }
-};
-
-export const getTransactionsByDateAndName = async (id, year, month, name, page, signal) => {
-   const response = await fetch(`${API}/date?id=${id}&year=${year}&month=${month}&name=${name}&page=${page}`, {
-      method: "GET",
-      headers: {
-         "Content-Type": "application/json",
-         "Authorization": TOKEN
-      },
-      signal
+      body: JSON.stringify(date)
    });
 
    if (response.ok) {

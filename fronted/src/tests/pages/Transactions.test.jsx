@@ -29,21 +29,71 @@ describe("Transactions page tests", () => {
       });
    });
 
-   it("After select the type, should show all transactions with the respective type", async () =>  {
-      const page = customRender(<Transactions />);
-      const user = userEvent.setup();
-      const typeInput = page.getByLabelText("Transaction Type");
+   describe("After select the type", () => {
+      it("Should show all transactions with the respective type", async () =>  {
+         const page = customRender(<Transactions />);
+         const user = userEvent.setup();
+         const typeInput = page.getByLabelText("Transaction Type");
+   
+         await waitForElementToBeRemoved(() => 
+            page.getAllByRole("progressbar")
+         );
+   
+         await user.click(typeInput);
+         await user.click(page.getByText("Wire transfer"));
 
-      await waitForElementToBeRemoved(() => 
-         page.getAllByRole("progressbar")
-      );
+         const spyTransaction = vi.spyOn(transactions, "getTransactions");
+         const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
+   
+         await waitFor(() => {
+            expect(spyTransaction).toHaveBeenCalledTimes(1);
+            expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
+            expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
+            expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
+               id: 238589851,
+               type: "WIRE_TRANSFER",
+               name: "",
+               date: {},
+               page: 0,
+            });
+         });
+   
+         await waitFor(() => {
+            expect(page.getAllByRole("article")).length(2);
+         });
+      });
 
-      await user.click(typeInput);
-      await user.click(page.getByText("Wire transfer"));
+      it("Should show no transactions found", async () =>  {
+         const page = customRender(<Transactions />);
+         const user = userEvent.setup();
+         const typeInput = page.getByLabelText("Transaction Type");
+   
+         await waitForElementToBeRemoved(() => 
+            page.getAllByRole("progressbar")
+         );
+   
+         await user.click(typeInput);
+         await user.click(page.getByRole("menuitem", { name: "Deposit" }));
 
-      await waitFor(() => {
-         expect(page.queryByText("Deposit")).not.toBeInTheDocument();
-         expect(page.getAllByText(/Wire transfer$/i)).length(2);
+         const spyTransaction = vi.spyOn(transactions, "getTransactions");
+         const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
+   
+         await waitFor(() => {
+            expect(spyTransaction).toHaveBeenCalledTimes(1);
+            expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
+            expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
+            expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
+               id: 238589851,
+               type: "DEPOSIT",
+               name: "",
+               date: {},
+               page: 0,
+            });
+         });
+   
+         await waitFor(() => {
+            expect(page.getByText("No transactions found")).toBeInTheDocument();
+         });
       });
    });
 
@@ -61,15 +111,19 @@ describe("Transactions page tests", () => {
          await user.keyboard("{Enter}");
    
          const spyTransaction = vi.spyOn(transactions, "getTransactions");
-         const spyTransactionByName = vi.spyOn(transactions, "getTransactionsByName");
-         const spyTransactionByDateAndName = vi.spyOn(transactions, "getTransactionsByDateAndName");
+         const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
             expect(spyTransaction).toHaveBeenCalledTimes(1);
             expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
-            expect(spyTransactionByName).toHaveBeenCalledTimes(1);
-            expect(spyTransactionByName).toHaveBeenLastCalledWith(238589851, "new", 0);
-            expect(spyTransactionByDateAndName).toHaveBeenCalledTimes(0);
+            expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
+            expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
+               id: 238589851,
+               type: "",
+               name: "new",
+               date: {},
+               page: 0,
+            });
          });
    
          await waitFor(() => {
@@ -90,15 +144,19 @@ describe("Transactions page tests", () => {
          await user.keyboard("{Enter}");
    
          const spyTransaction = vi.spyOn(transactions, "getTransactions");
-         const spyTransactionByName = vi.spyOn(transactions, "getTransactionsByName");
-         const spyTransactionByDateAndName = vi.spyOn(transactions, "getTransactionsByDateAndName");
+         const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
             expect(spyTransaction).toHaveBeenCalledTimes(1);
             expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
-            expect(spyTransactionByName).toHaveBeenCalledTimes(1);
-            expect(spyTransactionByName).toHaveBeenLastCalledWith(238589851, "test name", 0);
-            expect(spyTransactionByDateAndName).toHaveBeenCalledTimes(0);
+            expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
+            expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
+               id: 238589851, 
+               type: "",
+               name: "test name", 
+               date: {},
+               page: 0
+            });
          });
    
          await waitFor(() => {
@@ -124,15 +182,22 @@ describe("Transactions page tests", () => {
          await user.click(page.getByRole("button", { name: "Accept", hidden: true }));
    
          const spyTransaction = vi.spyOn(transactions, "getTransactions");
-         const spyTransactionByName = vi.spyOn(transactions, "getTransactionsByName");
-         const spyTransactionByDateAndName = vi.spyOn(transactions, "getTransactionsByDateAndName");
+         const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
             expect(spyTransaction).toHaveBeenCalledTimes(1);
             expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
-            expect(spyTransactionByName).toHaveBeenCalledTimes(0);
-            expect(spyTransactionByDateAndName).toHaveBeenCalledTimes(1);
-            expect(spyTransactionByDateAndName).toHaveBeenLastCalledWith(238589851, "2023", "", "", 0);
+            expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
+            expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
+               id: 238589851, 
+               type: "",
+               name: "",
+               date: {
+                  year: 2023, 
+                  month: null,
+               }, 
+               page: 0
+            });
          });
    
          await waitFor(() => {
@@ -155,15 +220,22 @@ describe("Transactions page tests", () => {
          await user.click(page.getByRole("button", { name: "Accept", hidden: true }));
    
          const spyTransaction = vi.spyOn(transactions, "getTransactions");
-         const spyTransactionByName = vi.spyOn(transactions, "getTransactionsByName");
-         const spyTransactionByDateAndName = vi.spyOn(transactions, "getTransactionsByDateAndName");
+         const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
             expect(spyTransaction).toHaveBeenCalledTimes(1);
             expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
-            expect(spyTransactionByName).toHaveBeenCalledTimes(0);
-            expect(spyTransactionByDateAndName).toHaveBeenCalledTimes(1);
-            expect(spyTransactionByDateAndName).toHaveBeenLastCalledWith(238589851, "2022", "", "", 0);
+            expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
+            expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
+               id: 238589851, 
+               type: "",
+               name: "",
+               date: {
+                  year: 2022, 
+                  month: null
+               }, 
+               page: 0,
+            });
          });
    
          await waitFor(() => {

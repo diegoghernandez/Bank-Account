@@ -1,9 +1,11 @@
 package com.bankaccount.back.web;
 
+import com.bankaccount.back.constants.TransactionType;
 import com.bankaccount.back.domain.service.TransactionService;
 import com.bankaccount.back.domain.service.TransactionTypeService;
 import com.bankaccount.back.helpers.Messages;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
+import com.bankaccount.back.web.dto.DateDto;
 import com.bankaccount.back.web.dto.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.Month;
 import java.util.Locale;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/transactions")
@@ -45,24 +45,16 @@ public class TransactionController {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
    }
 
-   @GetMapping("/name")
-   public ResponseEntity<Page<TransactionEntity>> getByIdAccountAndName(@RequestParam(name = "id") int idAccount, @RequestParam String name, @RequestParam int page) {
-      Page<TransactionEntity> pageable = transactionService.getByIdAccountAndName(idAccount, name, page).get();
+   @PostMapping("/filter")
+   public ResponseEntity<Page<TransactionEntity>> getByFilter(
+           @RequestParam(name = "id") int idAccount,
+           @RequestParam(name = "type", required = false) TransactionType transactionType,
+           @RequestParam(required = false) String name,
+           @RequestBody @Valid DateDto dateDto,
+           @RequestParam int page) {
 
-      if (!pageable.isEmpty()) {
-         return new ResponseEntity<>(pageable, HttpStatus.OK);
-      }
-
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-   }
-
-   @GetMapping("/date")
-   public ResponseEntity<Page<TransactionEntity>> getByIdAccountAndDateAndName(@RequestParam(name = "id") int idAccount,
-                                                                               @RequestParam int year,
-                                                                               @RequestParam(required = false) Month month,
-                                                                               @RequestParam String name,
-                                                                               @RequestParam int page) {
-      Page<TransactionEntity> transactionDomainList = transactionService.getByIdAccountAndDateAndName(idAccount, year, month, name, page).get();
+      Page<TransactionEntity> transactionDomainList = transactionService.getByFilter(
+              idAccount, transactionType, name, dateDto, page).get();
 
       if (!transactionDomainList.isEmpty()) {
          return new ResponseEntity<>(transactionDomainList, HttpStatus.OK);

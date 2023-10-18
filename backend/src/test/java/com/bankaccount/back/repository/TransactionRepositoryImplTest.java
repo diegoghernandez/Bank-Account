@@ -3,6 +3,7 @@ package com.bankaccount.back.repository;
 import com.bankaccount.back.domain.repository.TransactionRepository;
 import com.bankaccount.back.persistence.crud.TransactionCrudRepository;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
+import com.bankaccount.back.web.dto.DateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
@@ -86,7 +88,7 @@ public class TransactionRepositoryImplTest {
    @Test
    @DisplayName("Should return all transactionEntities with the specific idAccount of the database")
    void getByIdAccount() {
-      PageRequest pageable = PageRequest.of(0, 10);
+      PageRequest pageable = PageRequest.of(0, 10, Sort.by("idTransaction").descending());
       Mockito.when(transactionCrudRepository.findByIdAccount(343, pageable))
               .thenReturn(new PageImpl<>(List.of(transactionEntityList.get(0), transactionEntityList.get(1))));
 
@@ -96,13 +98,14 @@ public class TransactionRepositoryImplTest {
    }
 
    @Test
-   @DisplayName("Should return all transactionEntities with the specific idAccount and name of the database")
+   @DisplayName("Should return all transactionEntities with the specific idAccount or type and name of the database")
    void getByIdAccountAndName() {
-      PageRequest pageable = PageRequest.of(0, 10);
-      Mockito.when(transactionCrudRepository.findByIdAccountAndReceiverNameContainingIgnoreCase(343, "ma", pageable))
+      PageRequest pageable = PageRequest.of(0, 10, Sort.by("idTransaction").descending());
+      Mockito.when(transactionCrudRepository.findByFilter(
+              343,  null, "ma", null, null, pageable))
               .thenReturn(new PageImpl<>(List.of(transactionEntityList.get(0), transactionEntityList.get(1))));
 
-      Page<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndName(343, "ma", 0).get();
+      Page<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndName(343,  null, "ma", 0).get();
 
       assertAll(
               () -> assertEquals(List.of(432L, 342L), transactionList.stream().map(TransactionEntity::getIdTransaction).toList()),
@@ -112,17 +115,18 @@ public class TransactionRepositoryImplTest {
    }
 
    @Test
-   @DisplayName("Should return all transactionEntities of the database with the specific idAccount and year of the database")
-   void getByIdAccountAndDateAndName() {
-      PageRequest pageable = PageRequest.of(0, 10);
+   @DisplayName("Should return all transactionEntities of the database with the specific idAccount, type, name, and date of the database")
+   void getByIdAccountAndTypeAndNameAndDate() {
+      PageRequest pageable = PageRequest.of(0, 10, Sort.by("idTransaction").ascending());
       LocalDateTime startTime = LocalDateTime.of(2022, Month.JANUARY, 1, 0, 0, 0);
       LocalDateTime endTime = LocalDateTime.of(2022, Month.JANUARY, 31, 0, 0, 0);
 
-      Mockito.when(transactionCrudRepository.findByIdAccountAndTransactionTimestampBetweenAndReceiverNameContainingIgnoreCase(
-                      343, startTime, endTime, "ma", pageable))
+      Mockito.when(transactionCrudRepository.findByFilter(
+                      343, null, "ma", startTime, endTime, pageable))
               .thenReturn(new PageImpl<>(Collections.singletonList(transactionEntityList.get(1))));
 
-      Page<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndDateAndName(343, 2022, Month.JANUARY, "ma", 0).get();
+      Page<TransactionEntity> transactionList = transactionRepository.getByIdAccountAndTypeAndNameAndDate(
+              343,   null, "ma", new DateDto(2022, Month.JANUARY, null), 0).get();
 
       assertAll(
               () -> assertThat(transactionList.getSize()).isEqualTo(1),

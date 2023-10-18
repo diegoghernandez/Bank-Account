@@ -1,12 +1,13 @@
 package com.bankaccount.back.domain.service;
 
+import com.bankaccount.back.constants.TransactionType;
 import com.bankaccount.back.domain.repository.TransactionRepository;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
+import com.bankaccount.back.web.dto.DateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.time.Month;
 import java.util.Optional;
 
 @Service
@@ -23,11 +24,13 @@ public class TransactionService {
       return transactionRepository.getByIdAccount(idAccount, page);
    }
 
-   public Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, String name, int page) {
-      return transactionRepository.getByIdAccountAndName(idAccount, name, page);
-   }
+   public Optional<Page<TransactionEntity>> getByFilter(
+           int idAccount, TransactionType transactionType, String name, DateDto dateDto, int page) {
 
-   public Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Month month, String name, int page) {
-      return transactionRepository.getByIdAccountAndDateAndName(idAccount, year, month, name, page);
+      if (dateDto.year() != 0) {
+         return transactionRepository.getByIdAccountAndTypeAndNameAndDate(idAccount, transactionType, name, dateDto, page);
+      } else {
+         return transactionRepository.getByIdAccountAndName(idAccount, transactionType, name, page);
+      }
    }
 }

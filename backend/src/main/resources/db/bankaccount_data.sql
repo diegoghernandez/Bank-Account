@@ -30,4 +30,4 @@ INSERT INTO `transaction` (id_transaction, id_account, id_transfer_account, rece
 (9, 1, 2, 'Javier', 6000.00, 'WIRE_TRANSFER', {ts '2022-10-09 20:10:12'}),
 (10, 1, 0, 'Pedro', 2000.00, 'DEPOSIT', {ts '2022-10-09 20:10:12'}),
 (11, 1, 2, 'Maria', 400.00, 'ONLINE_PAYMENT', {ts '2022-10-09 20:10:12'}),
-(12, 1, 2, 'Maria', 300.00, 'ONLINE_PAYMENT', {ts '2024-10-09 20:10:12'});
+(12, 1, 2, 'Maria', 300.00, 'WIRE_TRANSFER', {ts '2024-10-09 20:10:12'});

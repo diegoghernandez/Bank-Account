@@ -4,6 +4,7 @@ import com.bankaccount.back.constants.TransactionType;
 import com.bankaccount.back.domain.repository.TransactionRepository;
 import com.bankaccount.back.domain.service.TransactionService;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
+import com.bankaccount.back.web.dto.DateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -105,13 +106,14 @@ public class TransactionServiceTest {
    }
 
    @Test
-   @DisplayName("Should return all transactionEntity with the specific idAccount using the repository")
-   void getByIdAccountAndName() {
-      Mockito.when(transactionRepository.getByIdAccountAndName(343, "ma", 1))
+   @DisplayName("Should return all transactionEntity with the specific idAccount or name and type using the repository")
+   void getByFilterWithName() {
+      Mockito.when(transactionRepository.getByIdAccountAndName(343,  null, "ma", 1))
               .thenReturn(Optional.of(new PageImpl<>(
                       List.of(transactionEntityList.get(1), transactionEntityList.get(2)))));
 
-      Page<TransactionEntity> transactionList = transactionService.getByIdAccountAndName(343, "ma", 1).get();
+      Page<TransactionEntity> transactionList = transactionService.getByFilter(
+              343, null, "ma", new DateDto(0, null, null), 1).get();
 
       assertAll(
               () -> assertThat(transactionList.getSize()).isEqualTo(2),
@@ -122,13 +124,15 @@ public class TransactionServiceTest {
 
 
    @Test
-   @DisplayName("Should return all transactionEntity with the specific idAccount and year using the repository")
-   void getByIdAccountAndDateAndName() {
-      Mockito.when(transactionRepository.getByIdAccountAndDateAndName(1, 2021, Month.JANUARY, "ma", 0))
+   @DisplayName("Should return all transactionEntity with the specific idAccount or type, name, date using the repository")
+   void getByFilterWithDate() {
+      Mockito.when(transactionRepository.getByIdAccountAndTypeAndNameAndDate(
+              1,  null, "ma", new DateDto(2021, Month.JANUARY, null), 0))
               .thenReturn(Optional.of(new PageImpl<>(
                       Collections.singletonList(transactionEntityList.get(1)))));
 
-      Page<TransactionEntity> transactionList = transactionService.getByIdAccountAndDateAndName(1, 2021, Month.JANUARY, "ma", 0).get();
+      Page<TransactionEntity> transactionList = transactionService.getByFilter(
+              1, null, "ma", new DateDto(2021, Month.JANUARY, null), 0).get();
 
       assertAll(
               () -> assertThat(transactionList.getSize()).isEqualTo(1),

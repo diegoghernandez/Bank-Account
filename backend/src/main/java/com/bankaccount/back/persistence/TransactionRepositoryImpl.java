@@ -1,12 +1,15 @@
 package com.bankaccount.back.persistence;
 
+import com.bankaccount.back.constants.TransactionType;
 import com.bankaccount.back.domain.repository.TransactionRepository;
 import com.bankaccount.back.persistence.crud.TransactionCrudRepository;
 import com.bankaccount.back.persistence.entity.TransactionEntity;
+import com.bankaccount.back.web.dto.DateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -27,31 +30,33 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
    @Override
    public Optional<Page<TransactionEntity>> getByIdAccount(int idAccount, int page) {
-      Pageable pageRequest = PageRequest.of(page, 10);
+      Pageable pageRequest = PageRequest.of(page, 10, Sort.by("idTransaction").descending());
       return Optional.of(transactionCrudRepository.findByIdAccount(idAccount, pageRequest));
    }
 
    @Override
-   public Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, String name, int page) {
-      Pageable pageRequest = PageRequest.of(page, 10);
-      return Optional.of(transactionCrudRepository.findByIdAccountAndReceiverNameContainingIgnoreCase(idAccount, name, pageRequest));
+   public Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, TransactionType transactionType, String name, int page) {
+      Pageable pageRequest = PageRequest.of(page, 10, Sort.by("idTransaction").descending());
+      return Optional.of(transactionCrudRepository.findByFilter(
+              idAccount, transactionType, name, null, null, pageRequest));
    }
 
    @Override
-   public Optional<Page<TransactionEntity>> getByIdAccountAndDateAndName(int idAccount, int year, Month month, String name, int page) {
+   public Optional<Page<TransactionEntity>> getByIdAccountAndTypeAndNameAndDate(
+           int idAccount, TransactionType transactionType, String name, DateDto dateDto, int page) {
       LocalDateTime startDate;
       LocalDateTime endDate;
-      if (month != null) {
-         startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
+      if (dateDto.month() != null) {
+         startDate = LocalDateTime.of(dateDto.year(), dateDto.month(), 1, 0, 0, 0);
          endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
       } else {
-         startDate = LocalDateTime.of(year, Month.JANUARY, 1, 0, 0, 0);
-         endDate = LocalDateTime.of(year + 1, Month.JANUARY, 1, 0, 0, 0);
+         startDate = LocalDateTime.of(dateDto.year(), Month.JANUARY, 1, 0, 0, 0);
+         endDate = LocalDateTime.of(dateDto.year() + 1, Month.JANUARY, 1, 0, 0, 0);
       }
-      Pageable pageRequest = PageRequest.of(page, 10);
+      Pageable pageRequest = PageRequest.of(page, 10, Sort.by("idTransaction").ascending());
 
-      return Optional.of(transactionCrudRepository.findByIdAccountAndTransactionTimestampBetweenAndReceiverNameContainingIgnoreCase(
-              idAccount, startDate, endDate, name, pageRequest));
+      return Optional.of(transactionCrudRepository.findByFilter(
+              idAccount, transactionType, name, startDate, endDate, pageRequest));
    }
 
    @Override
