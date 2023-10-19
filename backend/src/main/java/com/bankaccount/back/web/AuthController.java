@@ -2,6 +2,7 @@ package com.bankaccount.back.web;
 
 import com.bankaccount.back.domain.event.RegistrationCompleteEvent;
 import com.bankaccount.back.domain.service.AccountService;
+import com.bankaccount.back.domain.service.EmailService;
 import com.bankaccount.back.domain.service.TokenService;
 import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.exception.NotFoundException;
@@ -46,6 +47,9 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping(value = "/login", consumes = {"application/json"})
     public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto) {
@@ -196,17 +200,23 @@ public class AuthController {
     }
 
     private String passwordResetTokenEmail(AccountEntity accountEntity, String applicationUrl, String token) {
-        String url = applicationUrl + "/savePassword?token=" + token;
+        String url = applicationUrl + "/auth/savePassword?token=" + token;
 
-        log.info("Click the link to reset your password: {}", url);
+        emailService.sendEmail(
+                accountEntity.getEmail(),
+                "Reset password",
+                "Click the link to reset your password: " + url);
 
         return url;
     }
 
     private void resendVerificationTokenEmail(AccountEntity account, String applicationUrl, VerificationToken token) {
-        String url = applicationUrl + "/verifyRegistration?token=" + token.getToken();
+        String url = applicationUrl + "/auth/verifyRegistration?token=" + token.getToken();
 
-        log.info("Click the link to verify your account: {}", url);
+        emailService.sendEmail(
+                account.getEmail(),
+                "Verification Token resend",
+                "Click the link to verify your account: " + url);
     }
 
     private String applicationUrl(HttpServletRequest request) {

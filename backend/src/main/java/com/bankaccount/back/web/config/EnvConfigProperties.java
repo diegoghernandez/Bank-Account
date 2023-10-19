@@ -6,6 +6,7 @@ import java.util.List;
 
 @ConfigurationProperties("env")
 public record EnvConfigProperties(
+   String email,
    List<String> allowedOrigins,
    String jwtSecretKey,
    String jwtIssuer

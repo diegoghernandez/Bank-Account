@@ -4,6 +4,9 @@ spring:
   config:
     import: optional:env.yml
 
+server:
+  port: 8090
+
 ---
 
 spring:
