@@ -46,7 +46,7 @@ export const Automation = () => {
                navigate("/automations");
             }, 1000);
          }).catch((e) => {
-            const message = (JSON.parse(e.message));
+            const message = JSON.parse(e.message);
             setIsLoading(false);
             setError(message);
          });

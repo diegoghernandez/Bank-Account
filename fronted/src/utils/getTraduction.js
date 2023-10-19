@@ -10,6 +10,7 @@ import automationsPage from "../i18n/automations-page.json";
 import updateAutomationPage from "../i18n/update-automation-page.json";
 import homePage from "../i18n/home-page.json";
 import signInPage from "../i18n/sign-in-page.json";
+import signUpPage from "../i18n/sign-up-page.json";
 import transactionPage from "../i18n/transaction-page.json";
 import transactionsPage from "../i18n/transactions-page.json";
 
@@ -41,6 +42,8 @@ export const getTraduction = (wantedTranslation) => {
          return homePage[availableLanguage];
       case Traduction.SIGN_IN_PAGE: 
          return signInPage[availableLanguage];
+      case Traduction.SIGN_UP_PAGE: 
+         return signUpPage[availableLanguage];
       case Traduction.TRANSACTION_PAGE: 
          return transactionPage[availableLanguage];
       case Traduction.TRANSACTIONS_PAGE: 

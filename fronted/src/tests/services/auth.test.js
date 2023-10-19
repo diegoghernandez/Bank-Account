@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { changeEmail, changeName, changePassword, login } from "../../pages/_services/auth";
+import { changeEmail, changeName, changePassword, login, register } from "../../pages/_services/auth";
 
 describe("Auth tests", () => {
    describe("login test", () => {
@@ -17,6 +17,37 @@ describe("Auth tests", () => {
       it("Should save the right content", async () => {
          const content = await login("user@user.com", "1234");
          expect(content).toStrictEqual("Token");
+      });
+   });
+
+   describe("register test", () => {
+      it("Should be a function", () => {
+         expect(typeof register).toBe("function");
+      });
+
+      it("Should throw an StatusError if some value is wrong", async () => {
+         await expect(register({
+               name: "name",
+               email: "error@user.com", 
+               password: "1234",
+               matchingPassword: "1234"
+            })).rejects.toThrow(StatusError);
+         await expect(register({
+            name: "name",
+            email: "error@user.com", 
+            password: "1234",
+            matchingPassword: "1234"
+         })).rejects.toThrow('{"name":"Simple, wrong name,","email":"Wrong email","password":"Bad password","confirmation":"Bad confirmation"}');
+      });
+
+      it("Should save the right content", async () => {
+         const content = await register({
+            name: "name",
+            email: "user@user.com", 
+            password: "1234",
+            matchingPassword: "1234"
+         });
+         expect(content).toStrictEqual("Account created successfully");
       });
    });
 

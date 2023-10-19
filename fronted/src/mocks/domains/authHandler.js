@@ -10,7 +10,22 @@ export const authHandler = [
          return res(ctx.status(200), ctx.text("Token"));
       }
 
-      return res(ctx.status(403));
+      return res(ctx.status(400));
+   }),
+
+   rest.post(`${API}/register`, async (req, res, ctx) => {
+      const body = await req.json();
+
+      if (body.email === "user@user.com") {
+         return res(ctx.status(200), ctx.text("Account created successfully"));
+      }
+
+      return res(ctx.status(400), ctx.json({
+         name: "Simple, wrong name,",
+         email: "Wrong email",
+         password: "Bad password",
+         confirmation: "Bad confirmation"
+      }));
    }),
 
    rest.post(`${API}/secure/change-name`, async (req, res, ctx) => {

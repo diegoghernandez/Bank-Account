@@ -10,6 +10,7 @@ export const Traduction = Object.freeze({
    UPDATE_AUTOMATION_PAGE: Symbol("update-automation"),
    HOME_PAGE: Symbol("home"),
    SIGN_IN_PAGE: Symbol("signIn"),
+   SIGN_UP_PAGE: Symbol("signUp"),
    TRANSACTION_PAGE: Symbol("transaction"),
    TRANSACTIONS_PAGE: Symbol("transactions"),
 });

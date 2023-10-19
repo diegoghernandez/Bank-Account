@@ -1,0 +1,22 @@
+{
+   "en": {
+      "seo": {
+         "title": "Sign Up",
+         "description": "Name. Email. Password. Password confirmation."
+      },
+      "title": "Sign Up",
+      "labels": ["Name", "Email", "Password", "Password confirmation"],
+      "accept": "Sign Up",
+      "success": "Success"
+   },
+   "es": {
+      "seo": {
+         "title": "Registrarse",
+         "description": "Nombre. Email. Contraseña. Confirmar contraseña."
+      },
+      "title": "Registrarse",
+      "labels": ["Nombre", "Email", "Contraseña", "Confirmar contraseña"],
+      "accept": "Registrarse",
+      "success": "Conseguido"
+   }
+}

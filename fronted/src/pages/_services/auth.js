@@ -28,6 +28,23 @@ export const login = async (email, password) => {
    }
 };
 
+export const register = async (accountData) => {
+   const response = await fetch(`${API}/register`, {
+      method: "POST",
+      headers: {
+         "Content-Type": "application/json",
+         "Accept-Language": LANGUAGE
+      },
+      body: JSON.stringify(accountData)
+   });
+
+   if (response.ok) {
+      return await response.text();
+   } else {
+      throw new StatusError(JSON.stringify(await response.json()), response.status);
+   }
+};
+
 export const changeName = async (newName, password) => {
    const response = await fetch(`${API}/secure/change-name?name=${newName}`, {
       method: "POST",
