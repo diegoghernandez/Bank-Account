@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { changeEmail, changeName, changePassword, login, register } from "../../pages/_services/auth";
+import { changeEmail, changeName, changePassword, login, register, resendVerificationToken, savePassword, verifyRegistration } from "../../pages/_services/auth";
 
 describe("Auth tests", () => {
    describe("login test", () => {
@@ -48,6 +48,61 @@ describe("Auth tests", () => {
             matchingPassword: "1234"
          });
          expect(content).toStrictEqual("Account created successfully");
+      });
+   });
+
+   describe("verify registration test", () => {
+      it("Should be a function", () => {
+         expect(typeof verifyRegistration).toBe("function");
+      });
+
+      it("Should throw an StatusError if some value is wrong", async () => {
+         await expect(verifyRegistration("very wrong token")).rejects.toThrow(StatusError);
+         await expect(verifyRegistration("very wrong token")).rejects.toThrow("expire");
+      });
+
+      it("Should save the right content", async () => {
+         const content = await verifyRegistration("nu3v3-9b58-41ae-8723-29d7ff675a30");
+         expect(content).toStrictEqual("valid");
+      });
+   });
+
+   describe("resend verification token", () => {
+      it("Should be a function", () => {
+         expect(typeof resendVerificationToken).toBe("function");
+      });
+
+      it("Should save the right content", async () => {
+         const content = await resendVerificationToken("nu3v3-9b58-41ae-8723-29d7ff675a30");
+         expect(content).toStrictEqual("Verification Link Sent");
+      });
+   });
+
+   describe("save password test", () => {
+      it("Should be a function", () => {
+         expect(typeof savePassword).toBe("function");
+      });
+
+      it("Should throw an StatusError if some value is wrong", async () => {
+         await expect(savePassword("nu3v3-9b58-41ae-8723-29d7ff675a30", {
+               idAccount: 3131312,
+               oldPassword: "error",
+               newPassword: "error"
+            })).rejects.toThrow(StatusError);
+         await expect(savePassword("nu3v3-9b58-41ae-8723-29d7ff675a30", {
+            idAccount: 3131312,
+            oldPassword: "error",
+            newPassword: "error"
+         })).rejects.toThrow("Invalid something");
+      });
+
+      it("Should save the right content", async () => {
+         const content = await savePassword("nu3v3-9b58-41ae-8723-29d7ff675a30", {
+            idAccount: 121,
+            oldPassword: "1234",
+            newPassword: "1234"
+         });
+         expect(content).toStrictEqual("Message to show");
       });
    });
 

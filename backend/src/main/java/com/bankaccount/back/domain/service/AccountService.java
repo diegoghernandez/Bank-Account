@@ -65,7 +65,7 @@ public class AccountService {
       int idAccount = passwordDto.idAccount();
 
       if (checkIfValidPassword(idAccount, passwordDto.oldPassword())) {
-         accountRepository.updatePassword(passwordEncoder.encode(passwordDto.newPassword()), idAccount);
+         updatePassword(passwordDto.newPassword(), idAccount);
          return Messages.getMessageForLocale("service.account.change-password.success", locale);
       } else {
          return Messages.getMessageForLocale("service.account.change-password.error", locale);
@@ -86,6 +86,10 @@ public class AccountService {
       } else {
          throw new NotAllowedException("email", "service.account.error.email", locale);
       }
+   }
+
+   public void updatePassword(String newPassword, int id) {
+      accountRepository.updatePassword(passwordEncoder.encode(newPassword), id);
    }
 
    private boolean checkIfValidPassword(int id, String password) throws NotFoundException {

@@ -19,12 +19,17 @@ public class PasswordResetTokenRepositoryImpl implements PasswordResetTokenRepos
    }
 
    @Override
-   public PasswordResetToken savePasswordResetToken(PasswordResetToken passwordResetToken) {
-      return passwordResetTokenCrud.save(passwordResetToken);
+   public void savePasswordResetToken(PasswordResetToken passwordResetToken) {
+      passwordResetTokenCrud.save(passwordResetToken);
    }
 
    @Override
    public void delete(PasswordResetToken passwordResetToken) {
       passwordResetTokenCrud.delete(passwordResetToken);
+   }
+
+   @Override
+   public void deleteByToken(String token) {
+      passwordResetTokenCrud.deleteByToken(token);
    }
 }

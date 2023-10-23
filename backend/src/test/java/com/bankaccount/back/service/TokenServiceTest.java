@@ -2,6 +2,7 @@ package com.bankaccount.back.service;
 
 import com.bankaccount.back.constants.AccountRoles;
 import com.bankaccount.back.domain.repository.AccountRepository;
+import com.bankaccount.back.domain.repository.PasswordResetTokenRepository;
 import com.bankaccount.back.domain.repository.VerificationTokenRepository;
 import com.bankaccount.back.domain.service.TokenService;
 import com.bankaccount.back.persistence.entity.AccountEntity;
@@ -38,6 +39,9 @@ public class TokenServiceTest {
 
    @MockBean
    private AccountRepository accountRepository;
+
+   @MockBean
+   private PasswordResetTokenRepository passwordResetTokenRepository;
 
    private List<VerificationToken> verificationTokenList;
 
@@ -106,6 +110,26 @@ public class TokenServiceTest {
       String valid = tokenService.validateVerificationToken("er143ge8-9b58-41ae-8723-29d7ff675a30");
 
       assertThat(valid).isEqualTo("valid");
+   }
+
+   @Test
+   @DisplayName("Should deleteVerificationToken be called one time")
+   void deleteVerificationToken() {
+      Mockito.doNothing().when(verificationTokenRepository).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
+
+      tokenService.deleteVerificationToken("po43do45-34gr-41ae-8723-237a3f675a30");
+
+      Mockito.verify(verificationTokenRepository, Mockito.times(1)).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
+   }
+
+   @Test
+   @DisplayName("Should deleteVerificationToken be called one time")
+   void deletePasswordToken() {
+      Mockito.doNothing().when(passwordResetTokenRepository).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
+
+      tokenService.deletePasswordToken("po43do45-34gr-41ae-8723-237a3f675a30");
+
+      Mockito.verify(passwordResetTokenRepository, Mockito.times(1)).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
    }
 
    @Test

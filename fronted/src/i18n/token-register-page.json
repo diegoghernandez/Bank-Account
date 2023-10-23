@@ -1,0 +1,32 @@
+{
+   "en": {
+      "seo": {
+         "title": "Verify registration"
+      },
+      "title": "Verify registration",
+      "description": {
+         "valid": "Register successfully",
+         "expire": "Expire token",
+         "invalid": "Invalid token"
+      },
+      "button": {
+         "valid": "Return to sign in",
+         "expire": "Resend token"
+      }
+   },
+   "es": {
+      "seo": {
+         "title": "Comprobar el registro"
+      },
+      "title": "Comprobar el registro",
+      "description": {
+         "valid": "Registro completado correctamente",
+         "expire": "El token ha expirado",
+         "invalid": "El token es inválido"
+      },
+      "button": {
+         "valid": "Regresar a iniciar sesión",
+         "expire": "Reenviar token"
+      }
+   }
+}

@@ -6,7 +6,9 @@ public interface PasswordResetTokenRepository {
 
    PasswordResetToken getByToken(String token);
 
-   PasswordResetToken savePasswordResetToken(PasswordResetToken passwordResetToken);
+   void savePasswordResetToken(PasswordResetToken passwordResetToken);
 
    void delete(PasswordResetToken passwordResetToken);
+
+   void deleteByToken(String token);
 }

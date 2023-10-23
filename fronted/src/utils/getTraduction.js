@@ -13,6 +13,8 @@ import signInPage from "../i18n/sign-in-page.json";
 import signUpPage from "../i18n/sign-up-page.json";
 import transactionPage from "../i18n/transaction-page.json";
 import transactionsPage from "../i18n/transactions-page.json";
+import tokenRegisterPage from "../i18n/token-register-page.json";
+import savePasswordPage from "../i18n/save-password-page.json";
 
 const language = localStorage.getItem("language") ?? navigator.language;
 
@@ -48,5 +50,9 @@ export const getTraduction = (wantedTranslation) => {
          return transactionPage[availableLanguage];
       case Traduction.TRANSACTIONS_PAGE: 
          return transactionsPage[availableLanguage];
+      case Traduction.TOKEN_REGISTER:
+         return tokenRegisterPage[availableLanguage];
+      case Traduction.SAVE_PASSWORD:
+         return savePasswordPage[availableLanguage];
    }
 };

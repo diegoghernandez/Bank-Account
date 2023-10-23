@@ -9,6 +9,11 @@ INSERT INTO `verification_token` (id_token, token, expiration_time, id_account) 
 (1, 'er143ge8-9b58-41ae-8723-29d7ff675a30', {ts '2021-12-25 13:47:05.602'}, 4),
 (2, '7f1a71e8-9b58-41ae-8723-29d7ff675a30', {ts '2022-12-25 14:10:05.602'}, 5);
 
+INSERT INTO `password_reset_token` (id_password_token, token, expiration_time, id_account) VALUES
+(1, 'er143ge8-9b58-41ae-8723-29d7ff675a30', {ts '2021-12-25 13:47:05.602'}, 4),
+(2, '7f1a71e8-9b58-41ae-8723-29d7ff675a30', {ts '2022-12-25 14:10:05.602'}, 5);
+
+
 INSERT INTO `automation` (id_automation, id_account, name, amount, id_transfer_account, hours_to_next_execution, execution_time, status) VALUES
 (1, 3, 'Automation', 2000.00, 43, 12, {ts '2023-10-09 20:10:12'}, TRUE),
 (2, 2, 'Automation', 2000.00, 43, 12, {ts '2023-10-09 20:10:12'}, TRUE),

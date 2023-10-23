@@ -45,6 +45,61 @@ export const register = async (accountData) => {
    }
 };
 
+export const verifyRegistration = async (token) => {
+   const response = await fetch(`${API}/verify-registration?token=${token}`, {
+      method: "GET",
+      headers: {
+         "Content-Type": "application/json",
+         "Accept-Language": LANGUAGE
+      }
+   });
+
+   const data = await response.text();
+
+   if (response.ok) {
+      return data;
+   } else {
+      throw new StatusError(data, response.status);
+   }
+};
+
+export const resendVerificationToken = async (token) => {
+   const response = await fetch(`${API}/resend-token?token=${token}`, {
+      method: "GET",
+      headers: {
+         "Content-Type": "application/json",
+         "Accept-Language": LANGUAGE
+      }
+   });
+
+   const data = await response.text();
+
+   if (response.ok) {
+      return data;
+   } else {
+      throw new StatusError(data, response.status);
+   }
+};
+
+export const savePassword = async (token, passwordDto) => {
+   const response = await fetch(`${API}/save-password?token=${token}`, {
+      method: "POST",
+      headers: {
+         "Content-Type": "application/json",
+         "Accept-Language": LANGUAGE
+      },
+      body: JSON.stringify(passwordDto)
+   });
+
+   const data = await response.text();
+
+   if (response.ok) {
+      return data;
+   } else {
+      throw new StatusError(data, response.status);
+   }
+};
+
 export const changeName = async (newName, password) => {
    const response = await fetch(`${API}/secure/change-name?name=${newName}`, {
       method: "POST",

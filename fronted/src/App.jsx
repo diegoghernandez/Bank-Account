@@ -10,6 +10,8 @@ import { SignUp } from "./pages/SignUp";
 import { UpdateAutomation } from "./pages/UpdateAutomation";
 import { useAuth } from "./hooks/useAuth";
 import { useTheme } from "./hooks/useTheme";
+import { Token } from "./pages/Token";
+import { SavePassword } from "./pages/SavePassword";
 
 const ProtectedRoute = ({ children }) => {
    const { isAuthenticated } = useAuth();
@@ -36,6 +38,8 @@ function App() {
             <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>}/>
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/verify-registration" element={<Token />} />
+            <Route path="/save-password" element={<SavePassword />} />
          </Routes>
       </>
    );

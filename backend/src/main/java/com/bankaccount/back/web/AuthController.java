@@ -9,6 +9,7 @@ import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.helpers.Messages;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.VerificationToken;
+import com.bankaccount.back.web.config.EnvConfigProperties;
 import com.bankaccount.back.web.config.JwtUtil;
 import com.bankaccount.back.web.dto.AccountDto;
 import com.bankaccount.back.web.dto.LoginDto;
@@ -51,6 +52,9 @@ public class AuthController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private EnvConfigProperties configProperties;
+
     @PostMapping(value = "/login", consumes = {"application/json"})
     public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password());
@@ -65,6 +69,7 @@ public class AuthController {
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
             @RequestBody @Valid AccountDto accountDto,
             final HttpServletRequest request) throws NotAllowedException {
+
         if (!accountDto.password().equals(accountDto.matchingPassword())) {
             return new ResponseEntity<>(
                     Messages.getMessageForLocale("controller.auth.register.error", locale),
@@ -90,10 +95,10 @@ public class AuthController {
         String result = tokenService.validateVerificationToken(token);
         if (result.equalsIgnoreCase("valid")) {
             tokenService.deleteVerificationToken(token);
-            return Messages.getMessageForLocale("controller.auth.verify.success", locale);
+            return result;
         }
 
-        return Messages.getMessageForLocale("controller.auth.verify.error", locale);
+        return result;
     }
 
     @GetMapping("/resend-token")
@@ -109,9 +114,9 @@ public class AuthController {
         return Messages.getMessageForLocale("controller.auth.resend", locale);
     }
 
-    @PostMapping("/reset-password")
-    public String resetPassword(@RequestBody @Valid PasswordDto passwordDto, HttpServletRequest request) {
-        Optional<AccountEntity> optionalAccount = accountService.getAccountByEmail(passwordDto.email());
+    @GetMapping("/reset-password/{email}")
+    public String resetPassword(@PathVariable String email, HttpServletRequest request) {
+        Optional<AccountEntity> optionalAccount = accountService.getAccountByEmail(email);
 
         String url = "";
 
@@ -138,7 +143,8 @@ public class AuthController {
 
         Optional<AccountEntity> accountEntity = tokenService.getAccountByPasswordResetToken(token);
         if (accountEntity.isPresent()) {
-            accountService.changePassword(passwordDto, locale);
+            tokenService.deletePasswordToken(token);
+            accountService.updatePassword(passwordDto.newPassword(), passwordDto.idAccount());
             return Messages.getMessageForLocale("controller.auth.save-password.success", locale);
         }
 
@@ -200,7 +206,8 @@ public class AuthController {
     }
 
     private String passwordResetTokenEmail(AccountEntity accountEntity, String applicationUrl, String token) {
-        String url = applicationUrl + "/auth/savePassword?token=" + token;
+        String url = configProperties.client() + "/save-password?token=" + token
+                + "&id=" + accountEntity.getIdAccount();
 
         emailService.sendEmail(
                 accountEntity.getEmail(),

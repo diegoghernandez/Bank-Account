@@ -68,6 +68,9 @@ public class TokenService {
       verificationTokenRepository.deleteByToken(token);
    }
 
+   public void deletePasswordToken(String token) {
+      passwordResetTokenRepository.deleteByToken(token);
+   }
 
    public void createPasswordResetTokenForAccount(AccountEntity accountEntity, String token) {
       PasswordResetToken passwordResetToken = PasswordResetToken.builder()

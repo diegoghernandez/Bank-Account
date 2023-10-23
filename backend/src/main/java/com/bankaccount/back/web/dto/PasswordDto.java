@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 public record PasswordDto(
 
         @Nullable int idAccount,
-        @Email @NotEmpty String email,
+        @Email @Nullable String email,
         @Nullable String oldPassword,
         @NotBlank String newPassword
 ) {

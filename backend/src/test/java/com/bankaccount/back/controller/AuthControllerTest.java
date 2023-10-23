@@ -2,12 +2,14 @@ package com.bankaccount.back.controller;
 
 import com.bankaccount.back.constants.AccountRoles;
 import com.bankaccount.back.domain.service.AccountService;
+import com.bankaccount.back.domain.service.EmailService;
 import com.bankaccount.back.domain.service.TokenService;
 import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.VerificationToken;
 import com.bankaccount.back.web.AuthController;
+import com.bankaccount.back.web.config.EnvConfigProperties;
 import com.bankaccount.back.web.config.JwtUtil;
 import com.bankaccount.back.web.dto.AccountDto;
 import com.bankaccount.back.web.dto.LoginDto;
@@ -63,6 +65,9 @@ public class AuthControllerTest {
 
    @MockBean
    private JwtUtil jwtUtil;
+
+   @MockBean
+   private EmailService emailService;
 
    @Test
    @DisplayName("Should return a response with an authorization header with the value of a jwt if the credentials are correct")
@@ -138,7 +143,7 @@ public class AuthControllerTest {
               .thenReturn("valid");
 
       Mockito.when(tokenService.validateVerificationToken("hello"))
-              .thenReturn("hello");
+              .thenReturn("invalid");
 
       assertAll(
               () -> mockMvc.perform(get("/auth/verify-registration")
@@ -147,7 +152,7 @@ public class AuthControllerTest {
                               .contentType(MediaType.APPLICATION_JSON)
                               .with(user("user").roles(USER)))
                       .andExpect(status().isOk())
-                      .andExpect(content().string("Account verifies successfully")),
+                      .andExpect(content().string("valid")),
 
               () -> mockMvc.perform(get("/auth/verify-registration")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
@@ -155,7 +160,7 @@ public class AuthControllerTest {
                               .contentType(MediaType.APPLICATION_JSON)
                               .with(user("user").roles(USER)))
                       .andExpect(status().isOk())
-                      .andExpect(content().string("Bad account"))
+                      .andExpect(content().string("invalid"))
       );
    }
 
@@ -214,9 +219,8 @@ public class AuthControllerTest {
               .thenReturn(Optional.of(account));
 
       assertAll(
-              () -> mockMvc.perform(post("/auth/reset-password")
+              () -> mockMvc.perform(get("/auth/reset-password/user@user.com")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsString(passwordDto))
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isOk())
@@ -228,13 +232,6 @@ public class AuthControllerTest {
    @Test
    @DisplayName("Should save a new password")
    void savePassword() {
-      PasswordDto passwordDto = new PasswordDto(
-              1,
-              "user@user.com",
-              "1234",
-              "4321"
-      );
-
       AccountEntity account = AccountEntity.builder()
               .idAccount(687452786)
               .accountName("Random634675")
@@ -247,6 +244,9 @@ public class AuthControllerTest {
       objectMapper.registerModule(new JavaTimeModule());
       objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
+      Mockito.doNothing().when(tokenService).deletePasswordToken("er143ge8-9b58-41ae-8723-29d7ff675a30");
+      Mockito.doNothing().when(accountService).updatePassword("4321", 1);
+
       Mockito.when(tokenService.validatePasswordResetToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
               .thenReturn("valid");
 
@@ -254,7 +254,7 @@ public class AuthControllerTest {
               .thenReturn("invalid");
 
       Mockito.when(tokenService.validatePasswordResetToken("nu3v3-9b58-41ae-8723-29d7ff675a30"))
-              .thenReturn("valid");
+              .thenReturn("expire");
 
       Mockito.when(tokenService.getAccountByPasswordResetToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
               .thenReturn(Optional.of(account));
@@ -264,31 +264,58 @@ public class AuthControllerTest {
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsString(passwordDto))
+                              .content(objectMapper.writeValueAsString(new PasswordDto(
+                                      1,
+                                      "user@user.com",
+                                      "1234",
+                                      "4321"
+                              )))
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isOk())
                       .andExpect(content().string("Password Reset Successfully")),
+              () -> Mockito.verify(tokenService, Mockito.times(1))
+                      .deletePasswordToken("er143ge8-9b58-41ae-8723-29d7ff675a30"),
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .updatePassword("4321", 1),
 
               () -> mockMvc.perform(post("/auth/save-password")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("token", "53535")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsString(passwordDto))
+                              .content(objectMapper.writeValueAsString(new PasswordDto(
+                                      32,
+                                      "user@user.com",
+                                      "1234",
+                                      "535534"
+                              )))
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isOk())
                       .andExpect(content().string("Invalid token")),
+              () -> Mockito.verify(tokenService, Mockito.times(0))
+                      .deletePasswordToken("53535"),
+              () -> Mockito.verify(accountService, Mockito.times(0))
+                      .updatePassword("535534", 32),
 
               () -> mockMvc.perform(post("/auth/save-password")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("token", "nu3v3-9b58-41ae-8723-29d7ff675a30")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsString(passwordDto))
+                              .content(objectMapper.writeValueAsString(new PasswordDto(
+                                      62362,
+                                      "user@user.com",
+                                      "1234",
+                                      "gsdfgd"
+                              )))
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isOk())
-                      .andExpect(content().string("Invalid token"))
+                      .andExpect(content().string("Invalid token")),
+              () -> Mockito.verify(tokenService, Mockito.times(0))
+                      .deletePasswordToken("nu3v3-9b58-41ae-8723-29d7ff675a30"),
+              () -> Mockito.verify(accountService, Mockito.times(0))
+                      .updatePassword("gsdfgd", 62362)
       );
    }
 

@@ -71,6 +71,17 @@ public class VerificationTokenRepositoryImplTest {
    }
 
    @Test
+   @DisplayName("Should delete a verificationToken with the specific token in the database")
+   void deleteByToken() {
+      Mockito.doNothing().when(verificationTokenCrud)
+              .deleteByToken("er143ge8-34gr-41ae-8723-456");
+
+      verificationTokenRepository.deleteByToken("er143ge8-34gr-41ae-8723-237a3f675a30");
+
+      Mockito.verify(verificationTokenCrud, Mockito.times(1)).deleteByToken("er143ge8-34gr-41ae-8723-237a3f675a30");
+   }
+
+   @Test
    @DisplayName("Should update a verificationToken with the specific token value and the new token in the database")
    void updateToken() {
       Mockito.doNothing().when(verificationTokenCrud)
