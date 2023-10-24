@@ -81,6 +81,15 @@ export const resendVerificationToken = async (token) => {
    }
 };
 
+export const resetPassword = (email) => {
+   fetch(`${API}/reset-password/${email}`, {
+      method: "GET",
+      headers: {
+         "Content-Type": "application/json",
+      },
+   });
+};
+
 export const savePassword = async (token, passwordDto) => {
    const response = await fetch(`${API}/save-password?token=${token}`, {
       method: "POST",

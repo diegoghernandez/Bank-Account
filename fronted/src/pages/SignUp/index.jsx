@@ -9,13 +9,15 @@ import { SEO } from "../../utils/SEO";
 import { Bar } from "../../components/Loader/Bar";
 import { register } from "../_services/auth";
 import { Modal } from "../../components/Modal";
+import { Link, useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
    const [isLoading, setIsLoading] = useState(false);
    const [error, setError] = useState("");
    const [successMessage, setSuccessMessage] = useState("");
-   const t = getTraduction(Traduction.SIGN_UP_PAGE);
+   const navigate = useNavigate();
    const dialogRef = useRef();
+   const t = getTraduction(Traduction.SIGN_UP_PAGE);
 
    const handleSubmit = (event) => {
       event.preventDefault();
@@ -83,11 +85,18 @@ export const SignUp = () => {
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
             {isLoading && <Bar />}
+            <div className="text-sm font-normal font-sans">
+                  <span className="text-onSurface-variant dark:text-onSurface-variant-dark">{t.link[0]} </span>
+                  <Link to="/sign-in" className="text-primary dark:text-primary-dark hover:underline">
+                     {t.link[1]}
+                  </Link>
+               </div>
             <Modal 
                title={t.success}
                dialogRef={dialogRef}
                messageUtils={{
-                  message: successMessage
+                  message: successMessage,
+                  function: () => navigate("/sign-in")
                }}
             />
          </div>

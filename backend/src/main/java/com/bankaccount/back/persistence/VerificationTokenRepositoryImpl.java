@@ -6,6 +6,8 @@ import com.bankaccount.back.persistence.entity.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class VerificationTokenRepositoryImpl implements VerificationTokenRepository {
 
@@ -30,8 +32,8 @@ public class VerificationTokenRepositoryImpl implements VerificationTokenReposit
 
 
    @Override
-   public VerificationToken updateToken(String newToken, String oldToken) {
-      verificationTokenCrud.updateTokenByToken(newToken, oldToken);
+   public VerificationToken updateToken(String newToken, Date date, String oldToken) {
+      verificationTokenCrud.updateTokenByToken(newToken, date, oldToken);
 
       return verificationTokenCrud.findByToken(newToken);
    }

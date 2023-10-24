@@ -109,26 +109,22 @@ public class AuthController {
         VerificationToken verificationToken = tokenService.generateNewVerificationToken(oldToken);
 
         AccountEntity account = verificationToken.getAccountEntity();
-        resendVerificationTokenEmail(account, applicationUrl(request), verificationToken);
+        resendVerificationTokenEmail(account, verificationToken);
 
         return Messages.getMessageForLocale("controller.auth.resend", locale);
     }
 
     @GetMapping("/reset-password/{email}")
-    public String resetPassword(@PathVariable String email, HttpServletRequest request) {
+    public void resetPassword(@PathVariable String email) {
         Optional<AccountEntity> optionalAccount = accountService.getAccountByEmail(email);
-
-        String url = "";
 
         if (optionalAccount.isPresent()) {
             AccountEntity accountEntity = optionalAccount.get();
             String token = UUID.randomUUID().toString();
             tokenService.createPasswordResetTokenForAccount(accountEntity, token);
 
-            url = passwordResetTokenEmail(accountEntity, applicationUrl(request), token);
+            passwordResetTokenEmail(accountEntity, token);
         }
-
-        return url;
     }
 
     @PostMapping("/save-password")
@@ -205,7 +201,7 @@ public class AuthController {
         return ResponseEntity.badRequest().body(response);
     }
 
-    private String passwordResetTokenEmail(AccountEntity accountEntity, String applicationUrl, String token) {
+    private void passwordResetTokenEmail(AccountEntity accountEntity, String token) {
         String url = configProperties.client() + "/save-password?token=" + token
                 + "&id=" + accountEntity.getIdAccount();
 
@@ -213,12 +209,11 @@ public class AuthController {
                 accountEntity.getEmail(),
                 "Reset password",
                 "Click the link to reset your password: " + url);
-
-        return url;
     }
 
-    private void resendVerificationTokenEmail(AccountEntity account, String applicationUrl, VerificationToken token) {
-        String url = applicationUrl + "/auth/verifyRegistration?token=" + token.getToken();
+    private void resendVerificationTokenEmail(AccountEntity account, VerificationToken token) {
+        String url = configProperties.client() + "/verify-registration?token=" + token.getToken() +
+                "&traduction=TOKEN_REGISTER&email=" + account.getEmail();
 
         emailService.sendEmail(
                 account.getEmail(),

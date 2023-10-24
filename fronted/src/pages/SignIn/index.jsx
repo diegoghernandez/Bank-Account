@@ -1,23 +1,27 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled";
 import { TextField } from "../../components/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { getAccountData } from "../_services/account";
-import { login as logUser } from "../_services/auth";
-import { useState } from "react";
+import { login as logUser, resetPassword } from "../_services/auth";
+import { useRef, useState } from "react";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { Bar } from "../../components/Loader/Bar";
 import { SEO } from "../../utils/SEO";
 import { useAuth } from "../../hooks/useAuth";
+import { Outline } from "../../components/Buttons/Outline";
+import { Modal } from "../../components/Modal";
 
 export const SignIn = () => {
    const [error, setError] = useState("");
    const [isLoading, setIsLoading] = useState(false);
+   const [isReset, setIsReset] = useState(false);
    const { login } = useAuth();
    const navigate = useNavigate();
    const { state } = useLocation();
+   const dialogRef = useRef();
    const t = getTraduction(Traduction.SIGN_IN_PAGE);
 
    const handleSubmit = (event) => {
@@ -25,24 +29,29 @@ export const SignIn = () => {
       const email = event?.target?.elements[0]?.value;
       const password = event?.target?.elements[1]?.value;
 
-      setIsLoading(true);
+      
+      if (!isReset) {
+         setIsLoading(true);
 
-      setTimeout(() => {
-         logUser(email, password)
-            .then((token) => {
-               localStorage.setItem("token", "Bearer " + token);
-               getAccountData(email)
-                  .then(() => {
-                     login();
-                     navigate(state?.location?.pathname ?? "/");
-                  });
-            }).catch((e) => {
-               const message = e.message;
-               setIsLoading(false);
-               setError(message);
-            });
-      }, 1000);
-
+         setTimeout(() => {
+            logUser(email, password)
+               .then((token) => {
+                  localStorage.setItem("token", "Bearer " + token);
+                  getAccountData(email)
+                     .then(() => {
+                        login();
+                        navigate(state?.location?.pathname ?? "/");
+                     });
+               }).catch((e) => {
+                  const message = e.message;
+                  setIsLoading(false);
+                  setError(message);
+               });
+         }, 1000);
+      } else {
+         resetPassword(email);
+         dialogRef.current?.showModal?.();
+      }
    };
 
    return (
@@ -50,7 +59,8 @@ export const SignIn = () => {
          <div className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-full px-4 mx-auto border border-outline-variant
          bg-white md:rounded-2xl md:px-6 md:py-8 md:h-fit dark:border-outline-variant-dark dark:bg-black">
             <SEO title={t.seo.title} description={t.seo.description} />
-            <h1 className="text-4xl font-bold font-sans text-onSurface dark:text-onSurface-dark">{t.title}</h1>
+            <h1 className="text-4xl font-bold font-sans text-center text-onSurface dark:text-onSurface-dark">{
+            (!isReset) ? t.title : t.resetPassword.title }</h1>
             <form
                className="flex flex-col items-center gap-3 w-full"
                onSubmit={handleSubmit}   
@@ -62,18 +72,57 @@ export const SignIn = () => {
                   supportiveText={error}
                   isError={error}
                   isDisable={isLoading}
+               />
+               {(!isReset) &&
+                  <TextField
+                     label={t.labels[1]}
+                     type={TextFieldTypes.DEFAULT}
+                     inputType={InputTypes.PASSWORD}
+                     supportiveText={error}
+                     isError={error}
+                     isDisable={isLoading}
                   />
-               <TextField
-                  label={t.labels[1]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.PASSWORD}
-                  supportiveText={error}
-                  isError={error}
-                  isDisable={isLoading}
-                  />
-               <Filled label={t.accept} isDisable={isLoading} />
+               }
+               <Filled label={(!isReset) ? t.accept : t.resetPassword.accept} isDisable={isLoading} />
             </form>
             {isLoading && <Bar />}
+
+            {(!isReset) &&
+               <div className="flex flex-col gap-2">
+                  <button 
+                     className="text-sm font-normal font-sans text-primary dark:text-primary-dark"
+                     onClick={() => {
+                        setIsReset(true);
+                        setError(false);
+                     }}
+                  >
+                     {t.links[0]}
+                  </button>
+                  <div className="text-sm font-normal font-sans">
+                     <span className="text-onSurface-variant dark:text-onSurface-variant-dark">{t.links[1][0]} </span>
+                     <Link to="/sign-up" className="text-primary dark:text-primary-dark hover:underline">
+                        {t.links[1][1]}
+                     </Link>
+                  </div>
+               </div>
+            }
+
+            {(isReset) &&
+               <button 
+                  className="w-full"
+                  onClick={() => setIsReset(false)}
+               >
+                  <Outline label={t.resetPassword.cancel} />
+               </button>
+            }
+
+            <Modal
+               dialogRef={dialogRef}
+               messageUtils={{
+                  message: t.resetPassword.success,
+                  function: () => setIsReset(false)
+               }}
+            />
          </div>
       </section>
    );

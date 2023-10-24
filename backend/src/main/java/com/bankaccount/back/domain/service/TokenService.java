@@ -11,10 +11,7 @@ import com.bankaccount.back.persistence.entity.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TokenService {
@@ -39,7 +36,6 @@ public class TokenService {
       Calendar cal = Calendar.getInstance();
 
       if ((verificationToken.getExpirationTime().getTime() - cal.getTime().getTime()) <= 0) {
-         verificationTokenRepository.delete(verificationToken);
          return "expired";
       }
 
@@ -60,8 +56,12 @@ public class TokenService {
    }
 
    public VerificationToken generateNewVerificationToken(String oldToken) {
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTimeInMillis(new Date().getTime());
+      calendar.add(Calendar.MINUTE, 10);
+
       return verificationTokenRepository.updateToken(
-              UUID.randomUUID().toString(), oldToken);
+              UUID.randomUUID().toString(), new Date(calendar.getTime().getTime()), oldToken);
    }
 
    public void deleteVerificationToken(String token) {

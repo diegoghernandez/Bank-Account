@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,15 +48,20 @@ public class VerificationTokenCrudRepositoryTest {
    @Test
    @DisplayName("Should update a verificationToken by token value of the data.sql")
    void updateToken() {
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTimeInMillis(new Date().getTime());
+      calendar.add(Calendar.MINUTE, 10);
+      Date date = new Date(calendar.getTime().getTime());
       String newToken = UUID.randomUUID().toString();
 
-      verificationTokenCrud.updateTokenByToken(newToken, "7f1a71e8-9b58-41ae-8723-29d7ff675a30");
+      verificationTokenCrud.updateTokenByToken(newToken, date, "7f1a71e8-9b58-41ae-8723-29d7ff675a30");
 
       VerificationToken verificationToken = verificationTokenCrud.findByToken(newToken);
 
       assertAll(
+              () -> assertEquals(2, verificationToken.getIdToken()),
               () -> assertEquals(newToken, verificationToken.getToken()),
-              () -> assertEquals(2, verificationToken.getIdToken())
+              () -> assertEquals(date, verificationToken.getExpirationTime())
       );
    }
 }

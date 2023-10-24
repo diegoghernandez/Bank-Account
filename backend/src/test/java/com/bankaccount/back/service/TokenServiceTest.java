@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -147,7 +148,8 @@ public class TokenServiceTest {
                       .build())
               .build();
 
-      Mockito.when(verificationTokenRepository.updateToken(ArgumentMatchers.any(), ArgumentMatchers.eq("7f1a71e8-9b58-41ae-8723-29d7ff675a30")))
+      Mockito.when(verificationTokenRepository.updateToken(
+                      Mockito.isA(String.class), Mockito.isA(Date.class), ArgumentMatchers.eq("7f1a71e8-9b58-41ae-8723-29d7ff675a30")))
               .thenReturn(newVerificationToken);
 
       VerificationToken verificationToken = tokenService.generateNewVerificationToken("7f1a71e8-9b58-41ae-8723-29d7ff675a30");

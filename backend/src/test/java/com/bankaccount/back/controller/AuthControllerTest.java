@@ -218,13 +218,17 @@ public class AuthControllerTest {
       Mockito.when(accountService.getAccountByEmail("user@user.com"))
               .thenReturn(Optional.of(account));
 
+      Mockito.doNothing().when(tokenService)
+                      .createPasswordResetTokenForAccount(Mockito.isA(AccountEntity.class), Mockito.isA(String.class));
+
       assertAll(
               () -> mockMvc.perform(get("/auth/reset-password/user@user.com")
                               .contentType(MediaType.APPLICATION_JSON)
                               .with(user("user").roles(USER))
                               .with(csrf()))
-                      .andExpect(status().isOk())
-                      .andExpect(content().string(MatchesPattern.matchesPattern("http://.*")))
+                      .andExpect(status().isOk()),
+              () -> Mockito.verify(tokenService, Mockito.times(1))
+                      .createPasswordResetTokenForAccount(Mockito.isA(AccountEntity.class), Mockito.isA(String.class))
 
       );
    }

@@ -9,7 +9,7 @@ import { Bar } from "../../components/Loader/Bar";
 import { savePassword } from "../_services/auth";
 import { Modal } from "../../components/Modal";
 import { useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { SEO } from "../../utils/SEO";
 
 export const SavePassword = () => {
@@ -17,6 +17,7 @@ export const SavePassword = () => {
    const [error, setError] = useState("");
    const [message, setMessage] = useState("");
    const [searchParams] = useSearchParams();
+   const navigate = useNavigate();
    const dialogRef = useRef();
    const t = getTraduction(Traduction.SAVE_PASSWORD);
 
@@ -82,7 +83,8 @@ export const SavePassword = () => {
                title={(!error) ? t.messageTitle[0] : t.messageTitle[1]}
                dialogRef={dialogRef}
                messageUtils={{
-                  message: message
+                  message: message,
+                  function: () => navigate("/sign-in")
                }}
             />
          </div>

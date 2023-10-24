@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 
 public interface VerificationTokenCrudRepository extends CrudRepository<VerificationToken, Long> {
 
@@ -17,6 +18,6 @@ public interface VerificationTokenCrudRepository extends CrudRepository<Verifica
 
    @Modifying
    @Transactional
-   @Query("UPDATE VerificationToken AS vt SET vt.token = :newToken WHERE vt.token = :oldToken")
-   void updateTokenByToken(@Param("newToken") String newToken, @Param("oldToken") String oldToken);
+   @Query("UPDATE VerificationToken AS vt SET vt.token = :newToken, vt.expirationTime = :date WHERE vt.token = :oldToken")
+   void updateTokenByToken(@Param("newToken") String newToken, Date date, @Param("oldToken") String oldToken);
 }

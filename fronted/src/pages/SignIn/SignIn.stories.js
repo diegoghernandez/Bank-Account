@@ -27,6 +27,20 @@ const API = import.meta.env.VITE_API_URL + "/auth/login";
 
 export const Default = {};
 
+export const ResetPassword = {
+   play: async ({ canvasElement }) => { 
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.SIGN_IN_PAGE);
+
+      await userEvent.click(canvas.getByRole("button", { name: t.links[0] } ));
+
+      await expect(canvas.getByRole("heading", { name: t.resetPassword.title } )).toBeInTheDocument();
+      await expect(canvas.getByLabelText(t.labels[0])).toBeInTheDocument();
+      await expect(canvas.getByRole("button", { name: t.resetPassword.accept } )).toBeInTheDocument();
+      await expect(canvas.getByRole("button", { name: t.resetPassword.cancel } )).toBeInTheDocument();
+   },
+};
+
 export const Load = {
    play: async ({ canvasElement, step }) => { 
       const canvas = within(canvasElement);

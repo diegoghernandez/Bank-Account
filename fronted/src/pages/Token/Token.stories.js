@@ -2,7 +2,7 @@ import { reactRouterParameters, withRouter } from "storybook-addon-react-router-
 import { Token } from ".";
 import { rest } from "msw";
 import { expect } from "@storybook/jest";
-import { within } from "@storybook/testing-library";
+import { userEvent, within } from "@storybook/testing-library";
 import { Traduction } from "../../constants/Traduction";
 import { getTraduction } from "../../utils/getTraduction";
 
@@ -56,12 +56,20 @@ export const Expire = {
       const t = getTraduction(Traduction.TOKEN_REGISTER);
 
       await expect(canvas.getByRole("heading", { name: t.title })).toBeInTheDocument();
-      await expect(await canvas.findByText(t.description.expire)).toBeInTheDocument();
+      await expect(await canvas.findByText(t.description.expired)).toBeInTheDocument();
+      await expect(await canvas.findByRole("button", { name: t.button.expired })).toBeInTheDocument();
+
+      setTimeout(async() => {
+         await userEvent.click(await canvas.findByRole("button", { name: t.button.expired }));
+
+         await expect(canvas.getByRole("heading", { name: t.modal.title })).toBeInTheDocument();
+         await expect(await canvas.findByText(t.modal.message)).toBeInTheDocument();
+      }, 2000);
    }, 
    parameters: {
       msw: [
          rest.get(API, (req, res, ctx) => {
-            return res(ctx.status(400), ctx.text("expire"));
+            return res(ctx.status(400), ctx.text("expired"));
          }),
       ],
    },

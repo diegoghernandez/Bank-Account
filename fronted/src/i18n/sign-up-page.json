@@ -17,6 +17,7 @@
       "title": "Registrarse",
       "labels": ["Nombre", "Email", "Contraseña", "Confirmar contraseña"],
       "accept": "Registrarse",
-      "success": "Conseguido"
+      "success": "Conseguido",
+      "link": ["¿Tienes cuenta?", "Inicia sesión"]
    }
 }

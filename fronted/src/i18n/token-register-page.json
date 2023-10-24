@@ -6,12 +6,16 @@
       "title": "Verify registration",
       "description": {
          "valid": "Register successfully",
-         "expire": "Expire token",
+         "expired": "Expire token",
          "invalid": "Invalid token"
       },
       "button": {
          "valid": "Return to sign in",
-         "expire": "Resend token"
+         "expired": "Resend token"
+      },
+      "modal": {
+         "title": "Success",
+         "message": "Token send successfully"
       }
    },
    "es": {
@@ -21,12 +25,16 @@
       "title": "Comprobar el registro",
       "description": {
          "valid": "Registro completado correctamente",
-         "expire": "El token ha expirado",
+         "expired": "El token ha expirado",
          "invalid": "El token es inválido"
       },
       "button": {
          "valid": "Regresar a iniciar sesión",
-         "expire": "Reenviar token"
+         "expired": "Reenviar token"
+      },
+      "modal": {
+         "title": "Conseguido",
+         "message": "Token enviado correctamente"
       }
    }
 }

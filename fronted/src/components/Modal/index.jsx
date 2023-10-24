@@ -227,6 +227,7 @@ export const Modal = ({
                   <button 
                      type="button"
                      onClick={() => { 
+                        messageUtils?.function?.();
                         messageUtils?.changeLanguage?.();
                         messageUtils?.closeSession?.();
                         closeModal();
