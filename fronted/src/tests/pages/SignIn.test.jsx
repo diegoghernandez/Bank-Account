@@ -5,6 +5,14 @@ import { expect, vi } from "vitest";
 import * as auth from "../../pages/_services/auth";
 import { customRender } from "../../utils/renderTest";
 
+/* vi.mock("react-router-dom", async () => {
+   const actual = await vi.importActual("react-router-dom");
+   return {
+      ...actual,
+   };
+});
+ */
+
 describe("SignIn page tests", () => {
    it("Should render SignIn page correctly", () => {  
       const page = customRender(<SignIn />);
@@ -12,7 +20,7 @@ describe("SignIn page tests", () => {
       page.getByRole("heading");
       page.getByLabelText("Email");
       page.getByLabelText("Password");
-      page.getByRole("button");
+      page.getByRole("button", { name: "Sign In" });
    });
 
    describe("After clicking", () => {
@@ -21,9 +29,9 @@ describe("SignIn page tests", () => {
          const user = userEvent.setup();
          const spyLogin = vi.spyOn(auth, "login");
 
-         const button = page.getByRole("button");
          const emailInput = page.getByLabelText("Email");
          const passwordInput = page.getByLabelText("Password");
+         const button = page.getByRole("button", { name: "Sign In" });
 
          await user.type(emailInput, "error@user.com");
          await user.type(passwordInput, "1234");
@@ -46,9 +54,9 @@ describe("SignIn page tests", () => {
          const user = userEvent.setup();
          const spyLogin = vi.spyOn(auth, "login");
 
-         const button = page.getByRole("button");
          const emailInput = page.getByLabelText("Email");
          const passwordInput = page.getByLabelText("Password");
+         const button = page.getByRole("button", { name: "Sign In" });
 
          await user.type(emailInput, "user@user.com");
          await user.type(passwordInput, "1234");

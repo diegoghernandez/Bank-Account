@@ -13,10 +13,13 @@ const mocks = vi.hoisted(() => {
    };
 });
 
-vi.mock("react-router-dom", () => ({
-   ...vi.requireActual,
-   useSearchParams: mocks.useSearchParams,
-}));
+vi.mock("react-router-dom", async () => {
+   const actual = await vi.importActual("react-router-dom");
+   return {
+      ...actual,
+      useSearchParams: mocks.useSearchParams,
+   };
+});
 
 describe("Token page tests", () => {
    it("Should render the Token expire page correctly", async () =>  {
@@ -32,7 +35,7 @@ describe("Token page tests", () => {
       );
    
       expect(page.getByRole("heading")).toBeInTheDocument();
-      expect(page.getByText(t.description.expire)).toBeInTheDocument();      
+      expect(page.getByText(t.description.expired)).toBeInTheDocument();      
    });
 
    it("Should render the Token valid page correctly", async () =>  {

@@ -35,7 +35,7 @@ export const authHandler = [
          return res(ctx.status(200), ctx.text("valid"));
       }
 
-      return res(ctx.status(400), ctx.text("expire"));
+      return res(ctx.status(400), ctx.text("expired"));
    }),
 
    rest.get(`${API}/resend-token`, async (req, res, ctx) => 

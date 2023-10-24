@@ -9,13 +9,16 @@ import * as auth from "../../pages/_services/auth";
 
 const t = getTraduction(Traduction.SAVE_PASSWORD);
 
-vi.mock("react-router-dom", () => ({
-   ...vi.requireActual,
-   useSearchParams: () => [new URLSearchParams({ 
-      id: 45325324 ,
-      token: "er143ge8-9b58-41ae-8723-29d7ff675a30"
-   })],
-}));
+vi.mock("react-router-dom", async () => {
+   const actual = await vi.importActual("react-router-dom");
+   return {
+      ...actual,
+      useSearchParams: () => [new URLSearchParams({ 
+         id: 45325324 ,
+         token: "er143ge8-9b58-41ae-8723-29d7ff675a30"
+      })],
+   };
+});
 
 describe("Save password page tests", () => {
    it("Should render SignIn page correctly", () => {  
