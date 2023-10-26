@@ -145,6 +145,29 @@ public class AutomationRepositoryImplTest {
    }
 
    @Test
+   @DisplayName("Should save one automationEntity in the database and return it")
+   void saveAutomation() {
+      AutomationEntity automationEntity = AutomationEntity.builder()
+              .idAutomation(3123L)
+              .idAccount(54)
+              .name("For testing")
+              .amount(new BigDecimal("4324.43"))
+              .idTransferAccount(321)
+              .hoursToNextExecution(213)
+              .executionTime(LocalDateTime.of(2023, Month.DECEMBER, 11, 13, 12, 0))
+              .status(true)
+              .build();
+
+      Mockito.when(automationCrudRepository.save(ArgumentMatchers.any())).thenReturn(automationEntity);
+
+      automationRepository.saveAutomation(automationEntity);
+
+      assertAll(
+              () -> Mockito.verify(automationCrudRepository, Mockito.times(1)).save(automationEntity)
+      );
+   }
+
+   @Test
    @DisplayName("Should update the executionTime of an automationEntity by id in the database")
    void updateExecutionTimeById() {
       LocalDateTime time = LocalDateTime.of(2022, Month.DECEMBER, 11, 13, 12, 0);
@@ -167,26 +190,13 @@ public class AutomationRepositoryImplTest {
    }
 
    @Test
-   @DisplayName("Should save one automationEntity in the database and return it")
-   void saveAutomation() {
-      AutomationEntity automationEntity = AutomationEntity.builder()
-              .idAutomation(3123L)
-              .idAccount(54)
-              .name("For testing")
-              .amount(new BigDecimal("4324.43"))
-              .idTransferAccount(321)
-              .hoursToNextExecution(213)
-              .executionTime(LocalDateTime.of(2023, Month.DECEMBER, 11, 13, 12, 0))
-              .status(true)
-              .build();
+   @DisplayName("Should delete an automationEntity by id in the database")
+   void deleteById() {
+      Mockito.doNothing().when(automationCrudRepository).deleteById(Mockito.isA(Long.class));
 
-      Mockito.when(automationCrudRepository.save(ArgumentMatchers.any())).thenReturn(automationEntity);
+      automationRepository.deleteById(76L);
 
-      automationRepository.saveAutomation(automationEntity);
-
-      assertAll(
-              () -> Mockito.verify(automationCrudRepository, Mockito.times(1)).save(automationEntity)
-      );
+      Mockito.verify(automationCrudRepository, Mockito.times(1)).deleteById(76L);
    }
 }
 

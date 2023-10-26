@@ -38,6 +38,27 @@ public class AutomationService {
       return automationRepository.getByIdAccount(idAccount);
    }
 
+   public void saveAutomation(AutomationDto automationDto, Locale locale) throws NotFoundException {
+      Optional<AccountEntity> isAccount = accountRepository.getAccountById(automationDto.idAccount());
+      Optional<AccountEntity> isAccountTransfer = accountRepository.getAccountById(automationDto.idTransferAccount());
+
+      if (isAccount.isEmpty() || isAccountTransfer.isEmpty()) throw new NotFoundException("account.error", locale);
+
+      LocalDateTime localDateTime = LocalDateTime.now().plusHours(automationDto.hoursToNextExecution());
+
+      AutomationEntity automationEntity = AutomationEntity.builder()
+              .idAccount(automationDto.idAccount())
+              .name(automationDto.name())
+              .amount(automationDto.amount())
+              .idTransferAccount(automationDto.idTransferAccount())
+              .hoursToNextExecution(automationDto.hoursToNextExecution())
+              .executionTime(localDateTime)
+              .status(true)
+              .build();
+
+      automationRepository.saveAutomation(automationEntity);
+   }
+
    public void updateAutomation(AutomationEntity automationEntity, Locale locale) throws NotFoundException {
       if (!automationRepository.existsById(automationEntity.getIdAutomation()))
          throw new NotFoundException("service.automation.error.automation", locale);
@@ -58,24 +79,10 @@ public class AutomationService {
       automationRepository.saveAutomation(automationBuilder);
    }
 
-   public void saveAutomation(AutomationDto automationDto, Locale locale) throws NotFoundException {
-      Optional<AccountEntity> isAccount = accountRepository.getAccountById(automationDto.idAccount());
-      Optional<AccountEntity> isAccountTransfer = accountRepository.getAccountById(automationDto.idTransferAccount());
+   public void deleteById(long id, Locale locale) throws NotFoundException {
+      if (!automationRepository.existsById(id))
+         throw new NotFoundException("service.automation.error.automation", locale);
 
-      if (isAccount.isEmpty() || isAccountTransfer.isEmpty()) throw new NotFoundException("account.error", locale);
-
-      LocalDateTime localDateTime = LocalDateTime.now().plusHours(automationDto.hoursToNextExecution());
-
-      AutomationEntity automationEntity = AutomationEntity.builder()
-              .idAccount(automationDto.idAccount())
-              .name(automationDto.name())
-              .amount(automationDto.amount())
-              .idTransferAccount(automationDto.idTransferAccount())
-              .hoursToNextExecution(automationDto.hoursToNextExecution())
-              .executionTime(localDateTime)
-              .status(true)
-              .build();
-
-      automationRepository.saveAutomation(automationEntity);
+      automationRepository.deleteById(id);
    }
 }

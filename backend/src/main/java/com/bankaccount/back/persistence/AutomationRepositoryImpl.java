@@ -40,6 +40,10 @@ public class AutomationRepositoryImpl implements AutomationRepository {
    public List<AutomationEntity> getByIdAccountAndStatus(int idAccount, boolean status) {
       return automationCrudRepository.findByIdAccountAndStatus(idAccount, status);
    }
+   @Override
+   public void saveAutomation(AutomationEntity automationEntity) {
+      automationCrudRepository.save(automationEntity);
+   }
 
    @Override
    public void updateExecutionTimeById(LocalDateTime newTime, long id) {
@@ -52,7 +56,7 @@ public class AutomationRepositoryImpl implements AutomationRepository {
    }
 
    @Override
-   public void saveAutomation(AutomationEntity automationEntity) {
-      automationCrudRepository.save(automationEntity);
+   public void deleteById(long id) {
+      automationCrudRepository.deleteById(id);
    }
 }

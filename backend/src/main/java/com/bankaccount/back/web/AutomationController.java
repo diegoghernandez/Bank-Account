@@ -40,6 +40,16 @@ public class AutomationController {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
    }
 
+   @PostMapping(value = "/save", consumes = {"application/json"})
+   public ResponseEntity<String> saveAutomation(
+           @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+           @RequestBody @Valid AutomationDto automationDto) throws NotFoundException {
+      automationService.saveAutomation(automationDto, locale);
+      return new ResponseEntity<>(
+              Messages.getMessageForLocale("controller.automation.save", locale),
+              HttpStatus.CREATED);
+   }
+
    @PutMapping("/update")
    public ResponseEntity<String> updateAutomation(
            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
@@ -51,13 +61,14 @@ public class AutomationController {
               HttpStatus.OK);
    }
 
-   @PostMapping(value = "/save", consumes = {"application/json"})
-   public ResponseEntity<String> saveAutomation(
+   @DeleteMapping("/delete")
+   public ResponseEntity<String> deleteById(
            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-           @RequestBody @Valid AutomationDto automationDto) throws NotFoundException {
-      automationService.saveAutomation(automationDto, locale);
-      return new ResponseEntity<>(
-              Messages.getMessageForLocale("controller.automation.save", locale),
-              HttpStatus.CREATED);
+           @RequestParam long id) throws NotFoundException {
+
+      automationService.deleteById(id, locale);
+
+      return new ResponseEntity<>(Messages.getMessageForLocale("controller.automation.delete", locale),
+              HttpStatus.OK);
    }
 }

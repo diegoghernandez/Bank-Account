@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -194,6 +195,39 @@ public class AutomationControllerTest {
    }
 
    @Test
+   @DisplayName("Should return one automationDto using the service or return an unauthorized if doesn't have permission")
+   void saveAutomation() throws NotFoundException {
+      AutomationDto automationDto = new AutomationDto(
+              234,
+              "New fr fr",
+              new BigDecimal("4324.00"),
+              321,
+              54
+      );
+
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+      assertAll(
+              () -> mockMvc.perform(MockMvcRequestBuilders.post("/automations/save")
+                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsString(automationDto))
+                              .with(user("user").roles(USER))
+                              .with(csrf()))
+                      .andExpect(status().isCreated())
+                      .andExpect(content().string("Automation created successfully")),
+
+              () -> mockMvc.perform(MockMvcRequestBuilders.post("/automations/save")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .content(objectMapper.writeValueAsString(automationDto))
+                              .with(csrf()))
+                      .andExpect(status().isUnauthorized())
+      );
+   }
+
+   @Test
    @DisplayName("Should update one automationEntity with another automationEntity with the wanted changes using the service if authorized")
    void updateAutomation() throws Exception {
       AutomationEntity automationEntity = AutomationEntity.builder()
@@ -230,33 +264,24 @@ public class AutomationControllerTest {
    }
 
    @Test
-   @DisplayName("Should return one automationDto using the service or return an unauthorized if doesn't have permission")
-   void saveAutomation() throws NotFoundException {
-      AutomationDto automationDto = new AutomationDto(
-              234,
-              "New fr fr",
-              new BigDecimal("4324.00"),
-              321,
-              54
-      );
-
-      ObjectMapper objectMapper = new ObjectMapper();
-      objectMapper.registerModule(new JavaTimeModule());
-      objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+   @DisplayName("Should delete one automationEntity by id using the service if authorized")
+   void deleteById() throws Exception {
+      Mockito.doNothing().when(automationService).deleteById(324L, Locale.getDefault());
 
       assertAll(
-              () -> mockMvc.perform(MockMvcRequestBuilders.post("/automations/save")
+              () -> mockMvc.perform(MockMvcRequestBuilders.delete("/automations/delete")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                              .param("id", "324")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsString(automationDto))
                               .with(user("user").roles(USER))
                               .with(csrf()))
-                      .andExpect(status().isCreated())
-                      .andExpect(content().string("Automation created successfully")),
+                      .andExpect(status().isOk())
+                      .andExpect(content().string("Automation deleted successfully")),
+              () -> Mockito.verify(automationService, Mockito.times(1))
+                      .deleteById(324L, Locale.getDefault()),
 
-              () -> mockMvc.perform(MockMvcRequestBuilders.post("/automations/save")
+              () -> mockMvc.perform(MockMvcRequestBuilders.delete("/automations/delete")
                               .contentType(MediaType.APPLICATION_JSON)
-                              .content(objectMapper.writeValueAsString(automationDto))
                               .with(csrf()))
                       .andExpect(status().isUnauthorized())
       );

@@ -144,6 +144,35 @@ public class AutomationCrudRepositoryTest {
    }
 
    @Test
+   @DisplayName("Should save an automation in the database")
+   public void saveAutomation() {
+      LocalDateTime localDateTime = LocalDateTime.now();
+
+      AutomationEntity automationEntity = AutomationEntity.builder()
+              .idAccount(32)
+              .name("For testing")
+              .amount(new BigDecimal("43242.94"))
+              .idTransferAccount(12)
+              .hoursToNextExecution(4)
+              .executionTime(localDateTime)
+              .status(true)
+              .build();
+
+      AutomationEntity saveAutomation = automationCrudRepository.save(automationEntity);
+
+      assertAll(
+              () -> assertThat(saveAutomation.getIdAutomation()).isEqualTo(1L),
+              () -> assertThat(saveAutomation.getIdAccount()).isEqualTo(automationEntity.getIdAccount()),
+              () -> assertThat(saveAutomation.getName()).isEqualTo(automationEntity.getName()),
+              () -> assertThat(saveAutomation.getAmount()).isEqualTo(automationEntity.getAmount()),
+              () -> assertThat(saveAutomation.getIdTransferAccount()).isEqualTo(automationEntity.getIdTransferAccount()),
+              () -> assertThat(saveAutomation.getHoursToNextExecution()).isEqualTo(automationEntity.getHoursToNextExecution()),
+              () -> assertThat(saveAutomation.getExecutionTime()).isEqualTo(automationEntity.getExecutionTime()),
+              () -> assertThat(saveAutomation.getStatus()).isEqualTo(automationEntity.getStatus())
+      );
+   }
+
+   @Test
    @Sql("/db/bankaccount_data.sql")
    @DisplayName("Should update the executionTime from a specific automationEntity with a specific id of the data.sql")
    public void updateExecutionTimeById() {
@@ -182,35 +211,6 @@ public class AutomationCrudRepositoryTest {
               () -> assertThat(automationEntity.getExecutionTime()).isEqualTo(
                       LocalDateTime.of(2023, Month.OCTOBER, 9, 20, 10, 12)),
               () -> assertThat(automationEntity.getStatus()).isEqualTo(false)
-      );
-   }
-
-   @Test
-   @DisplayName("Should save an automation in the database")
-   public void saveAutomation() {
-      LocalDateTime localDateTime = LocalDateTime.now();
-
-      AutomationEntity automationEntity = AutomationEntity.builder()
-              .idAccount(32)
-              .name("For testing")
-              .amount(new BigDecimal("43242.94"))
-              .idTransferAccount(12)
-              .hoursToNextExecution(4)
-              .executionTime(localDateTime)
-              .status(true)
-              .build();
-
-      AutomationEntity saveAutomation = automationCrudRepository.save(automationEntity);
-
-      assertAll(
-              () -> assertThat(saveAutomation.getIdAutomation()).isEqualTo(1L),
-              () -> assertThat(saveAutomation.getIdAccount()).isEqualTo(automationEntity.getIdAccount()),
-              () -> assertThat(saveAutomation.getName()).isEqualTo(automationEntity.getName()),
-              () -> assertThat(saveAutomation.getAmount()).isEqualTo(automationEntity.getAmount()),
-              () -> assertThat(saveAutomation.getIdTransferAccount()).isEqualTo(automationEntity.getIdTransferAccount()),
-              () -> assertThat(saveAutomation.getHoursToNextExecution()).isEqualTo(automationEntity.getHoursToNextExecution()),
-              () -> assertThat(saveAutomation.getExecutionTime()).isEqualTo(automationEntity.getExecutionTime()),
-              () -> assertThat(saveAutomation.getStatus()).isEqualTo(automationEntity.getStatus())
       );
    }
 }

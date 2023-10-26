@@ -18,9 +18,11 @@ public interface AutomationRepository {
 
    List<AutomationEntity> getByIdAccountAndStatus(int idAccount, boolean status);
 
+   void saveAutomation(AutomationEntity automationEntity);
+
    void updateExecutionTimeById(LocalDateTime newTime, long id);
 
    void updateStatusById(boolean status, long id);
 
-   void saveAutomation(AutomationEntity automationEntity);
+   void deleteById(long id);
 }
