@@ -2,7 +2,7 @@
    "content": [
       {
          "idTransaction": 1,
-         "idTransferAccount": 0,
+         "idTransferAccount": "XXXXXX0",
          "receiverName": "Random1",
          "transactionAmount": 120.00,
          "transactionType": "DEPOSIT",
@@ -11,7 +11,7 @@
       },
       {
          "idTransaction": 2,
-         "idTransferAccount": 432,
+         "idTransferAccount": "XXXXXX432",
          "receiverName": "Random1",
          "transactionAmount": 120.00,
          "transactionType": "WIRE_TRANSFER",
@@ -20,7 +20,7 @@
       },
       {
          "idTransaction": 3,
-         "idTransferAccount": 78568,
+         "idTransferAccount": "XXXXXX568",
          "receiverName": "Random3",
          "transactionAmount": 120.00,
          "transactionType": "WIRE_TRANSFER",

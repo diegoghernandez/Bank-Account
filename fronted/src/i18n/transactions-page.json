@@ -5,6 +5,10 @@
          "description": "Transaction Type. Name. Date. Transactions. Transaction"
       },
       "labels": ["Transaction Type", "Name", "Date"],
+      "modal": {
+         "labels": ["Year", "Month", "Day"],
+         "supportText": ["You must chose a year", "You must chose a month", "Write a number between 1 and "]
+      },
       "title": "Transactions",
       "notFound": "No transactions found",
       "fab": {
@@ -18,6 +22,10 @@
          "description": "Tipo de transacción. Nombre. Fecha. Transacciones. Transacción"
       },
       "labels": ["Tipo de transacción", "Nombre", "Fecha"],
+      "modal": {
+         "labels": ["Año", "Mes", "Día"],
+         "supportText": ["Debes escoger un año", "Debes escoger un mes", "Escribe un número entre 1 y "]
+      },
       "title": "Transacciones",
       "notFound": "Sin transacciones",
       "fab": {

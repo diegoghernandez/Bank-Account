@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Filled } from "../../components/Buttons/Filled";
 import { TextField } from "../../components/TextField";
-import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Traduction } from "../../constants/Traduction";
 import { getTraduction } from "../../utils/getTraduction";
@@ -60,16 +59,14 @@ export const SavePassword = () => {
             >
                <TextField
                   label={t.labels[0]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.PASSWORD}
+                  type={TextFieldTypes.PASSWORD}
                   supportiveText={error}
                   isError={error}
                   isDisable={isLoading}
                   />
                <TextField
                   label={t.labels[1]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.PASSWORD}
+                  type={TextFieldTypes.PASSWORD}
                   supportiveText={error}
                   isError={error}
                   isDisable={isLoading}

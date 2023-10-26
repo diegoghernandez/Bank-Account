@@ -74,7 +74,7 @@ public class TransactionCrudRepositoryTest {
               () -> assertEquals(List.of(1, 1, 1, 1, 1),
                       transactionEntityList.stream().map(TransactionEntity::getIdAccount).toList()),
 
-              () -> assertEquals(Arrays.asList(2, 2, 2, 0, 2),
+              () -> assertEquals(Arrays.asList("XXXXXX2", "XXXXXX2", "XXXXXX2", "XXXXXX0", "XXXXXX2"),
                       transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
 
               () -> assertEquals(List.of("Maria", "Maria", "Maria", "Pedro", "Luisa"),
@@ -123,7 +123,7 @@ public class TransactionCrudRepositoryTest {
               () -> assertTrue(errorTransactionEntity.isEmpty()),
               () -> assertThat(transactionEntityList.getContent().size()).isEqualTo(2),
               () -> assertEquals(List.of(1, 1), transactionEntityList.stream().map(TransactionEntity::getIdAccount).toList()),
-              () -> assertEquals(Arrays.asList(2, 2), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
+              () -> assertEquals(Arrays.asList("XXXXXX2", "XXXXXX2"), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
               () -> assertEquals(List.of("Maria", "Maria"), transactionEntityList.stream().map(TransactionEntity::getReceiverName).toList()),
               () -> assertEquals(List.of("400.00", "400.00"), transactionEntityList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
               () -> assertEquals(List.of(TransactionType.ONLINE_PAYMENT, TransactionType.ONLINE_PAYMENT),
@@ -169,7 +169,7 @@ public class TransactionCrudRepositoryTest {
       assertAll(
               () -> assertThat(transactionEntityList.getContent().size()).isEqualTo(3),
               () -> assertEquals(List.of(1, 1, 1), transactionEntityList.stream().map(TransactionEntity::getIdAccount).toList()),
-              () -> assertEquals(Arrays.asList(2, 2, 2), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
+              () -> assertEquals(Arrays.asList("XXXXXX2", "XXXXXX2", "XXXXXX2"), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
               () -> assertEquals(List.of("TEst", "TEst", "TEst"), transactionEntityList.stream().map(TransactionEntity::getReceiverName).toList()),
               () -> assertEquals(List.of("6000.00", "400.00", "300.00"), transactionEntityList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
               () -> assertEquals(List.of(TransactionType.WIRE_TRANSFER, TransactionType.ONLINE_PAYMENT, TransactionType.ONLINE_PAYMENT),
@@ -190,7 +190,7 @@ public class TransactionCrudRepositoryTest {
       assertAll(
               () -> assertThat(transactionEntityList.getContent().size()).isEqualTo(2),
               () -> assertEquals(List.of(1, 1), transactionEntityList.stream().map(TransactionEntity::getIdAccount).toList()),
-              () -> assertEquals(Arrays.asList(0, 0), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
+              () -> assertEquals(Arrays.asList("XXXXXX0", "XXXXXX0"), transactionEntityList.stream().map(TransactionEntity::getIdTransferAccount).collect(Collectors.toList())),
               () -> assertEquals(List.of("TEst", "TEst"), transactionEntityList.stream().map(TransactionEntity::getReceiverName).toList()),
               () -> assertEquals(List.of("6000.00", "2000.00"), transactionEntityList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
               () -> assertEquals(List.of(TransactionType.DEPOSIT, TransactionType.DEPOSIT),

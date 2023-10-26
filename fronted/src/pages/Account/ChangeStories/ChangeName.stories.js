@@ -46,7 +46,7 @@ export const Load = {
       const acceptButton = canvas.getByRole("button", { name: tModal.accept });
 
       await step("Enter and submit necessary data", async () => {
-         await userEvent.type(nameInput, "wrong@email.com");
+         await userEvent.type(nameInput, "wrong");
          await userEvent.type(passwordInput, "W0rng PAsswrOd");
          
          await userEvent.click(acceptButton);
@@ -85,7 +85,7 @@ export const Error = {
       const acceptButton = canvas.getByRole("button", { name: tModal.accept });
 
       await step("Enter and submit necessary data", async () => {
-         await userEvent.type(nameInput, "wrong@email.com");
+         await userEvent.type(nameInput, "wrong");
          await userEvent.type(passwordInput, "W0rng PAsswrOd");
          
          await userEvent.click(acceptButton);
@@ -135,7 +135,7 @@ export const Success = {
       const acceptButton = canvas.getByRole("button", { name: tModal.accept });
 
       await step("Enter and submit necessary data", async () => {
-         await userEvent.type(nameInput, "success@email.com");
+         await userEvent.type(nameInput, "success");
          await userEvent.type(passwordInput, "password");
          
          await userEvent.click(acceptButton);

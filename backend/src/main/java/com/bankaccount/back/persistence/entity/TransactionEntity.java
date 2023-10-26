@@ -45,4 +45,8 @@ public class TransactionEntity {
 
    @Column(name = "is_automated")
    private Boolean isAutomated;
+
+   public String getIdTransferAccount() {
+      return "XXXXXX" + (idTransferAccount % 1000);
+   }
 }

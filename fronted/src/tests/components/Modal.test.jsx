@@ -19,7 +19,7 @@ describe("Modal component test", () => {
       });
 
       it("Should all functions have called after interact with the button", async () => {
-         const { mockSetValue, mockSetIsChange, mockSetIsClicked } = getListElements();
+         const { mockSetValue, mockFunctionToUpdate, mockSetIsClicked } = getListElements();
 
          fireEvent.click(screen.getByRole("button", { name: "Modal" }));
 
@@ -31,8 +31,8 @@ describe("Modal component test", () => {
 
          expect(mockSetValue).toHaveBeenCalledTimes(1);
          expect(mockSetValue).toHaveBeenCalledWith("2015 December");
-         expect(mockSetIsChange).toHaveBeenCalledTimes(1);
          expect(mockSetIsClicked).toHaveBeenCalledTimes(1);
+         expect(mockFunctionToUpdate).toHaveBeenCalledTimes(1);
       });
    });
 
@@ -128,7 +128,7 @@ describe("Modal component test", () => {
 
 const getListElements = () => {
    const mockSetValue = vi.fn();
-   const mockSetIsChange = vi.fn();
+   const mockFunctionToUpdate = vi.fn();
    const mockSetIsClicked = vi.fn();
 
    render(<Modal 
@@ -144,14 +144,14 @@ const getListElements = () => {
             menuParameters: ["December", "January", "February"]
          }],
          setValue: mockSetValue,
-         setIsChange: mockSetIsChange,
+         functionToUpdate: mockFunctionToUpdate,
          setIsClicked: mockSetIsClicked
       }}
    />);
 
    return {
       mockSetValue,
-      mockSetIsChange,
+      mockFunctionToUpdate,
       mockSetIsClicked
    };
 };

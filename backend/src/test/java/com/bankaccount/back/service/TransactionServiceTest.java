@@ -137,7 +137,7 @@ public class TransactionServiceTest {
       assertAll(
               () -> assertThat(transactionList.getSize()).isEqualTo(1),
               () -> assertEquals(List.of(87686L), transactionList.stream().map(TransactionEntity::getIdTransaction).toList()),
-              () -> assertEquals(List.of(312421), transactionList.stream().map(TransactionEntity::getIdTransferAccount).toList()),
+              () -> assertEquals(List.of("XXXXXX421"), transactionList.stream().map(TransactionEntity::getIdTransferAccount).toList()),
               () -> assertEquals(List.of("Maria"), transactionList.stream().map(TransactionEntity::getReceiverName).toList()),
               () -> assertEquals(List.of("7657.75"), transactionList.stream().map(transaction -> transaction.getTransactionAmount().toString()).toList()),
               () -> assertEquals(Collections.singletonList(transactionEntityList.get(1).getTransactionTimestamp()), transactionList.stream().map(TransactionEntity::getTransactionTimestamp).toList())

@@ -11,11 +11,11 @@ export default {
       isError: { control: "boolean" },
       isDisable: { control: "boolean" },
       type: {
-         options: ["Default", "Search"],
+         options: ["DEFAULT", "SEARCH", "PASSWORD"],
          mapping: TextFieldTypes,
          control: "radio",
       },
-      inputType: {
+      initialInputType: {
          options: Object.keys(InputTypes),
          mapping: InputTypes,
          control: "radio",
@@ -28,7 +28,7 @@ export const Filled = {
       styles: TextFieldStyles.FILLED,
       label: "Filled",
       type: TextFieldTypes.DEFAULT,
-      inputType: InputTypes.TEXT,
+      initialInputType: InputTypes.TEXT,
       supportiveText: "Supportive",
    }
 };
@@ -37,7 +37,7 @@ export const Outline = {
    args: {
       label: "Outline",
       type: TextFieldTypes.DEFAULT,
-      inputType: InputTypes.TEXT,
+      initialInputType: InputTypes.TEXT,
       supportiveText: "Supportive",
    }
 };
@@ -51,7 +51,7 @@ export const Menu = {
    },
    parameters: {
       controls: {
-         exclude: ["type", "inputType"]
+         exclude: ["type", "initialInputType"]
       }
    }
 };
@@ -63,18 +63,18 @@ export const Modal = {
       supportiveText: "Supportive",
       modalParameters: [{
          label: "weeks",
-         inputType: InputTypes.NUMBER,
+         initialInputType: InputTypes.NUMBER,
          textFieldType: TextFieldTypes.DEFAULT,
       }, {
          label: "days",
-         inputType: InputTypes.NUMBER,
+         initialInputType: InputTypes.NUMBER,
          textFieldType: TextFieldTypes.DEFAULT,
          max: 6
       }]
    },
    parameters: {
       controls: {
-         exclude: ["type", "inputType"]
+         exclude: ["type", "initialInputType"]
       }
    }
 };

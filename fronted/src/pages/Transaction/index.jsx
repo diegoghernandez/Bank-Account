@@ -36,9 +36,14 @@ export const Transaction = () => {
          }
       }
 
+      console.log(error);
+
       const typeValue = elements[0].value;
-      if (!typeValue) setError({type: t.errorMessages[0]});
-      else {
+      if (!typeValue) setError({ type: t.errorMessages[0] });
+      else if (transactionType == "DEPOSIT" && elements[2].value) {
+         setError({ desc: t.errorMessages[2] });
+         setIsActive(true);
+      } else {
          setIsLoading(true);
 
          setTimeout(() => {
@@ -53,7 +58,7 @@ export const Transaction = () => {
    
                setTimeout(() => {
                   dialogRef?.current?.close?.();
-                  navigate("/");
+                  navigate("/transactions");
                }, 1000);
             }).catch((e) => {
                const message = JSON.parse(e.message);
@@ -69,8 +74,10 @@ export const Transaction = () => {
       
       if ((type === TransactionType.WIRE_TRANSFER.description) || (type === TransactionType.ONLINE_PAYMENT.description)) {
          setIsActive(true);
+         setError({});
       } else {
          setIsActive(false);
+         setError({});
       }
    };
 
@@ -88,7 +95,7 @@ export const Transaction = () => {
                   valueRef={typeReference}
                   label={t.labels[0]}
                   type={TextFieldTypes.MENU}
-                  inputType={InputTypes.TEXT}
+                  initialInputType={InputTypes.TEXT}
                   supportiveText={error.type}
                   isError={error.type}
                   isDisable={isLoading}
@@ -99,7 +106,7 @@ export const Transaction = () => {
                <TextField
                   label={t.labels[1]}
                   type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.NUMBER}
+                  initialInputType={InputTypes.NUMBER}
                   supportiveText={error.amount}
                   isError={error.amount}
                   isDisable={isLoading}
@@ -107,7 +114,7 @@ export const Transaction = () => {
                <TextField
                   label={t.labels[2]}
                   type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.NUMBER}
+                  initialInputType={InputTypes.NUMBER}
                   supportiveText={error.desc}
                   isError={error.desc}
                   isDisable={(isLoading) ? isLoading : !isActive}

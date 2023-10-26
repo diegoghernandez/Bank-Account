@@ -4,7 +4,7 @@ import { getTransactions, getTransactionsByFilter, saveTransaction } from "../..
 const transaction = {
    content: [{
       "idTransaction": 1,
-      "idTransferAccount": 0,
+      "idTransferAccount": "XXXXXX0",
       "receiverName": "Random1",
       "transactionAmount": 120.00,
       "transactionType": "DEPOSIT",
@@ -12,7 +12,7 @@ const transaction = {
       "isAutomated": false
    }, {
       "idTransaction": 2,
-      "idTransferAccount": 432,
+      "idTransferAccount": "XXXXXX432",
       "receiverName": "Random1",
       "transactionAmount": 120.00,
       "transactionType": "WIRE_TRANSFER",
@@ -20,7 +20,7 @@ const transaction = {
       "isAutomated": false
    }, {
       "idTransaction": 3,
-      "idTransferAccount": 78568,
+      "idTransferAccount": "XXXXXX568",
       "receiverName": "Random3",
       "transactionAmount": 120.00,
       "transactionType": "WIRE_TRANSFER",
@@ -33,7 +33,7 @@ const transaction = {
 const transactionByName = {
    content: [{
       "idTransaction": 1,
-      "idTransferAccount": 654,
+      "idTransferAccount": "XXXXXX654",
       "receiverName": "New",
       "transactionAmount": 120.00,
       "transactionType": "WIRE_TRANSFER",
@@ -41,7 +41,7 @@ const transactionByName = {
       "isAutomated": false
    }, {
       "idTransaction": 2,
-      "idTransferAccount": 654,
+      "idTransferAccount": "XXXXXX654",
       "receiverName": "New",
       "transactionAmount": 120.00,
       "transactionType": "WIRE_TRANSFER",

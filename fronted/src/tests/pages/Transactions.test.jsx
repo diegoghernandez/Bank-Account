@@ -46,8 +46,7 @@ describe("Transactions page tests", () => {
          const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
-            expect(spyTransaction).toHaveBeenCalledTimes(1);
-            expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
+            expect(spyTransaction).toHaveBeenCalledTimes(0);
             expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
             expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
                id: 238589851,
@@ -79,8 +78,7 @@ describe("Transactions page tests", () => {
          const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
-            expect(spyTransaction).toHaveBeenCalledTimes(1);
-            expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
+            expect(spyTransaction).toHaveBeenCalledTimes(0);
             expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
             expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
                id: 238589851,
@@ -114,8 +112,7 @@ describe("Transactions page tests", () => {
          const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
-            expect(spyTransaction).toHaveBeenCalledTimes(1);
-            expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
+            expect(spyTransaction).toHaveBeenCalledTimes(0);
             expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
             expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
                id: 238589851,
@@ -147,8 +144,7 @@ describe("Transactions page tests", () => {
          const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
-            expect(spyTransaction).toHaveBeenCalledTimes(1);
-            expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
+            expect(spyTransaction).toHaveBeenCalledTimes(0);
             expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
             expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
                id: 238589851, 
@@ -177,7 +173,7 @@ describe("Transactions page tests", () => {
          );
    
          await user.click(dateInput);
-         await user.click(page.getByLabelText("year"));
+         await user.click(page.getByLabelText("Year"));
          await user.click(page.getByRole("menuitem", { name: "2023", hidden: true }));
          await user.click(page.getByRole("button", { name: "Accept", hidden: true }));
    
@@ -185,8 +181,7 @@ describe("Transactions page tests", () => {
          const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
-            expect(spyTransaction).toHaveBeenCalledTimes(1);
-            expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
+            expect(spyTransaction).toHaveBeenCalledTimes(0);
             expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
             expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
                id: 238589851, 
@@ -195,13 +190,15 @@ describe("Transactions page tests", () => {
                date: {
                   year: 2023, 
                   month: null,
+                  day: null
                }, 
                page: 0
             });
          });
    
          await waitFor(() => {
-            expect(page.getAllByText(/^2023-06/i)).length(2);
+            expect(page.getAllByText(new Intl.DateTimeFormat("en", { dateStyle: "full", timeStyle: "medium" })
+               .format(new Date("2023-06-26T21:02:13.374219")))).length(2);
          });
       });
       
@@ -215,7 +212,7 @@ describe("Transactions page tests", () => {
          );
    
          await user.click(dateInput);
-         await user.click(page.getByLabelText("year"));
+         await user.click(page.getByLabelText("Year"));
          await user.click(page.getByRole("menuitem", { name: "2022", hidden: true}));
          await user.click(page.getByRole("button", { name: "Accept", hidden: true }));
    
@@ -223,8 +220,7 @@ describe("Transactions page tests", () => {
          const spyTransactionByFilter = vi.spyOn(transactions, "getTransactionsByFilter");
    
          await waitFor(() => {
-            expect(spyTransaction).toHaveBeenCalledTimes(1);
-            expect(spyTransaction).toHaveBeenLastCalledWith(238589851, 0);
+            expect(spyTransaction).toHaveBeenCalledTimes(0);
             expect(spyTransactionByFilter).toHaveBeenCalledTimes(1);
             expect(spyTransactionByFilter).toHaveBeenLastCalledWith({
                id: 238589851, 
@@ -232,7 +228,8 @@ describe("Transactions page tests", () => {
                name: "",
                date: {
                   year: 2022, 
-                  month: null
+                  month: null,
+                  day: null
                }, 
                page: 0,
             });

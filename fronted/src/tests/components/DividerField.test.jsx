@@ -21,6 +21,6 @@ describe("DividerField component tests", () => {
 
       fireEvent.click(screen.getByRole("button", { name: "Label" }));
 
-      expect(screen.getByRole("dialog", { hidden: true })).toBeInTheDocument();
+      expect(screen.getByRole("alertdialog", { hidden: true })).toBeInTheDocument();
    });
 });

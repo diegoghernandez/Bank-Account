@@ -68,7 +68,7 @@ export const SignIn = () => {
                <TextField
                   label={t.labels[0]}
                   type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.EMAIL}
+                  initialInputType={InputTypes.EMAIL}
                   supportiveText={error}
                   isError={error}
                   isDisable={isLoading}
@@ -76,8 +76,7 @@ export const SignIn = () => {
                {(!isReset) &&
                   <TextField
                      label={t.labels[1]}
-                     type={TextFieldTypes.DEFAULT}
-                     inputType={InputTypes.PASSWORD}
+                     type={TextFieldTypes.PASSWORD}
                      supportiveText={error}
                      isError={error}
                      isDisable={isLoading}

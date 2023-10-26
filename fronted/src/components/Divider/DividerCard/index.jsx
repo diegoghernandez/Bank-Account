@@ -1,14 +1,14 @@
 import { AutomationIcon } from "../../../assets/automation";
 
 export const DividerCard = ({
-   transferAccount = 0,
+   transferAccount = "XXXXXX0",
    name,
    amount,
    type,
    time,
    automated = false
 }) => {
-   const isTransfer = transferAccount != 0 ? 
+   const isTransfer = transferAccount != "XXXXXX0" ? 
       `${transferAccount} - ${type}` : type;
 
    return (

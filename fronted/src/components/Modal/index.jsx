@@ -26,11 +26,16 @@ const ListModal = ({
                   key={parameter.label}
                   styles={TextFieldStyles.FILLED}
                   label={parameter.label}
+                  type={parameter.textFieldType}
+                  initialInputType={parameter?.initialInputType}
                   required={false}
+                  initialValue={parameter?.value}
                   min={0}
                   max={parameter?.max}
-                  inputType={parameter.inputType}
-                  type={parameter.textFieldType}
+                  supportiveText={parameter?.support ?? parameter?.error}
+                  isError={parameter?.error}
+                  isDisable={parameter?.isDisable}
+                  functionToUpdate={parameter?.functionToUpdate}
                   menuParameters={(parameter.textFieldType === TextFieldTypes.MENU) ? parameter?.menuParameters: ""}
                   menuClasses="w-[calc(100%-3rem)] h-28 overflow-y-scroll"
                />
@@ -67,8 +72,8 @@ const FormModal = ({ title, formUtils, children }) => {
                <TextField 
                   styles={TextFieldStyles.FILLED}
                   label={formUtils?.inputs[0]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={formUtils?.inputs[0]?.match("email") ? InputTypes.EMAIL : InputTypes.TEXT}
+                  type={formUtils?.types?.[0]}
+                  initialInputType={formUtils?.inputs[0]?.match("email") ? InputTypes.EMAIL : InputTypes.TEXT}
                   supportiveText={parameters?.first}
                   isError={parameters?.first}
                   isDisable={formUtils?.isLoading}
@@ -76,8 +81,7 @@ const FormModal = ({ title, formUtils, children }) => {
                <TextField 
                   styles={TextFieldStyles.FILLED}
                   label={formUtils?.inputs[1]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.PASSWORD}
+                  type={formUtils?.types?.[1]}
                   supportiveText={parameters?.second}
                   isError={parameters?.second}
                   isDisable={formUtils?.isLoading}
@@ -117,7 +121,9 @@ export const Modal = ({
 
       if (inputs) {
          for (const target of inputs) {
-            values.push(target.value);
+            if (!target.disabled && target.ariaInvalid !== "true") {
+               values.push(target.value);
+            }
          }
    
          if (listUtils?.parameters[0]?.label == modalParameters[0]) {
@@ -156,6 +162,7 @@ export const Modal = ({
          {dialogRef === undefined && <button onClick={showModal}>Modal</button>}
          <dialog 
             ref={dialogRef ?? storyRef} 
+            role={(messageUtils?.message ? "alertdialog" : "")}
             className="w-[calc(100%-1rem)] min-w-[11rem] max-w-[24rem] shadow-md rounded-[1.75rem] bg-surface-container-high dark:bg-surface-container-high-dark"
             onClose={(formUtils?.inputs[0].match("email") && formUtils?.successMessage) ? formUtils?.closeSession : clearModal}
          >
@@ -176,8 +183,8 @@ export const Modal = ({
                   onClick={() => {
                      handleValues();
                      closeModal();
-                     listUtils?.setIsChange(!listUtils.isChange);
                      listUtils?.setIsClicked(false);
+                     listUtils?.functionToUpdate?.();
                   }}
                   className={buttonStyles}
                >{accept}</button>
@@ -228,8 +235,6 @@ export const Modal = ({
                      type="button"
                      onClick={() => { 
                         messageUtils?.function?.();
-                        messageUtils?.changeLanguage?.();
-                        messageUtils?.closeSession?.();
                         closeModal();
                      }}
                      className={buttonStyles}

@@ -53,7 +53,7 @@ export const transactionHandler = [
       if (type == "WIRE_TRANSFER") {
          return res(ctx.json(paginationStructure([{
             "idTransaction": 2,
-            "idTransferAccount": 432,
+            "idTransferAccount": "XXXXXX432",
             "receiverName": "Random1",
             "transactionAmount": 120.00,
             "transactionType": "WIRE_TRANSFER",
@@ -61,7 +61,7 @@ export const transactionHandler = [
             "isAutomated": false
          }, {
             "idTransaction": 3,
-            "idTransferAccount": 78568,
+            "idTransferAccount": "XXXXXX568",
             "receiverName": "Random3",
             "transactionAmount": 120.00,
             "transactionType": "WIRE_TRANSFER",
@@ -71,7 +71,7 @@ export const transactionHandler = [
       } else if (name == "new") {
          return res(ctx.json(paginationStructure([{
             "idTransaction": 1,
-            "idTransferAccount": 654,
+            "idTransferAccount": "XXXXXX654",
             "receiverName": "New",
             "transactionAmount": 120.00,
             "transactionType": "WIRE_TRANSFER",
@@ -79,7 +79,7 @@ export const transactionHandler = [
             "isAutomated": false
          }, {
             "idTransaction": 2,
-            "idTransferAccount": 654,
+            "idTransferAccount": "XXXXXX654",
             "receiverName": "New",
             "transactionAmount": 120.00,
             "transactionType": "WIRE_TRANSFER",
@@ -90,7 +90,7 @@ export const transactionHandler = [
          return res(ctx.json(paginationStructure([
                {
                   "idTransaction": 1,
-                  "idTransferAccount": 654,
+                  "idTransferAccount": "XXXXXX654",
                   "receiverName": "New",
                   "transactionAmount": 120.00,
                   "transactionType": "WIRE_TRANSFER",
@@ -98,7 +98,7 @@ export const transactionHandler = [
                   "isAutomated": false
                }, {
                   "idTransaction": 2,
-                  "idTransferAccount": 654,
+                  "idTransferAccount": "XXXXXX654",
                   "receiverName": "New",
                   "transactionAmount": 120.00,
                   "transactionType": "WIRE_TRANSFER",

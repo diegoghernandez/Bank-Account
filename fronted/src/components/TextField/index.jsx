@@ -11,6 +11,7 @@ import { ModalIcon } from "../../assets/modal";
 import { CancelIcon } from "../../assets/cancel_icon";
 import { SearchIcon } from "../../assets/search_icon";
 import { TextFieldStyles } from "../../constants/TextFieldStyles";
+import { VisibilityIcon } from "../../assets/visibility";
 import "./TextField.css";
 
 const getColors = (isDisable, isError) => {
@@ -21,7 +22,7 @@ const getColors = (isDisable, isError) => {
          borderColor: ["border-onSurface/12 dark:border-onSurface-dark/12", "border-onSurface/12 dark:border-onSurface-dark/12", 
             "group-hover/text:border-onSurface/12 dark:group-hover/text:border-onSurface-dark/12"],
          svgFill: "fill-onSurface/38 dark:fill-onSurface-dark/38",
-         supportiveColor: "text-onSurface/38 dark:text-onSurface-dark/38"
+         supportiveColor: "text-onSurface-variant dark:text-onSurface-variant-dark"
       };
    } else if (isError) {
       return {
@@ -73,7 +74,7 @@ export const TextField = ({
    label,
    initialValue = "",
    type = TextFieldTypes.DEFAULT,
-   inputType = InputTypes.TEXT,
+   initialInputType = InputTypes.TEXT,
    supportiveText = "",
    isError = false,
    isDisable = false,
@@ -89,13 +90,12 @@ export const TextField = ({
 
    const [isClicked, setIsClicked] = useState(false);
    const [value, setValue] = useState(initialValue);
-   const [isChange, setIsChange] = useState(false);
+   const [inputType, setInputType] = useState((type === TextFieldTypes.PASSWORD) ? InputTypes.PASSWORD.description :  initialInputType.description);
    const [isShowMenu, setIsShowMenu] = useState(false);
    const textFieldId = useId();
    
    const handleClickOutside = () => {
       setIsClicked(false);
-      setIsChange(!isChange);
       setIsShowMenu(false);
    };
 
@@ -103,7 +103,14 @@ export const TextField = ({
    const dialogRef = useRef();
    
    const showModal = () => {
-      dialogRef.current?.showModal?.();
+      const dialogComponent = dialogRef.current;
+      if (type === TextFieldTypes.MODAL && dialogComponent) {
+         dialogComponent.inert = true;
+         dialogComponent.showModal?.();
+         dialogComponent.inert = false;
+      } else {
+         dialogComponent?.showModal?.();
+      }
    };
    
    const onClear = () => setValue("");
@@ -118,8 +125,10 @@ export const TextField = ({
    const { textLabelColor, borderColor, svgFill, supportiveColor } = getColors(isDisable, isError);
 
    useEffect(() => {
-      functionToUpdate?.();
-   }, [isChange]);
+      if (type === TextFieldTypes.MENU) {
+         functionToUpdate?.();
+      }
+   }, [value]);
    
    return (
       <div ref={ref} className="inline-flex flex-col w-full group/text">
@@ -142,7 +151,7 @@ export const TextField = ({
                className={`w-full h-14 bg-transparent outline-none text-start text text-onSurface disabled:text-onSurface/38 
                   dark:text-onSurface-dark dark:disabled:text-onSurface-dark/38 
                   ${(styles === TextFieldStyles.FILLED) ? "px-4 pt-[1.5rem] pb-2" : "p-4"}`}
-               type={inputType.description}
+               type={inputType}
                min={min}
                max={max}
                ref={valueRef}
@@ -176,7 +185,7 @@ export const TextField = ({
                onKeyDown={(e) => {
                   if (e.key === "Enter") {
                      e.target.blur();
-                     setIsChange(!isChange);
+                     functionToUpdate?.();
                      setValue(value);
                      showModal();
                      if (!notMenu) {
@@ -190,15 +199,32 @@ export const TextField = ({
                }}
             />
 
-            {(notMenu && notModal) && <CancelIcon 
-               fillClass={`mr-3 ${(isClicked || value) ? `${svgFill}` : "fill-none"} ${(!isDisable) ? "cursor-pointer" : "cursor-default"}`} 
-               onClick={() => {
-                  if (!isDisable) {
-                     onClear();
-                     setIsChange(!isChange);
-                  }
-               }}
-            />}
+            {(notMenu && notModal && (type !== TextFieldTypes.PASSWORD)) && 
+               <CancelIcon 
+                  fillClass={`mr-3 ${(isClicked || value) ? `${svgFill}` : "fill-none"} ${(!isDisable) ? "cursor-pointer" : "cursor-default"}`} 
+                  onClick={() => {
+                     if (!isDisable) {
+                        onClear();
+                        setTimeout(() => {
+                           functionToUpdate?.();
+                        }, 100);
+                     }
+                  }}
+               />
+            }
+
+            {(notMenu && notModal && (type === TextFieldTypes.PASSWORD)) && 
+               <VisibilityIcon 
+                  fillClass={`mr-3 ${(isClicked || value) ? svgFill : "fill-none"} ${(!isDisable) ? "cursor-pointer" : "cursor-default"}`} 
+                  show={inputType}
+                  handleClick={() => {
+                     if (!isDisable) {
+                        (inputType === InputTypes.PASSWORD.description) ? setInputType(InputTypes.TEXT.description): 
+                           setInputType(InputTypes.PASSWORD.description);
+                     }
+                  }}
+               />
+            }
             
             {(!notMenu && !isClicked) && <div className={svgContainer}>
                <ArrowDownIcon fillClass={svgFill} />
@@ -230,9 +256,8 @@ export const TextField = ({
             listUtils={{
                parameters: modalParameters,
                setValue,
-               isChange,
-               setIsChange,
-               setIsClicked
+               setIsClicked,
+               functionToUpdate: functionToUpdate
             }}
          />}
       </div>

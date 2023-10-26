@@ -53,7 +53,6 @@ export const SignUp = () => {
                <TextField
                   label={t.labels[0]}
                   type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.TEXT}
                   supportiveText={error.name}
                   isError={error.name}
                   isDisable={isLoading}
@@ -61,23 +60,21 @@ export const SignUp = () => {
                <TextField
                   label={t.labels[1]}
                   type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.EMAIL}
+                  initialInputType={InputTypes.EMAIL}
                   supportiveText={error.email}
                   isError={error.email}
                   isDisable={isLoading}
                   />
                <TextField
                   label={t.labels[2]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.PASSWORD}
+                  type={TextFieldTypes.PASSWORD}
                   supportiveText={error.password}
                   isError={error.password}
                   isDisable={isLoading}
                   />
                <TextField
                   label={t.labels[3]}
-                  type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.PASSWORD}
+                  type={TextFieldTypes.PASSWORD}
                   supportiveText={error.confirmation}
                   isError={error.confirmation}
                   isDisable={isLoading}

@@ -4,7 +4,7 @@
          "title": "Transaction",
          "description": "Transaction Type. Amount. Account to transfer. Cancel. Make transaction"
       },
-      "errorMessages": ["You must choose one", "Must not be empty"],
+      "errorMessages": ["You must choose one", "Must not be empty", "You can not choose an account to transfer in deposit"],
       "title": "Transaction",
       "labels": ["Transaction Type", "Amount", "Account to transfer"],
       "cancel": "Cancel",
@@ -15,7 +15,7 @@
          "title": "Transacción",
          "description": "Tipo de transacción. Monto. Cuenta a transferir. Cancelar. Hacer transacción"
       },
-      "errorMessages": ["Debes escoger una", "No debe estar vació"],
+      "errorMessages": ["Debes escoger una", "No debe estar vació", "No puedes escoger una cuenta a transferir en deposito"],
       "title": "Transacción",
       "labels": ["Tipo de transacción", "Monto", "Cuenta a transferir"],
       "cancel": "Cancelar",

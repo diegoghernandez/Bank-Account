@@ -73,7 +73,6 @@ export const UpdateAutomation = () => {
                   label={t.labels[0]}
                   initialValue={automation.name}
                   type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.TEXT}
                   isError={error.name}
                   supportiveText={error.name}
                   isDisable={isLoading}
@@ -82,7 +81,7 @@ export const UpdateAutomation = () => {
                   label={t.labels[1]}
                   initialValue={automation.amount}
                   type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.NUMBER}
+                  initialInputType={InputTypes.NUMBER}
                   isError={error.amount}
                   supportiveText={error.amount}
                   isDisable={isLoading}
@@ -91,7 +90,7 @@ export const UpdateAutomation = () => {
                   label={t.labels[2]}
                   initialValue={automation.idTransferAccount}
                   type={TextFieldTypes.DEFAULT}
-                  inputType={InputTypes.NUMBER}
+                  initialInputType={InputTypes.NUMBER}
                   isError={error.desc}
                   supportiveText={error.desc ?? t.description}
                   isDisable={isLoading}
@@ -100,21 +99,21 @@ export const UpdateAutomation = () => {
                   label={t.labels[3]}
                   initialValue={`${t.modalValue[0]} ${automation.hoursToNextExecution} ${t.modalValue[1]}`}
                   type={TextFieldTypes.MODAL}
-                  inputType={InputTypes.TEXT}
+                  initialInputType={InputTypes.TEXT}
                   isError={error.hoursToNextExecution}
                   supportiveText={error.hoursToNextExecution}
                   modalParameters={[{
                      label: t.modalParameters[0],
-                     inputType: InputTypes.NUMBER,
+                     initialInputType: InputTypes.NUMBER,
                      textFieldType: TextFieldTypes.DEFAULT
                   }, {
                      label: t.modalParameters[1],
-                     inputType: InputTypes.NUMBER,
+                     initialInputType: InputTypes.NUMBER,
                      textFieldType: TextFieldTypes.DEFAULT,
                      max: 6
                   }, {
                      label: t.modalParameters[2],
-                     inputType: InputTypes.NUMBER,
+                     initialInputType: InputTypes.NUMBER,
                      textFieldType: TextFieldTypes.DEFAULT,
                      max: 23
                   }]}

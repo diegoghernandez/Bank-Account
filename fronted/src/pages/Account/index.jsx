@@ -9,6 +9,7 @@ import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { SEO } from "../../utils/SEO";
 import { useTheme } from "../../hooks/useTheme";
+import { TextFieldTypes } from "../../constants/TextFieldType";
 
 export const Account = () => {
    const [error, setError] = useState({});
@@ -85,7 +86,7 @@ export const Account = () => {
                modalUtils={{
                   messageUtils: {
                      message: t.change.language.message,
-                     changeLanguage
+                     function: changeLanguage
                   }
                }}
             />
@@ -93,6 +94,7 @@ export const Account = () => {
                label={t.change.name.label}
                modalUtils={{
                   formUtils: {
+                     types: [TextFieldTypes.DEFAULT, TextFieldTypes.PASSWORD],
                      inputs: t.change.name.inputs,
                      handle: handleName,
                      isLoading,
@@ -110,6 +112,7 @@ export const Account = () => {
                label={t.change.password.label}
                modalUtils={{
                   formUtils: {
+                     types: [TextFieldTypes.PASSWORD, TextFieldTypes.PASSWORD],
                      inputs: t.change.password.inputs,
                      handle: handlePassword,
                      isLoading,
@@ -127,6 +130,7 @@ export const Account = () => {
                label={t.change.email.label}
                modalUtils={{
                   formUtils: {
+                     types: [TextFieldTypes.DEFAULT, TextFieldTypes.PASSWORD],
                      inputs: t.change.email.inputs,
                      handle: handleEmail,
                      isLoading,
@@ -146,7 +150,7 @@ export const Account = () => {
                modalUtils={{
                   messageUtils: {
                      message: t.logout.message,
-                     closeSession
+                     function: closeSession
                   }
                }}
             />

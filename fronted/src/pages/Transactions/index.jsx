@@ -21,10 +21,7 @@ const months = (language) => (language == "es") ? ["Enero", "Febrero", "Marzo", 
    : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const getFormattedDate = (date) => {
-   const transformDate = Date.parse(date);  
-   const newDate = new Date(transformDate);
-
-   return `${months(language)[newDate.getMonth()]} ${newDate.getDate()} ${newDate.getFullYear()}`;
+   return new Intl.DateTimeFormat(language, { dateStyle: "long" }).format(new Date(date));
 };
 
 const getModifiedContent = (pastTransactions, content) => {
@@ -61,11 +58,12 @@ export const Transactions = () => {
    const [texts, setTexts] = useState({
       type: "",
       name: "",
-      date: ""
+      date: []
    });
+   const [modalValues, setModalValues] = useState(["", "", ""]);
    const [page, setPage] = useState({
       default: 0,
-      search: [0, "", ""],
+      search: 0,
    });
    const [notFound, setNotFound] = useState(false); 
    const [loading, setLoading] = useState(true);
@@ -74,6 +72,7 @@ export const Transactions = () => {
    const typeReference = useRef();
    const textReference = useRef();
    const dateReference = useRef();
+   const formToDialogReference = useRef();
    const transactionsContainer = useRef();
 
    const whichContainer = (globalThis.matchMedia?.("(min-width: 768px)").matches) ? transactionsContainer.current : globalThis;
@@ -83,10 +82,9 @@ export const Transactions = () => {
    const handleChange = () =>{
       const text = textReference.current?.value;
       const type = typeReference.current?.value;
-      const date = dateReference.current?.value;
 
       setAllTransactions({ ...allTransactions, search: [] });
-      setPage({ ...page, search: [0, "", ""] });  
+      setPage({ ...page, search: 0 });  
 
       setNotFound(false);
       setLoading(true);
@@ -94,13 +92,27 @@ export const Transactions = () => {
       setTexts({
          type: type,
          name: text,
-         date: date.split(" ")
+         date: modalValues
       });
 
       whichContainer?.removeEventListener?.("scrollend", () => setPage({
          ...page,
          search: page.search + 1
       }));
+   };
+
+   const handleModalValues = () => {
+      const menuInputs = formToDialogReference.current?.getElementsByTagName("input");
+      setModalValues([menuInputs[3].value, menuInputs[4].value, menuInputs[5].value]);
+   };
+
+   const getMaxDaysInAMonth = (year = 2023, month) => {
+      return new Date(year, months(language).indexOf(month) + 1, 0).getDate();
+   };
+
+   const inDaysOfAMonth = (year, month, day) => {
+      const MAX_DAY = getMaxDaysInAMonth(year, month);
+      return day >= 1 && day <= MAX_DAY;
    };
 
    useEffect(() => {
@@ -113,21 +125,13 @@ export const Transactions = () => {
             let type = "default";
             let pageContent = page[type] + 1;
    
-            if (texts.date[0] || texts.name || texts.type) {
+            if (dateReference?.current.value || texts.name || texts.type) {
                whichContainer?.removeEventListener?.("scrollend", () => setPage({
                   ...page,
                   default: page.default + 1
                }));
    
-               const text = textReference?.current?.value;
-               const date = dateReference?.current?.value;
-               let actualPage = page.search[0];
-               if ((text !== page.search[1]) || (date !== page.search[2])) {
-                  setPage({...page, search: [0, text, date]});
-                  actualPage = 0;
-               } 
-   
-               pageContent = [page.search[0] + 1, page.search[1], page.search[2]];
+               pageContent = page.search + 1;
 
                let transactionType = "";
                let formattedMonth;
@@ -152,11 +156,12 @@ export const Transactions = () => {
                   id: idAccount,
                   type: transactionType,
                   name: texts.name,
-                  date: texts.date[0] ? {
-                     year: Number(texts.date[0]),
-                     month: texts.date[1] ? formattedMonth : null
+                  date: dateReference?.current?.value ? {
+                     year: Number(modalValues[0]),
+                     month: modalValues[1] ? formattedMonth : null,
+                     day: (formattedMonth && inDaysOfAMonth(modalValues[0], modalValues[1], modalValues[2])) ? modalValues[2] : null
                   } : {},
-                  page: actualPage,
+                  page: page.search,
                });
 
                content = filterContent;
@@ -181,9 +186,11 @@ export const Transactions = () => {
             setLoading(false);
             if (last) {
                setLoading(false);
-               whichContainer?.removeEventListener?.("scrollend", () => setPage({
-                  ...page,
-                  [type]: pageContent
+               whichContainer?.removeEventListener?.("scrollend", () => setPage((prevPage) => {
+                  return {
+                     ...prevPage,
+                     [type]: pageContent
+                  };
                }));
             } else {
                whichContainer?.addEventListener?.("scrollend", () => setPage({
@@ -207,12 +214,10 @@ export const Transactions = () => {
          }
       }, 500);
 
-      return () => {
-         whichContainer?.removeEventListener?.("scrollend", () => setPage({
-            ...page,
-            default: page.default + 1
-         }));
-      };
+      return whichContainer?.removeEventListener?.("scrollend", () => setPage({
+         ...page,
+         search: page.search + 1
+      }));
    }, [page, texts.type, texts.name, texts.date]);
 
    let transactionsGroup = allTransactions.default;
@@ -224,7 +229,10 @@ export const Transactions = () => {
          <SEO title={t.seo.title} description={t.seo.description} />
          <div className="w-full min-h-[calc(100vh-5rem)] bg-white border-outline-variant md:border md:rounded-2xl md:mx-6 md:my-4 
             md:pb-2 dark:bg-black dark:border-outline-variant-dark">
-            <form className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3 md:pt-4">
+            <form 
+               ref={formToDialogReference}
+               className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3 md:pt-4"
+            >
                <TextField
                   label={t.labels[0]}
                   type={TextFieldTypes.MENU}
@@ -245,20 +253,30 @@ export const Transactions = () => {
                   valueRef={dateReference}
                   functionToUpdate={handleChange}
                   modalParameters={[{
-                     label: "year",
-                     inputType: InputTypes.NUMBER,
+                     label: t.modal.labels[0],
                      textFieldType: TextFieldTypes.MENU,
-                     menuParameters: [2023, 2022, 2021, 2020, 2019]
+                     initialInputType: InputTypes.NUMBER,
+                     value: 2023,
+                     menuParameters: [2023, 2022, 2021, 2020, 2019],
+                     functionToUpdate: handleModalValues
                   }, {
-                     label: "month",
-                     inputType: InputTypes.TEXT,
+                     label: t.modal.labels[1],
                      textFieldType: TextFieldTypes.MENU,
-                     menuParameters: months(language)
+                     initialInputType: InputTypes.TEXT,
+                     support: (!modalValues[0]) ? t.modal.supportText[0] : "",
+                     error: (modalValues[1] && !modalValues[0]),
+                     isDisable: !modalValues[0],
+                     menuParameters: months(language),
+                     functionToUpdate: handleModalValues
                   }, {
-                     label: "day",
-                     inputType: InputTypes.NUMBER,
+                     label: t.modal.labels[2],
                      textFieldType: TextFieldTypes.DEFAULT,
-                     max: 31
+                     initialInputType: InputTypes.NUMBER,
+                     support: (!modalValues[1]) ? t.modal.supportText[1] : t.modal.supportText[2] 
+                        + getMaxDaysInAMonth(modalValues[0], modalValues[1]),
+                     error: (modalValues[2]) ? !inDaysOfAMonth(modalValues[0], modalValues[1], modalValues[2]) : false,
+                     isDisable: (!modalValues[0] || !modalValues[1]),
+                     functionToUpdate: handleModalValues
                   }]}
                />
             </form>
@@ -280,7 +298,8 @@ export const Transactions = () => {
                                  name={transaction?.receiverName}
                                  amount={transaction?.transactionAmount?.toFixed(2)}
                                  type={formattedType}
-                                 time={transaction?.transactionTimestamp}
+                                 time={new Intl.DateTimeFormat(language, { dateStyle: "full", timeStyle: "medium" })
+                                    .format(new Date(transaction?.transactionTimestamp))}
                                  automated={transaction?.isAutomated}
                               />
                            </>

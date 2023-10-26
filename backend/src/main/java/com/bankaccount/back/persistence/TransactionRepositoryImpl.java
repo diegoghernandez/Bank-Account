@@ -47,7 +47,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
       LocalDateTime startDate;
       LocalDateTime endDate;
       if (dateDto.month() != null) {
-         startDate = LocalDateTime.of(dateDto.year(), dateDto.month(), 1, 0, 0, 0);
+         startDate = LocalDateTime.of(dateDto.year(), dateDto.month(), (dateDto.day() != null) ? dateDto.day() : 1, 0, 0, 0);
          endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
       } else {
          startDate = LocalDateTime.of(dateDto.year(), Month.JANUARY, 1, 0, 0, 0);
