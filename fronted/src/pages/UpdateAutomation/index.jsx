@@ -46,11 +46,6 @@ export const UpdateAutomation = () => {
          }).then((data) => {
             setMessage(data);
             dialogRef.current?.showModal?.();
-   
-            setTimeout(() => {
-               dialogRef?.current?.close?.();
-               navigate(-1);
-            }, 1000);
          }).catch((e) => {
             const message = (JSON.parse(e.message));
             setIsLoading(false);
@@ -153,16 +148,24 @@ export const UpdateAutomation = () => {
                <Modal 
                   dialogRef={dialogRef}
                   messageUtils={{
-                     message: message
+                     message: message,
+                     accept: true,
+                     function: () => {
+                        dialogRef?.current?.close?.();
+                        navigate(-1);
+                     }
                   }}
                />
             }
 
             {(message === t.delete.message) && 
                <Modal 
+                  title={t.delete.title}
                   dialogRef={dialogRef}
                   messageUtils={{
                      message: message,
+                     cancel: true,
+                     accept: true,
                      function: () => {
                         deleteAutomation(automation.idAutomation)
                            .then((result) => {

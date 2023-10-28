@@ -50,6 +50,7 @@ export const Token = () => {
                dialogRef={dialogRef}
                messageUtils={{
                   message: t.modal.message,
+                  accept: true
                }}
             />
          </div>

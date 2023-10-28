@@ -81,7 +81,8 @@ export const SavePassword = () => {
                dialogRef={dialogRef}
                messageUtils={{
                   message: message,
-                  function: () => navigate("/sign-in")
+                  function: () => navigate("/sign-in"),
+                  accept: true
                }}
             />
          </div>

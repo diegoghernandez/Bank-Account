@@ -86,6 +86,8 @@ export const Account = () => {
                modalUtils={{
                   messageUtils: {
                      message: t.change.language.message,
+                     cancel: true,
+                     accept: true,
                      function: changeLanguage
                   }
                }}
@@ -150,7 +152,9 @@ export const Account = () => {
                modalUtils={{
                   messageUtils: {
                      message: t.logout.message,
-                     function: closeSession
+                     function: closeSession,
+                     cancel: true,
+                     accept: true
                   }
                }}
             />

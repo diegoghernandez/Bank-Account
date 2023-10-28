@@ -93,7 +93,8 @@ export const SignUp = () => {
                dialogRef={dialogRef}
                messageUtils={{
                   message: successMessage,
-                  function: () => navigate("/sign-in")
+                  function: () => navigate("/sign-in"),
+                  accept: true
                }}
             />
          </div>

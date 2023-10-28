@@ -173,10 +173,12 @@ const getFormElements = () => {
 };
 
 const getMessageElements = () => {
-   render(<Modal 
+   render(<Modal
       title="Testing Message"
       messageUtils={{
-         message: "Logic applied successfully"
+         message: "Logic applied successfully",
+         cancel: true,
+         accept: true,
       }}
    />);
 };

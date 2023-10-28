@@ -222,22 +222,26 @@ export const Modal = ({
             {messageUtils && <div className="w-full flex flex-col justify-center items-center p-6">
                {h2Element(title)}
                <p className={supportText}>{messageUtils?.message}</p>
-               <div className="w-full inline-flex justify-center items-center gap-4 mt-6">
-                  <button 
-                     type="button"
-                     onClick={() => { 
-                        closeModal();
-                     }}
-                     className={buttonStyles}
-                  >{cancel}</button>
-                  <button 
-                     type="button"
-                     onClick={() => { 
-                        messageUtils?.function?.();
-                        closeModal();
-                     }}
-                     className={buttonStyles}
-                  >{accept}</button>
+               <div className="w-full inline-flex justify-end items-center gap-4 mt-6">
+                  {messageUtils.cancel &&
+                     <button 
+                        type="button"
+                        onClick={() => { 
+                           closeModal();
+                        }}
+                        className={buttonStyles}
+                     >{cancel}</button>
+                  }
+                  {messageUtils.accept &&
+                     <button 
+                        type="button"
+                        onClick={() => { 
+                           messageUtils?.function?.();
+                           closeModal();
+                        }}
+                        className={buttonStyles}
+                     >{accept}</button>
+                  }
                </div>
             </div>}
          </dialog>

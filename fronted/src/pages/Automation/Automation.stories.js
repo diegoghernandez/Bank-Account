@@ -20,9 +20,6 @@ export default {
             { name: "dark-blue", value: "rgb(18 18 24)"}
          ]
       },
-      viewport: {
-         defaultViewport: "iphone5"
-      }
    }
 };
 
