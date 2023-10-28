@@ -219,3 +219,22 @@ export const Successful = {
       ],
    },
 };
+
+export const Delete = {
+   play: async ({ canvasElement, step }) => { 
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.UPDATE_AUTOMATION_PAGE);
+      const tModal = getTraduction(Traduction.MODAL);
+
+      await userEvent.click(canvas.getByRole("button", { name: t.delete.button }));
+
+      await step("Show Modal", async () => {
+         await waitFor(async () => {
+            const deleteDialog = canvas.getByRole("dialog");
+            await expect(canvas.getByText(t.delete.message)).toBeInTheDocument();
+            await expect(within(deleteDialog).getByRole("button", { name: tModal.cancel })).toBeInTheDocument();
+            await expect(within(deleteDialog).getByRole("button", { name: tModal.accept })).toBeInTheDocument();
+         });
+      });
+   },
+};

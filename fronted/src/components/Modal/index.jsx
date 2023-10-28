@@ -162,7 +162,6 @@ export const Modal = ({
          {dialogRef === undefined && <button onClick={showModal}>Modal</button>}
          <dialog 
             ref={dialogRef ?? storyRef} 
-            role={(messageUtils?.message ? "alertdialog" : "")}
             className="w-[calc(100%-1rem)] min-w-[11rem] max-w-[24rem] shadow-md rounded-[1.75rem] bg-surface-container-high dark:bg-surface-container-high-dark"
             onClose={(formUtils?.inputs[0].match("email") && formUtils?.successMessage) ? formUtils?.closeSession : clearModal}
          >

@@ -22,6 +22,24 @@ export const getAutomations = async (id, email) => {
    }
 };
 
+export const saveAutomation = async (automation) => {
+   const response = await fetch(`${API}/save`, {
+      method: "POST",
+      headers: {
+         "Content-Type": "application/json",
+         "Authorization": TOKEN,
+         "Accept-Language": LANGUAGE
+      },
+      body: JSON.stringify(automation)
+   });
+
+   if (response.ok) {
+      return await response.text();
+   } else {
+      throw new StatusError(JSON.stringify(await response.json()), response.status);
+   }
+};
+
 export const updateAutomation = async (automation) => {
    const response = await fetch(`${API}/update`, {
       method: "PUT",
@@ -40,20 +58,20 @@ export const updateAutomation = async (automation) => {
    }
 };
 
-export const saveAutomation = async (automation) => {
-   const response = await fetch(`${API}/save`, {
-      method: "POST",
+export const deleteAutomation = async (id) => {
+   const response = await fetch(`${API}/delete?id=${id}`, {
+      method: "DELETE",
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
          "Accept-Language": LANGUAGE
       },
-      body: JSON.stringify(automation)
    });
 
    if (response.ok) {
       return await response.text();
    } else {
-      throw new StatusError(JSON.stringify(await response.json()), response.status);
+      const data = await response.json();
+      throw new StatusError(data.desc, 400);
    }
 };

@@ -10,13 +10,13 @@ import { getTraduction } from "../../utils/getTraduction";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Outline } from "../../components/Buttons/Outline";
 import { Switch } from "../../components/Switch";
-import { updateAutomation } from "../_services/automation";
+import { deleteAutomation, updateAutomation } from "../_services/automation";
 import { Modal } from "../../components/Modal";
 
 export const UpdateAutomation = () => {
    const [error, setError] = useState({});
    const [isLoading, setIsLoading] = useState(false);
-   const [successMessage, setSuccessMessage] = useState("");
+   const [message, setMessage] = useState("");
    const navigate = useNavigate();
    const { state } = useLocation();
    const { automation } = state;
@@ -44,7 +44,7 @@ export const UpdateAutomation = () => {
             "executionTime": automation.executionTime,
             "status": elements[6].checked
          }).then((data) => {
-            setSuccessMessage(data);
+            setMessage(data);
             dialogRef.current?.showModal?.();
    
             setTimeout(() => {
@@ -133,14 +133,54 @@ export const UpdateAutomation = () => {
                <Outline label={t.cancel} isDisable={isLoading} />
             </Link>
 
+            <button 
+               disabled={isLoading}
+               className="text-base font-normal font-sans text-error dark:text-error-dark 
+                  disabled:text-onSurface/38 disabled:dark:text-onSurface-dark/38"
+               onClick={() => {
+                  setMessage(t.delete.message);
+                  setTimeout(() => {
+                     dialogRef.current?.showModal?.();
+                  }, 100);
+               }}
+            >
+               {t.delete.button}
+            </button>
+
             {isLoading && <Bar />}
 
-            <Modal 
-               dialogRef={dialogRef}
-               messageUtils={{
-                  message: successMessage
-               }}
-            />
+            {(message !== t.delete.message) && 
+               <Modal 
+                  dialogRef={dialogRef}
+                  messageUtils={{
+                     message: message
+                  }}
+               />
+            }
+
+            {(message === t.delete.message) && 
+               <Modal 
+                  dialogRef={dialogRef}
+                  messageUtils={{
+                     message: message,
+                     function: () => {
+                        deleteAutomation(automation.idAutomation)
+                           .then((result) => {
+                              setMessage(result);
+                              setTimeout(() => {
+                                 dialogRef.current?.showModal?.();
+                              }, 100);
+                           })
+                           .catch((error) => {
+                              setMessage(error.message);
+                              setTimeout(() => {
+                                 dialogRef.current?.showModal?.();
+                              }, 100);
+                           });
+                     }
+                  }}
+               />
+            }
          </div>
       </section>
    );

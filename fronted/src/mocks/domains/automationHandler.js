@@ -14,6 +14,18 @@ export const automationHandler = [
       return res(ctx.status(404));
    }),
 
+   rest.post(`${API}/save`, async (req, res, ctx) => {
+      const { idTransferAccount } = await req.json();
+
+      if (idTransferAccount == 124124) {
+         return res(ctx.status(404), ctx.json({
+            desc: "Account not found"
+         }));
+      } else {
+         return res(ctx.status(200), ctx.text("Automation created successfully"));
+      }
+   }),
+
    rest.put(`${API}/update`, async (req, res, ctx) => {
       const { idTransferAccount } = await req.json();
       
@@ -29,15 +41,13 @@ export const automationHandler = [
       }
    }),
 
-   rest.post(`${API}/save`, async (req, res, ctx) => {
-      const { idTransferAccount } = await req.json();
+   rest.delete(`${API}/delete`, async (req, res, ctx) => {
+      const id = req.url.searchParams.get("id");
 
-      if (idTransferAccount == 124124) {
-         return res(ctx.status(404), ctx.json({
-            desc: "Account not found"
-         }));
-      } else {
-         return res(ctx.status(200), ctx.text("Automation created successfully"));
+      if (id == 42342) {
+         return res(ctx.text("Automation deleted successfully"));
       }
+
+      return res(ctx.status(404), ctx.json({ desc: "Automation not found"}));
    })
 ];

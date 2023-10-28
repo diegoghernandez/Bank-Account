@@ -5,7 +5,21 @@ import userEvent from "@testing-library/user-event";
 import * as automation from "../../pages/_services/automation";
 import { Traduction } from "../../constants/Traduction";
 import { getTraduction } from "../../utils/getTraduction";
-import { waitFor } from "@testing-library/dom";
+import { waitFor, within } from "@testing-library/dom";
+
+const mocks = vi.hoisted(() => {
+   return {
+      useLocation: vi.fn(),
+   };
+});
+
+vi.mock("react-router-dom", async () => {
+   const actual = await vi.importActual("react-router-dom");
+   return {
+      ...actual,
+      useLocation: mocks.useLocation,
+   };
+});
 
 describe("Update Automation page tests", () => {
    it("Should render Automation page correctly", () => {
@@ -18,7 +32,8 @@ describe("Update Automation page tests", () => {
          timeInput,
          statusSwitch,
          cancelButton,
-         makeButton
+         makeButton,
+         deleteButton
       } = getElements();
 
       expect(header).toBeInTheDocument();
@@ -35,6 +50,7 @@ describe("Update Automation page tests", () => {
       expect(statusSwitch).toBeChecked();
       expect(makeButton).toBeInTheDocument();
       expect(cancelButton).toBeInTheDocument();
+      expect(deleteButton).toBeInTheDocument();
    });
 
    describe("After clicking", () => {
@@ -57,7 +73,7 @@ describe("Update Automation page tests", () => {
          await waitFor(() => {
             expect(spyAutomation).toHaveBeenCalledTimes(1);
             expect(spyAutomation).toHaveBeenLastCalledWith({
-               "idAutomation": 4234,
+               "idAutomation": 776548,
                "idAccount": 238589851,
                "name": "Name",
                "amount": 124124,
@@ -79,7 +95,7 @@ describe("Update Automation page tests", () => {
       });
 
       it("Should accept the given values", async () => {
-         const { page, user, spyAutomation, makeButton, nameInput, amountInput, transferInput, statusSwitch } = getElements(75648);
+         const { page, user, spyAutomation, makeButton, nameInput, amountInput, transferInput, statusSwitch } = getElements();
 
          await user.clear(nameInput);
          await user.type(nameInput, "Name");
@@ -97,7 +113,7 @@ describe("Update Automation page tests", () => {
          await waitFor(() => {
             expect(spyAutomation).toHaveBeenCalledTimes(1);
             expect(spyAutomation).toHaveBeenLastCalledWith({
-               "idAutomation": 4234,
+               "idAutomation": 776548,
                "idAccount": 238589851,
                "name": "Name",
                "amount": 124124,
@@ -111,9 +127,74 @@ describe("Update Automation page tests", () => {
          await waitFor(() => expect(page.getByText("Automation updated successfully")).toBeInTheDocument());
       });
    });
+
+   describe("Delete automation", () => {
+      it("Should show the modal with the specific message", async () => {
+         const { page, user, deleteButton } = getElements();
+         const t = getTraduction(Traduction.UPDATE_AUTOMATION_PAGE);
+         const tModal = getTraduction(Traduction.MODAL);
+
+         await user.click(deleteButton);
+
+         const deleteDialog = page.getAllByRole("dialog", { hidden: true })[1];
+         expect(page.getByText(t.delete.message)).toBeInTheDocument();
+         expect(within(deleteDialog).getByRole("button", { name: tModal.cancel, hidden: true })).toBeInTheDocument();
+         expect(within(deleteDialog).getByRole("button", { name: tModal.accept, hidden: true })).toBeInTheDocument();
+      });
+
+      it("Should show the modal with the error message", async () => {
+         const { page, user, deleteButton } = getElements();
+         const tModal = getTraduction(Traduction.MODAL);
+
+         await user.click(deleteButton);
+
+         await user.click(within(page.getAllByRole("dialog", { hidden: true })[1])
+            .getByRole("button", { name: tModal.accept, hidden: true }));
+
+         expect(within(page.getAllByRole("dialog", { hidden: true })[1])
+            .getByText("Automation not found")).toBeInTheDocument();
+      });
+
+      it("Should show the modal with the success message", async () => {
+         const { page, user, deleteButton } = getElements({
+            automation: {
+               idAutomation: 42342,
+               name: "New automation",
+               amount: 2000.00,
+               idTransferAccount: 419670285,
+               hoursToNextExecution: 6,
+               executionTime: "2023-07-15T17:51:36.986827",
+               status: true
+            }
+         });
+         const tModal = getTraduction(Traduction.MODAL);
+
+         await user.click(deleteButton);
+
+         await user.click(within(page.getAllByRole("dialog", { hidden: true })[1])
+            .getByRole("button", { name: tModal.accept, hidden: true }));
+
+         expect(within(page.getAllByRole("dialog", { hidden: true })[1])
+            .getByText("Automation deleted successfully")).toBeInTheDocument();
+      });
+   });
 });
 
-const getElements = () => {
+const getElements = (value = {
+   automation: {
+      idAutomation: 776548,
+      name: "New automation",
+      amount: 2000.00,
+      idTransferAccount: 419670285,
+      hoursToNextExecution: 6,
+      executionTime: "2023-07-15T17:51:36.986827",
+      status: true
+   }
+}) => {
+   mocks.useLocation.mockReturnValue({
+      state: value
+   });
+
    const page = customRender(<UpdateAutomation />);
    const user = userEvent.setup();
    const spyAutomation = vi.spyOn(automation, "updateAutomation");
@@ -128,6 +209,7 @@ const getElements = () => {
    const statusSwitch = page.getByLabelText(t.labels[4]);
    const cancelButton = page.getByRole("link", { name: t.cancel });
    const makeButton = page.getByRole("button", { name: t.accept });
+   const deleteButton = page.getByRole("button", { name: t.delete.button });
 
    return {
       page,
@@ -141,6 +223,7 @@ const getElements = () => {
       timeInput,
       statusSwitch,
       cancelButton,
-      makeButton
+      makeButton,
+      deleteButton
    };
 };
