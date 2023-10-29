@@ -23,7 +23,7 @@ public interface AccountRepository {
 
    AccountEntity saveAccount(AccountEntity accountEntity);
 
-   void saveVerificationToken(String token, AccountEntity accountEntity);
+   void saveToken(String token, AccountEntity accountEntity);
 
    boolean emailExist(String email);
 

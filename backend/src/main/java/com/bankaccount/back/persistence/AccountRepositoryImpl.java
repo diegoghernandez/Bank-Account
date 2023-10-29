@@ -2,9 +2,9 @@ package com.bankaccount.back.persistence;
 
 import com.bankaccount.back.domain.repository.AccountRepository;
 import com.bankaccount.back.persistence.crud.AccountCrudRepository;
-import com.bankaccount.back.persistence.crud.VerificationTokenCrudRepository;
+import com.bankaccount.back.persistence.crud.TokenCrudRepository;
 import com.bankaccount.back.persistence.entity.AccountEntity;
-import com.bankaccount.back.persistence.entity.VerificationToken;
+import com.bankaccount.back.persistence.entity.TokenEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +18,7 @@ public class AccountRepositoryImpl implements AccountRepository {
    private AccountCrudRepository accountCrudRepository;
 
    @Autowired
-   private VerificationTokenCrudRepository tokenCrudRepository;
+   private TokenCrudRepository tokenCrudRepository;
 
    @Override
    public Optional<AccountEntity> getAccountById(int id) {
@@ -61,13 +61,13 @@ public class AccountRepositoryImpl implements AccountRepository {
    }
 
    @Override
-   public void saveVerificationToken(String token, AccountEntity accountEntity) {
-      VerificationToken verificationToken = VerificationToken.builder()
+   public void saveToken(String token, AccountEntity accountEntity) {
+      TokenEntity tokenEntity = TokenEntity.builder()
               .accountEntity(accountEntity)
               .token(token)
               .build();
 
-      tokenCrudRepository.save(verificationToken);
+      tokenCrudRepository.save(tokenEntity);
    }
 
    @Override

@@ -12,8 +12,8 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "verification_token")
-public class VerificationToken {
+@Table(name = "token")
+public class TokenEntity {
 
    private static final int EXPIRATION_TIME = 10;
 
@@ -32,13 +32,13 @@ public class VerificationToken {
    @JoinColumn(name = "id_account", nullable = false)
    private AccountEntity accountEntity;
 
-   public static VerificationTokenBuilder builder() {
+   public static TokenEntityBuilder builder() {
       return new CustomBuilder();
    }
 
-   private static class CustomBuilder extends VerificationTokenBuilder {
+   private static class CustomBuilder extends TokenEntityBuilder {
 
-      public VerificationToken build() {
+      public TokenEntity build() {
          super.expirationTime = calculateExpirationDate();
          return super.build();
       }
@@ -46,7 +46,7 @@ public class VerificationToken {
       private Date calculateExpirationDate() {
          Calendar calendar = Calendar.getInstance();
          calendar.setTimeInMillis(new Date().getTime());
-         calendar.add(Calendar.MINUTE, VerificationToken.EXPIRATION_TIME);
+         calendar.add(Calendar.MINUTE, TokenEntity.EXPIRATION_TIME);
          return new Date(calendar.getTime().getTime());
       }
    }

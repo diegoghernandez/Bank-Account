@@ -152,9 +152,9 @@ export const Account = () => {
                modalUtils={{
                   messageUtils: {
                      message: t.logout.message,
-                     function: closeSession,
                      cancel: true,
-                     accept: true
+                     accept: true,
+                     function: closeSession
                   }
                }}
             />

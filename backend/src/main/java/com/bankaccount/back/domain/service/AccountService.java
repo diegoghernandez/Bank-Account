@@ -6,6 +6,7 @@ import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.helpers.Messages;
 import com.bankaccount.back.persistence.entity.AccountEntity;
+import com.bankaccount.back.persistence.entity.TokenEntity;
 import com.bankaccount.back.web.dto.AccountDto;
 import com.bankaccount.back.web.dto.PasswordDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,10 @@ public class AccountService {
               .build();
 
       return accountRepository.saveAccount(accountEntity);
+   }
+
+   public void saveToken(String token, AccountEntity accountEntity) {
+      accountRepository.saveToken(token, accountEntity);
    }
 
    public String changeName(String newName, PasswordDto passwordDto, Locale locale) throws NotFoundException {

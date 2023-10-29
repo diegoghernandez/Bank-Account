@@ -42,13 +42,15 @@ export const authHandler = [
       res(ctx.status(200), ctx.text("Verification Link Sent"))),
 
    rest.post(`${API}/save-password`, async (req, res, ctx) => {
-      const body = await req.json();
+      const token = req.url.searchParams.get("token");
 
-      if (body.newPassword == 1234) {
-         return res(ctx.status(200), ctx.text("Message to show"));
+      if (token == "er143ge8-9b58-41ae-8723-29d7ff675a30") {
+         return res(ctx.status(200), ctx.text("valid"));
+      } else if (token == "nu3v3-9b58-41ae-8723-29d7ff675a30") {
+         return res(ctx.status(400), ctx.text("expired"));
+      } else {
+         return res(ctx.status(400), ctx.text("invalid"));
       }
-
-      return res(ctx.status(400), ctx.text("Invalid something"));
    }),
 
    rest.post(`${API}/secure/change-name`, async (req, res, ctx) => {

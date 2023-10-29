@@ -2,12 +2,11 @@ package com.bankaccount.back.service;
 
 import com.bankaccount.back.constants.AccountRoles;
 import com.bankaccount.back.domain.repository.AccountRepository;
-import com.bankaccount.back.domain.repository.PasswordResetTokenRepository;
-import com.bankaccount.back.domain.repository.VerificationTokenRepository;
+import com.bankaccount.back.domain.repository.TokenRepository;
 import com.bankaccount.back.domain.service.TokenService;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.persistence.entity.AccountRoleEntity;
-import com.bankaccount.back.persistence.entity.VerificationToken;
+import com.bankaccount.back.persistence.entity.TokenEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,19 +35,16 @@ public class TokenServiceTest {
    private TokenService tokenService;
 
    @MockBean
-   private VerificationTokenRepository verificationTokenRepository;
+   private TokenRepository tokenRepository;
 
    @MockBean
    private AccountRepository accountRepository;
 
-   @MockBean
-   private PasswordResetTokenRepository passwordResetTokenRepository;
-
-   private List<VerificationToken> verificationTokenList;
+   private List<TokenEntity> tokenEntityList;
 
    @BeforeEach
    void setUp() {
-      VerificationToken verificationToken1 = VerificationToken.builder()
+      TokenEntity tokenEntity1 = TokenEntity.builder()
               .idToken(1L)
               .token("er143ge8-9b58-41ae-8723-29d7ff675a30")
               .accountEntity(AccountEntity.builder()
@@ -60,7 +56,7 @@ public class TokenServiceTest {
                       .build())
               .build();
 
-      VerificationToken verificationToken2 = VerificationToken.builder()
+      TokenEntity tokenEntity2 = TokenEntity.builder()
               .idToken(2L)
               .token("7f1a71e8-9b58-41ae-8723-29d7ff675a30")
               .accountEntity(AccountEntity.builder()
@@ -72,16 +68,16 @@ public class TokenServiceTest {
                       .build())
               .build();
 
-      verificationTokenList = Arrays.asList(verificationToken1, verificationToken2);
+      tokenEntityList = Arrays.asList(tokenEntity1, tokenEntity2);
    }
 
    @Test
    @DisplayName("Should return a string with the value 'invalid' if the token doesn't exist")
    void validateVerificationToken_invalid() {
-      Mockito.when(verificationTokenRepository.getByToken("GRSEDGSGS"))
+      Mockito.when(tokenRepository.getByToken("GRSEDGSGS"))
               .thenReturn(null);
 
-      String invalid = tokenService.validateVerificationToken("GRSEDGSGS");
+      String invalid = tokenService.validateVerification("GRSEDGSGS");
 
       assertThat(invalid).isEqualTo("invalid");
    }
@@ -105,38 +101,28 @@ public class TokenServiceTest {
               .build();
 
 
-      Mockito.when(verificationTokenRepository.getByToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
-              .thenReturn(verificationTokenList.get(0));
+      Mockito.when(tokenRepository.getByToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+              .thenReturn(tokenEntityList.get(0));
 
-      String valid = tokenService.validateVerificationToken("er143ge8-9b58-41ae-8723-29d7ff675a30");
+      String valid = tokenService.validateVerification("er143ge8-9b58-41ae-8723-29d7ff675a30");
 
       assertThat(valid).isEqualTo("valid");
    }
 
    @Test
-   @DisplayName("Should deleteVerificationToken be called one time")
-   void deleteVerificationToken() {
-      Mockito.doNothing().when(verificationTokenRepository).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
+   @DisplayName("Should deleteToken be called one time")
+   void deleteToken() {
+      Mockito.doNothing().when(tokenRepository).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
 
-      tokenService.deleteVerificationToken("po43do45-34gr-41ae-8723-237a3f675a30");
+      tokenService.deleteToken("po43do45-34gr-41ae-8723-237a3f675a30");
 
-      Mockito.verify(verificationTokenRepository, Mockito.times(1)).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
+      Mockito.verify(tokenRepository, Mockito.times(1)).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
    }
 
    @Test
-   @DisplayName("Should deleteVerificationToken be called one time")
-   void deletePasswordToken() {
-      Mockito.doNothing().when(passwordResetTokenRepository).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
-
-      tokenService.deletePasswordToken("po43do45-34gr-41ae-8723-237a3f675a30");
-
-      Mockito.verify(passwordResetTokenRepository, Mockito.times(1)).deleteByToken("po43do45-34gr-41ae-8723-237a3f675a30");
-   }
-
-   @Test
-   @DisplayName("Should return a new verificationToken when an old token is given")
-   void generateNewVerificationToken() {
-      VerificationToken newVerificationToken = VerificationToken.builder()
+   @DisplayName("Should return a new TokenEntity with the old token give it")
+   void generateNewToken() {
+      TokenEntity newTokenEntity = TokenEntity.builder()
               .idToken(2L)
               .token("po43do45-34gr-41ae-8723-237a3f675a30")
               .accountEntity(AccountEntity.builder()
@@ -148,16 +134,16 @@ public class TokenServiceTest {
                       .build())
               .build();
 
-      Mockito.when(verificationTokenRepository.updateToken(
+      Mockito.when(tokenRepository.updateToken(
                       Mockito.isA(String.class), Mockito.isA(Date.class), ArgumentMatchers.eq("7f1a71e8-9b58-41ae-8723-29d7ff675a30")))
-              .thenReturn(newVerificationToken);
+              .thenReturn(newTokenEntity);
 
-      VerificationToken verificationToken = tokenService.generateNewVerificationToken("7f1a71e8-9b58-41ae-8723-29d7ff675a30");
+      TokenEntity tokenEntity = tokenService.generateNewToken("7f1a71e8-9b58-41ae-8723-29d7ff675a30");
 
       assertAll(
-              () -> assertEquals(newVerificationToken.getIdToken(), verificationToken.getIdToken()),
-              () -> assertEquals(newVerificationToken.getToken(), verificationToken.getToken()),
-              () -> assertEquals(newVerificationToken.getAccountEntity(), verificationToken.getAccountEntity())
+              () -> assertEquals(newTokenEntity.getIdToken(), tokenEntity.getIdToken()),
+              () -> assertEquals(newTokenEntity.getToken(), tokenEntity.getToken()),
+              () -> assertEquals(newTokenEntity.getAccountEntity(), tokenEntity.getAccountEntity())
       );
    }
 }

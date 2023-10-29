@@ -221,7 +221,7 @@ export const Modal = ({
             </FormModal>}
             {messageUtils && <div className="w-full flex flex-col justify-center items-center p-6">
                {h2Element(title)}
-               <p className={supportText}>{messageUtils?.message}</p>
+               <p className={`${supportText} whitespace-pre-line text-center`}>{messageUtils?.message}</p>
                <div className="w-full inline-flex justify-end items-center gap-4 mt-6">
                   {messageUtils.cancel &&
                      <button 

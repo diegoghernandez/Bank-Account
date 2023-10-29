@@ -83,7 +83,20 @@ describe("Auth tests", () => {
          expect(typeof savePassword).toBe("function");
       });
 
-      it("Should throw an StatusError if some value is wrong", async () => {
+      it("Should throw an StatusError if the value is invalid", async () => {
+         await expect(savePassword("342gdfsh4", {
+               idAccount: 3131312,
+               oldPassword: "error",
+               newPassword: "error"
+            })).rejects.toThrow(StatusError);
+         await expect(savePassword("342gdfsh4", {
+            idAccount: 3131312,
+            oldPassword: "error",
+            newPassword: "error"
+         })).rejects.toThrow("invalid");
+      });
+
+      it("Should throw an StatusError if the value is expired", async () => {
          await expect(savePassword("nu3v3-9b58-41ae-8723-29d7ff675a30", {
                idAccount: 3131312,
                oldPassword: "error",
@@ -93,16 +106,16 @@ describe("Auth tests", () => {
             idAccount: 3131312,
             oldPassword: "error",
             newPassword: "error"
-         })).rejects.toThrow("Invalid something");
+         })).rejects.toThrow("expired");
       });
 
       it("Should save the right content", async () => {
-         const content = await savePassword("nu3v3-9b58-41ae-8723-29d7ff675a30", {
+         const content = await savePassword("er143ge8-9b58-41ae-8723-29d7ff675a30", {
             idAccount: 121,
             oldPassword: "1234",
             newPassword: "1234"
          });
-         expect(content).toStrictEqual("Message to show");
+         expect(content).toStrictEqual("valid");
       });
    });
 

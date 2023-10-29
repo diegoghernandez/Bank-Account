@@ -29,7 +29,7 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
    public void onApplicationEvent(RegistrationCompleteEvent event) {
       AccountEntity accountEntity = event.getAccountEntity();
       String token = UUID.randomUUID().toString();
-      accountRepository.saveVerificationToken(token, accountEntity);
+      accountRepository.saveToken(token, accountEntity);
 
       String url = configProperties.client() + "/verify-registration?token=" + token +
               "&traduction=TOKEN_REGISTER&email=" + accountEntity.getEmail();

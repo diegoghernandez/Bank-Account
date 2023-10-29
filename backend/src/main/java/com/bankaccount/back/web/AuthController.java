@@ -8,7 +8,7 @@ import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.helpers.Messages;
 import com.bankaccount.back.persistence.entity.AccountEntity;
-import com.bankaccount.back.persistence.entity.VerificationToken;
+import com.bankaccount.back.persistence.entity.TokenEntity;
 import com.bankaccount.back.web.config.EnvConfigProperties;
 import com.bankaccount.back.web.config.JwtUtil;
 import com.bankaccount.back.web.dto.AccountDto;
@@ -25,7 +25,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -67,8 +66,7 @@ public class AuthController {
     @PostMapping(value = "/register", consumes = {"application/json"})
     public ResponseEntity<String> registerAccount(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestBody @Valid AccountDto accountDto,
-            final HttpServletRequest request) throws NotAllowedException {
+            @RequestBody @Valid AccountDto accountDto) throws NotAllowedException {
 
         if (!accountDto.password().equals(accountDto.matchingPassword())) {
             return new ResponseEntity<>(
@@ -78,10 +76,7 @@ public class AuthController {
 
         AccountEntity account = accountService.saveAccount(accountDto, locale);
 
-        publisher.publishEvent(new RegistrationCompleteEvent(
-                account,
-                applicationUrl(request)
-        ));
+        publisher.publishEvent(new RegistrationCompleteEvent(account, locale));
 
         return new ResponseEntity<>(
                 Messages.getMessageForLocale("controller.auth.register.success", locale),
@@ -89,27 +84,32 @@ public class AuthController {
     }
 
     @GetMapping("/verify-registration")
-    public String verifyRegistration(
+    public ResponseEntity<String> verifyRegistration(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
             @RequestParam String token) {
-        String result = tokenService.validateVerificationToken(token);
+        String result = tokenService.validateVerification(token);
         if (result.equalsIgnoreCase("valid")) {
-            tokenService.deleteVerificationToken(token);
-            return result;
+            tokenService.deleteToken(token);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
 
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/resend-token")
-    public String resendVerificationToken(
+    public String resendToken(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestParam("token") String oldToken,
-            HttpServletRequest request) {
-        VerificationToken verificationToken = tokenService.generateNewVerificationToken(oldToken);
+            @RequestParam String type,
+            @RequestParam("token") String oldToken) {
+        TokenEntity tokenEntity = tokenService.generateNewToken(oldToken);
 
-        AccountEntity account = verificationToken.getAccountEntity();
-        resendVerificationTokenEmail(account, verificationToken);
+        AccountEntity account = tokenEntity.getAccountEntity();
+
+        if (type.equalsIgnoreCase("verification")) {
+            resendVerificationTokenEmail(tokenEntity, account);
+        } else if (type.equalsIgnoreCase("password")) {
+            passwordResetTokenEmail(tokenEntity.getToken(), account);
+        }
 
         return Messages.getMessageForLocale("controller.auth.resend", locale);
     }
@@ -121,30 +121,30 @@ public class AuthController {
         if (optionalAccount.isPresent()) {
             AccountEntity accountEntity = optionalAccount.get();
             String token = UUID.randomUUID().toString();
-            tokenService.createPasswordResetTokenForAccount(accountEntity, token);
+            accountService.saveToken(token, accountEntity);
 
-            passwordResetTokenEmail(accountEntity, token);
+            passwordResetTokenEmail(token, accountEntity);
         }
     }
 
     @PostMapping("/save-password")
-    private String savePassword(
+    private ResponseEntity<String> savePassword(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
             @RequestParam String token,
             @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
-        String result = tokenService.validatePasswordResetToken(token);
-        if (!result.equalsIgnoreCase("valid")) {
-            return Messages.getMessageForLocale("controller.auth.save-password.error", locale);
+        String result = tokenService.validateToken(token);
+
+        if (result.equalsIgnoreCase("valid")) {
+            Optional<AccountEntity> accountEntity = tokenService.getAccountByToken(token);
+            if (accountEntity.isPresent()) {
+                tokenService.deleteToken(token);
+                accountService.updatePassword(passwordDto.newPassword(), passwordDto.idAccount());
+
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
         }
 
-        Optional<AccountEntity> accountEntity = tokenService.getAccountByPasswordResetToken(token);
-        if (accountEntity.isPresent()) {
-            tokenService.deletePasswordToken(token);
-            accountService.updatePassword(passwordDto.newPassword(), passwordDto.idAccount());
-            return Messages.getMessageForLocale("controller.auth.save-password.success", locale);
-        }
-
-        return Messages.getMessageForLocale("controller.auth.save-password.error", locale);
+        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/secure/change-name")
@@ -201,7 +201,7 @@ public class AuthController {
         return ResponseEntity.badRequest().body(response);
     }
 
-    private void passwordResetTokenEmail(AccountEntity accountEntity, String token) {
+    private void passwordResetTokenEmail(String token, AccountEntity accountEntity) {
         String url = configProperties.client() + "/save-password?token=" + token
                 + "&id=" + accountEntity.getIdAccount();
 
@@ -211,7 +211,7 @@ public class AuthController {
                 "Click the link to reset your password: " + url);
     }
 
-    private void resendVerificationTokenEmail(AccountEntity account, VerificationToken token) {
+    private void resendVerificationTokenEmail(TokenEntity token, AccountEntity account) {
         String url = configProperties.client() + "/verify-registration?token=" + token.getToken() +
                 "&traduction=TOKEN_REGISTER&email=" + account.getEmail();
 
@@ -219,10 +219,5 @@ public class AuthController {
                 account.getEmail(),
                 "Verification Token resend",
                 "Click the link to verify your account: " + url);
-    }
-
-    private String applicationUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":"
-                + request.getServerPort() + request.getContextPath();
     }
 }

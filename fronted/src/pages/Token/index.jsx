@@ -36,7 +36,7 @@ export const Token = () => {
                   }
                   {(message === "expired") && 
                      <button onClick={() => {
-                        resendVerificationToken(searchParams.get("token"));
+                        resendVerificationToken(searchParams.get("token"), "verification");
                         dialogRef.current?.showModal?.();
                      }}>
                         {t.button.expired}

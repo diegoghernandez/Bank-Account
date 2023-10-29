@@ -5,7 +5,7 @@ import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Traduction } from "../../constants/Traduction";
 import { getTraduction } from "../../utils/getTraduction";
 import { Bar } from "../../components/Loader/Bar";
-import { savePassword } from "../_services/auth";
+import { resendVerificationToken, savePassword } from "../_services/auth";
 import { Modal } from "../../components/Modal";
 import { useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -40,6 +40,7 @@ export const SavePassword = () => {
                const errorMessage = e.message;
                setIsLoading(false);
                setMessage(errorMessage);
+               dialogRef.current?.showModal?.();
             });
          }, 1000);
       } else {
@@ -77,12 +78,18 @@ export const SavePassword = () => {
             {isLoading && <Bar />}
 
             <Modal 
-               title={(!error) ? t.messageTitle[0] : t.messageTitle[1]}
+               title={(message === "valid") ? t.modal.title[0] : t.modal.title[1]}
                dialogRef={dialogRef}
                messageUtils={{
-                  message: message,
-                  function: () => navigate("/sign-in"),
-                  accept: true
+                  message: t.modal.description[message],
+                  function: () => { 
+                     if (message === "valid") {
+                        navigate("/sign-in");
+                     } else if (message === "expired") {
+                        resendVerificationToken(searchParams.get("token"), "password");
+                     }
+                  },
+                  accept: (message !== "invalid")
                }}
             />
          </div>

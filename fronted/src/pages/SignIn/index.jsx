@@ -119,7 +119,8 @@ export const SignIn = () => {
                dialogRef={dialogRef}
                messageUtils={{
                   message: t.resetPassword.success,
-                  function: () => setIsReset(false)
+                  function: () => setIsReset(false),
+                  accept: true
                }}
             />
          </div>

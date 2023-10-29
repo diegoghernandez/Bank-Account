@@ -63,8 +63,8 @@ export const verifyRegistration = async (token) => {
    }
 };
 
-export const resendVerificationToken = async (token) => {
-   const response = await fetch(`${API}/resend-token?token=${token}`, {
+export const resendVerificationToken = async (token, type) => {
+   const response = await fetch(`${API}/resend-token?token=${token}&type=${type}`, {
       method: "GET",
       headers: {
          "Content-Type": "application/json",

@@ -7,9 +7,8 @@ import com.bankaccount.back.domain.service.TokenService;
 import com.bankaccount.back.exception.NotAllowedException;
 import com.bankaccount.back.exception.NotFoundException;
 import com.bankaccount.back.persistence.entity.AccountEntity;
-import com.bankaccount.back.persistence.entity.VerificationToken;
+import com.bankaccount.back.persistence.entity.TokenEntity;
 import com.bankaccount.back.web.AuthController;
-import com.bankaccount.back.web.config.EnvConfigProperties;
 import com.bankaccount.back.web.config.JwtUtil;
 import com.bankaccount.back.web.dto.AccountDto;
 import com.bankaccount.back.web.dto.LoginDto;
@@ -17,7 +16,6 @@ import com.bankaccount.back.web.dto.PasswordDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.hamcrest.text.MatchesPattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -139,10 +137,10 @@ public class AuthControllerTest {
    @Test
    @DisplayName("Should verify if the token is valid")
    void verifyRegistration() {
-      Mockito.when(tokenService.validateVerificationToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+      Mockito.when(tokenService.validateVerification("er143ge8-9b58-41ae-8723-29d7ff675a30"))
               .thenReturn("valid");
 
-      Mockito.when(tokenService.validateVerificationToken("hello"))
+      Mockito.when(tokenService.validateVerification("hello"))
               .thenReturn("invalid");
 
       assertAll(
@@ -159,7 +157,7 @@ public class AuthControllerTest {
                               .param("token", "hello")
                               .contentType(MediaType.APPLICATION_JSON)
                               .with(user("user").roles(USER)))
-                      .andExpect(status().isOk())
+                      .andExpect(status().isBadRequest())
                       .andExpect(content().string("invalid"))
       );
    }
@@ -167,7 +165,7 @@ public class AuthControllerTest {
    @Test
    @DisplayName("Should return a new verification token when an old token is given")
    void resendVerificationToken() {
-      VerificationToken newVerificationToken = VerificationToken.builder()
+      TokenEntity newTokenEntity = TokenEntity.builder()
               .idToken(2L)
               .token("po43do45-34gr-41ae-8723-237a3f675a30")
               .accountEntity(AccountEntity.builder()
@@ -179,12 +177,13 @@ public class AuthControllerTest {
                       .build())
               .build();
 
-      Mockito.when(tokenService.generateNewVerificationToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
-              .thenReturn(newVerificationToken);
+      Mockito.when(tokenService.generateNewToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+              .thenReturn(newTokenEntity);
 
       assertAll(
               () -> mockMvc.perform(get("/auth/resend-token")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                              .param("type", "verification")
                               .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
                               .contentType(MediaType.APPLICATION_JSON)
                               .with(user("user").roles(USER)))
@@ -218,8 +217,8 @@ public class AuthControllerTest {
       Mockito.when(accountService.getAccountByEmail("user@user.com"))
               .thenReturn(Optional.of(account));
 
-      Mockito.doNothing().when(tokenService)
-                      .createPasswordResetTokenForAccount(Mockito.isA(AccountEntity.class), Mockito.isA(String.class));
+      Mockito.doNothing().when(accountService)
+                      .saveToken(Mockito.isA(String.class), Mockito.isA(AccountEntity.class));
 
       assertAll(
               () -> mockMvc.perform(get("/auth/reset-password/user@user.com")
@@ -227,8 +226,8 @@ public class AuthControllerTest {
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isOk()),
-              () -> Mockito.verify(tokenService, Mockito.times(1))
-                      .createPasswordResetTokenForAccount(Mockito.isA(AccountEntity.class), Mockito.isA(String.class))
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .saveToken(Mockito.isA(String.class), Mockito.isA(AccountEntity.class))
 
       );
    }
@@ -248,19 +247,19 @@ public class AuthControllerTest {
       objectMapper.registerModule(new JavaTimeModule());
       objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-      Mockito.doNothing().when(tokenService).deletePasswordToken("er143ge8-9b58-41ae-8723-29d7ff675a30");
+      Mockito.doNothing().when(tokenService).deleteToken("er143ge8-9b58-41ae-8723-29d7ff675a30");
       Mockito.doNothing().when(accountService).updatePassword("4321", 1);
 
-      Mockito.when(tokenService.validatePasswordResetToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+      Mockito.when(tokenService.validateToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
               .thenReturn("valid");
 
-      Mockito.when(tokenService.validatePasswordResetToken("53535"))
+      Mockito.when(tokenService.validateToken("53535"))
               .thenReturn("invalid");
 
-      Mockito.when(tokenService.validatePasswordResetToken("nu3v3-9b58-41ae-8723-29d7ff675a30"))
+      Mockito.when(tokenService.validateToken("nu3v3-9b58-41ae-8723-29d7ff675a30"))
               .thenReturn("expire");
 
-      Mockito.when(tokenService.getAccountByPasswordResetToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+      Mockito.when(tokenService.getAccountByToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
               .thenReturn(Optional.of(account));
 
       assertAll(
@@ -277,9 +276,9 @@ public class AuthControllerTest {
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isOk())
-                      .andExpect(content().string("Password Reset Successfully")),
+                      .andExpect(content().string("valid")),
               () -> Mockito.verify(tokenService, Mockito.times(1))
-                      .deletePasswordToken("er143ge8-9b58-41ae-8723-29d7ff675a30"),
+                      .deleteToken("er143ge8-9b58-41ae-8723-29d7ff675a30"),
               () -> Mockito.verify(accountService, Mockito.times(1))
                       .updatePassword("4321", 1),
 
@@ -295,10 +294,10 @@ public class AuthControllerTest {
                               )))
                               .with(user("user").roles(USER))
                               .with(csrf()))
-                      .andExpect(status().isOk())
-                      .andExpect(content().string("Invalid token")),
+                      .andExpect(status().isBadRequest())
+                      .andExpect(content().string("invalid")),
               () -> Mockito.verify(tokenService, Mockito.times(0))
-                      .deletePasswordToken("53535"),
+                      .deleteToken("53535"),
               () -> Mockito.verify(accountService, Mockito.times(0))
                       .updatePassword("535534", 32),
 
@@ -314,10 +313,10 @@ public class AuthControllerTest {
                               )))
                               .with(user("user").roles(USER))
                               .with(csrf()))
-                      .andExpect(status().isOk())
-                      .andExpect(content().string("Invalid token")),
+                      .andExpect(status().isBadRequest())
+                      .andExpect(content().string("expire")),
               () -> Mockito.verify(tokenService, Mockito.times(0))
-                      .deletePasswordToken("nu3v3-9b58-41ae-8723-29d7ff675a30"),
+                      .deleteToken("nu3v3-9b58-41ae-8723-29d7ff675a30"),
               () -> Mockito.verify(accountService, Mockito.times(0))
                       .updatePassword("gsdfgd", 62362)
       );
