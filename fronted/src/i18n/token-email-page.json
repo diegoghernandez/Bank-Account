@@ -1,0 +1,40 @@
+{
+   "en": {
+      "seo": {
+         "title": "Verify email"
+      },
+      "title": "Verify email",
+      "description": {
+         "valid": "Email verify successfully",
+         "expired": "Expire token",
+         "invalid": "Invalid token"
+      },
+      "button": {
+         "valid": "Return to sign in",
+         "expired": "Resend token"
+      },
+      "modal": {
+         "title": "Success",
+         "message": "Token send successfully"
+      }
+   },
+   "es": {
+      "seo": {
+         "title": "Verificar el email"
+      },
+      "title": "Verificar el email",
+      "description": {
+         "valid": "Email verificado correctamente",
+         "expired": "El token ha expirado",
+         "invalid": "El token es inválido"
+      },
+      "button": {
+         "valid": "Regresar a iniciar sesión",
+         "expired": "Reenviar token"
+      },
+      "modal": {
+         "title": "Conseguido",
+         "message": "Token enviado correctamente"
+      }
+   }
+}
