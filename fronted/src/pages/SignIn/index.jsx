@@ -41,6 +41,7 @@ export const SignIn = () => {
                      .then(() => {
                         login();
                         navigate(state?.location?.pathname ?? "/");
+                        globalThis.location.reload();
                      });
                }).catch((e) => {
                   const message = e.message;

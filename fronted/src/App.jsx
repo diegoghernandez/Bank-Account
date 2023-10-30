@@ -39,6 +39,7 @@ function App() {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/verify-registration" element={<Token />} />
+            <Route path="/verify-email" element={<Token />} />
             <Route path="/save-password" element={<SavePassword />} />
          </Routes>
       </>

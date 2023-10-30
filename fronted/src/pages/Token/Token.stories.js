@@ -13,14 +13,6 @@ export default {
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",
-      reactRouter: reactRouterParameters({
-         location: {
-            searchParams: {
-               traduction: "TOKEN_REGISTER",
-               token: "er143ge8-9b58-41ae-8723-29d7ff675a30"
-            }
-         }
-      }),
       backgrounds: {
          default: "dark-blue",
          values: [
@@ -31,9 +23,9 @@ export default {
    }
 };
 
-const API = import.meta.env.VITE_API_URL +  "/auth/verify-registration";
+const API = import.meta.env.VITE_API_URL +  "/auth";
 
-export const Success = {
+export const RegisterSuccess = {
    play: async ({ canvasElement }) => {
       const canvas = within(canvasElement);
       const t = getTraduction(Traduction.TOKEN_REGISTER);
@@ -42,15 +34,23 @@ export const Success = {
       await expect(await canvas.findByText(t.description.valid)).toBeInTheDocument();
    }, 
    parameters: {
+      reactRouter: reactRouterParameters({
+         location: {
+            searchParams: {
+               traduction: "TOKEN_REGISTER",
+               token: "er143ge8-9b58-41ae-8723-29d7ff675a30"
+            }
+         }
+      }),
       msw: [
-         rest.get(API, (req, res, ctx) => {
+         rest.get(API + "/verify-registration", (req, res, ctx) => {
             return res(ctx.status(200), ctx.text("valid"));
          }),
       ],
    },
 };
 
-export const Expire = {
+export const RegisterExpire = {
    play: async ({ canvasElement }) => {
       const canvas = within(canvasElement);
       const t = getTraduction(Traduction.TOKEN_REGISTER);
@@ -67,8 +67,74 @@ export const Expire = {
       }, 2000);
    }, 
    parameters: {
+      reactRouter: reactRouterParameters({
+         location: {
+            searchParams: {
+               traduction: "TOKEN_REGISTER",
+               token: "er143ge8-9b58-41ae-8723-29d7ff675a30"
+            }
+         }
+      }),
       msw: [
-         rest.get(API, (req, res, ctx) => {
+         rest.get(API + "/verify-registration", (req, res, ctx) => {
+            return res(ctx.status(400), ctx.text("expired"));
+         }),
+      ],
+   },
+};
+
+export const EmailSuccess = {
+   play: async ({ canvasElement }) => {
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.TOKEN_EMAIL);
+
+      await expect(canvas.getByRole("heading", { name: t.title })).toBeInTheDocument();
+      await expect(await canvas.findByText(t.description.valid)).toBeInTheDocument();
+   }, 
+   parameters: {
+      reactRouter: reactRouterParameters({
+         location: {
+            searchParams: {
+               traduction: "TOKEN_EMAIL",
+               token: "er143ge8-9b58-41ae-8723-29d7ff675a30"
+            }
+         }
+      }),
+      msw: [
+         rest.get(API + "/verify-email", (req, res, ctx) => {
+            return res(ctx.status(200), ctx.text("valid"));
+         }),
+      ],
+   },
+};
+
+export const EmailExpire = {
+   play: async ({ canvasElement }) => {
+      const canvas = within(canvasElement);
+      const t = getTraduction(Traduction.TOKEN_EMAIL);
+
+      await expect(canvas.getByRole("heading", { name: t.title })).toBeInTheDocument();
+      await expect(await canvas.findByText(t.description.expired)).toBeInTheDocument();
+      await expect(await canvas.findByRole("button", { name: t.button.expired })).toBeInTheDocument();
+
+      setTimeout(async() => {
+         await userEvent.click(await canvas.findByRole("button", { name: t.button.expired }));
+
+         await expect(canvas.getByRole("heading", { name: t.modal.title })).toBeInTheDocument();
+         await expect(await canvas.findByText(t.modal.message)).toBeInTheDocument();
+      }, 2000);
+   }, 
+   parameters: {
+      reactRouter: reactRouterParameters({
+         location: {
+            searchParams: {
+               traduction: "TOKEN_EMAIL",
+               token: "er143ge8-9b58-41ae-8723-29d7ff675a30"
+            }
+         }
+      }),
+      msw: [
+         rest.get(API + "/verify-email", (req, res, ctx) => {
             return res(ctx.status(400), ctx.text("expired"));
          }),
       ],

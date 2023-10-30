@@ -13,7 +13,7 @@ public interface AccountRepository {
 
    void updateBalance(BigDecimal bigDecimal, int id);
 
-   void updateStatus(int id);
+   void updateStatus(boolean status, int id);
 
    void updateName(String newName, int id);
 

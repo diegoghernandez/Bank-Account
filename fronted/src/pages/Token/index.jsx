@@ -2,19 +2,39 @@ import { useEffect, useRef, useState } from "react";
 import { getTraduction } from "../../utils/getTraduction";
 import { Link, useSearchParams } from "react-router-dom";
 import { Traduction } from "../../constants/Traduction";
-import { resendVerificationToken, verifyRegistration } from "../_services/auth";
+import { resendToken, verifyEmail, verifyRegistration } from "../_services/auth";
 import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 import { Modal } from "../../components/Modal";
+
+const logicForPage = (type) => {
+   switch (type) {
+      case "TOKEN_REGISTER":
+         return {
+            verifyFunction: verifyRegistration,
+            resendType: "verification"
+         };
+
+      case "TOKEN_EMAIL":
+         return {
+            verifyFunction: verifyEmail,
+            resendType: "email"
+         };
+   
+      default:
+         break;
+   }
+};
 
 export const Token = () => {
    const [message, setMessage] = useState("");
    const [searchParams] = useSearchParams();
    const dialogRef = useRef();
+   const { verifyFunction, resendType } = logicForPage(searchParams.get("traduction"));
    const t = getTraduction(Traduction[searchParams.get("traduction")]);
 
    useEffect(() => {
-      verifyRegistration(searchParams.get("token"))
+      verifyFunction(searchParams.get("token"))
          .then((response) => setMessage(response))
          .catch((text) => setMessage(text.message));
    }, []);
@@ -36,7 +56,7 @@ export const Token = () => {
                   }
                   {(message === "expired") && 
                      <button onClick={() => {
-                        resendVerificationToken(searchParams.get("token"), "verification");
+                        resendToken(searchParams.get("token"), resendType);
                         dialogRef.current?.showModal?.();
                      }}>
                         {t.button.expired}

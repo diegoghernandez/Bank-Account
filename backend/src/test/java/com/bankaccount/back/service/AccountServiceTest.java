@@ -187,6 +187,7 @@ public class AccountServiceTest {
    void changeEmail() throws NotAllowedException, NotFoundException {
       Mockito.when(accountService.getAccountById(1))
               .thenReturn(Optional.of(AccountEntity.builder().idAccount(1).password(passwordEncoder.encode("1234567")).build()));
+      Mockito.doNothing().when(accountRepository).updateStatus(Mockito.isA(Boolean.class), Mockito.isA(Integer.class));
       Mockito.doNothing().when(accountRepository).updateEmail(Mockito.isA(String.class), Mockito.isA(Integer.class));
       Mockito.when(accountRepository.idExist(1)).thenReturn(true);
       Mockito.when(accountRepository.emailExist("newTest@test.com")).thenReturn(false);
@@ -204,9 +205,30 @@ public class AccountServiceTest {
       assertAll(
               () -> assertThat(accept).isEqualTo("Email changed successfully"),
               () -> assertThat(reject).isEqualTo("Invalid password"),
+              () -> Mockito.verify(accountRepository, Mockito.times(1)).updateStatus(false, 1),
               () -> Mockito.verify(accountRepository, Mockito.times(1)).updateEmail("newTest@test.com", 1),
               () -> assertTrue(accountException.getMessage().contentEquals("Account not found")),
               () -> assertTrue(emailException.getMessage().contentEquals("There is an account with that email address"))
       );
+   }
+
+   @Test
+   @DisplayName("Should update the status of an accountEntity using the repository with the specific id")
+   void updateStatus() {
+      Mockito.doNothing().when(accountRepository).updateStatus(Mockito.isA(Boolean.class), Mockito.isA(Integer.class));
+
+      accountService.updateStatus(true, 1);
+
+      Mockito.verify(accountRepository, Mockito.times(1)).updateStatus(true, 1);
+   }
+
+   @Test
+   @DisplayName("Should update the password of an accountEntity using the repository with the specific id")
+   void updatePassword() {
+      Mockito.doNothing().when(accountRepository).updatePassword(Mockito.isA(String.class), Mockito.isA(Integer.class));
+
+      accountService.updatePassword("new pass", 1);
+
+      Mockito.verify(accountRepository, Mockito.times(1)).updatePassword(Mockito.isA(String.class), Mockito.eq(1));
    }
 }

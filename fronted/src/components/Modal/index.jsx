@@ -212,7 +212,6 @@ export const Modal = ({
                   <button 
                      type="button"
                      className={buttonStyles}
-                     disabled={formUtils?.isLoading}
                      onClick={() => { 
                         closeModal();
                      }}

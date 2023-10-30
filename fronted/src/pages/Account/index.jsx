@@ -28,6 +28,7 @@ export const Account = () => {
          try {
             const data = await changeFunction(firstParameter, secondParameter);
             setSuccessMessage(data);
+            setIsLoading(false);
          } catch (e) {
             const message = JSON.parse(e.message);
             setIsLoading(false);

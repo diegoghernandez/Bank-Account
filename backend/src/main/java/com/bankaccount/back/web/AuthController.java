@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
@@ -83,6 +85,26 @@ public class AuthController {
                 HttpStatus.CREATED);
     }
 
+    @GetMapping("/resend-token")
+    public String resendToken(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestParam String type,
+            @RequestParam("token") String oldToken) {
+        TokenEntity tokenEntity = tokenService.generateNewToken(oldToken);
+
+        AccountEntity account = tokenEntity.getAccountEntity();
+
+        if (type.equalsIgnoreCase("verification")) {
+            resendVerificationTokenEmail(tokenEntity.getToken(), account);
+        } else if (type.equalsIgnoreCase("password")) {
+            passwordResetTokenEmail(tokenEntity.getToken(), account);
+        } else if (type.equalsIgnoreCase("email")) {
+            emailChangeTokenEmail(tokenEntity.getToken(), account);
+        }
+
+        return Messages.getMessageForLocale("controller.auth.resend", locale);
+    }
+
     @GetMapping("/verify-registration")
     public ResponseEntity<String> verifyRegistration(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
@@ -94,24 +116,6 @@ public class AuthController {
         }
 
         return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-    }
-
-    @GetMapping("/resend-token")
-    public String resendToken(
-            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestParam String type,
-            @RequestParam("token") String oldToken) {
-        TokenEntity tokenEntity = tokenService.generateNewToken(oldToken);
-
-        AccountEntity account = tokenEntity.getAccountEntity();
-
-        if (type.equalsIgnoreCase("verification")) {
-            resendVerificationTokenEmail(tokenEntity, account);
-        } else if (type.equalsIgnoreCase("password")) {
-            passwordResetTokenEmail(tokenEntity.getToken(), account);
-        }
-
-        return Messages.getMessageForLocale("controller.auth.resend", locale);
     }
 
     @GetMapping("/reset-password/{email}")
@@ -140,6 +144,24 @@ public class AuthController {
                 tokenService.deleteToken(token);
                 accountService.updatePassword(passwordDto.newPassword(), passwordDto.idAccount());
 
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            }
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/verify-email")
+    public ResponseEntity<String> verifyEmail(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @RequestParam String token) {
+        String result = tokenService.validateToken(token);
+
+        if (result.equalsIgnoreCase("valid")) {
+            Optional<AccountEntity> accountEntity = tokenService.getAccountByToken(token);
+            if (accountEntity.isPresent()) {
+                tokenService.deleteToken(token);
+                accountService.updateStatus(true, accountEntity.get().getIdAccount());
                 return new ResponseEntity<>(result, HttpStatus.OK);
             }
         }
@@ -193,12 +215,29 @@ public class AuthController {
         String result = accountService.changeEmail(passwordDto, locale);
 
         if (result.contains(Messages.getMessageForLocale("service.account.change-email.success", locale))) {
+            CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS).execute(() -> {
+                AccountEntity accountEntity = accountService.getAccountByEmail(passwordDto.email()).get();
+
+                String token = UUID.randomUUID().toString();
+                accountService.saveToken(token, accountEntity);
+                emailChangeTokenEmail(token, accountEntity);
+            });
             response.put("result", result);
             return ResponseEntity.ok().body(response);
         }
 
         response.put("newPassword", result);
         return ResponseEntity.badRequest().body(response);
+    }
+
+    private void resendVerificationTokenEmail(String token, AccountEntity account) {
+        String url = configProperties.client() + "/verify-registration?token=" + token +
+                "&traduction=TOKEN_REGISTER&email=" + account.getEmail();
+
+        emailService.sendEmail(
+                account.getEmail(),
+                "Verification Token resend",
+                "Click the link to verify your account: " + url);
     }
 
     private void passwordResetTokenEmail(String token, AccountEntity accountEntity) {
@@ -211,13 +250,13 @@ public class AuthController {
                 "Click the link to reset your password: " + url);
     }
 
-    private void resendVerificationTokenEmail(TokenEntity token, AccountEntity account) {
-        String url = configProperties.client() + "/verify-registration?token=" + token.getToken() +
-                "&traduction=TOKEN_REGISTER&email=" + account.getEmail();
+    private void emailChangeTokenEmail(String token, AccountEntity accountEntity) {
+        String url = configProperties.client() + "/verify-email?token=" + token
+                + "&traduction=TOKEN_EMAIL&id=" + accountEntity.getIdAccount();
 
         emailService.sendEmail(
-                account.getEmail(),
-                "Verification Token resend",
-                "Click the link to verify your account: " + url);
+                accountEntity.getEmail(),
+                "Verify email",
+                "Click the link to verify your email: " + url);
     }
 }

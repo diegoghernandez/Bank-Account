@@ -28,6 +28,9 @@ export const authHandler = [
       }));
    }),
 
+   rest.get(`${API}/resend-token`, async (req, res, ctx) => 
+      res(ctx.status(200), ctx.text("Verification Link Sent"))),
+
    rest.get(`${API}/verify-registration`, async (req, res, ctx) => {
       const token = req.url.searchParams.get("token");
 
@@ -37,9 +40,6 @@ export const authHandler = [
 
       return res(ctx.status(400), ctx.text("expired"));
    }),
-
-   rest.get(`${API}/resend-token`, async (req, res, ctx) => 
-      res(ctx.status(200), ctx.text("Verification Link Sent"))),
 
    rest.post(`${API}/save-password`, async (req, res, ctx) => {
       const token = req.url.searchParams.get("token");
@@ -51,6 +51,16 @@ export const authHandler = [
       } else {
          return res(ctx.status(400), ctx.text("invalid"));
       }
+   }),
+
+   rest.get(`${API}/verify-email`, async (req, res, ctx) => {
+      const token = req.url.searchParams.get("token");
+
+      if (token == "nu3v3-9b58-41ae-8723-29d7ff675a30") {
+         return res(ctx.status(200), ctx.text("valid"));
+      }
+
+      return res(ctx.status(400), ctx.text("expired"));
    }),
 
    rest.post(`${API}/secure/change-name`, async (req, res, ctx) => {

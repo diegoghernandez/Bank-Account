@@ -5,7 +5,7 @@ import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Traduction } from "../../constants/Traduction";
 import { getTraduction } from "../../utils/getTraduction";
 import { Bar } from "../../components/Loader/Bar";
-import { resendVerificationToken, savePassword } from "../_services/auth";
+import { resendToken, savePassword } from "../_services/auth";
 import { Modal } from "../../components/Modal";
 import { useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -86,7 +86,7 @@ export const SavePassword = () => {
                      if (message === "valid") {
                         navigate("/sign-in");
                      } else if (message === "expired") {
-                        resendVerificationToken(searchParams.get("token"), "password");
+                        resendToken(searchParams.get("token"), "password");
                      }
                   },
                   accept: (message !== "invalid")

@@ -45,8 +45,8 @@ export const register = async (accountData) => {
    }
 };
 
-export const verifyRegistration = async (token) => {
-   const response = await fetch(`${API}/verify-registration?token=${token}`, {
+export const resendToken = async (token, type) => {
+   const response = await fetch(`${API}/resend-token?token=${token}&type=${type}`, {
       method: "GET",
       headers: {
          "Content-Type": "application/json",
@@ -63,8 +63,8 @@ export const verifyRegistration = async (token) => {
    }
 };
 
-export const resendVerificationToken = async (token, type) => {
-   const response = await fetch(`${API}/resend-token?token=${token}&type=${type}`, {
+export const verifyRegistration = async (token) => {
+   const response = await fetch(`${API}/verify-registration?token=${token}`, {
       method: "GET",
       headers: {
          "Content-Type": "application/json",
@@ -98,6 +98,24 @@ export const savePassword = async (token, passwordDto) => {
          "Accept-Language": LANGUAGE
       },
       body: JSON.stringify(passwordDto)
+   });
+
+   const data = await response.text();
+
+   if (response.ok) {
+      return data;
+   } else {
+      throw new StatusError(data, response.status);
+   }
+};
+
+export const verifyEmail = async (token) => {
+   const response = await fetch(`${API}/verify-email?token=${token}`, {
+      method: "GET",
+      headers: {
+         "Content-Type": "application/json",
+         "Accept-Language": LANGUAGE
+      }
    });
 
    const data = await response.text();

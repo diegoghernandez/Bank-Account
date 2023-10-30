@@ -14,5 +14,6 @@ export const Traduction = Object.freeze({
    TRANSACTION_PAGE: Symbol("transaction"),
    TRANSACTIONS_PAGE: Symbol("transactions"),
    TOKEN_REGISTER: Symbol("token-register"),
+   TOKEN_EMAIL: Symbol("token-email"),
    SAVE_PASSWORD: Symbol("save-password")
 });

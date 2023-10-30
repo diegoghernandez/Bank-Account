@@ -1,5 +1,5 @@
 import { StatusError } from "../../errors/StatusError";
-import { changeEmail, changeName, changePassword, login, register, resendVerificationToken, savePassword, verifyRegistration } from "../../pages/_services/auth";
+import { changeEmail, changeName, changePassword, login, register, resendToken, savePassword, verifyEmail, verifyRegistration } from "../../pages/_services/auth";
 
 describe("Auth tests", () => {
    describe("login test", () => {
@@ -51,7 +51,18 @@ describe("Auth tests", () => {
       });
    });
 
-   describe("verify registration test", () => {
+   describe("resend token", () => {
+      it("Should be a function", () => {
+         expect(typeof resendToken).toBe("function");
+      });
+
+      it("Should save the right content", async () => {
+         const content = await resendToken("nu3v3-9b58-41ae-8723-29d7ff675a30");
+         expect(content).toStrictEqual("Verification Link Sent");
+      });
+   });
+
+   describe("verify registration tests", () => {
       it("Should be a function", () => {
          expect(typeof verifyRegistration).toBe("function");
       });
@@ -67,18 +78,7 @@ describe("Auth tests", () => {
       });
    });
 
-   describe("resend verification token", () => {
-      it("Should be a function", () => {
-         expect(typeof resendVerificationToken).toBe("function");
-      });
-
-      it("Should save the right content", async () => {
-         const content = await resendVerificationToken("nu3v3-9b58-41ae-8723-29d7ff675a30");
-         expect(content).toStrictEqual("Verification Link Sent");
-      });
-   });
-
-   describe("save password test", () => {
+   describe("save password tests", () => {
       it("Should be a function", () => {
          expect(typeof savePassword).toBe("function");
       });
@@ -115,6 +115,22 @@ describe("Auth tests", () => {
             oldPassword: "1234",
             newPassword: "1234"
          });
+         expect(content).toStrictEqual("valid");
+      });
+   });
+
+   describe("verify email tests", () => {
+      it("Should be a function", () => {
+         expect(typeof verifyEmail).toBe("function");
+      });
+
+      it("Should throw an StatusError if some value is wrong", async () => {
+         await expect(verifyEmail("very wrong token")).rejects.toThrow(StatusError);
+         await expect(verifyEmail("very wrong token")).rejects.toThrow("expire");
+      });
+
+      it("Should save the right content", async () => {
+         const content = await verifyEmail("nu3v3-9b58-41ae-8723-29d7ff675a30");
          expect(content).toStrictEqual("valid");
       });
    });

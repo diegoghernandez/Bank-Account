@@ -87,11 +87,11 @@ public class AccountRepositoryImplTest {
    @Test
    @DisplayName("Should update the status of an accountEntity in the database with the specific id")
    void updateStatus() {
-      Mockito.doNothing().when(accountCrudRepository).updateStatusById(Mockito.isA(Integer.class));
+      Mockito.doNothing().when(accountCrudRepository).updateStatusById(Mockito.isA(Boolean.class), Mockito.isA(Integer.class));
 
-      accountRepository.updateStatus(1);
+      accountRepository.updateStatus(true, 1);
 
-      Mockito.verify(accountCrudRepository, Mockito.times(1)).updateStatusById(1);
+      Mockito.verify(accountCrudRepository, Mockito.times(1)).updateStatusById(true, 1);
    }
 
    @Test

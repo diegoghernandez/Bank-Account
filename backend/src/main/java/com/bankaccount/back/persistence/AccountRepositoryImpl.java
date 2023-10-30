@@ -36,8 +36,8 @@ public class AccountRepositoryImpl implements AccountRepository {
    }
 
    @Override
-   public void updateStatus(int id) {
-      accountCrudRepository.updateStatusById(id);
+   public void updateStatus(boolean status, int id) {
+      accountCrudRepository.updateStatusById(status, id);
    }
 
    @Override

@@ -135,34 +135,6 @@ public class AuthControllerTest {
    }
 
    @Test
-   @DisplayName("Should verify if the token is valid")
-   void verifyRegistration() {
-      Mockito.when(tokenService.validateVerification("er143ge8-9b58-41ae-8723-29d7ff675a30"))
-              .thenReturn("valid");
-
-      Mockito.when(tokenService.validateVerification("hello"))
-              .thenReturn("invalid");
-
-      assertAll(
-              () -> mockMvc.perform(get("/auth/verify-registration")
-                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
-                              .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .with(user("user").roles(USER)))
-                      .andExpect(status().isOk())
-                      .andExpect(content().string("valid")),
-
-              () -> mockMvc.perform(get("/auth/verify-registration")
-                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
-                              .param("token", "hello")
-                              .contentType(MediaType.APPLICATION_JSON)
-                              .with(user("user").roles(USER)))
-                      .andExpect(status().isBadRequest())
-                      .andExpect(content().string("invalid"))
-      );
-   }
-
-   @Test
    @DisplayName("Should return a new verification token when an old token is given")
    void resendVerificationToken() {
       TokenEntity newTokenEntity = TokenEntity.builder()
@@ -193,7 +165,35 @@ public class AuthControllerTest {
    }
 
    @Test
-   @DisplayName("Should send a url for reset the password")
+   @DisplayName("Should verify if the token is valid and update account credentials")
+   void verifyRegistration() {
+      Mockito.when(tokenService.validateVerification("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+              .thenReturn("valid");
+
+      Mockito.when(tokenService.validateVerification("hello"))
+              .thenReturn("invalid");
+
+      assertAll(
+              () -> mockMvc.perform(get("/auth/verify-registration")
+                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                              .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .with(user("user").roles(USER)))
+                      .andExpect(status().isOk())
+                      .andExpect(content().string("valid")),
+
+              () -> mockMvc.perform(get("/auth/verify-registration")
+                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                              .param("token", "hello")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .with(user("user").roles(USER)))
+                      .andExpect(status().isBadRequest())
+                      .andExpect(content().string("invalid"))
+      );
+   }
+
+   @Test
+   @DisplayName("Should send an email for reset the password")
    void resetPassword() {
       PasswordDto passwordDto = new PasswordDto(
               1,
@@ -233,7 +233,7 @@ public class AuthControllerTest {
    }
 
    @Test
-   @DisplayName("Should save a new password")
+   @DisplayName("Should save a new password if the token is valid")
    void savePassword() {
       AccountEntity account = AccountEntity.builder()
               .idAccount(687452786)
@@ -319,6 +319,49 @@ public class AuthControllerTest {
                       .deleteToken("nu3v3-9b58-41ae-8723-29d7ff675a30"),
               () -> Mockito.verify(accountService, Mockito.times(0))
                       .updatePassword("gsdfgd", 62362)
+      );
+   }
+
+   @Test
+   @DisplayName("Should verify if the token is valid and update account")
+   void verifyEmail() {
+      Mockito.when(tokenService.validateToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+              .thenReturn("valid");
+
+      Mockito.when(tokenService.getAccountByToken("er143ge8-9b58-41ae-8723-29d7ff675a30"))
+              .thenReturn(Optional.ofNullable(AccountEntity.builder()
+                              .idAccount(687452786)
+                              .accountName("Random634675")
+                              .email("random@names.com")
+                              .password("1234567")
+                              .currentBalance(new BigDecimal("654316.76"))
+                              .build()));
+
+      Mockito.when(tokenService.validateToken("hello"))
+              .thenReturn("invalid");
+
+      assertAll(
+              () -> mockMvc.perform(get("/auth/verify-email")
+                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                              .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .with(user("user").roles(USER)))
+                      .andExpect(status().isOk())
+                      .andExpect(content().string("valid")),
+              () -> Mockito.verify(tokenService, Mockito.times(1))
+                      .deleteToken("er143ge8-9b58-41ae-8723-29d7ff675a30"),
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .updateStatus(true, 687452786),
+
+              () -> mockMvc.perform(get("/auth/verify-email")
+                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
+                              .param("token", "hello")
+                              .contentType(MediaType.APPLICATION_JSON)
+                              .with(user("user").roles(USER)))
+                      .andExpect(status().isBadRequest())
+                      .andExpect(content().string("invalid")),
+              () -> Mockito.verify(tokenService, Mockito.times(0))
+                      .deleteToken("hello")
       );
    }
 

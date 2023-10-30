@@ -83,6 +83,7 @@ public class AccountService {
 
       if (!accountRepository.emailExist(newEmail)) {
          if (checkIfValidPassword(idAccount, passwordDto.newPassword())) {
+            accountRepository.updateStatus(false, idAccount);
             accountRepository.updateEmail(newEmail, idAccount);
             return Messages.getMessageForLocale("service.account.change-email.success", locale);
          } else {
@@ -91,6 +92,10 @@ public class AccountService {
       } else {
          throw new NotAllowedException("email", "service.account.error.email", locale);
       }
+   }
+
+   public void updateStatus(boolean status, int id) {
+      accountRepository.updateStatus(status, id);
    }
 
    public void updatePassword(String newPassword, int id) {

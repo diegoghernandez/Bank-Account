@@ -18,8 +18,8 @@ public interface AccountCrudRepository extends CrudRepository<AccountEntity, Int
 
    @Modifying
    @Transactional
-   @Query("UPDATE AccountEntity AS acc SET acc.enabled = true WHERE acc.idAccount = :id")
-   void updateStatusById(int id);
+   @Query("UPDATE AccountEntity AS acc SET acc.enabled = :status WHERE acc.idAccount = :id")
+   void updateStatusById(boolean status, int id);
 
    @Modifying
    @Transactional
