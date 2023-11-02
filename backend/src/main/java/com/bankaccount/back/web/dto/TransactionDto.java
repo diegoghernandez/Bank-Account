@@ -6,6 +6,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+/**
+ * Record to handle the data to create an {{@link com.bankaccount.back.persistence.entity.TransactionEntity}}
+ * @param idAccount
+ * @param idTransferAccount
+ * @param amount
+ * @param transactionType
+ */
 public record TransactionDto(
         @NotNull int idAccount,
         @NotNull int idTransferAccount,

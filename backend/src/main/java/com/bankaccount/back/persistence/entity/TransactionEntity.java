@@ -8,6 +8,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Transaction is the entity to be the core of everything related to transactions
+ */
 @Entity
 @Getter
 @Builder
@@ -46,6 +49,9 @@ public class TransactionEntity {
    @Column(name = "is_automated")
    private Boolean isAutomated;
 
+   /**
+    * @return the last three digits from a transfer account with six X in front
+    */
    public String getIdTransferAccount() {
       return "XXXXXX" + (idTransferAccount % 1000);
    }

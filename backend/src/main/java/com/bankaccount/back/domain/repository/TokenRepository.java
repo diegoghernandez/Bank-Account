@@ -4,6 +4,9 @@ import com.bankaccount.back.persistence.entity.TokenEntity;
 
 import java.util.Date;
 
+/**
+ * Token repository API.
+ */
 public interface TokenRepository {
 
    TokenEntity getByToken(String token);

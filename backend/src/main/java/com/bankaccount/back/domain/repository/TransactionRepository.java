@@ -5,9 +5,11 @@ import com.bankaccount.back.persistence.entity.TransactionEntity;
 import com.bankaccount.back.web.dto.DateDto;
 import org.springframework.data.domain.Page;
 
-import java.time.Month;
 import java.util.Optional;
 
+/**
+ * Transaction repository API.
+ */
 public interface TransactionRepository {
 
    Optional<TransactionEntity> getTransactionById(long id);

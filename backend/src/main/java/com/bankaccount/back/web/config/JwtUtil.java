@@ -9,12 +9,19 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Config class in charge of the JWT manipulation
+ */
 @Component
 public class JwtUtil {
 
    @Autowired
    private EnvConfigProperties envConfigProperties;
 
+   /**
+    * @param username the username of the token
+    * @return a JWT token
+    */
    public String create(String username) {
       return JWT.create()
               .withSubject(username)
@@ -24,6 +31,10 @@ public class JwtUtil {
               .sign(Algorithm.HMAC256(envConfigProperties.jwtSecretKey()));
    }
 
+   /**
+    * @param jwt the jwt token to be verified
+    * @return the result of the verification
+    */
    public boolean isValid(String jwt) {
       try {
          JWT.require(Algorithm.HMAC256(envConfigProperties.jwtSecretKey()))
@@ -36,6 +47,10 @@ public class JwtUtil {
       }
    }
 
+   /**
+    * @param jwt the jwt token where extract the username
+    * @return the username of the jwt token
+    */
    public String getUsername(String jwt) {
       return JWT.require(Algorithm.HMAC256(envConfigProperties.jwtSecretKey()))
               .build()

@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Automation repository API.
+ */
 public interface AutomationRepository {
 
    boolean existsById(long id);

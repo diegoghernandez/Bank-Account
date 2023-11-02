@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+/**
+ * Token repository implementation API.
+ * <p>Implements {@link TokenRepository}
+ */
 @Service
 public class TokenRepositoryImpl implements TokenRepository {
 

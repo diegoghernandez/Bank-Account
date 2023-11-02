@@ -6,6 +6,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
+/**
+ * Class in charge from the email logic
+ */
 @Component
 public class EmailService {
 
@@ -15,6 +18,12 @@ public class EmailService {
    @Autowired
    private EnvConfigProperties envConfigProperties;
 
+   /**
+    * Send the email with the desire content to the respective user
+    * @param to the value to who send
+    * @param subject the value for the summary of the content
+    * @param text the value for the content of the email
+    */
    public void sendEmail(String to, String subject, String text) {
       SimpleMailMessage message = new SimpleMailMessage();
 

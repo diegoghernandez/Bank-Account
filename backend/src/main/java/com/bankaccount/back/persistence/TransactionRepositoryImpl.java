@@ -17,6 +17,10 @@ import java.time.Month;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Optional;
 
+/**
+ * Transaction repository implementation API.
+ * <p>Implements {@link TransactionRepository}
+ */
 @Repository
 public class TransactionRepositoryImpl implements TransactionRepository {
 
@@ -28,12 +32,28 @@ public class TransactionRepositoryImpl implements TransactionRepository {
       return transactionCrudRepository.findById(id);
    }
 
+   /**
+    * Get a pageable element by account id with a maximum of ten transactions
+    * and sorted from the last element to the first element
+    * @param idAccount the account id of the desire transactions
+    * @param page the value to access to certain page
+    * @return an {@code Optional} of {@link Page} of {@link TransactionEntity}
+    */
    @Override
    public Optional<Page<TransactionEntity>> getByIdAccount(int idAccount, int page) {
       Pageable pageRequest = PageRequest.of(page, 10, Sort.by("idTransaction").descending());
       return Optional.of(transactionCrudRepository.findByIdAccount(idAccount, pageRequest));
    }
 
+   /**
+    * Get a pageable element by account id, and the nullable parameters type and name with a maximum of ten transactions
+    * and sorted from the last element to the first element
+    * @param idAccount the account id of the desire transactions
+    * @param transactionType the type of the desire transactions
+    * @param name the name of the desire transactions
+    * @param page the value to access to certain page
+    * @return an {@code Optional} of {@link Page} of {@link TransactionEntity}
+    */
    @Override
    public Optional<Page<TransactionEntity>> getByIdAccountAndName(int idAccount, TransactionType transactionType, String name, int page) {
       Pageable pageRequest = PageRequest.of(page, 10, Sort.by("idTransaction").descending());
@@ -41,6 +61,17 @@ public class TransactionRepositoryImpl implements TransactionRepository {
               idAccount, transactionType, name, null, null, pageRequest));
    }
 
+   /**
+    * Get a pageable element by account id, and the nullable parameters type,
+    * name, dateDto with a maximum of ten transactions
+    * and sorted from the first element to the last element
+    * @param idAccount the account id of the desire transactions
+    * @param transactionType the type of the desire transactions
+    * @param name the name of the desire transactions
+    * @param dateDto the date of the desire transactions
+    * @param page the value to access to certain page
+    * @return an {@code Optional} of {@link Page} of {@link TransactionEntity}
+    */
    @Override
    public Optional<Page<TransactionEntity>> getByIdAccountAndTypeAndNameAndDate(
            int idAccount, TransactionType transactionType, String name, DateDto dateDto, int page) {

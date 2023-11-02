@@ -15,6 +15,9 @@ import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ * A class in charge of the type logic of transactions
+ */
 @Service
 public class TransactionTypeService {
 
@@ -24,6 +27,14 @@ public class TransactionTypeService {
    @Autowired
    private AccountRepository accountRepository;
 
+   /**
+    * Save a transaction with the data of {@code transactionDto} and return it, otherwise throw an exception.
+    * @param transactionDto the value to extract the transaction data
+    * @param isAutomated the value to know if is invoked for an automation
+    * @param locale the value to choose the language of the message
+    * @throws NotFoundException if neither the account nor the transfer account exists
+    * @throws NotAllowedException it either there is a balance error or the type is not supported
+    */
    public void saveTransaction(TransactionDto transactionDto, boolean isAutomated, Locale locale) throws NotFoundException, NotAllowedException {
       int id = transactionDto.idAccount();
       int idTransfer = transactionDto.idTransferAccount();

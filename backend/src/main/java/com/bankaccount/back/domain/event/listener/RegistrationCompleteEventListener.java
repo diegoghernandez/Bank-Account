@@ -5,14 +5,17 @@ import com.bankaccount.back.domain.repository.AccountRepository;
 import com.bankaccount.back.domain.service.EmailService;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.web.config.EnvConfigProperties;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Slf4j
+
+/**
+ * Class listener for {@link RegistrationCompleteEvent}.
+ * <p>Extends {@link ApplicationListener}
+ */
 @Component
 public class RegistrationCompleteEventListener implements ApplicationListener<RegistrationCompleteEvent> {
 
@@ -25,6 +28,11 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
    @Autowired
    private EnvConfigProperties configProperties;
 
+   /**
+    * Send email to verify the account, using the account email, the token,
+    * and the url of the client.
+    * @param event the event to respond to {@link RegistrationCompleteEvent}
+    */
    @Override
    public void onApplicationEvent(RegistrationCompleteEvent event) {
       AccountEntity accountEntity = event.getAccountEntity();

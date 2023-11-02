@@ -4,6 +4,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
 
+/**
+ * Config class in charge of get the environment variables
+ * @param client
+ * @param email
+ * @param allowedOrigins
+ * @param jwtSecretKey
+ * @param jwtIssuer
+ */
 @ConfigurationProperties("env")
 public record EnvConfigProperties(
    String client,

@@ -5,6 +5,9 @@ import com.bankaccount.back.persistence.entity.AccountEntity;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+/**
+ * Account repository API.
+ */
 public interface AccountRepository {
 
    Optional<AccountEntity> getAccountById(int id);

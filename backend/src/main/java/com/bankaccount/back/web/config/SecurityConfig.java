@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Config class in charge of the basic the endpoints configuration
+ */
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
@@ -23,11 +26,21 @@ public class SecurityConfig {
    private static final String ADMIN = AccountRoles.ADMIN.toString();
    private static final String USER = AccountRoles.USER.toString();
 
+   /**
+    * Constructor for {@link SecurityConfig}.
+    * @param jwtFilter class to work with the jwt logic
+    */
    @Autowired
    public SecurityConfig(JwtFilter jwtFilter) {
       this.jwtFilter = jwtFilter;
    }
 
+   /**
+    * Make the configuration to what allow for each endpoint
+    * @param http the value to make the configuration
+    * @return an {@link HttpSecurity} with desire configuration
+    * @throws Exception if {@link HttpSecurity} get an error
+    */
    @Bean
    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
       http
@@ -36,6 +49,7 @@ public class SecurityConfig {
               .sessionManagement()
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
               .authorizeHttpRequests()
+              .antMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
               .antMatchers("/auth/secure/**").hasAnyRole(USER, ADMIN)
               .antMatchers("/auth/**").permitAll()
               .antMatchers("/transactions/**").hasAnyRole(USER, ADMIN)
@@ -52,11 +66,19 @@ public class SecurityConfig {
       return http.build();
    }
 
+   /**
+    * @param configuration the value from gets the authentication manager
+    * @return an {@link AuthenticationManager}
+    * @throws Exception if {@link AuthenticationConfiguration} get an error
+    */
    @Bean
    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
       return configuration.getAuthenticationManager();
    }
 
+   /**
+    * @return a {@link BCryptPasswordEncoder}
+    */
    @Bean
    public PasswordEncoder passwordEncoder() {
       return new BCryptPasswordEncoder();

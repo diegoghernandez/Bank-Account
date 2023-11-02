@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Token is the entity to be the core of all token logic
+ */
 @Entity
 @Getter
 @ToString
@@ -31,6 +34,8 @@ public class TokenEntity {
    @OneToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "id_account", nullable = false)
    private AccountEntity accountEntity;
+
+   public static class TokenEntityBuilder {}
 
    public static TokenEntityBuilder builder() {
       return new CustomBuilder();

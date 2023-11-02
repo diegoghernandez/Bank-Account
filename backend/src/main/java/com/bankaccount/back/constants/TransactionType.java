@@ -1,5 +1,8 @@
 package com.bankaccount.back.constants;
 
+/**
+ * Enum with the types a transaction can have.
+ */
 public enum TransactionType {
 
    DEPOSIT,

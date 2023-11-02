@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Class in charge of execute the active automations
+ */
 @Component
 public class AutomationHelper {
 
@@ -23,6 +26,12 @@ public class AutomationHelper {
    @Autowired
    private TransactionTypeService transactionTypeService;
 
+   /**
+    * Check every automation to know if is time to execute it,
+    * otherwise if either ran out of money or the accounts don't exist,
+    * the automation will be disabled
+    * @param list the value to start a loop
+    */
    public void useAutomations(List<AutomationEntity> list) {
       for (var automation : list) {
          if (automation.getExecutionTime().isBefore(LocalDateTime.now())) {

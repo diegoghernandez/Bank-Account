@@ -14,6 +14,14 @@ import com.bankaccount.back.web.config.JwtUtil;
 import com.bankaccount.back.web.dto.AccountDto;
 import com.bankaccount.back.web.dto.LoginDto;
 import com.bankaccount.back.web.dto.PasswordDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Auth", description = "The auth API")
 public class AuthController {
 
     @Autowired
@@ -56,6 +65,25 @@ public class AuthController {
     @Autowired
     private EnvConfigProperties configProperties;
 
+    @Operation(
+            summary = "Login a user",
+            description = "Login a user and return a jwt token",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkhvbGEiLCJpYXQiOjE1MTYyMzkwMjJ9.UIk97TCf753QX9TqT2XXh9KOykFM9bLhmccWKuMAQzs")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad format",
+                            content = @Content
+                    )
+            }
+    )
     @PostMapping(value = "/login", consumes = {"application/json"})
     public ResponseEntity<String> login(@RequestBody @Valid LoginDto loginDto) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password());
@@ -65,6 +93,38 @@ public class AuthController {
         return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Register an user",
+            description = "Register an user, send an email, and return a message",
+            parameters = @Parameter(
+                    name = HttpHeaders.ACCEPT_LANGUAGE,
+                    in = ParameterIn.HEADER,
+                    required = true,
+                    description = "header for get the message according to the language",
+                    content = @Content(
+                            schema = @Schema(type = "string"),
+                            examples = @ExampleObject( value = "en")
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "Success")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad format",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "Passwords don't match")
+                            )
+                    )
+            }
+    )
     @PostMapping(value = "/register", consumes = {"application/json"})
     public ResponseEntity<String> registerAccount(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
@@ -85,11 +145,35 @@ public class AuthController {
                 HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Resend a token",
+            description = "With the old token return a message, and send email with new token",
+            parameters = @Parameter(
+                    name = HttpHeaders.ACCEPT_LANGUAGE,
+                    in = ParameterIn.HEADER,
+                    required = true,
+                    description = "header for get the message according to the language",
+                    content = @Content(
+                            schema = @Schema(type = "string"),
+                            examples = @ExampleObject( value = "en")
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "Verification Link Sent")
+                            )
+                    )
+            }
+    )
     @GetMapping("/resend-token")
     public String resendToken(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestParam String type,
-            @RequestParam("token") String oldToken) {
+            @Parameter(description = "type of email to send") @RequestParam String type,
+            @Parameter(description = "old token to be updated") @RequestParam("token") String oldToken) {
         TokenEntity tokenEntity = tokenService.generateNewToken(oldToken);
 
         AccountEntity account = tokenEntity.getAccountEntity();
@@ -105,10 +189,42 @@ public class AuthController {
         return Messages.getMessageForLocale("controller.auth.resend", locale);
     }
 
+    @Operation(
+            summary = "Verify the account with the token",
+            description = "According to the token, return a message, and if is valid, verify the account",
+            parameters = @Parameter(
+                    name = HttpHeaders.ACCEPT_LANGUAGE,
+                    in = ParameterIn.HEADER,
+                    required = true,
+                    description = "header for get the message according to the language",
+                    content = @Content(
+                            schema = @Schema(type = "string"),
+                            examples = @ExampleObject( value = "en")
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "valid")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Something bad happens with the token",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "invalid")
+                            )
+                    )
+            }
+    )
     @GetMapping("/verify-registration")
     public ResponseEntity<String> verifyRegistration(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestParam String token) {
+            @Parameter(description = "the token to check") @RequestParam String token) {
         String result = tokenService.validateVerification(token);
         if (result.equalsIgnoreCase("valid")) {
             tokenService.deleteToken(token);
@@ -118,8 +234,19 @@ public class AuthController {
         return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
+    @Operation(
+            summary = "Send an email",
+            description = "Send an email with the token to reset the password",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Send email"
+                    )
+            }
+    )
     @GetMapping("/reset-password/{email}")
-    public void resetPassword(@PathVariable String email) {
+    public void resetPassword(
+            @Parameter(description = "the email to send the token") @PathVariable String email) {
         Optional<AccountEntity> optionalAccount = accountService.getAccountByEmail(email);
 
         if (optionalAccount.isPresent()) {
@@ -131,10 +258,42 @@ public class AuthController {
         }
     }
 
+    @Operation(
+            summary = "Update the password",
+            description = "Update the password and return a message according to the token",
+            parameters = @Parameter(
+                    name = HttpHeaders.ACCEPT_LANGUAGE,
+                    in = ParameterIn.HEADER,
+                    required = true,
+                    description = "header for get the message according to the language",
+                    content = @Content(
+                            schema = @Schema(type = "string"),
+                            examples = @ExampleObject( value = "en")
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "valid")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Something bad happens with the token",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "invalid")
+                            )
+                    )
+            }
+    )
     @PostMapping("/save-password")
     private ResponseEntity<String> savePassword(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestParam String token,
+            @Parameter(description = "the token to check") @RequestParam String token,
             @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
         String result = tokenService.validateToken(token);
 
@@ -151,10 +310,32 @@ public class AuthController {
         return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
+    @Operation(
+            summary = "Verify the email with the token",
+            description = "According to the token, return a message, and if is valid, verify the email",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "valid")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Something bad happens with the token",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "invalid")
+                            )
+                    )
+            }
+    )
     @GetMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestParam String token) {
+            @Parameter(description = "the token to check") @RequestParam String token) {
         String result = tokenService.validateToken(token);
 
         if (result.equalsIgnoreCase("valid")) {
@@ -169,11 +350,55 @@ public class AuthController {
         return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 
+    @Operation(
+            summary = "Update the name of account",
+            description = "According to the id of account, update the name if the password is correct",
+            parameters = @Parameter(
+                    name = HttpHeaders.ACCEPT_LANGUAGE,
+                    in = ParameterIn.HEADER,
+                    required = true,
+                    description = "header for get the message according to the language",
+                    content = @Content(
+                            schema = @Schema(type = "string"),
+                            examples = @ExampleObject( value = "en")
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = @Content(
+                                    examples = @ExampleObject(value = "{\"result\": \"Name changed successfully\"}")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Something goes wrong",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Error name",
+                                                    value = "{\"name\": \"Name must not be empty\"}"),
+                                            @ExampleObject(
+                                                    name = "Error password",
+                                                    value = "{\"newPassword\": \"Invalid password\"}",
+                                                    description = "The password is incorrect")
+                                    }
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Unauthorized | Invalid Token",
+                            content = @Content
+                    )
+            }
+    )
     @PostMapping("/secure/change-name")
     public ResponseEntity<Map<String, String>> changeName(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestParam String name,
-            @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
+            @Parameter(description = "the name to update") @RequestParam String name,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description =
+                    "the object to get the id and the password")
+                @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
         Map<String, String> response = new HashMap<>();
         if (name.isEmpty()) {
             response.put("name", Messages.getMessageForLocale("controller.auth.change-name.error", locale));
@@ -191,6 +416,48 @@ public class AuthController {
         return ResponseEntity.badRequest().body(response);
     }
 
+   @Operation(
+           summary = "Update the password of account",
+           description = "According to the id of account, update the password if the password is correct",
+           parameters = @Parameter(
+                   name = HttpHeaders.ACCEPT_LANGUAGE,
+                   in = ParameterIn.HEADER,
+                   required = true,
+                   description = "header for get the message according to the language",
+                   content = @Content(
+                           schema = @Schema(type = "string"),
+                           examples = @ExampleObject( value = "en")
+                   )
+           ),
+           responses = {
+                   @ApiResponse(
+                           responseCode = "200",
+                           description = "Success",
+                           content = @Content(
+                                   examples = @ExampleObject(value = "{\"result\": \"Password changed successfully\"}")
+                           )
+                   ),
+                   @ApiResponse(
+                           responseCode = "400",
+                           description = "Something goes wrong",
+                           content = @Content(
+                                   examples = {
+                                           @ExampleObject(name = "Error email",
+                                                   value = "{\"name\": \"Password changed successfully\"}"),
+                                           @ExampleObject(
+                                                   name = "Error password",
+                                                   value = "{\"oldPassword\": \"Invalid old password\"}",
+                                                   description = "The password is incorrect")
+                                   }
+                           )
+                   ),
+                   @ApiResponse(
+                           responseCode = "403",
+                           description = "Unauthorized | Invalid Token",
+                           content = @Content
+                   )
+           }
+   )
     @PostMapping("/secure/change-password")
     public ResponseEntity<Map<String, String>> changePassword(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
@@ -207,10 +474,54 @@ public class AuthController {
         return ResponseEntity.badRequest().body(response);
     }
 
+   @Operation(
+           summary = "Update the email of account",
+           description = "According to the id of account, update the email and send an email to verify it if the password is correct",
+           parameters = @Parameter(
+                   name = HttpHeaders.ACCEPT_LANGUAGE,
+                   in = ParameterIn.HEADER,
+                   required = true,
+                   description = "header for get the message according to the language",
+                   content = @Content(
+                           schema = @Schema(type = "string"),
+                           examples = @ExampleObject( value = "en")
+                   )
+           ),
+           responses = {
+                   @ApiResponse(
+                           responseCode = "200",
+                           description = "Success",
+                           content = @Content(
+                                   examples = @ExampleObject(value = "{\"result\": \"Email changed successfully\"}")
+                           )
+                   ),
+                   @ApiResponse(
+                           responseCode = "400",
+                           description = "Something goes wrong",
+                           content = @Content(
+                                   examples = {
+                                           @ExampleObject(name = "Error email",
+                                                   value = "{\"email\": \"There is an account with that email address\"}"),
+                                           @ExampleObject(
+                                                   name = "Error password",
+                                                   value = "{\"newPassword\": \"Invalid password\"}",
+                                                   description = "The password is incorrect")
+                                   }
+                           )
+                   ),
+                   @ApiResponse(
+                           responseCode = "403",
+                           description = "Unauthorized | Invalid Token",
+                           content = @Content
+                   )
+           }
+   )
     @PostMapping("/secure/change-email")
     public ResponseEntity<Map<String, String>> changeEmail(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
-            @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description =
+                    "the object to get the id, the email and the password")
+                     @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException, NotAllowedException {
         Map<String, String> response = new HashMap<>();
         String result = accountService.changeEmail(passwordDto, locale);
 
@@ -230,6 +541,11 @@ public class AuthController {
         return ResponseEntity.badRequest().body(response);
     }
 
+   /**
+    * Send email with the necessary values to verify the account
+    * @param token the token to verify the account
+    * @param account the value to extract the email
+    */
     private void resendVerificationTokenEmail(String token, AccountEntity account) {
         String url = configProperties.client() + "/verify-registration?token=" + token +
                 "&traduction=TOKEN_REGISTER&email=" + account.getEmail();
@@ -240,6 +556,11 @@ public class AuthController {
                 "Click the link to verify your account: " + url);
     }
 
+   /**
+    * Send email with the necessary values to reset the password
+    * @param token the token reset the password
+    * @param accountEntity the value to extract the id and email
+    */
     private void passwordResetTokenEmail(String token, AccountEntity accountEntity) {
         String url = configProperties.client() + "/save-password?token=" + token
                 + "&id=" + accountEntity.getIdAccount();
@@ -250,6 +571,11 @@ public class AuthController {
                 "Click the link to reset your password: " + url);
     }
 
+   /**
+    * Send email with the necessary values to verify the email
+    * @param token the token to verify the email
+    * @param accountEntity the value to extract the id and email
+    */
     private void emailChangeTokenEmail(String token, AccountEntity accountEntity) {
         String url = configProperties.client() + "/verify-email?token=" + token
                 + "&traduction=TOKEN_EMAIL&id=" + accountEntity.getIdAccount();

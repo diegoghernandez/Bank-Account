@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Token service API
+ */
 @Service
 public class TokenService {
 
@@ -20,6 +23,19 @@ public class TokenService {
    @Autowired
    private TokenRepository tokenRepository;
 
+   /**
+    * @param token the token of the desire account
+    * @return an {@code Optional} of {@link AccountEntity}
+    */
+   public Optional<AccountEntity> getAccountByToken(String token) {
+      return Optional.ofNullable(tokenRepository.getByToken(token).getAccountEntity());
+   }
+
+   /**
+    * Verify if the token is valid, and it is, active the account and give it the {@code USER} roles
+    * @param token the token to verify
+    * @return one of the following texts: invalid, expired, valid
+    */
    public String validateVerification(String token) {
       TokenEntity tokenEntity = tokenRepository.getByToken(token);
 
@@ -50,6 +66,11 @@ public class TokenService {
       return "valid";
    }
 
+   /**
+    * Update the old token to a new one and return it
+    * @param oldToken the old token to update
+    * @return the new token
+    */
    public TokenEntity generateNewToken(String oldToken) {
       Calendar calendar = Calendar.getInstance();
       calendar.setTimeInMillis(new Date().getTime());
@@ -59,10 +80,19 @@ public class TokenService {
               UUID.randomUUID().toString(), new Date(calendar.getTime().getTime()), oldToken);
    }
 
+   /**
+    * Delete the token by token
+    * @param token the token to be deleted
+    */
    public void deleteToken(String token) {
       tokenRepository.deleteByToken(token);
    }
 
+   /**
+    * Check if the token is valid
+    * @param token the token to verify
+    * @return one of the following texts: invalid, expired, valid
+    */
    public String validateToken(String token) {
       TokenEntity tokenEntity = tokenRepository.getByToken(token);
 
@@ -77,9 +107,5 @@ public class TokenService {
       }
 
       return "valid";
-   }
-
-   public Optional<AccountEntity> getAccountByToken(String token) {
-      return Optional.ofNullable(tokenRepository.getByToken(token).getAccountEntity());
    }
 }

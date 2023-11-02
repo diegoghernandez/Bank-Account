@@ -9,6 +9,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Account is the entity to be used with everything related to the user
+ */
 @Entity
 @Getter
 @Builder

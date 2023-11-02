@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class in charge from create the User for security.
+ * <p>Extends {@link UserDetailsService}
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -37,23 +41,28 @@ public class CustomUserDetailsService implements UserDetailsService {
               .build();
    }
 
-   private String[] getAuthorities(String role) {
+   /*private String[] getAuthorities(String role) {
       if ("ADMIN".equals(role) || "USER".equals(role)) {
          return new String[]{"random_user"};
       }
 
       return new String[]{};
-   }
+   }*/
 
+   /**
+    * Get all roles from the user to transform them in {@link GrantedAuthority} and return them.
+    * @param roles the roles to transform in authorities
+    * @return a {@code List} of the {@link GrantedAuthority} from the user
+    */
    private List<GrantedAuthority> grantedAuthorities(String[] roles) {
       List<GrantedAuthority> authorities = new ArrayList<>(roles.length);
 
       for (String role : roles) {
          authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
-         for (String authority : this.getAuthorities(role)) {
+         /*for (String authority : this.getAuthorities(role)) {
             authorities.add(new SimpleGrantedAuthority(authority));
-         }
+         }*/
       }
 
       return authorities;

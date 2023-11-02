@@ -10,6 +10,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Automation repository implementation API.
+ * <p>Implements {@link AutomationRepository}
+ */
 @Repository
 public class AutomationRepositoryImpl implements AutomationRepository {
 

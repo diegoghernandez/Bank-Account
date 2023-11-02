@@ -9,12 +9,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+/**
+ * Config class in charge of the cors configuration
+ */
 @Configuration
 public class CorsConfig {
 
    @Autowired
    private EnvConfigProperties envConfigProperties;
 
+   /**
+    * Set what cors will allow
+    * @return the cors configuration
+    */
    @Bean
    CorsConfigurationSource corsConfigurationSource() {
       CorsConfiguration corsConfiguration = new CorsConfiguration();

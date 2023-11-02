@@ -1,6 +1,5 @@
 package com.bankaccount.back.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +10,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Automation is the entity in charge of everything related to automatized transactions
+ */
 @Entity
 @Getter
 @Builder

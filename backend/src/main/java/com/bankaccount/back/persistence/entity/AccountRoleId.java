@@ -9,6 +9,9 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Account role id is the entity to give the id to {@link AccountRoleEntity}
+ */
 @Getter
 @Setter
 @NoArgsConstructor

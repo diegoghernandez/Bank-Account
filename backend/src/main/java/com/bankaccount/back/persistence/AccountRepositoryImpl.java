@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+/**
+ * Account repository implementation API.
+ * <p>Implements {@link AccountRepository}
+ */
 @Repository
 public class AccountRepositoryImpl implements AccountRepository {
 

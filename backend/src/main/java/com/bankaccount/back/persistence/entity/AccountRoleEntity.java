@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Account role is the entity to give roles to {@link AccountEntity}
+ */
 @Entity
 @Getter
 @Builder
