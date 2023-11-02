@@ -144,7 +144,7 @@ public class AccountServiceTest {
       Exception exception = assertThrows(Exception.class, () ->
               accountService.changeName("new", new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
 
-      String expectedMessage = "Account not found";
+      String expectedMessage = "Account is not found";
       String actualMessage = exception.getMessage();
 
       assertAll(
@@ -171,7 +171,7 @@ public class AccountServiceTest {
       Exception exception = assertThrows(Exception.class, () ->
               accountService.changePassword(new PasswordDto(3, "te", "s", "t"), Locale.getDefault()));
 
-      String expectedMessage = "Account not found";
+      String expectedMessage = "Account is not found";
       String actualMessage = exception.getMessage();
 
       assertAll(
@@ -207,7 +207,7 @@ public class AccountServiceTest {
               () -> assertThat(reject).isEqualTo("Invalid password"),
               () -> Mockito.verify(accountRepository, Mockito.times(1)).updateStatus(false, 1),
               () -> Mockito.verify(accountRepository, Mockito.times(1)).updateEmail("newTest@test.com", 1),
-              () -> assertTrue(accountException.getMessage().contentEquals("Account not found")),
+              () -> assertTrue(accountException.getMessage().contentEquals("Account is not found")),
               () -> assertTrue(emailException.getMessage().contentEquals("There is an account with that email address"))
       );
    }

@@ -92,7 +92,7 @@ export const resetPassword = (email) => {
 
 export const savePassword = async (token, passwordDto) => {
    const response = await fetch(`${API}/save-password?token=${token}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
          "Content-Type": "application/json",
          "Accept-Language": LANGUAGE
@@ -129,7 +129,7 @@ export const verifyEmail = async (token) => {
 
 export const changeName = async (newName, password) => {
    const response = await fetch(`${API}/secure/change-name?name=${newName}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
@@ -155,7 +155,7 @@ export const changeName = async (newName, password) => {
 
 export const changePassword = async (oldPassword, newPassword) => {
    const response = await fetch(`${API}/secure/change-password`, {
-      method: "POST",
+      method: "PUT",
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
@@ -181,7 +181,7 @@ export const changePassword = async (oldPassword, newPassword) => {
 
 export const changeEmail = async (newEmail, password) => {
    const response = await fetch(`${API}/secure/change-email`, {
-      method: "POST",
+      method: "PUT",
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,

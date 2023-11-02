@@ -41,7 +41,7 @@ export const authHandler = [
       return res(ctx.status(400), ctx.text("expired"));
    }),
 
-   rest.post(`${API}/save-password`, async (req, res, ctx) => {
+   rest.put(`${API}/save-password`, async (req, res, ctx) => {
       const token = req.url.searchParams.get("token");
 
       if (token == "er143ge8-9b58-41ae-8723-29d7ff675a30") {
@@ -63,7 +63,7 @@ export const authHandler = [
       return res(ctx.status(400), ctx.text("expired"));
    }),
 
-   rest.post(`${API}/secure/change-name`, async (req, res, ctx) => {
+   rest.put(`${API}/secure/change-name`, async (req, res, ctx) => {
       const body = await req.json();
 
       if (body.newPassword === "1234") {
@@ -73,7 +73,7 @@ export const authHandler = [
       return res(ctx.status(400), ctx.json({ newPassword: "Invalid password"}));
    }),
 
-   rest.post(`${API}/secure/change-password`, async (req, res, ctx) => {
+   rest.put(`${API}/secure/change-password`, async (req, res, ctx) => {
       const body = await req.json();
 
       if (body.oldPassword === "oldPass") {
@@ -83,7 +83,7 @@ export const authHandler = [
       return res(ctx.status(400), ctx.json({ oldPassword: "Invalid old password"}));
    }),
 
-   rest.post(`${API}/secure/change-email`, async (req, res, ctx) => {
+   rest.put(`${API}/secure/change-email`, async (req, res, ctx) => {
       const body = await req.json();
 
       if (body.email === "test@names.com") {

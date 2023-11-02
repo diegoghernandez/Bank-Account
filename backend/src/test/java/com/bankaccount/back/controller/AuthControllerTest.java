@@ -36,8 +36,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("dev")
@@ -263,7 +263,7 @@ public class AuthControllerTest {
               .thenReturn(Optional.of(account));
 
       assertAll(
-              () -> mockMvc.perform(post("/auth/save-password")
+              () -> mockMvc.perform(put("/auth/save-password")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("token", "er143ge8-9b58-41ae-8723-29d7ff675a30")
                               .contentType(MediaType.APPLICATION_JSON)
@@ -282,7 +282,7 @@ public class AuthControllerTest {
               () -> Mockito.verify(accountService, Mockito.times(1))
                       .updatePassword("4321", 1),
 
-              () -> mockMvc.perform(post("/auth/save-password")
+              () -> mockMvc.perform(put("/auth/save-password")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("token", "53535")
                               .contentType(MediaType.APPLICATION_JSON)
@@ -301,7 +301,7 @@ public class AuthControllerTest {
               () -> Mockito.verify(accountService, Mockito.times(0))
                       .updatePassword("535534", 32),
 
-              () -> mockMvc.perform(post("/auth/save-password")
+              () -> mockMvc.perform(put("/auth/save-password")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("token", "nu3v3-9b58-41ae-8723-29d7ff675a30")
                               .contentType(MediaType.APPLICATION_JSON)
@@ -401,7 +401,7 @@ public class AuthControllerTest {
               .thenReturn("Invalid password");
 
       assertAll(
-              () -> mockMvc.perform(post("/auth/secure/change-name")
+              () -> mockMvc.perform(put("/auth/secure/change-name")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("name", "")
                               .contentType(MediaType.APPLICATION_JSON)
@@ -411,7 +411,7 @@ public class AuthControllerTest {
                       .andExpect(status().isBadRequest())
                       .andExpect(jsonPath("$.name").value("Name must not be empty")),
 
-              () -> mockMvc.perform(post("/auth/secure/change-name")
+              () -> mockMvc.perform(put("/auth/secure/change-name")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("name", "newName")
                               .contentType(MediaType.APPLICATION_JSON)
@@ -421,7 +421,7 @@ public class AuthControllerTest {
                       .andExpect(status().isOk())
                       .andExpect(jsonPath("$.result").value("Name changed successfully")),
 
-              () -> mockMvc.perform(post("/auth/secure/change-name")
+              () -> mockMvc.perform(put("/auth/secure/change-name")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .param("name", "newError")
                               .contentType(MediaType.APPLICATION_JSON)
@@ -469,7 +469,7 @@ public class AuthControllerTest {
               .thenReturn("Invalid old password");
 
       assertAll(
-              () -> mockMvc.perform(post("/auth/secure/change-password")
+              () -> mockMvc.perform(put("/auth/secure/change-password")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .contentType(MediaType.APPLICATION_JSON)
                               .content(objectMapper.writeValueAsString(password))
@@ -478,7 +478,7 @@ public class AuthControllerTest {
                       .andExpect(status().isOk())
                       .andExpect(jsonPath("$.result").value("Password changed successfully")),
 
-              () -> mockMvc.perform(post("/auth/secure/change-password")
+              () -> mockMvc.perform(put("/auth/secure/change-password")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .contentType(MediaType.APPLICATION_JSON)
                               .content(objectMapper.writeValueAsString(passwordError))
@@ -525,7 +525,7 @@ public class AuthControllerTest {
               .thenReturn("Invalid password");
 
       assertAll(
-              () -> mockMvc.perform(post("/auth/secure/change-email")
+              () -> mockMvc.perform(put("/auth/secure/change-email")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .contentType(MediaType.APPLICATION_JSON)
                               .content(objectMapper.writeValueAsString(password))
@@ -534,7 +534,7 @@ public class AuthControllerTest {
                       .andExpect(status().isOk())
                       .andExpect(jsonPath("$.result").value("Email changed successfully")),
 
-              () -> mockMvc.perform(post("/auth/secure/change-email")
+              () -> mockMvc.perform(put("/auth/secure/change-email")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .contentType(MediaType.APPLICATION_JSON)
                               .content(objectMapper.writeValueAsString(passwordError))

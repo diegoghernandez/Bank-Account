@@ -155,7 +155,7 @@ public class AutomationServiceTest {
       Exception exception = assertThrows(NotFoundException.class, () ->
               automationService.saveAutomation(automationError, Locale.getDefault()));
 
-      String expectedMessage = "Account not found";
+      String expectedMessage = "Account is not found";
       String actualMessage = exception.getMessage();
 
       assertAll(
@@ -194,8 +194,8 @@ public class AutomationServiceTest {
 
       assertAll(
               () -> Mockito.verify(automationRepository, Mockito.times(1)).saveAutomation(Mockito.any(AutomationEntity.class)),
-              () -> assertEquals(exceptionAutomation.getMessage(), "Automation not found"),
-              () -> assertEquals(exceptionAccount.getMessage(), "Account not found")
+              () -> assertEquals(exceptionAutomation.getMessage(), "Automation is not found"),
+              () -> assertEquals(exceptionAccount.getMessage(), "Account is not found")
       );
    }
 
@@ -211,7 +211,7 @@ public class AutomationServiceTest {
 
       assertAll(
               () -> Mockito.verify(automationRepository, Mockito.times(1)).deleteById(Mockito.isA(Long.class)),
-              () -> assertEquals(exceptionAutomation.getMessage(), "Automation not found")
+              () -> assertEquals(exceptionAutomation.getMessage(), "Automation is not found")
       );
    }
 }

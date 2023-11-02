@@ -290,7 +290,7 @@ public class AuthController {
                     )
             }
     )
-    @PostMapping("/save-password")
+    @PutMapping("/save-password")
     private ResponseEntity<String> savePassword(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
             @Parameter(description = "the token to check") @RequestParam String token,
@@ -392,7 +392,7 @@ public class AuthController {
                     )
             }
     )
-    @PostMapping("/secure/change-name")
+    @PutMapping("/secure/change-name")
     public ResponseEntity<Map<String, String>> changeName(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
             @Parameter(description = "the name to update") @RequestParam String name,
@@ -458,7 +458,7 @@ public class AuthController {
                    )
            }
    )
-    @PostMapping("/secure/change-password")
+    @PutMapping("/secure/change-password")
     public ResponseEntity<Map<String, String>> changePassword(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
             @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
@@ -516,7 +516,7 @@ public class AuthController {
                    )
            }
    )
-    @PostMapping("/secure/change-email")
+    @PutMapping("/secure/change-email")
     public ResponseEntity<Map<String, String>> changeEmail(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description =

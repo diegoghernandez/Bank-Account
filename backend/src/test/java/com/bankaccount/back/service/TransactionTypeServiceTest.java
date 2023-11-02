@@ -95,10 +95,10 @@ public class TransactionTypeServiceTest {
       Exception exceptionTransfer = assertThrows(NotFoundException.class, () ->
               transactionTypeService.saveTransaction(transactionTransferError, false, Locale.getDefault()));
 
-      String expectedAccountMessage = "Account not found";
+      String expectedAccountMessage = "Account is not found";
       String actualAccountMessage = exceptionAccount.getMessage();
 
-      String expectedTransferMessage = "Account to transfer not found";
+      String expectedTransferMessage = "Account to transfer is not found";
       String actualTransferMessage = exceptionTransfer.getMessage();
 
       assertAll(
@@ -119,7 +119,7 @@ public class TransactionTypeServiceTest {
       Exception exception = assertThrows(Exception.class, () ->
               transactionTypeService.saveTransaction(transactionError, false, Locale.getDefault()));
 
-      String expectedMessage = "Not enough balance";
+      String expectedMessage = "Not enough balances";
       String actualMessage = exception.getMessage();
 
       assertTrue(actualMessage.contentEquals(expectedMessage));

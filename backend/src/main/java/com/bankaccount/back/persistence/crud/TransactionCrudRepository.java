@@ -52,7 +52,7 @@ public interface TransactionCrudRepository extends JpaRepository<TransactionEnti
     */
    @Modifying
    @Transactional
-   @Query("UPDATE TransactionEntity AS tran SET tran.receiverName = :name WHERE tran.receiverName = :id")
+   @Query("UPDATE TransactionEntity AS tran SET tran.receiverName = :name WHERE tran.idTransferAccount = :id")
    void updateNameByIdTransferAccount(int id, String name);
 
    /**
