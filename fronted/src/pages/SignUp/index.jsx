@@ -10,21 +10,34 @@ import { Bar } from "../../components/Loader/Bar";
 import { register } from "../_services/auth";
 import { Modal } from "../../components/Modal";
 import { Link, useNavigate } from "react-router-dom";
+import { validInputElement } from "../../utils/validInputElement";
 
+/**
+ * Page containing the logic to register a new user
+ * @returns 
+ */
 export const SignUp = () => {
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [isLoading, setIsLoading] = useState(false);
+   /** @type {[object, import("react").Dispatch<import("react").SetStateAction<object>>]} */
    const [error, setError] = useState("");
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [successMessage, setSuccessMessage] = useState("");
    const navigate = useNavigate();
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
    const t = getTraduction(Traduction.SIGN_UP_PAGE);
 
+   /** @param {import("react").FormEvent<HTMLFormElement>} event */
    const handleSubmit = (event) => {
       event.preventDefault();
-      const name = event?.target?.elements[0]?.value;
-      const email = event?.target?.elements[1]?.value;
-      const password = event?.target?.elements[2]?.value;
-      const confirmation = event?.target?.elements[3]?.value;
+
+      const { elements } = event.currentTarget;
+      const inputArray = validInputElement([elements[0], elements[1], elements[2], elements[3]]);
+      const name = inputArray?.[0].value;
+      const email = inputArray?.[1].value;
+      const password = inputArray?.[2].value;
+      const confirmation = inputArray?.[3].value;
 
       setIsLoading(true);
 

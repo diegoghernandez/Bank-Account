@@ -1,7 +1,12 @@
 import { useContext } from "react";
 import { ThemeContext } from "../context/theme";
 
+/**
+ * Change the tailwind class dark to change the theme to use
+ * @returns
+ */
 export const useTheme = () => {
+   /** @type {{ isDark: boolean, setIsDark: import("react").Dispatch<import("react").SetStateAction<boolean>> }} */
    const { isDark, setIsDark } = useContext(ThemeContext);
 
    if (isDark) {

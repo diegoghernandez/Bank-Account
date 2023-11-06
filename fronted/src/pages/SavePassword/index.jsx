@@ -10,20 +10,33 @@ import { Modal } from "../../components/Modal";
 import { useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SEO } from "../../utils/SEO";
+import { validInputElement } from "../../utils/validInputElement";
 
+/**
+ * Page containing the logic to reset the password
+ * @returns 
+ */
 export const SavePassword = () => {
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [isLoading, setIsLoading] = useState(false);
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [error, setError] = useState("");
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [message, setMessage] = useState("");
    const [searchParams] = useSearchParams();
    const navigate = useNavigate();
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
    const t = getTraduction(Traduction.SAVE_PASSWORD);
 
+   /** @param {import("react").FormEvent<HTMLFormElement>} event */
    const handleSubmit = (event) => {
       event.preventDefault();
-      const password = event?.target?.elements[0]?.value;
-      const confirmation = event?.target?.elements[1]?.value;
+
+      const { elements } = event.currentTarget;
+      const inputArray = validInputElement([elements[0], elements[1]]);
+      const password = inputArray?.[0].value;
+      const confirmation = inputArray?.[1].value;
 
       if (password === confirmation) {
          setIsLoading(true);
@@ -62,14 +75,14 @@ export const SavePassword = () => {
                   label={t.labels[0]}
                   type={TextFieldTypes.PASSWORD}
                   supportiveText={error}
-                  isError={error}
+                  isError={Boolean(error)}
                   isDisable={isLoading}
                   />
                <TextField
                   label={t.labels[1]}
                   type={TextFieldTypes.PASSWORD}
                   supportiveText={error}
-                  isError={error}
+                  isError={Boolean(error)}
                   isDisable={isLoading}
                   />
                <Filled label={t.accept} isDisable={isLoading} />

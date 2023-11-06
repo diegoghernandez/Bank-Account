@@ -1,3 +1,9 @@
+/**
+ * JSX icon to represent something with automation
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @returns 
+ */
 export const AutomationIcon = ({ fillClass }) => (
    <svg 
       className={fillClass} 

@@ -1,3 +1,9 @@
+/**
+ * JSX icon to indicate that something is not displayed
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @returns 
+ */
 export const ArrowDownIcon = ({ fillClass }) => (
    <svg 
       className={fillClass} 

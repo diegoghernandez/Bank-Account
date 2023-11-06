@@ -9,7 +9,14 @@ const TOKEN = localStorage.getItem("token");
 const { idAccount, email } = JSON.parse(localStorage.getItem("account")) ?? "";
 const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
 
-
+/**
+ * Send the credentials to be authenticated, if resolve,
+ * otherwise return a Status Error with the message
+ * @param {string} email the email to log in
+ * @param {string} password the password to log in
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const login = async (email, password) => {
    const { login } = getTraduction(Traduction.LOGIN);
 
@@ -28,6 +35,13 @@ export const login = async (email, password) => {
    }
 };
 
+/**
+ * Send an accountDto object to be save, and return a message, if resolve,
+ * otherwise return a Status Error with a json message
+ * @param {object} accountData the accountDto to be save
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const register = async (accountData) => {
    const response = await fetch(`${API}/register`, {
       method: "POST",
@@ -45,6 +59,14 @@ export const register = async (accountData) => {
    }
 };
 
+/**
+ * Send a token to be updated, and send the respective type email with the new token, if resolve,
+ * otherwise return a Status Error with the message
+ * @param {string} token the token to be updated
+ * @param {string} type the token type to be resend
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const resendToken = async (token, type) => {
    const response = await fetch(`${API}/resend-token?token=${token}&type=${type}`, {
       method: "GET",
@@ -63,6 +85,13 @@ export const resendToken = async (token, type) => {
    }
 };
 
+/**
+ * Send a token to verify the account, and return the success message if resolve,
+ * otherwise return a Status Error with the message
+ * @param {string} token the token to be verified
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const verifyRegistration = async (token) => {
    const response = await fetch(`${API}/verify-registration?token=${token}`, {
       method: "GET",
@@ -81,6 +110,10 @@ export const verifyRegistration = async (token) => {
    }
 };
 
+/**
+ * Send the email where the token will send
+ * @param {string} email the email to be send
+ */
 export const resetPassword = (email) => {
    fetch(`${API}/reset-password/${email}`, {
       method: "GET",
@@ -90,6 +123,14 @@ export const resetPassword = (email) => {
    });
 };
 
+/**
+ * Send a passwordDto to create a new password, and return the success message if resolve,
+ * otherwise return a Status Error with the message
+ * @param {string} token the token to be verified
+ * @param {object} passwordDto the object to send the idAccount, oldPassword, newPassword
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const savePassword = async (token, passwordDto) => {
    const response = await fetch(`${API}/save-password?token=${token}`, {
       method: "PUT",
@@ -109,6 +150,13 @@ export const savePassword = async (token, passwordDto) => {
    }
 };
 
+/**
+ * Send a token to be verify the email, and return the success message if resolve,
+ * otherwise return a Status Error with the message
+ * @param {string} token the token to be verified
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const verifyEmail = async (token) => {
    const response = await fetch(`${API}/verify-email?token=${token}`, {
       method: "GET",
@@ -127,6 +175,14 @@ export const verifyEmail = async (token) => {
    }
 };
 
+/**
+ * Send the name to change, and return the success message if the password is correct,
+ * otherwise return a Status Error a json message
+ * @param {string} newName the desire name
+ * @param {string} password the account password
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const changeName = async (newName, password) => {
    const response = await fetch(`${API}/secure/change-name?name=${newName}`, {
       method: "PUT",
@@ -153,6 +209,14 @@ export const changeName = async (newName, password) => {
    }
 };
 
+/**
+ * Send the password to change, and return the success message if the password is correct,
+ * otherwise return a Status Error a json message
+ * @param {string} oldPassword the past password
+ * @param {string} newPassword the desire password
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const changePassword = async (oldPassword, newPassword) => {
    const response = await fetch(`${API}/secure/change-password`, {
       method: "PUT",
@@ -179,6 +243,14 @@ export const changePassword = async (oldPassword, newPassword) => {
    }
 };
 
+/**
+ * Send the email to change, and return the success message if the password is correct,
+ * otherwise return a Status Error a json message
+ * @param {string} newEmail the desire email
+ * @param {string} password the account password
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const changeEmail = async (newEmail, password) => {
    const response = await fetch(`${API}/secure/change-email`, {
       method: "PUT",

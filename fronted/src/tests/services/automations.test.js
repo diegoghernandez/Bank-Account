@@ -10,14 +10,14 @@ describe("Automations tests", () => {
       });
 
       it("Should throw an StatusError if there is no element", async () => {         
-         await expect(getAutomations(21))
+         await expect(getAutomations(21, "juan@names.com"))
             .rejects.toThrow(StatusError);
-         await expect(getAutomations(21))
+         await expect(getAutomations(21, "juan@names.com"))
             .rejects.toThrow("No automations found");
       });
 
       it("Should give the right content", async () => {
-         const content = await getAutomations(238589851);
+         const content = await getAutomations(238589851, "juan@names.com");
          expect(content).toStrictEqual(automations);
       });
    });

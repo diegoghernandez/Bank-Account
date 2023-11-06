@@ -1,3 +1,9 @@
+/**
+ * JSX icon to represent something with transaction
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @returns
+ */
 export const TransactionsIcon = ({ fillClass }) => (
    <svg 
       className={fillClass}

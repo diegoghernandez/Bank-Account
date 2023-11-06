@@ -7,6 +7,11 @@ import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 import { Modal } from "../../components/Modal";
 
+/**
+ * Return the token function to execute, according to desire logic
+ * @param {string} type The desire logic using the wanted traduction
+ * @returns {{ verifyFunction: (token: string) => Promise<String>, resendType: string }}
+ */
 const logicForPage = (type) => {
    switch (type) {
       case "TOKEN_REGISTER":
@@ -26,9 +31,15 @@ const logicForPage = (type) => {
    }
 };
 
+/**
+ * Page containing the logic to verify tokens
+ * @returns
+ */
 export const Token = () => {
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [message, setMessage] = useState("");
    const [searchParams] = useSearchParams();
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
    const { verifyFunction, resendType } = logicForPage(searchParams.get("traduction"));
    const t = getTraduction(Traduction[searchParams.get("traduction")]);

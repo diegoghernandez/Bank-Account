@@ -57,7 +57,7 @@ describe("Auth tests", () => {
       });
 
       it("Should save the right content", async () => {
-         const content = await resendToken("nu3v3-9b58-41ae-8723-29d7ff675a30");
+         const content = await resendToken("nu3v3-9b58-41ae-8723-29d7ff675a30", "verification");
          expect(content).toStrictEqual("Verification Link Sent");
       });
    });

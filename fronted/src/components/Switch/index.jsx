@@ -1,8 +1,20 @@
 import { useState } from "react";
 
+/**
+ * Return the tailwind classes for the text depending on the state
+ * @param {boolean} isDisable The value to represent which classes get for the elements
+ * @returns {string}
+ */
 const getTextColor = (isDisable) => (isDisable) ? 
    "text-onSurface/38 dark:text-onSurface-dark/38" : "text-onSurface dark:text-onSurface-dark";
 
+   /**
+    * Return an array with tailwind classes for the following elements: track and thumb element
+    * @param {object} requirement 
+    * @param {boolean} requirement.isDisable The value to know if is disable
+    * @param {boolean} requirement.checked The value to know if is checked
+    * @returns 
+    */
 const getStyles = (requirement) => {
    if (!requirement.isDisable) {
       if (requirement.checked) {
@@ -21,6 +33,15 @@ const getStyles = (requirement) => {
    }
 };
 
+/**
+ * Component to represent simple boolean values
+ * @param {object} props
+ * @param {string} props.label The text to be displayed by the component
+ * @param {boolean} props.isDisable The value to use the disable styles
+ * @param {boolean} props.checked The initial value to represent for the check input and styles
+ * @param {(value: boolean) => void} props.set
+ * @returns 
+ */
 export const Switch = ({ 
    label="",
    isDisable=false,

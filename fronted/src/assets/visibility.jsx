@@ -1,7 +1,14 @@
 import { InputTypes } from "../constants/InputType";
 
+/**
+ * JSX icon to represent the visibility of password input
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @param {() => void} props.handleClick function to be executed when is clicked on it
+ * @param {string} props.show string containing which element will be return
+ * @returns
+ */
 export const VisibilityIcon = ({ fillClass, handleClick, show }) => {
-
    return (
       <>
          {(show === InputTypes.PASSWORD.description) && 

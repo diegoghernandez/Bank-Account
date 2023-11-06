@@ -2,9 +2,19 @@ import { StatusError } from "../../errors/StatusError";
 import { getAccountData } from "./account";
 
 const API = import.meta.env.VITE_API_URL + "/automations";
+/** @type {string} */
 const TOKEN = localStorage.getItem("token");
+/** @type {string} */
 const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
 
+/**
+ * Return all automation that the user has, if resolve,
+ * otherwise return a Status Error with a json message
+ * @param {number} id the id of account to get the automation list
+ * @param {string} email the email to get the account data
+ * @returns {Promise<Array<object>>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const getAutomations = async (id, email) => {
    const response = await fetch(`${API}/account?id=${id}`, {
       method: "GET",
@@ -22,6 +32,13 @@ export const getAutomations = async (id, email) => {
    }
 };
 
+/**
+ * Send an automationDto object to be save, and return a message if resolve,
+ * otherwise return a Status Error with a json message
+ * @param {object} automation the automationDto to be save
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const saveAutomation = async (automation) => {
    const response = await fetch(`${API}/save`, {
       method: "POST",
@@ -40,6 +57,13 @@ export const saveAutomation = async (automation) => {
    }
 };
 
+/**
+ * Send an automation object to be update, and return a message if resolve,
+ * otherwise return a Status Error with a json message
+ * @param {object} automation the automation to be update
+ * @returns {Promise<String>} 
+ * return the success text if resolver, otherwise return a Status error
+ */
 export const updateAutomation = async (automation) => {
    const response = await fetch(`${API}/update`, {
       method: "PUT",
@@ -58,6 +82,13 @@ export const updateAutomation = async (automation) => {
    }
 };
 
+/**
+ * Send the id of the desire automation to be delete if resolve,
+ * otherwise return a Status Error with the error message
+ * @param {number} id the id of automation
+ * @returns {Promise<String>} 
+ * return the success text if resolve, otherwise return a Status error
+ */
 export const deleteAutomation = async (id) => {
    const response = await fetch(`${API}/delete?id=${id}`, {
       method: "DELETE",

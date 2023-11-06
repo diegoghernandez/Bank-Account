@@ -1,3 +1,9 @@
+/**
+ * JSX icon to indicate the intention to add something
+ * @param {object} props 
+ * @param {string} props.fillClass String containing all tailwind class
+ * @returns
+ */
 export const AddIcon = ({ fillClass }) => (
    <svg 
       className={fillClass} 

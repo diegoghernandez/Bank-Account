@@ -140,7 +140,7 @@ describe("Transactions tests", () => {
             "idTransferAccount": 432,
             "amount": 1400.00,
             "transactionType": "ONLINE_PAYMENT"
-         });
+         }, "juan@names.com");
          
          expect(content).toStrictEqual("Transaction made successfully");
       });

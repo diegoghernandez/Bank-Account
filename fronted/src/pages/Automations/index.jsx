@@ -12,43 +12,64 @@ import { Traduction } from "../../constants/Traduction";
 import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 
+/**
+ * Return a formatted text to show the period of time of automation from the hoursToNextExecution
+ * @param {Array<String>} textTime The text to represent each part of the period
+ * @param {number} hoursToNextExecution The value with the execution period
+ * @returns 
+ */
 const getTimePeriod = (textTime, hoursToNextExecution) => {
+   /** @type {number} */
    let hours = hoursToNextExecution;
-   let days = (hours / 24).toFixed();
-   let weeks = (days / 7 > 1) ? (days / 7).toFixed() : 0;
+   /** @type {number} */
+   let days = Number((hours / 24).toFixed());
+   /** @type {number} */
+   let weeks = (days / 7 > 1) ? Number((days / 7).toFixed()) : 0;
 
    hours = hours - (days * 24);
    days = days - (weeks * 7);
 
    let text = textTime[0];
 
-   if (weeks >= 1)  text = text.concat(weeks, ` ${textTime[1]}/`);
+   if (weeks >= 1)  text = text.concat(String(weeks), ` ${textTime[1]}/`);
    
-   if (days >= 1) text = text.concat(days, ` ${textTime[2]}/`);
+   if (days >= 1) text = text.concat(String(days), ` ${textTime[2]}/`);
    
-   if (hours >= 1)  text = text.concat(hours, ` ${textTime[3]}`);
+   if (hours >= 1)  text = text.concat(String(hours), ` ${textTime[3]}`);
 
    return text;
 };
 
+/**
+ * Page containing all automations in the account
+ * @returns 
+ */
 export const Automations = () => {
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [status, setStatus] = useState("");
+   /** @type {[Array<object>, import("react").Dispatch<import("react").SetStateAction<Array<object>>>]} */
    const [automations, setAutomations] = useState([]);
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [notFound, setNotFound] = useState(false); 
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [loading, setLoading] = useState(true);
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [text, setText] = useState("");
    const navigate = useNavigate();
    const t = getTraduction(Traduction.AUTOMATIONS_PAGE);
 
+   /** @type {import("react").MutableRefObject<HTMLInputElement>} */
    const typeReference = useRef();
+   /** @type {import("react").MutableRefObject<HTMLInputElement>} */
    const textReference = useRef();
 
+   /** @type {{ idAccount: number, email: string }} */
    const { idAccount, email } = JSON.parse(localStorage.getItem("account"));
 
    useEffect(() => {
       getAutomations(idAccount, email)
          .then((data) => {
-            setAutomations(data, ...automations);
+            setAutomations(data);
             setNotFound(false);
             setLoading(false);
          }).catch(() => {
@@ -62,6 +83,7 @@ export const Automations = () => {
       setStatus(typeReference.current?.value);
    };
 
+   /** @param {object} automation */
    const handleAutomation = (automation) => {
       navigate("/update-automation", { state: { automation } });
    };

@@ -13,21 +13,34 @@ import { SEO } from "../../utils/SEO";
 import { useAuth } from "../../hooks/useAuth";
 import { Outline } from "../../components/Buttons/Outline";
 import { Modal } from "../../components/Modal";
+import { validInputElement } from "../../utils/validInputElement";
 
+/**
+ * Page containing the logic to sign in
+ * @returns 
+ */
 export const SignIn = () => {
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [error, setError] = useState("");
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [isLoading, setIsLoading] = useState(false);
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [isReset, setIsReset] = useState(false);
    const { login } = useAuth();
    const navigate = useNavigate();
    const { state } = useLocation();
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
    const t = getTraduction(Traduction.SIGN_IN_PAGE);
 
+   /** @param {import("react").FormEvent<HTMLFormElement>} event */
    const handleSubmit = (event) => {
       event.preventDefault();
-      const email = event?.target?.elements[0]?.value;
-      const password = event?.target?.elements[1]?.value;
+
+      const { elements } = event.currentTarget;
+      const inputArray = validInputElement([elements[0], elements[1]]);
+      const email = inputArray?.[0].value;
+      const password = inputArray?.[1].value;
 
       
       if (!isReset) {
@@ -71,7 +84,7 @@ export const SignIn = () => {
                   type={TextFieldTypes.DEFAULT}
                   initialInputType={InputTypes.EMAIL}
                   supportiveText={error}
-                  isError={error}
+                  isError={Boolean(error)}
                   isDisable={isLoading}
                />
                {(!isReset) &&
@@ -79,7 +92,7 @@ export const SignIn = () => {
                      label={t.labels[1]}
                      type={TextFieldTypes.PASSWORD}
                      supportiveText={error}
-                     isError={error}
+                     isError={Boolean(error)}
                      isDisable={isLoading}
                   />
                }
@@ -93,7 +106,7 @@ export const SignIn = () => {
                      className="text-sm font-normal font-sans text-primary dark:text-primary-dark"
                      onClick={() => {
                         setIsReset(true);
-                        setError(false);
+                        setError("");
                      }}
                   >
                      {t.links[0]}

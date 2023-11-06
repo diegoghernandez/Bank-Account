@@ -1,5 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * The component to show multiple elements to choose under the component
+ * @param {object} props
+ * @param {string} [props.menuClasses] The classes to adapt the menu styles
+ * @param {Array<string>} props.parameters The array with all parameters
+ * @param {import("react").Dispatch<import("react").SetStateAction<String>>} props.setValue
+ * The value to set the value of Text Field component
+ * @param {() => void} props.handleClickOutside The array with all parameters
+ * @returns 
+ */
 export const Menu = ({ 
    menuClasses = "w-full",
    parameters,
@@ -7,12 +17,18 @@ export const Menu = ({
    handleClickOutside
 
 }) => {
+   /** @type {[number, import("react").Dispatch<import("react").SetStateAction<Number>>]} */
    const [element, setElement] = useState(-1);
+   /** @type {import("react").MutableRefObject<HTMLUListElement>} */
    const listRef = useRef(null);
 
+   /** @type {HTMLCollectionOf<HTMLLIElement>} */
    const options = listRef?.current?.getElementsByTagName("li");
    options?.[element]?.focus();
 
+   /**
+    * Stop of show the menu element
+    */
    const exit = () => {
       listRef?.current?.blur();
       handleClickOutside();
@@ -23,6 +39,10 @@ export const Menu = ({
       exit();
    }
    
+   /**
+    * Handle two key to increase or decrease the element value
+    * @param {KeyboardEvent} e The key to handle
+    */
    const handleKeys = (e) => {
       if (e.key == "ArrowDown") {
          setElement((prev) => prev + 1);

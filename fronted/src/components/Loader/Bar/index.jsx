@@ -2,6 +2,10 @@ import { Traduction } from "../../../constants/Traduction";
 import { getTraduction } from "../../../utils/getTraduction";
 import "./Bar.css";
 
+/**
+ * Load component in bar-shaped
+ * @returns 
+ */
 export const Bar = () => {
    const { title } = getTraduction(Traduction.LOADER);
    return (

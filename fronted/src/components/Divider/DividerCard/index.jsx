@@ -1,5 +1,16 @@
 import { AutomationIcon } from "../../../assets/automation";
 
+/**
+ * The component to represent the transaction values
+ * @param {object} props
+ * @param {string} [props.transferAccount="XXXXXX0"] The transfer account to show if exist
+ * @param {string} props.name Either the receiver name if there is transfer account or the account name
+ * @param {number} props.amount The transaction amount
+ * @param {string} props.type The transaction type
+ * @param {string} props.time the transaction date
+ * @param {boolean} [props.automated=false] If the transaction has been made automatically
+ * @returns 
+ */
 export const DividerCard = ({
    transferAccount = "XXXXXX0",
    name,

@@ -2,6 +2,15 @@ import { AddIcon } from "../../../assets/add";
 
 const BASE_BUTTON_CLASSES = "flex flex-row justify-center items-center cursor-pointer w-fit h-14 rounded-2xl shadow md:w-14 md:shadow-none md:hover:shadow";
 
+/**
+ * ```text
+ * Floating Action Button (FAB) to be used when you want to do an action to do something.
+ * Have two styles depending on the viewport 
+ * ```
+ * @param {object} props
+ * @param {string} props.label The text to be displayed by the component
+ * @returns 
+ */
 export const Fab = ({ label }) => {
    return (
       <div className="flex flex-col gap-1 items-center">

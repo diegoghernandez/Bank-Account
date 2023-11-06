@@ -9,37 +9,58 @@ import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Return a formatted text to show missing time for execution of automation from the executionTime
+ * @param {Array<String>} textTime The text to represent each part of the period
+ * @param {string} executionTime The value with the time to the next execution
+ * @returns 
+ */
 const getTimePeriod = (textTime, executionTime) => {
+   /** @type {number} */
    const startTime = new Date().getTime();
+   /** @type {number} */
    const endTime = new Date(executionTime).getTime();
 
+   /** @type {number} */
    const hoursToNextExecution = Math.round((endTime - startTime) / (1000 * 60 * 60));
 
+   /** @type {number} */
    let hours = hoursToNextExecution;
+   /** @type {number} */
    let days = Math.floor(hours / 24);
+   /** @type {number} */
    let weeks = Math.floor(days / 7);
 
    hours = hoursToNextExecution % 24;
    if (weeks !== 0) days = days - (weeks * 7);
    
+   /** @type {string} */
    let text = textTime[0];
 
-   if (weeks >= 1)  text = text.concat(weeks, ` ${textTime[1]}/`);
+   if (weeks >= 1)  text = text.concat(String(weeks), ` ${textTime[1]}/`);
    
-   if (days >= 1) text = text.concat(days, ` ${textTime[2]}/`);
+   if (days >= 1) text = text.concat(String(days), ` ${textTime[2]}/`);
    
-   if (hours >= 1)  text = text.concat(hours, ` ${textTime[3]}`);
+   if (hours >= 1)  text = text.concat(String(hours), ` ${textTime[3]}`);
 
    return text;
 };
 
+/**
+ * Page containing all active automations and general values of account
+ * @returns 
+ */
 export const Home = () => {
+   /** @type {[Array<object>, import("react").Dispatch<import("react").SetStateAction<Array<object>>>]} */
    const [automations, setAutomations] = useState([]);
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [notFound, setNotFound] = useState(false); 
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [loading, setLoading] = useState(true);
    const navigate = useNavigate();
    const t = getTraduction(Traduction.HOME_PAGE);
 
+   /** @type {{ idAccount: number,  email: string, accountName: string, currentBalance: number}} */
    const account = JSON.parse(localStorage.getItem("account"));
 
    useEffect(() => {
@@ -87,7 +108,7 @@ export const Home = () => {
                            name={automation.name}
                            money={automation.amount}
                            period={getTimePeriod(t.period, automation.executionTime)}
-                           disable={automation.status}
+                           isDisable={automation.status}
                            handleFunction={() => handleAutomation(automation)}
                         />
                      );

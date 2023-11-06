@@ -17,9 +17,16 @@ import tokenRegisterPage from "../i18n/token-register-page.json";
 import tokenEmailPage from "../i18n/token-email-page.json";
 import savePasswordPage from "../i18n/save-password-page.json";
 
+/** @type {string} */
 const language = localStorage.getItem("language") ?? navigator.language;
 
+/**
+ * A function will return a traduction according to the Traduction constant and the language saved or prefer
+ * @param {Traduction} wantedTranslation The Traduction that you want to use
+ * @returns {object} The object with the traduction values 
+ */
 export const getTraduction = (wantedTranslation) => {
+   /** @type {string} */
    const availableLanguage = language.includes("es") ? "es" : "en";
    
    switch (wantedTranslation) {

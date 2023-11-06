@@ -11,16 +11,32 @@ import { SEO } from "../../utils/SEO";
 import { useTheme } from "../../hooks/useTheme";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 
+/**
+ * Page containing all account configuration
+ * @returns 
+ */
 export const Account = () => {
+   /** @type {[object, import("react").Dispatch<import("react").SetStateAction<object>>]} */
    const [error, setError] = useState({});
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [successMessage, setSuccessMessage] = useState("");
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [isLoading, setIsLoading] = useState(false);
    const { isDark, setIsDark } = useTheme();
    const navigate = useNavigate();
 
    const t = getTraduction(Traduction.ACCOUNT_PAGE);
+   /** @type {{ accountName: string | null, idAccount: string | null }} */
    const { accountName, idAccount } = JSON.parse(localStorage.getItem("account"));
-
+   
+   /**
+    * Execute the provided function after the timeout end with the given values, 
+    * and either resolve the function with a success message or show an error
+    * @param {any} firstParameter The first value of the function
+    * @param {any} secondParameter The second value of the function
+    * @param {(firstParameter: any, secondParameter: any) => Promise<String>} changeFunction 
+    * The function to execute with the given values
+    */
    const handleMethods = (firstParameter, secondParameter, changeFunction) => {
       setIsLoading(true);
 
@@ -49,15 +65,18 @@ export const Account = () => {
       globalThis.location.reload();
    };
 
-   const handleName =  (newName, password) => {
+   /** @param {string} newName @param {string} password */
+   const handleName = (newName, password) => {
       handleMethods(newName, password, changeName);
    };
 
-   const handlePassword =  (oldPassword, newPassword) => {
+   /** @param {string} oldPassword @param {string} newPassword */
+   const handlePassword = (oldPassword, newPassword) => {
       handleMethods(oldPassword, newPassword, changePassword);
    };
 
-   const handleEmail =  (newEmail, password) => {
+   /** @param {string} newEmail @param {string} password */
+   const handleEmail = (newEmail, password) => {
       handleMethods(newEmail, password, changeEmail);
    };
 

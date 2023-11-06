@@ -1,3 +1,9 @@
+/**
+ * JSX icon to represent something with the home page
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @returns
+ */
 export const SearchIcon = ({ fillClass }) => (
    <svg 
       className={fillClass} 

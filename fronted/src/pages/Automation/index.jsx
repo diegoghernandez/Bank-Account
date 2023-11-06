@@ -11,31 +11,43 @@ import { Traduction } from "../../constants/Traduction";
 import { Bar } from "../../components/Loader/Bar";
 import { SEO } from "../../utils/SEO";
 import { Modal } from "../../components/Modal";
+import { validInputElement } from "../../utils/validInputElement";
 
+/**
+ * Page containing the logic for create a new Automation
+ * @returns 
+ */
 export const Automation = () => {
+   /** @type {[object, import("react").Dispatch<import("react").SetStateAction<object>>]} */
    const [error, setError] = useState({});
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [isLoading, setIsLoading] = useState(false);
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [successMessage, setSuccessMessage] = useState("");
    const navigate = useNavigate();
    const t = getTraduction(Traduction.AUTOMATION_PAGE);
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
 
+   /** @param {import("react").FormEvent<HTMLFormElement>} event */
    const handleSubmit = (event) => {
       event.preventDefault();
 
+      /** @type {{ idAccount: number }} */
       const { idAccount } = JSON.parse(localStorage.getItem("account"));
-      const elements = event.target.elements;
+      const { elements } = event.currentTarget;
+      const inputArray = validInputElement([elements[0], elements[1], elements[2], elements[3]]);
 
-      const hours = Number(elements[3].value.split(" ")[1]);
+      const hours = Number(inputArray[3].value.split(" ")[1]);
 
       setIsLoading(true);
 
       setTimeout(() => {
          saveAutomation({
             idAccount,
-            "name": elements[0].value,
-            "amount": Number(elements[1].value),
-            "idTransferAccount": Number(elements[2].value),
+            "name": inputArray[0].value,
+            "amount": Number(inputArray[1].value),
+            "idTransferAccount": Number(inputArray[2].value),
             "hoursToNextExecution": hours,
          }).then((data) => {
             setSuccessMessage(data);

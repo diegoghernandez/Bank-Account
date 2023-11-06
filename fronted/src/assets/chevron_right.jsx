@@ -1,3 +1,9 @@
+/**
+ * JSX icon to indicate that something happen when you make a click
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @returns
+ */
 export const ChevronIcon = ({ fillClass }) => (
    <svg 
       className={fillClass} 

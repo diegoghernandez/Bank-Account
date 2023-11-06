@@ -1,3 +1,9 @@
+/**
+ * JSX icon to indicate that a modal will open when you make a click
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @returns
+ */
 export const ModalIcon = ({ fillClass }) => (
    <svg 
       className={fillClass}

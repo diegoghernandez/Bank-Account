@@ -1,6 +1,10 @@
 import { Traduction } from "../../../constants/Traduction";
 import { getTraduction } from "../../../utils/getTraduction";
 
+/**
+ * Load component in circle-shaped
+ * @returns 
+ */
 export const Spin = () => {
    const { title } = getTraduction(Traduction.LOADER);
    return (

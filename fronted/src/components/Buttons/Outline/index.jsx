@@ -1,6 +1,13 @@
 const BASE_BUTTON_CLASSES =
    "flex flex-col justify-center items-center h-10 rounded-3xl w-full";
 
+/**
+ * Secondary button
+ * @param {object} props
+ * @param {string} props.label The text to be displayed by the component
+ * @param {boolean} [props.isDisable] The value to disable the component
+ * @returns 
+ */
 export const Outline = ({ 
       label,
       isDisable

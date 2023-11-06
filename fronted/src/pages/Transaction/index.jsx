@@ -12,35 +12,46 @@ import { Traduction } from "../../constants/Traduction";
 import { Bar } from "../../components/Loader/Bar";
 import { SEO } from "../../utils/SEO";
 import { Modal } from "../../components/Modal";
+import { validInputElement } from "../../utils/validInputElement";
 
+/**
+ * Page containing the logic for create a new Transaction
+ * @returns 
+ */
 export const Transaction = () => {
+   /** @type {[object, import("react").Dispatch<import("react").SetStateAction<object>>]} */
    const [error, setError] = useState({});
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [isLoading, setIsLoading] = useState(false);
    const [isActive, setIsActive] = useState(false);
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [successMessage, setSuccessMessage] = useState("");
    const navigate = useNavigate();
    const t = getTraduction(Traduction.TRANSACTION_PAGE);
-   const typeReference = useRef();
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
+   /** @type {import("react").MutableRefObject<HTMLInputElement>} */
+   const typeReference = useRef();
 
+   /** @param {import("react").FormEvent<HTMLFormElement>} event */
    const handleSubmit = (event) => {
       event.preventDefault();
 
       const { idAccount, email } = JSON.parse(localStorage.getItem("account"));
-      const elements = event.target.elements;
+      const { elements } = event.currentTarget;
+      const inputArray = validInputElement([elements[0], elements[1], elements[2]]);
+      /** @type {string} */
       let transactionType;
       
       for (const type of Object.entries(TransactionType)) {
-         if (type[1].description.includes(elements[0].value)) {
+         if (type[1].description.includes(inputArray?.[0].value)) {
             transactionType = type[0];
          }
       }
 
-      console.log(error);
-
-      const typeValue = elements[0].value;
+      const typeValue = inputArray?.[0].value;
       if (!typeValue) setError({ type: t.errorMessages[0] });
-      else if (transactionType == "DEPOSIT" && elements[2].value) {
+      else if (transactionType == "DEPOSIT" && inputArray?.[2].value) {
          setError({ desc: t.errorMessages[2] });
          setIsActive(true);
       } else {
@@ -49,8 +60,8 @@ export const Transaction = () => {
          setTimeout(() => {
             saveTransaction({
                idAccount,
-               "idTransferAccount": Number(elements[2].value),
-               "amount": Number(elements[1].value),
+               "idTransferAccount": Number(inputArray?.[2].value),
+               "amount": Number(inputArray?.[1].value),
                "transactionType": transactionType
             }, email).then((data) => {
                setSuccessMessage(data);
@@ -69,7 +80,8 @@ export const Transaction = () => {
       }
    };
 
-   const handleChange = () => {
+   /** Check when the the transaction type change to activate or desactive the transfer account input */
+   const handleTransactionTypeChange = () => {
       const type = typeReference.current?.value;
       
       if ((type === TransactionType.WIRE_TRANSFER.description) || (type === TransactionType.ONLINE_PAYMENT.description)) {
@@ -101,7 +113,7 @@ export const Transaction = () => {
                   isDisable={isLoading}
                   menuParameters={Object.values(TransactionType).map((type) => type.description)}
                   menuClasses="w-[calc(100%-2rem)] md:max-w-[calc(75ch-3rem)]"
-                  functionToUpdate={handleChange}
+                  functionToUpdate={handleTransactionTypeChange}
                />
                <TextField
                   label={t.labels[1]}

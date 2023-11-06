@@ -1,3 +1,9 @@
+/**
+ * JSX icon to represent something with account
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @returns
+ */
 export const AccountIcon = ({ fillClass }) => (
    <svg 
       className={fillClass} 

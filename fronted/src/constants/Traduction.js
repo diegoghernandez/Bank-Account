@@ -1,3 +1,8 @@
+/**
+ * Enum to indicate the which traduction will be used
+ * @enum {Object} 
+ * @readonly
+ */
 export const Traduction = Object.freeze({
    MODAL: Symbol("modal"),
    NAVBAR: Symbol("navbar"),

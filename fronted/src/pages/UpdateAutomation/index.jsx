@@ -12,24 +12,31 @@ import { Outline } from "../../components/Buttons/Outline";
 import { Switch } from "../../components/Switch";
 import { deleteAutomation, updateAutomation } from "../_services/automation";
 import { Modal } from "../../components/Modal";
+import { validInputElement } from "../../utils/validInputElement";
 
 export const UpdateAutomation = () => {
+   /** @type {[object, import("react").Dispatch<import("react").SetStateAction<object>>]} */
    const [error, setError] = useState({});
+   /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [isLoading, setIsLoading] = useState(false);
+   /** @type {[string, import("react").Dispatch<import("react").SetStateAction<string>>]} */
    const [message, setMessage] = useState("");
    const navigate = useNavigate();
    const { state } = useLocation();
+   /** @type {{ automation: object }} */
    const { automation } = state;
    const t = getTraduction(Traduction.UPDATE_AUTOMATION_PAGE);
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
 
+   /** @param {import("react").FormEvent<HTMLFormElement>} event */
    const handleSubmit = (event) => {
       event.preventDefault();
 
       const { idAccount } = JSON.parse(localStorage.getItem("account"));
-      const elements = event.target.elements;
-
-      const hours = Number(elements[3].value.split(" ")[1]);
+      const { elements } = event.currentTarget;
+      const inputArray = validInputElement([elements[0], elements[1], elements[2], elements[3], elements[6]]);
+      const hours = Number(inputArray?.[3].value.split(" ")[1]);
 
       setIsLoading(true);
 
@@ -37,12 +44,12 @@ export const UpdateAutomation = () => {
          updateAutomation({
             "idAutomation": automation.idAutomation,
             idAccount,
-            "name": elements[0].value,
-            "amount": Number(elements[1].value),
-            "idTransferAccount": Number(elements[2].value),
+            "name": inputArray?.[0].value,
+            "amount": Number(inputArray?.[1].value),
+            "idTransferAccount": Number(inputArray?.[2].value),
             "hoursToNextExecution": hours,
             "executionTime": automation.executionTime,
-            "status": elements[6].checked
+            "status": inputArray?.[4].checked
          }).then((data) => {
             setMessage(data);
             dialogRef.current?.showModal?.();

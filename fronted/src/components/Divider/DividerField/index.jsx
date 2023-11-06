@@ -2,7 +2,16 @@ import { useRef } from "react";
 import { Modal } from "../../Modal";
 import { ChevronIcon } from "../../../assets/chevron_right";
 
+/**
+ * A component when you make a click, show a modal
+ * @param {object} props
+ * @param {string} props.label The text to be displayed by the component
+ * @param {{formUtils?: import("../../Modal").FormUtils, messageUtils?: import("../../Modal").MessageUtils}} props.modalUtils 
+ * The object with the necessary values to show the modal
+ * @returns 
+ */
 export const DividerField = ({ label, modalUtils }) => {
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
    
    const showModal = () => {

@@ -14,6 +14,12 @@ import { TextFieldStyles } from "../../constants/TextFieldStyles";
 import { VisibilityIcon } from "../../assets/visibility";
 import "./TextField.css";
 
+/**
+ * Return an object with desire styles from three options
+ * @param {boolean} isDisable the value to get the disable styles
+ * @param {boolean} isError the value to get the error styles
+ * @returns 
+ */
 const getColors = (isDisable, isError) => {
    if (isDisable) {
       return {
@@ -45,6 +51,11 @@ const getColors = (isDisable, isError) => {
    }
 };
 
+/**
+ * Return an object with desire styles from two options
+ * @param {TextFieldStyles} styles the desire style
+ * @returns 
+ */
 const textFieldStyles = (styles) => {
    switch (styles) {
       case TextFieldStyles.FILLED:
@@ -69,6 +80,27 @@ const textFieldStyles = (styles) => {
    }
 };
 
+/**
+ * 
+ * @param {object} props
+ * @param {TextFieldStyles} [props.styles] The style to chose 
+ * @param {string} props.label The label name
+ * @param {string} [props.initialValue] The input value you want to start with
+ * @param {TextFieldTypes} [props.type] The Text field type you want
+ * @param {InputTypes} [props.initialInputType] The input type you want
+ * @param {string} [props.supportiveText] The supportive text you want
+ * @param {boolean} [props.isError] If you want show the error styles
+ * @param {boolean} [props.isDisable] If you want show the disable styles
+ * @param {import("react").MutableRefObject} [props.valueRef] If you want work with input reference
+ * @param {() => void} [props.functionToUpdate] If you want execute a function
+ * @param {Array<String>} [props.menuParameters] The necessary values to the menu component
+ * @param {string} [props.menuClasses] The modal styles
+ * @param {Array<import("../Modal").ListParameter>} [props.modalParameters] The necessary values to list modal
+ * @param {boolean} [props.required] if the Text field is required
+ * @param {number} [props.min] The min value allow it in the input
+ * @param {number} [props.max] The max value allow it in the input
+ * @returns 
+ */
 export const TextField = ({
    styles = TextFieldStyles.OUTLINE,
    label,
@@ -100,6 +132,7 @@ export const TextField = ({
    };
 
    const ref = useOutsideClick(handleClickOutside);
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const dialogRef = useRef();
    
    const showModal = () => {
@@ -181,22 +214,28 @@ export const TextField = ({
                      setIsClicked(false);
                   }
                }}
-               onInput={(e) => setValue(e.target.value)}
-               onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                     e.target.blur();
-                     functionToUpdate?.();
-                     setValue(value);
-                     showModal();
-                     if (!notMenu) {
-                        setIsShowMenu(true);
+               onInput={
+                  /** @param {import("react").ChangeEvent<HTMLInputElement>} e */
+                  (e) => setValue(e.target.value)
+               }
+               onKeyDown={
+                  /** @param {any} e */
+                  (e) => {
+                     if (e.key === "Enter") {
+                        e.target.blur();
+                        functionToUpdate?.();
+                        setValue(value);
+                        showModal();
+                        if (!notMenu) {
+                           setIsShowMenu(true);
+                        }
+                     } 
+                     if (e.key === "Tab" && (!notModal || !notMenu)) {
+                        setIsClicked(false);
+                        setIsShowMenu(false);
                      }
-                  } 
-                  if (e.key === "Tab" && (!notModal || !notMenu)) {
-                     setIsClicked(false);
-                     setIsShowMenu(false);
                   }
-               }}
+               }
             />
 
             {(notMenu && notModal && (type !== TextFieldTypes.PASSWORD)) && 

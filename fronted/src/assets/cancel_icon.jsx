@@ -1,3 +1,10 @@
+/**
+ * JSX icon to indicate that something can be removed or canceled when you make a click
+ * @param {object} props 
+ * @param {string} props.fillClass string containing all tailwind class
+ * @param {() => void} props.onClick string containing all tailwind class
+ * @returns 
+ */
 export const CancelIcon = ({ fillClass, onClick }) => (
    <svg 
       className={fillClass} 

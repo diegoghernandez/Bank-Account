@@ -1,6 +1,14 @@
+/** @type {string} */
 const BASE_BUTTON_CLASSES =
    "flex flex-col justify-center items-center h-10 w-auto rounded-3xl w-full";
 
+/**
+ * Primary button
+ * @param {object} props
+ * @param {string} props.label The text to be displayed by the component
+ * @param {boolean} props.isDisable The value to disable the component
+ * @returns 
+ */
 export const Filled = ({
       label,
       isDisable

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import "./Modal.css";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
 import { TextField } from "../TextField";
@@ -7,21 +6,52 @@ import { TextFieldTypes } from "../../constants/TextFieldType";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldStyles } from "../../constants/TextFieldStyles";
 import { Bar } from "../Loader/Bar";
+import "./Modal.css";
+import { validInputElement } from "../../utils/validInputElement";
 
+/**
+ * The h2 title to use in the modal
+ * @param {string} title The text to be used as title
+ * @returns
+ */
 const h2Element = (title) => <h2 className="text-2xl font-normal font-sans text-onSurface mb-4 dark:text-onSurface-dark">{title}</h2>;
+/** @type {string} */
 const supportText = "text-sm font-sans font-normal text-onSurface-variant dark:text-onSurface-variant-dark";
+/** @type {string} */
 const buttonStyles = "text-sm font-medium font-sans text-primary dark:text-primary-dark";
 
+/**
+ * @typedef {object} ListParameter
+ * @param {string} label
+ * @param {string} [initialInputType]
+ * @param {TextFieldTypes} textFieldType
+ * @param {string} [value]
+ * @param {string} [support]
+ * @param {string} [error]
+ * @param {boolean} [isDisable]
+ * @param {() => void} [functionToUpdate]
+ * @param {Array<String>} [menuParameters]
+ * @param {number} [max]
+ */
+
+/**
+ * The list modal for the dialog
+ * @param {object} props
+ * @param {string} props.title The title of the list
+ * @param {Array<ListParameter>} props.parameters The parameters to create the inputs
+ * @param {any} props.children The buttons to accept the values or cancel
+ * @returns 
+ */
 const ListModal = ({ 
    title, 
-   listUtils, 
+   parameters, 
    children 
 }) => {
    return (
       <div className="w-full flex flex-col justify-center items-center p-6">
          {h2Element(title)}
          <div className="w-full flex flex-col justify-between gap-2">
-            {listUtils?.parameters?.map?.((parameter) => (
+            {parameters?.map?.((parameter) => (
                <TextField 
                   key={parameter.label}
                   styles={TextFieldStyles.FILLED}
@@ -48,12 +78,24 @@ const ListModal = ({
    );
 };
 
+/**
+ * The form modal for the dialog
+ * @param {object} props
+ * @param {string} props.title The title of the form
+ * @param {FormUtils} props.formUtils The title of the form
+ * @param {any} props.children The buttons to accept the values or cancel
+ * @returns 
+ */
 const FormModal = ({ title, formUtils, children }) => {
    const [parameters, setParameters] = useState(formUtils?.errorParameters);
 
+   /** @param {import("react").FormEvent<HTMLFormElement>} event */
    const handleSubmit = (event) => {
       event.preventDefault();
-      formUtils?.handle(event.target.elements[0].value, event.target.elements[1].value); 
+
+      const { elements } = event.currentTarget;
+      const inputArray = validInputElement([elements[0], elements[1]]);
+      formUtils?.handle(inputArray[0].value, inputArray[1].value); 
    };
 
    useEffect(() => {
@@ -75,7 +117,7 @@ const FormModal = ({ title, formUtils, children }) => {
                   type={formUtils?.types?.[0]}
                   initialInputType={formUtils?.inputs[0]?.match("email") ? InputTypes.EMAIL : InputTypes.TEXT}
                   supportiveText={parameters?.first}
-                  isError={parameters?.first}
+                  isError={Boolean(parameters?.first)}
                   isDisable={formUtils?.isLoading}
                />
                <TextField 
@@ -83,7 +125,7 @@ const FormModal = ({ title, formUtils, children }) => {
                   label={formUtils?.inputs[1]}
                   type={formUtils?.types?.[1]}
                   supportiveText={parameters?.second}
-                  isError={parameters?.second}
+                  isError={Boolean(parameters?.second)}
                   isDisable={formUtils?.isLoading}
                />
                {formUtils?.isLoading && <Bar />}
@@ -102,6 +144,49 @@ const FormModal = ({ title, formUtils, children }) => {
    );
 };
 
+/**
+ * @typedef {object} ListUtils
+ * @property {Array<ListParameter>} parameters The values to create the list
+ * @property {import("react").Dispatch<import("react").SetStateAction<object>>} [setIsClicked] 
+ * The value to set the click of TextField component
+ * @property {import("react").Dispatch<import("react").SetStateAction<object>>} [setValue] 
+ * The value to set the value of TextField component
+ * @property {import("react").Dispatch<import("react").SetStateAction<object>>} [functionToUpdate] 
+ * The value to execute a function to update something in TextField component
+ */
+
+/**
+ * @typedef {object} FormUtils
+ * @property {Array<string>} inputs The name of the two input to be used
+ * @property {Array<TextFieldTypes>} types The type of the two input to be used
+ * @property {string} successMessage The message to show that all inputs will remove
+ * @property {{ first: string, second: string }} errorParameters The object with the errors to be show for the inputs
+ * @property {boolean} isLoading The value to change the form state to load
+ * @property {(firstParameter: any, secondParameter: any) => void} handle The function to handle the form values
+ * @property {import("react").Dispatch<import("react").SetStateAction<object>>} setError 
+ * The value to set the error of TextField component
+ * @property {import("react").Dispatch<import("react").SetStateAction<object>>} setSuccessMessage
+ * The value to set the value of Account component
+ * @property {() => void} [closeSession] The value to execute a function
+ */
+
+/**
+ * @typedef {object} MessageUtils
+ * @property {string} message The message to show
+ * @property {boolean} [cancel] If the button is necessary to show
+ * @property {boolean} [accept] If the button is necessary to show
+ * @property {() => void} [function] The function to be executed
+
+/**
+ * The modal component with the capability to take three forms: list, form and message
+ * @param {object} props
+ * @param {import("react").MutableRefObject<HTMLDialogElement>} props.dialogRef
+ * @param {string} [props.title] The modal title
+ * @param {ListUtils} [props.listUtils] The object with the necessary values to show the list modal
+ * @param {FormUtils} [props.formUtils] The object with the necessary values to show the form modal
+ * @param {MessageUtils} [props.messageUtils] The object with the necessary values to show the message modal
+ * @returns 
+ */
 export const Modal = ({
    dialogRef,
    title,
@@ -109,6 +194,7 @@ export const Modal = ({
    formUtils,
    messageUtils
 }) => {
+   /** @type {import("react").MutableRefObject<HTMLDialogElement>} */
    const storyRef = useRef();
    const { formatText, cancel, accept } = getTraduction(Traduction.MODAL);
    const { modalParameters } = getTraduction(Traduction.AUTOMATION_PAGE);
@@ -167,7 +253,7 @@ export const Modal = ({
          >
             {listUtils && <ListModal 
                title={title}
-               listUtils={listUtils}
+               parameters={listUtils?.parameters}
             >
                <button 
                   type="button"

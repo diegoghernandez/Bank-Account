@@ -7,6 +7,12 @@ import { AutomationIcon } from "../../assets/automation";
 import { TransactionsIcon } from "../../assets/transactions";
 import { HomeIcon } from "../../assets/home";
 
+/**
+ * Return an object with the desire icon and label of the page
+ * @param {Page} page The page to represent
+ * @param {string} svgColor The class with the tailwind color
+ * @returns {{ svg: import("react").JSX.Element, label: string}}
+ */
 const getPage = (page, svgColor) => {
    const t = getTraduction(Traduction.NAVBAR);
    
@@ -36,6 +42,12 @@ const getPage = (page, svgColor) => {
    }
 };
 
+/**
+ * Return an array with tailwind classes for the following elements: 
+ * svg-container, state-layer, text-color, and svg-color, depending in the isActive value
+ * @param {boolean} isActive The value to represent which classes get for the elements
+ * @returns 
+ */
 const getActive = (isActive) => isActive 
    ? ["bg-secondary-container dark:bg-secondary-container-dark", "group-hover/nav:bg-onSurface/8 group-focus/nav:bg-onSurface-variant/8 " +
       "dark:group-hover/nav:bg-onSurface-dark/8 dark:group-focus/nav:bg-onSurface-variant-dark/8 ", 
@@ -44,8 +56,16 @@ const getActive = (isActive) => isActive
    : ["", "group-hover/nav:bg-onSurface/12 group-focus/nav:bg-onSurface-variant/12 dark:group-hover/nav:bg-onSurface-dark/12 dark:group-focus/nav:bg-onSurface-variant-dark/12", 
       "text-onSurface-variant dark:text-onSurface-variant-dark", "fill-onSurface-variant dark:fill-onSurface-variant-dark"];
 
+/** @type {string} */
 const BASE_INDICATOR_CLASSES = "flex justify-center items-center w-16 h-8 rounded-2xl md:w-14";
 
+/**
+ * Component to represent the navbar pages
+ * @param {object} props
+ * @param {boolean} [props.active=false] The value to represent if the element is active
+ * @param {Page} [props.page=Page.HOME] The value to represent the page to use
+ * @returns 
+ */
 const Nav = ({
    active = false,
    page = Page.HOME,
@@ -69,6 +89,13 @@ const Nav = ({
    );
 };
 
+/**
+ * Component to be used as the navbar for the four principal pages (Home, Transactions, Automations, Account)
+ * @param {object} props
+ * @param {Page} [props.page=Page.HOME] The value to represent what page is active
+ * @param {any} [props.children] If some value is needed inside of the navbar
+ * @returns 
+ */
 export const Navbar = ({ 
    page = Page.HOME,
    children
