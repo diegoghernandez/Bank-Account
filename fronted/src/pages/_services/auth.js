@@ -123,6 +123,7 @@ export const resetPassword = (email) => {
       method: "GET",
       headers: {
          "Content-Type": "application/json",
+         "Accept-Language": LANGUAGE
       },
    });
 };

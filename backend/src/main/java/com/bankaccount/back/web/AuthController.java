@@ -179,11 +179,11 @@ public class AuthController {
         AccountEntity account = tokenEntity.getAccountEntity();
 
         if (type.equalsIgnoreCase("verification")) {
-            resendVerificationTokenEmail(tokenEntity.getToken(), account);
+            resendVerificationTokenEmail(tokenEntity.getToken(), account, locale);
         } else if (type.equalsIgnoreCase("password")) {
-            passwordResetTokenEmail(tokenEntity.getToken(), account);
+            passwordResetTokenEmail(tokenEntity.getToken(), account, locale);
         } else if (type.equalsIgnoreCase("email")) {
-            emailChangeTokenEmail(tokenEntity.getToken(), account);
+            emailChangeTokenEmail(tokenEntity.getToken(), account, locale);
         }
 
         return Messages.getMessageForLocale("controller.auth.resend", locale);
@@ -237,6 +237,16 @@ public class AuthController {
     @Operation(
             summary = "Send an email",
             description = "Send an email with the token to reset the password",
+            parameters = @Parameter(
+                    name = HttpHeaders.ACCEPT_LANGUAGE,
+                    in = ParameterIn.HEADER,
+                    required = true,
+                    description = "header for get the message according to the language",
+                    content = @Content(
+                            schema = @Schema(type = "string"),
+                            examples = @ExampleObject( value = "en")
+                    )
+            ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -246,6 +256,7 @@ public class AuthController {
     )
     @GetMapping("/reset-password/{email}")
     public void resetPassword(
+            @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
             @Parameter(description = "the email to send the token") @PathVariable String email) {
         Optional<AccountEntity> optionalAccount = accountService.getAccountByEmail(email);
 
@@ -254,7 +265,7 @@ public class AuthController {
             String token = UUID.randomUUID().toString();
             accountService.saveToken(token, accountEntity);
 
-            passwordResetTokenEmail(token, accountEntity);
+            passwordResetTokenEmail(token, accountEntity, locale);
         }
     }
 
@@ -566,7 +577,7 @@ public class AuthController {
 
                 String token = UUID.randomUUID().toString();
                 accountService.saveToken(token, accountEntity);
-                emailChangeTokenEmail(token, accountEntity);
+                emailChangeTokenEmail(token, accountEntity, locale);
             });
             response.put("result", result);
             return ResponseEntity.ok().body(response);
@@ -581,14 +592,15 @@ public class AuthController {
     * @param token the token to verify the account
     * @param account the value to extract the email
     */
-    private void resendVerificationTokenEmail(String token, AccountEntity account) {
+    private void resendVerificationTokenEmail(String token, AccountEntity account, Locale locale) {
         String url = configProperties.client() + "/verify-registration?token=" + token +
                 "&traduction=TOKEN_REGISTER&email=" + account.getEmail();
 
         emailService.sendEmail(
                 account.getEmail(),
-                "Verification Token resend",
-                "Click the link to verify your account: " + url);
+                Messages.getMessageForLocale("email.verify.account.subject.resend", locale),
+                Messages.getMessageForLocale("email.verify.account.content", locale)
+                        + " " + url);
     }
 
    /**
@@ -596,14 +608,15 @@ public class AuthController {
     * @param token the token reset the password
     * @param accountEntity the value to extract the id and email
     */
-    private void passwordResetTokenEmail(String token, AccountEntity accountEntity) {
+    private void passwordResetTokenEmail(String token, AccountEntity accountEntity, Locale locale) {
         String url = configProperties.client() + "/save-password?token=" + token
                 + "&id=" + accountEntity.getIdAccount();
 
         emailService.sendEmail(
                 accountEntity.getEmail(),
-                "Reset password",
-                "Click the link to reset your password: " + url);
+                Messages.getMessageForLocale("email.reset.password.subject", locale),
+                Messages.getMessageForLocale("email.reset.password.content", locale)
+                        + " " + url);
     }
 
    /**
@@ -611,13 +624,14 @@ public class AuthController {
     * @param token the token to verify the email
     * @param accountEntity the value to extract the id and email
     */
-    private void emailChangeTokenEmail(String token, AccountEntity accountEntity) {
+    private void emailChangeTokenEmail(String token, AccountEntity accountEntity, Locale locale) {
         String url = configProperties.client() + "/verify-email?token=" + token
                 + "&traduction=TOKEN_EMAIL&id=" + accountEntity.getIdAccount();
 
         emailService.sendEmail(
                 accountEntity.getEmail(),
-                "Verify email",
-                "Click the link to verify your email: " + url);
+                Messages.getMessageForLocale("email.change.email.subject", locale),
+                Messages.getMessageForLocale("email.change.email.content", locale)
+                        + " " + url);
     }
 }

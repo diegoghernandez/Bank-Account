@@ -3,6 +3,7 @@ package com.bankaccount.back.domain.event.listener;
 import com.bankaccount.back.domain.event.RegistrationCompleteEvent;
 import com.bankaccount.back.domain.repository.AccountRepository;
 import com.bankaccount.back.domain.service.EmailService;
+import com.bankaccount.back.helpers.Messages;
 import com.bankaccount.back.persistence.entity.AccountEntity;
 import com.bankaccount.back.web.config.EnvConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,8 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
 
       emailService.sendEmail(
               accountEntity.getEmail(),
-              "Verify account",
-              "Click the link to verify your account: " + url);
+              Messages.getMessageForLocale("email.verify.account.subject", event.getLocale()),
+              Messages.getMessageForLocale("email.verify.account.content", event.getLocale())
+                      + " " + url);
    }
 }

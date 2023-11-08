@@ -16,7 +16,7 @@ import { validInputElement } from "../../utils/validInputElement";
  */
 const h2Element = (title) => <h2 className="text-2xl font-normal font-sans text-onSurface mb-4 dark:text-onSurface-dark">{title}</h2>;
 /** @type {string} */
-const supportText = "text-sm font-sans font-normal text-onSurface-variant dark:text-onSurface-variant-dark";
+const supportText = "text-sm font-sans font-normal text-center whitespace-pre-line text-onSurface-variant dark:text-onSurface-variant-dark";
 /** @type {string} */
 const buttonStyles = "text-sm font-medium font-sans text-primary dark:text-primary-dark";
 
