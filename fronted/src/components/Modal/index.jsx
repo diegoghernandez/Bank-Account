@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { getTraduction } from "../../utils/getTraduction";
-import { Traduction } from "../../constants/Traduction";
-import { TextField } from "../TextField";
-import { TextFieldTypes } from "../../constants/TextFieldType";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldStyles } from "../../constants/TextFieldStyles";
-import { Bar } from "../Loader/Bar";
-import "./Modal.css";
+import { TextFieldTypes } from "../../constants/TextFieldType";
+import { Traduction } from "../../constants/Traduction";
+import { getTraduction } from "../../utils/getTraduction";
 import { validInputElement } from "../../utils/validInputElement";
+import { Bar } from "../Loader/Bar";
+import { TextField } from "../TextField";
+import "./Modal.css";
 
 /**
  * The h2 title to use in the modal
@@ -127,6 +127,7 @@ const FormModal = ({ title, formUtils, children }) => {
                   supportiveText={parameters?.second}
                   isError={Boolean(parameters?.second)}
                   isDisable={formUtils?.isLoading}
+                  autoComplete="on"
                />
                {formUtils?.isLoading && <Bar />}
             </div>

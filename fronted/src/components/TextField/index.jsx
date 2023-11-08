@@ -97,6 +97,7 @@ const textFieldStyles = (styles) => {
  * @param {string} [props.menuClasses] The modal styles
  * @param {Array<import("../Modal").ListParameter>} [props.modalParameters] The necessary values to list modal
  * @param {boolean} [props.required] if the Text field is required
+ * @param {string} [props.autoComplete] if the Text field can use autocomplete
  * @param {number} [props.min] The min value allow it in the input
  * @param {number} [props.max] The max value allow it in the input
  * @returns 
@@ -116,6 +117,7 @@ export const TextField = ({
    menuClasses,
    modalParameters,
    required = true,
+   autoComplete = "off",
    min,
    max
 }) => {
@@ -188,7 +190,7 @@ export const TextField = ({
                min={min}
                max={max}
                ref={valueRef}
-               autoComplete="off"
+               autoComplete={autoComplete}
                required={required}
                readOnly={isReadOnly}
                disabled={isDisable}

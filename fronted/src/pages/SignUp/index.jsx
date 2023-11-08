@@ -77,6 +77,7 @@ export const SignUp = () => {
                   supportiveText={error.email}
                   isError={error.email}
                   isDisable={isLoading}
+                  autoComplete="email"
                   />
                <TextField
                   label={t.labels[2]}

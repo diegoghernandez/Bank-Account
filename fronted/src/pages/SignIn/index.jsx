@@ -86,6 +86,7 @@ export const SignIn = () => {
                   supportiveText={error}
                   isError={Boolean(error)}
                   isDisable={isLoading}
+                  autoComplete="email"
                />
                {(!isReset) &&
                   <TextField
@@ -94,6 +95,7 @@ export const SignIn = () => {
                      supportiveText={error}
                      isError={Boolean(error)}
                      isDisable={isLoading}
+                     autoComplete="current-password"
                   />
                }
                <Filled label={(!isReset) ? t.accept : t.resetPassword.accept} isDisable={isLoading} />
