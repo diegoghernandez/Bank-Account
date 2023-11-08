@@ -351,7 +351,7 @@ export const Transactions = () => {
                />
             </form>
             <h2 className="text-lg font-medium font-sans ml-4 underline md:ml-6 text-onSurface dark:text-onSurface-dark">{t.title}</h2>
-            {notFound && <p className="text-onSurface dark:text-onSurface-dark">{t.notFound}</p>}
+            {notFound && <p className="pl-6 text-onSurface dark:text-onSurface-dark">{t.notFound}</p>}
             <div ref={transactionsContainer}  className="md:h-[calc(100%-16rem)] md:overflow-y-scroll">
                {transactionsGroup?.map(/** @param {Object} group */(group) => (
                   <>

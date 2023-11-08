@@ -353,16 +353,27 @@ public class AuthController {
     @Operation(
             summary = "Update the name of account",
             description = "According to the id of account, update the name if the password is correct",
-            parameters = @Parameter(
+            parameters = {
+                    @Parameter(
                     name = HttpHeaders.ACCEPT_LANGUAGE,
                     in = ParameterIn.HEADER,
                     required = true,
                     description = "header for get the message according to the language",
                     content = @Content(
                             schema = @Schema(type = "string"),
-                            examples = @ExampleObject( value = "en")
+                            examples = @ExampleObject(value = "en")
+                    )),
+                    @Parameter(
+                            name = "ID",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "header for spring security for identify if is the user data",
+                            content = @Content(
+                                    schema = @Schema(type = "string"),
+                                    examples = @ExampleObject( value = "543215432")
+                            )
                     )
-            ),
+            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -419,16 +430,27 @@ public class AuthController {
    @Operation(
            summary = "Update the password of account",
            description = "According to the id of account, update the password if the password is correct",
-           parameters = @Parameter(
+           parameters = {
+                   @Parameter(
                    name = HttpHeaders.ACCEPT_LANGUAGE,
                    in = ParameterIn.HEADER,
                    required = true,
                    description = "header for get the message according to the language",
                    content = @Content(
                            schema = @Schema(type = "string"),
-                           examples = @ExampleObject( value = "en")
+                           examples = @ExampleObject(value = "en")
+                   )),
+                   @Parameter(
+                           name = "ID",
+                           in = ParameterIn.HEADER,
+                           required = true,
+                           description = "header for spring security for identify if is the user data",
+                           content = @Content(
+                                   schema = @Schema(type = "string"),
+                                   examples = @ExampleObject( value = "543215432")
+                           )
                    )
-           ),
+           },
            responses = {
                    @ApiResponse(
                            responseCode = "200",
@@ -461,6 +483,8 @@ public class AuthController {
     @PutMapping("/secure/change-password")
     public ResponseEntity<Map<String, String>> changePassword(
             @RequestHeader(HttpHeaders.ACCEPT_LANGUAGE) final Locale locale,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(description =
+                    "the object to get the id,the old password, and the new password")
             @RequestBody @Valid PasswordDto passwordDto) throws NotFoundException {
         Map<String, String> response = new HashMap<>();
         String result = accountService.changePassword(passwordDto, locale);
@@ -477,16 +501,27 @@ public class AuthController {
    @Operation(
            summary = "Update the email of account",
            description = "According to the id of account, update the email and send an email to verify it if the password is correct",
-           parameters = @Parameter(
+           parameters = {
+                   @Parameter(
                    name = HttpHeaders.ACCEPT_LANGUAGE,
                    in = ParameterIn.HEADER,
                    required = true,
                    description = "header for get the message according to the language",
                    content = @Content(
                            schema = @Schema(type = "string"),
-                           examples = @ExampleObject( value = "en")
+                           examples = @ExampleObject(value = "en")
+                   )),
+                   @Parameter(
+                           name = "ID",
+                           in = ParameterIn.HEADER,
+                           required = true,
+                           description = "header for spring security for identify if is the user data",
+                           content = @Content(
+                                   schema = @Schema(type = "string"),
+                                   examples = @ExampleObject( value = "543215432")
+                           )
                    )
-           ),
+           },
            responses = {
                    @ApiResponse(
                            responseCode = "200",

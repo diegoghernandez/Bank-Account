@@ -108,7 +108,7 @@ export const Home = () => {
                            name={automation.name}
                            money={automation.amount}
                            period={getTimePeriod(t.period, automation.executionTime)}
-                           isDisable={automation.status}
+                           isDisable={!automation.status}
                            handleFunction={() => handleAutomation(automation)}
                         />
                      );

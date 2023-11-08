@@ -3,11 +3,15 @@ import { StatusError } from "../../errors/StatusError";
 import { getTraduction } from "../../utils/getTraduction";
 import { getAccountData } from "./account";
 
+/** @type {string} */
 const API = import.meta.env.VITE_API_URL +  "/auth";
 
+/** @type {string} */
 const TOKEN = localStorage.getItem("token");
-const { idAccount, email } = JSON.parse(localStorage.getItem("account")) ?? "";
+/** @type {string} */
 const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
+/** @type {{ idAccount: number, email: string }} */
+const { idAccount, email } = JSON.parse(localStorage.getItem("account")) ?? "";
 
 /**
  * Send the credentials to be authenticated, if resolve,
@@ -189,7 +193,8 @@ export const changeName = async (newName, password) => {
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
-         "Accept-Language": LANGUAGE
+         "Accept-Language": LANGUAGE,
+         "ID": String(idAccount)
       },
       body: JSON.stringify({
          idAccount,
@@ -223,7 +228,8 @@ export const changePassword = async (oldPassword, newPassword) => {
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
-         "Accept-Language": LANGUAGE
+         "Accept-Language": LANGUAGE,
+         "ID": String(idAccount)
       },
       body: JSON.stringify({
          idAccount,
@@ -257,7 +263,8 @@ export const changeEmail = async (newEmail, password) => {
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
-         "Accept-Language": LANGUAGE
+         "Accept-Language": LANGUAGE,
+         "ID": String(idAccount)
       },
       body: JSON.stringify({
          idAccount,

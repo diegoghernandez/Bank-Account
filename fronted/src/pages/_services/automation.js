@@ -1,11 +1,15 @@
 import { StatusError } from "../../errors/StatusError";
 import { getAccountData } from "./account";
 
+/** @type {string} */
 const API = import.meta.env.VITE_API_URL + "/automations";
+
 /** @type {string} */
 const TOKEN = localStorage.getItem("token");
 /** @type {string} */
 const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
+/** @type {{ idAccount: number }} */
+const { idAccount } = JSON.parse(localStorage.getItem("account")) ?? "";
 
 /**
  * Return all automation that the user has, if resolve,
@@ -45,7 +49,8 @@ export const saveAutomation = async (automation) => {
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
-         "Accept-Language": LANGUAGE
+         "Accept-Language": LANGUAGE,
+         "ID": String(idAccount)
       },
       body: JSON.stringify(automation)
    });
@@ -70,7 +75,8 @@ export const updateAutomation = async (automation) => {
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
-         "Accept-Language": LANGUAGE
+         "Accept-Language": LANGUAGE,
+         "ID": String(idAccount)
       },
       body: JSON.stringify(automation)
    });
@@ -95,7 +101,8 @@ export const deleteAutomation = async (id) => {
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
-         "Accept-Language": LANGUAGE
+         "Accept-Language": LANGUAGE,
+         "ID": String(idAccount)
       },
    });
 

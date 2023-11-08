@@ -38,9 +38,9 @@ export const SignIn = () => {
       event.preventDefault();
 
       const { elements } = event.currentTarget;
-      const inputArray = validInputElement([elements[0], elements[1]]);
+      const inputArray = (!isReset) ? validInputElement([elements[0], elements[1]]) : validInputElement([elements[0]]);
       const email = inputArray?.[0].value;
-      const password = inputArray?.[1].value;
+      const password = inputArray?.[1]?.value;
 
       
       if (!isReset) {

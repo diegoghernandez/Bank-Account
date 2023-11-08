@@ -146,16 +146,27 @@ public class TransactionController {
    @Operation(
            summary = "Save a transaction",
            description = "Save all data from TransactionDto and return a success message",
-           parameters = @Parameter(
+           parameters = {
+                   @Parameter(
                    name = HttpHeaders.ACCEPT_LANGUAGE,
                    in = ParameterIn.HEADER,
                    required = true,
                    description = "header for get the message according to the language",
                    content = @Content(
                            schema = @Schema(type = "string"),
-                           examples = @ExampleObject( value = "en")
-                   )
-           ),
+                           examples = @ExampleObject(value = "en")
+                   )),
+                   @Parameter(
+                           name = "ID",
+                           in = ParameterIn.HEADER,
+                           required = true,
+                           description = "header for spring security for identify if is the user data",
+                           content = @Content(
+                                   schema = @Schema(type = "string"),
+                                   examples = @ExampleObject( value = "543215432")
+                           )
+                   ),
+           },
            responses = {
                    @ApiResponse(
                            responseCode = "201",

@@ -35,7 +35,7 @@ export const UpdateAutomation = () => {
 
       const { idAccount } = JSON.parse(localStorage.getItem("account"));
       const { elements } = event.currentTarget;
-      const inputArray = validInputElement([elements[0], elements[1], elements[2], elements[3], elements[6]]);
+      const inputArray = validInputElement([elements[0], elements[1], elements[2], elements[3], elements[9]]);
       const hours = Number(inputArray?.[3].value.split(" ")[1]);
 
       setIsLoading(true);

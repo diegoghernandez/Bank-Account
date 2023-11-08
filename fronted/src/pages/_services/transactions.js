@@ -1,9 +1,14 @@
 import { StatusError } from "../../errors/StatusError";
 import { getAccountData } from "./account";
 
+/** @type {string} */
 const API = import.meta.env.VITE_API_URL + "/transactions";
+/** @type {string} */
 const TOKEN = localStorage.getItem("token");
+/** @type {string} */
 const LANGUAGE = localStorage.getItem("language") ?? navigator.language;
+/** @type {{ idAccount: number }} */
+const { idAccount } = JSON.parse(localStorage.getItem("account")) ?? "";
 
 /**
  * Return a transaction list of max ten elements, and if is the last page, if resolve,
@@ -75,7 +80,8 @@ export const saveTransaction = async (transaction, email) => {
       headers: {
          "Content-Type": "application/json",
          "Authorization": TOKEN,
-         "Accept-Language": LANGUAGE
+         "Accept-Language": LANGUAGE,
+         "ID": String(idAccount)
       },
       body: JSON.stringify(transaction)
    });

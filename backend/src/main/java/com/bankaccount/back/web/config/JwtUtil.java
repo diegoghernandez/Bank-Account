@@ -19,7 +19,7 @@ public class JwtUtil {
    private EnvConfigProperties envConfigProperties;
 
    /**
-    * @param username the username of the token
+    * @param username the username of token
     * @return a JWT token
     */
    public String create(String username) {
@@ -33,7 +33,7 @@ public class JwtUtil {
 
    /**
     * @param jwt the jwt token to be verified
-    * @return the result of the verification
+    * @return the result of verification
     */
    public boolean isValid(String jwt) {
       try {
@@ -49,7 +49,7 @@ public class JwtUtil {
 
    /**
     * @param jwt the jwt token where extract the username
-    * @return the username of the jwt token
+    * @return the username of jwt token
     */
    public String getUsername(String jwt) {
       return JWT.require(Algorithm.HMAC256(envConfigProperties.jwtSecretKey()))

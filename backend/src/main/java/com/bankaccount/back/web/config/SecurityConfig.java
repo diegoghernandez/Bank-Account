@@ -42,25 +42,29 @@ public class SecurityConfig {
     * @throws Exception if {@link HttpSecurity} get an error
     */
    @Bean
-   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+   public SecurityFilterChain filterChain(HttpSecurity http, CustomAuthorizationManager customAuthorizationManager) throws Exception {
       http
               .csrf().disable()
               .cors().and()
               .sessionManagement()
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-              .authorizeHttpRequests()
-              .antMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-              .antMatchers("/auth/secure/**").hasAnyRole(USER, ADMIN)
-              .antMatchers("/auth/**").permitAll()
-              .antMatchers("/transactions/**").hasAnyRole(USER, ADMIN)
-              .antMatchers("/transactions/{id}").hasAnyRole(ADMIN)
-              .antMatchers("/automations/**").hasAnyRole(USER, ADMIN)
-              .antMatchers("/automations/{id}").hasAnyRole(ADMIN)
-              .antMatchers("/accounts/email/**").hasAnyRole(USER, ADMIN)
-              .antMatchers("/accounts/id/**").hasRole(ADMIN)
-              .anyRequest()
-              .authenticated()
-              .and()
+              .authorizeHttpRequests(requests -> requests
+                      .antMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                      .antMatchers("/auth/secure/**").access(customAuthorizationManager)
+                      .antMatchers("/auth/secure/**").hasAnyRole(USER, ADMIN)
+                      .antMatchers("/auth/**").permitAll()
+                      .antMatchers("/transactions/**").access(customAuthorizationManager)
+                      .antMatchers("/transactions/**").hasAnyRole(USER, ADMIN)
+                      .antMatchers("/transactions/{id}").hasAnyRole(ADMIN)
+                      .antMatchers("/automations/**").access(customAuthorizationManager)
+                      .antMatchers("/automations/**").hasAnyRole(USER, ADMIN)
+                      .antMatchers("/automations/{id}").hasAnyRole(ADMIN)
+                      .antMatchers("/accounts/email/{email}").access(customAuthorizationManager)
+                      .antMatchers("/accounts/email/{email}").hasAnyRole(USER, ADMIN)
+                      .antMatchers("/accounts/id/**").hasRole(ADMIN)
+                      .anyRequest()
+                      .authenticated()
+              )
               .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
       return http.build();
