@@ -127,7 +127,7 @@ const FormModal = ({ title, formUtils, children }) => {
                   supportiveText={parameters?.second}
                   isError={Boolean(parameters?.second)}
                   isDisable={formUtils?.isLoading}
-                  autoComplete="on"
+                  autoComplete="current-password"
                />
                {formUtils?.isLoading && <Bar />}
             </div>

@@ -86,10 +86,16 @@ export const Account = () => {
       navigate("/sign-in");
    };
 
+   const socialLinks = [
+      { id: crypto.randomUUID(), name: t.social.web, link: "https://diegoj4v.github.io/My-website/Fronted/public/index.html"},
+      { id: crypto.randomUUID(), name: "Github", link: "https://github.com/DiegoJ4V"},
+      { id: crypto.randomUUID(), name: "LinkedIn", link: "https://www.linkedin.com/in/diego-guadarrama-hern%C3%A1ndez-b6504b274/"}
+   ];
+
    return (
-      <section className="flex flex-row-reverse w-full h-screen justify-end bg-surface dark:bg-surface-dark">
+      <section className="w-full h-full md:h-screen md:flex md:flex-row-reverse justify-end bg-surface dark:bg-surface-dark">
          <SEO title={t.seo.title} description={t.seo.description} />
-         <div className="w-full bg-white border border-outline-variant md:rounded-2xl  md:mx-6 md:my-4 dark:bg-black dark:border-outline-variant-dark">
+         <div className="w-full min-h-[calc(100vh-5rem)] bg-white border border-outline-variant md:rounded-2xl  md:mx-6 md:my-4 dark:bg-black dark:border-outline-variant-dark">
             <h1 className="ml-4 md:ml-6 mt-8 text-4xl font-sans font-bold text-onSurface dark:text-onSurface-dark">{accountName}</h1>
             <p className="ml-4 md:ml-6 mt-3 text-base font-sans font-normal text-onSurface dark:text-onSurface-dark">{t.accountNumber}: {idAccount}</p>
 
@@ -178,8 +184,27 @@ export const Account = () => {
                   }
                }}
             />
+            <footer className="flex flex-col m-4 gap-2">
+               <h2 className="text-xl font-normal font-sans underline underline-offset-4 text-onSurface dark:text-onSurface-dark">
+                  {t.social.title}
+               </h2>
+               <div className="flex gap-4">
+                  {socialLinks.map((socialLink) => (
+                     <a 
+                        key={socialLink.id}
+                        rel="noreferrer"
+                        target="_blank"
+                        className="text-base font-sans font-normal text-onSurface dark:text-onSurface-dark hover:underline" 
+                        href={socialLink.link}>
+                           {socialLink.name}
+                     </a>
+                  ))}
+               </div>
+            </footer>
          </div>
-         <Navbar page={Page.ACCOUNT} />
+         <div className="w-full h-20 md:w-fit md:h-fit">
+            <Navbar page={Page.ACCOUNT} />
+         </div>
       </section>
    );
 };

@@ -63,7 +63,7 @@ export const Switch = ({
                type="checkbox"
                defaultChecked={checked}
                disabled={isDisable}
-               className="absolute w-[3.3rem] h-8 appearance-none"
+               className="absolute w-[3.3rem] h-8 appearance-none hover:cursor-pointer"
                onClick={() => {
                   setIsChecked(!isChecked);
                   set?.(!isChecked);
