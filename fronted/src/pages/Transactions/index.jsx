@@ -14,6 +14,7 @@ import { Fab } from "../../components/Buttons/FAB";
 import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
 import { InputTypes } from "../../constants/InputType";
+import { Fragment } from "react";
 
 /** @type {string} */
 const language = localStorage.getItem("language") ?? navigator.language;
@@ -58,7 +59,7 @@ const getFormattedDate = (date) => {
  */
 const getModifiedContent = (pastTransactions, content) => {
    const isDupe = pastTransactions?.some((group) => {
-      return group.transactions.some(/** @param {Object} transaction */(transaction) => content.some((value) => {
+      return group.transactions.some((transaction) => content.some((value) => {
          return value?.idTransaction === transaction?.idTransaction;
       }));
    });
@@ -105,11 +106,15 @@ export const Transactions = () => {
       default: 0,
       search: 0,
    });
+   /** @type {[{ default: boolean, search: boolean}, import("react").Dispatch<import("react").SetStateAction<{ default: boolean, search: boolean}>>]} */
+   const [lastPage, setLastPage] = useState({
+      default: false,
+      search: false,
+   });
    /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [notFound, setNotFound] = useState(false); 
    /** @type {[boolean, import("react").Dispatch<import("react").SetStateAction<boolean>>]} */
    const [loading, setLoading] = useState(true);
-   const t = getTraduction(Traduction.TRANSACTIONS_PAGE);
 
    /** @type {import("react").MutableRefObject<HTMLInputElement>} */
    const typeReference = useRef();
@@ -118,22 +123,66 @@ export const Transactions = () => {
    /** @type {import("react").MutableRefObject<HTMLInputElement>} */
    const dateReference = useRef();
    /** @type {import("react").MutableRefObject<HTMLFormElement>} */
-   const formToDialogReference = useRef();
-   /** @type {import("react").MutableRefObject<HTMLDivElement>} */
-   const transactionsContainer = useRef();
-
-   const whichContainer = (globalThis.matchMedia?.("(min-width: 768px)").matches) ? transactionsContainer.current : globalThis;
+   const formToDialogReference = useRef(); 
 
    /** @type {{ idAccount: number }} */
    const { idAccount } = JSON.parse(localStorage.getItem("account"));
+   const t = getTraduction(Traduction.TRANSACTIONS_PAGE);
+
+   /**
+    * When the container make a scroll, check if is in the bottom for update the respective page 
+    * if the last page is not true
+    * @param {import("react").UIEvent<HTMLDivElement | Document> | Event} event 
+    */
+   const handleScroll = (event) => {
+      const container = event.currentTarget;
+      let bottom = false;
+
+      if (container instanceof HTMLDivElement) {
+         bottom = Math.ceil(container?.scrollTop  + container?.clientHeight) >= container?.scrollHeight;
+      } else if (container instanceof Document) {   
+         const docElement = container?.documentElement;
+         bottom = Math.ceil(docElement.scrollTop  + docElement.clientHeight) >= docElement.scrollHeight;
+      }
+
+      if (bottom) {
+         if (!texts.type && !texts.name && !dateReference?.current?.value) {
+            if (!lastPage.default) {
+               setPage((prevState) => ({
+                  ...prevState,
+                  default: prevState.default + 1
+               })); 
+            }
+         } else {
+            if (!lastPage.search) {
+               setPage((prevState) => ({
+                  ...prevState,
+                  search: prevState.search + 1
+               }));
+            }
+         }
+      }
+   };
+
+   useEffect(() => {
+      if (!globalThis.matchMedia?.("(min-width: 768px)").matches) {
+         document.addEventListener("scroll", handleScroll);
+   
+         return () => {
+            document.removeEventListener("scroll", handleScroll);
+         };
+      }
+   }, []);
+
 
    /** When inputs change, and assign different values to fetch or to improve the user feedback */
    const handleChange = () =>{
       const text = textReference.current?.value;
       const type = typeReference.current?.value;
 
-      setAllTransactions({ ...allTransactions, search: [] });
-      setPage({ ...page, search: 0 });  
+      setAllTransactions((prevState) => ({ ...prevState, search: [] }));
+      setPage((prevState) => ({ ...prevState, search: 0 }));  
+      setLastPage((prevState) => ({ ...prevState, search: false }));  
 
       setNotFound(false);
       setLoading(true);
@@ -143,11 +192,6 @@ export const Transactions = () => {
          name: text,
          date: modalValues
       });
-
-      whichContainer?.removeEventListener?.("scrollend", () => setPage({
-         ...page,
-         search: page.search + 1
-      }));
    };
 
    /** When modal inputs change, set the respective values */
@@ -183,23 +227,7 @@ export const Transactions = () => {
 
       setTimeout(async () => {         
          try {
-            /** @type {Array<TransactionList>} */
-            let content = [{}];
-            /** @type {boolean} */
-            let last = false;
-            /** @type {string} */
-            let type = "default";
-            /** @type {number} */
-            let pageContent = page[type] + 1;
-   
             if (dateReference?.current.value || texts.name || texts.type) {
-               whichContainer?.removeEventListener?.("scrollend", () => setPage({
-                  ...page,
-                  default: page.default + 1
-               }));
-   
-               pageContent = page.search + 1;
-
                let transactionType = "";
                let formattedMonth;
       
@@ -220,7 +248,7 @@ export const Transactions = () => {
                }
 
                /** @type {{ content: Array<TransactionList>, last: boolean }} */
-               const { content: filterContent, last: filterLast } = await getTransactionsByFilter({
+               const { content, last } = await getTransactionsByFilter({
                   id: idAccount,
                   type: transactionType,
                   name: texts.name,
@@ -231,49 +259,39 @@ export const Transactions = () => {
                   } : {},
                   page: page.search,
                });
+               const newTransactionList = getModifiedContent(allTransactions.search, content);
 
-               content = filterContent;
-               last = filterLast;
-   
-               type = "search";
+               if (!last) {
+                  setAllTransactions((prevState) => ({
+                     ...prevState,
+                     search: newTransactionList
+                  }));  
+               } else {
+                  setLastPage((prevState) => ({
+                     ...prevState,
+                     search: true
+                  }));
+               }
             } else {
                /** @type {{ content: Array<TransactionList>, last: boolean }} */
-               const { content: defaultContent, last: defaultLast } = await getTransactions(idAccount, page?.default);
-   
-               content = defaultContent;
-               last = defaultLast;
-            }
-            
-            const pastTransactions = getModifiedContent(allTransactions[type], content);
-   
-            setAllTransactions({
-               ...allTransactions,
-               [type]: pastTransactions
-            });  
+               const { content, last } = await getTransactions(idAccount, page?.default);
+               const newTransactionList = getModifiedContent(allTransactions.default, content);
 
-            setNotFound(false);
-            setLoading(false);
-            if (last) {
-               setLoading(false);
-               whichContainer?.removeEventListener?.("scrollend", () => setPage((prevPage) => {
-                  return {
-                     ...prevPage,
-                     [type]: pageContent
-                  };
-               }));
-            } else {
-               whichContainer?.addEventListener?.("scrollend", () => setPage({
-                  ...page,
-                  [type]: pageContent
-               }));
-   
-               if (texts.name || texts.date) {
-                  whichContainer?.removeEventListener?.("scrollend", () => setPage({
-                     ...page,
-                     default: page.default + 1
+               if (!last) {
+                  setAllTransactions((prevState) => ({
+                     ...prevState,
+                     default: newTransactionList
+                  }));  
+               } else {
+                  setLastPage((prevState) => ({
+                     ...prevState,
+                     default: true
                   }));
                }
             }
+
+            setNotFound(false);
+            setLoading(false);
          } catch (error) {
             if (error instanceof StatusError) {
                setNotFound(true);
@@ -282,23 +300,19 @@ export const Transactions = () => {
             }
          }
       }, 500);
-
-      return whichContainer?.removeEventListener?.("scrollend", () => setPage({
-         ...page,
-         search: page.search + 1
-      }));
-   }, [page, texts.type, texts.name, texts.date]);
+   }, [page, texts.type, texts.name, dateReference?.current?.value]);
 
    /** @type {TransactionList} */
    let transactionsGroup = allTransactions.default;
 
-   if (texts.date[0] || texts.name || texts.type) transactionsGroup = allTransactions.search;
+   if (dateReference?.current?.value || texts.name || texts.type) transactionsGroup = allTransactions.search;
 
    return (
       <section className="h-full md:h-screen md:flex md:flex-row-reverse md:overflow-hidden">
          <SEO title={t.seo.title} description={t.seo.description} />
          <div className="w-full min-h-[calc(100vh-5rem)] bg-white border-outline-variant md:border md:rounded-2xl md:mx-6 md:my-4 
-            md:pb-2 dark:bg-black dark:border-outline-variant-dark">
+               md:pb-2 dark:bg-black dark:border-outline-variant-dark"
+         >
             <form 
                ref={formToDialogReference}
                className="flex flex-col gap-3 pt-3 px-4 md:px-6 mb-3 md:pt-4"
@@ -352,30 +366,31 @@ export const Transactions = () => {
             </form>
             <h2 className="text-lg font-medium font-sans ml-4 underline md:ml-6 text-onSurface dark:text-onSurface-dark">{t.title}</h2>
             {notFound && <p className="pl-6 text-onSurface dark:text-onSurface-dark">{t.notFound}</p>}
-            <div ref={transactionsContainer}  className="md:h-[calc(100%-16rem)] md:overflow-y-scroll">
-               {transactionsGroup?.map(/** @param {Object} group */(group) => (
-                  <>
-                     <div key={group?.id} className="mt-3 pl-4 pb-1 border-b border-primary dark:border-primary-dark">
+            <div 
+               className="md:h-[calc(100%-16rem)] md:overflow-y-scroll"
+               onScroll={handleScroll}
+            >
+               {transactionsGroup?.map((group) => (
+                  <Fragment key={group?.id}>
+                     <div className="mt-3 pl-4 pb-1 border-b border-primary dark:border-primary-dark">
                         <h3 className="text-sm font-medium font-sans text-onSurface dark:text-onSurface-dark">{group?.date}</h3>
                      </div>
-                     {group?.transactions?.map(/** @param {Object} transaction */(transaction) => {
+                     {group?.transactions?.map((transaction) => {
                         const formattedType = TransactionType[transaction?.transactionType]?.description;
                         return (
-                           <>
-                              <DividerCard 
-                                 key={transaction?.idTransaction}
-                                 transferAccount={transaction?.idTransferAccount}
-                                 name={transaction?.receiverName}
-                                 amount={transaction?.transactionAmount?.toFixed(2)}
-                                 type={formattedType}
-                                 time={new Intl.DateTimeFormat(language, { dateStyle: "full", timeStyle: "medium" })
-                                    .format(new Date(transaction?.transactionTimestamp))}
-                                 automated={transaction?.isAutomated}
-                              />
-                           </>
+                           <DividerCard 
+                              key={transaction?.idTransaction}
+                              transferAccount={transaction?.idTransferAccount}
+                              name={transaction?.receiverName}
+                              amount={transaction?.transactionAmount?.toFixed(2)}
+                              type={formattedType}
+                              time={new Intl.DateTimeFormat(language, { dateStyle: "short", timeStyle: "medium" })
+                                 .format(new Date(transaction?.transactionTimestamp))}
+                              automated={transaction?.isAutomated}
+                           />
                         );
                      })}
-                  </>
+                  </Fragment>
                ))}
                {loading && <Spin />}
             </div>

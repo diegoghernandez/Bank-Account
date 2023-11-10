@@ -43,7 +43,7 @@ export const getTransactions = async (id, page) => {
  * @param {number} filter.id the id of account to get the transaction list
  * @param {string} [filter.type] the desire type
  * @param {string} [filter.name] the desire name of receiver
- * @param {object} [filter.date] the desire date
+ * @param {{ year: Number, month: String, day: Number} | {}} [filter.date] the desire date
  * @param {number} filter.page the value to access to certain page
  * @returns {Promise<{ content: Array<object>, last: boolean }>}
  * return the transaction list, and the last indicator if resolve, otherwise return a Status error

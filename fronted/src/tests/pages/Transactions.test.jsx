@@ -197,7 +197,7 @@ describe("Transactions page tests", () => {
          });
    
          await waitFor(() => {
-            expect(page.getAllByText(new Intl.DateTimeFormat("en", { dateStyle: "full", timeStyle: "medium" })
+            expect(page.getAllByText(new Intl.DateTimeFormat("en", { dateStyle: "short", timeStyle: "medium" })
                .format(new Date("2023-06-26T21:02:13.374219")))).length(2);
          });
       });

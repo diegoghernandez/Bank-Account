@@ -9,13 +9,14 @@ describe("Account page tests", () =>  {
    it("Should render Account page correctly", async () =>  {
       const page = customRender(<Account />);
 
-      page.getByRole("heading");
+      page.getByRole("heading", { level: 1 });
       page.getByText(/^Account Number:\s\d+$/);      
       page.getByText("Dark Mode");      
       page.getByRole("button", { name: "Change name" });
       page.getByRole("button", { name: "Change password" });
       page.getByRole("button", { name: "Change email" });
       page.getByRole("button", { name: "Logout" });
+      page.getByRole("heading", { level: 2 });
    });
 
    describe("After click change language", () => {
