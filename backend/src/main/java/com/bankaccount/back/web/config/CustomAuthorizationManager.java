@@ -48,8 +48,8 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
    }
 
    /**
-    * Verify that the requested id is that of the user who made the request
-    * @param principal the user who made the request
+    * Verify that the requested id is that of the user whom made the request
+    * @param principal the user whom made the request
     * @param userId the requested id
     * @return a boolean with the result
     */

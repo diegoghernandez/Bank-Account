@@ -1,9 +1,15 @@
 spring:
   profiles:
     active: "prod"
+  config:
+    import: optional:env.yml
 
 server:
   port: 8090
+
+springdoc:
+  api-docs:
+    path: /api-docs
 
 ---
 
