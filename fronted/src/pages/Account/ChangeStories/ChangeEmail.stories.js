@@ -65,7 +65,7 @@ export const Load = {
    },
    parameters: {
       msw: [
-         rest.post(API, (req, res, ctx) => {
+         rest.put(API, (req, res, ctx) => {
             return res(ctx.delay("infinite"));
          }),
       ],
@@ -112,7 +112,7 @@ export const Error = {
    },
    parameters: {
       msw: [
-         rest.post(API, (req, res, ctx) => {
+         rest.put(API, (req, res, ctx) => {
             return res(ctx.status(400), ctx.json({ 
                email: "Wrong",
                newPassword: "Invalid password"
@@ -160,7 +160,7 @@ export const Success = {
    },
    parameters: {
       msw: [
-         rest.post(API, (req, res, ctx) => {
+         rest.put(API, (req, res, ctx) => {
             return res(ctx.status(200), ctx.json({ result: "Change email successfully"}));
          }),
       ],

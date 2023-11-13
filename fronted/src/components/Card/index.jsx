@@ -27,7 +27,7 @@ export const Card = ({
          tabIndex={0}
          onClick={handleFunction}
       >
-         <div className="grid grid-cols-1 grid-rows-1 w-full outline outline-1 rounded-xl outline-outline hover:bg-onSurface/8 group-focus:bg-onSurface/12 
+         <div className="transition grid grid-cols-1 grid-rows-1 w-full outline outline-1 rounded-xl outline-outline hover:bg-onSurface/8 group-focus:bg-onSurface/12 
          group-hover:bg-onSurface/8 dark:outline-outline-dark dark:hover:bg-onSurface-dark/8 dark:group-focus:bg-onSurface-dark/12 
          dark:group-hover:bg-onSurface-dark/8">
             <div className="w-full h-[4.2rem] col-start-1 col-end-2 row-start-1 row-end-2 flex flex-col pl-4 pb-1 justify-between items-start">

@@ -39,7 +39,7 @@ const getStyles = (requirement) => {
  * @param {string} props.label The text to be displayed by the component
  * @param {boolean} props.isDisable The value to use the disable styles
  * @param {boolean} props.checked The initial value to represent for the check input and styles
- * @param {(value: boolean) => void} props.set
+ * @param {(value: boolean) => void} [props.set]
  * @returns 
  */
 export const Switch = ({ 

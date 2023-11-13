@@ -87,9 +87,9 @@ export const Account = () => {
    };
 
    const socialLinks = [
-      { id: crypto.randomUUID(), name: t.social.web, link: "https://diegoj4v.github.io/My-website/Fronted/public/index.html"},
+      { id: crypto.randomUUID(), name: t.social.web, link: "https://diegoj4v.github.io/My-website/public"},
       { id: crypto.randomUUID(), name: "Github", link: "https://github.com/DiegoJ4V"},
-      { id: crypto.randomUUID(), name: "LinkedIn", link: "https://www.linkedin.com/in/diego-guadarrama-hern%C3%A1ndez-b6504b274/"}
+      { id: crypto.randomUUID(), name: "LinkedIn", link: "https://www.linkedin.com/in/diegoj4v/"}
    ];
 
    return (

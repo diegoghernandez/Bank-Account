@@ -1,6 +1,6 @@
 import { AddIcon } from "../../../assets/add";
 
-const BASE_BUTTON_CLASSES = "flex flex-row justify-center items-center cursor-pointer w-fit h-14 rounded-2xl shadow md:w-14 md:shadow-none md:hover:shadow";
+const BASE_BUTTON_CLASSES = "flex flex-row justify-center items-center cursor-pointer w-fit h-14 rounded-2xl shadow transition-all md:w-14 md:shadow-none md:hover:shadow";
 
 /**
  * ```text

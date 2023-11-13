@@ -20,7 +20,7 @@ export const Outline = ({
    return (
       <span 
          aria-disabled={isDisable}
-         className={`${BASE_BUTTON_CLASSES} ${colorStyles} px-3 text-sm text-center font-medium border`}>
+         className={`${BASE_BUTTON_CLASSES} ${colorStyles} transition px-3 text-sm text-center font-medium border`}>
          {label}
       </span>
    );

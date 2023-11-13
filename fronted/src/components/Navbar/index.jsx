@@ -80,7 +80,7 @@ const Nav = ({
    return (
       <div className={"flex flex-col justify-center items-center cursor-pointer pt-3 md:pt-0"}>
          <div className={`${BASE_INDICATOR_CLASSES} ${svgContainer} mb-1`}>
-            <div className={`${BASE_INDICATOR_CLASSES} ${stateLayer}`}>
+            <div className={`transition ${BASE_INDICATOR_CLASSES} ${stateLayer}`}>
                {pageElements.svg}
             </div>
          </div>

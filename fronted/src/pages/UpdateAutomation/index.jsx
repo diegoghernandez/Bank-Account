@@ -131,7 +131,7 @@ export const UpdateAutomation = () => {
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
 
-            <Link className={`w-full group/outline outline-none ${(isLoading) ? "cursor-default" : ""}`} to={-1}>
+            <Link className={`w-full group/outline outline-none ${(isLoading) ? "cursor-default" : ""}`} to={"-1"}>
                <Outline label={t.cancel} isDisable={isLoading} />
             </Link>
 

@@ -174,7 +174,7 @@ export const TextField = ({
          </label>
             
          <div className={`${inputColor} ${roundedStyle} ${borderStyle[1]} inline-flex relative items-center font-sans font-normal text-base cursor-text 
-         ${isError ? "caret-error dark:caret-error-dark" : "caret-primary dark:caret-primary-dark"}
+         transition ${isError ? "caret-error dark:caret-error-dark" : "caret-primary dark:caret-primary-dark"}
          ${isClicked ? `${borderStyle[0]} ${borderColor[1]}` : `${borderColor[0]} ${borderColor[2]} 
          ${(styles === TextFieldStyles.OUTLINE) ? "bg-transparent" : ((styles === TextFieldStyles.FILLED) && !isDisable) ? 
             "group-hover/text:bg-onSurface/38 dark:group-hover/text:bg-onSurface-dark/38" : "dark:bg-onSurface-dark/4"}`}`}>
