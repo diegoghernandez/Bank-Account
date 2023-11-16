@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.info.License;
                 contact = @Contact(
                         name = "Diego",
                         email = "diegoj4v@gmail.com",
-                        url = "https://diegoj4v.github.io/My-website/Fronted/public/index.html"
+                        url = "https://diegoj4v.github.io/My-website/public"
                 ),
                 title = "OpenApi specification - Bank",
                 description = "OpenApi documentation for the bank system",

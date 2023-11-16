@@ -4,14 +4,14 @@ import { useTheme } from "./hooks/useTheme";
 import { Suspense } from "react";
 import { Bar } from "./components/Loader/Bar";
 import { lazyLoad } from "./utils/lazyLoad";
+import { Home } from "./pages/Home";
+import { Transactions } from "./pages/Transactions";
+import { Automations } from "./pages/Automations";
+import { Account } from "./pages/Account";
 
-const Home = lazyLoad("../pages/Home", "Home");
 const Transaction = lazyLoad("../pages/Transaction", "Transaction");
-const Transactions = lazyLoad("../pages/Transactions", "Transactions");
 const Automation = lazyLoad("../pages/Automation", "Automation");
-const Automations = lazyLoad("../pages/Automations", "Automations");
 const UpdateAutomation = lazyLoad("../pages/UpdateAutomation", "UpdateAutomation");
-const Account = lazyLoad("../pages/Account", "Account");
 const SignIn = lazyLoad("../pages/SignIn", "SignIn");
 const SignUp = lazyLoad("../pages/SignUp", "SignUp");
 const Token = lazyLoad("../pages/Token", "Token");
