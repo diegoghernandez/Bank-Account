@@ -2,11 +2,13 @@
 
 ## Table of Contents
 
-- [Technologies](#technologies) 
-- [Environment variables](#environment-variables) 
-- [Installation](#installation) 
-- [Storybook](#storybook) 
-- [Test](#test)
+- [Bank account client](#bank-account-client)
+  - [Table of Contents](#table-of-contents)
+  - [Technologies](#technologies)
+  - [Environment variables](#environment-variables)
+  - [Installation](#installation)
+  - [Storybook](#storybook)
+  - [Test](#test)
 
 ## Technologies
 
