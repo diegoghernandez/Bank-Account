@@ -23,7 +23,7 @@ export default {
    }
 };
 
-const API = import.meta.env.VITE_API_URL + "/auth/register";
+const API = "http://localhost:8090/auth/register";
 
 export const Default = {};
 

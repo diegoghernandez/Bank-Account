@@ -16,7 +16,7 @@ export default {
    }
 };
 
-const API = import.meta.env.VITE_API_URL + "/auth/secure/change-password";
+const API = "http://localhost:8090/auth/secure/change-password";
 
 export const Default = {
    play: async ({ canvasElement }) => {

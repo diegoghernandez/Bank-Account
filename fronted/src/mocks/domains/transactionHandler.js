@@ -1,7 +1,7 @@
 import { rest } from "msw";
 import transactions from "../fixtures/transactions.json";
 
-const API = import.meta.env.VITE_API_URL +  "/transactions";
+const API = "http://localhost:8090/transactions";
 
 const paginationStructure = (content) => {
    return {

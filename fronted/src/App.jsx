@@ -37,6 +37,8 @@ const ProtectedRoute = ({ children }) => {
 };
 
 const LoadPage = () => {
+   useTheme();
+
    return (
       <section className="flex justify-center items-center h-screen bg-white dark:bg-black">
          <div className="flex flex-col justify-center items-center max-w-prose">

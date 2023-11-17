@@ -24,7 +24,7 @@ export default {
    }
 };
 
-const API = import.meta.env.VITE_API_URL + "/transactions/account";
+const API = "http://localhost:8090/transactions/account";
 
 export const Default = {
    play: async ({ canvasElement }) => { 

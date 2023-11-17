@@ -41,7 +41,7 @@ export default {
    }
 };
 
-const API = import.meta.env.VITE_API_URL + "/automations/update";
+const API = "http://localhost:8090/automations/update";
 
 export const Default = {};
 

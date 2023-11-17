@@ -23,7 +23,7 @@ export default {
    }
 };
 
-const API = import.meta.env.VITE_API_URL + "/transactions/save";
+const API = "http://localhost:8090/transactions/save";
 
 export const Default = {};
 

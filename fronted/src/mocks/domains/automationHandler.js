@@ -1,7 +1,7 @@
 import { rest } from "msw";
 import automations from "../fixtures/automations.json";
 
-const API = import.meta.env.VITE_API_URL + "/automations";
+const API = "http://localhost:8090/automations";
 
 export const automationHandler = [
    rest.get(`${API}/account`, (req, res, ctx) => {

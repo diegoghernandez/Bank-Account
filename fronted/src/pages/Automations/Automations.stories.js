@@ -27,7 +27,7 @@ export default {
    }
 };
 
-const API = import.meta.env.VITE_API_URL + "/automations/account";
+const API = "http://localhost:8090/automations/account";
 
 export const Default = {
    play: async ({ canvasElement }) => { 
