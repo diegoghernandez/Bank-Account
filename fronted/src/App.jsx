@@ -1,22 +1,33 @@
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth";
 import { useTheme } from "./hooks/useTheme";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { Bar } from "./components/Loader/Bar";
-import { lazyLoad } from "./utils/lazyLoad";
 import { Home } from "./pages/Home";
 import { Transactions } from "./pages/Transactions";
 import { Automations } from "./pages/Automations";
 import { Account } from "./pages/Account";
 
-const Transaction = lazyLoad("../pages/Transaction", "Transaction");
-const Automation = lazyLoad("../pages/Automation", "Automation");
-const UpdateAutomation = lazyLoad("../pages/UpdateAutomation", "UpdateAutomation");
-const SignIn = lazyLoad("../pages/SignIn", "SignIn");
-const SignUp = lazyLoad("../pages/SignUp", "SignUp");
-const Token = lazyLoad("../pages/Token", "Token");
-const SavePassword = lazyLoad("../pages/SavePassword", "SavePassword");
+/**
+ * Wait a specific time to execute the resolve function
+ * @param {Promise} promise the promise to executed in the period of time
+ * @returns 
+ */
+const delay = async (promise) =>  {
+   await new Promise(resolve => {
+      setTimeout(resolve, 400);
+   });
+   return await promise;
+};
 
+// Change lazy load function to this for vite, to detect lazy load function in production build
+const Transaction = lazy(async () => ({ default: (await delay((import("./pages/Transaction")))).Transaction }));
+const Automation = lazy(async () => ({ default: (await delay((import("./pages/Automation")))).Automation }));
+const UpdateAutomation = lazy(async () => ({ default: (await delay((import("./pages/UpdateAutomation")))).UpdateAutomation }));
+const SignIn = lazy(async () => ({ default: (await delay((import("./pages/SignIn")))).SignIn }));
+const SignUp = lazy(async () => ({ default: (await delay((import("./pages/SignUp")))).SignUp }));
+const Token = lazy(async () => ({ default: (await delay((import("./pages/Token")))).Token }));
+const SavePassword = lazy(async () => ({ default: (await delay((import("./pages/SavePassword")))).SavePassword }));
 
 /**
  * Verify if the user is authenticated to send them to the desired page, 
