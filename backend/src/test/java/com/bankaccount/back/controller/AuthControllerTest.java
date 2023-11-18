@@ -37,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("dev")
@@ -130,7 +129,10 @@ public class AuthControllerTest {
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isCreated())
-                      .andExpect(content().string("Success"))
+                      .andExpect(content().string("""
+                              Account created successfully.
+                              Check your email to verify your account.
+                              If it doesn't arrive, be sure to check your spam folder."""))
       );
    }
 
@@ -222,6 +224,7 @@ public class AuthControllerTest {
 
       assertAll(
               () -> mockMvc.perform(get("/auth/reset-password/user@user.com")
+                              .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
                               .contentType(MediaType.APPLICATION_JSON)
                               .with(user("user").roles(USER))
                               .with(csrf()))
@@ -394,10 +397,10 @@ public class AuthControllerTest {
       objectMapper.registerModule(new JavaTimeModule());
       objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-      Mockito.when(accountService.changeName("newName", password, Locale.getDefault()))
+      Mockito.when(accountService.changeName("newName", password, Locale.ENGLISH))
               .thenReturn("Name changed successfully");
 
-      Mockito.when(accountService.changeName("newError", passwordError, Locale.getDefault()))
+      Mockito.when(accountService.changeName("newError", passwordError, Locale.ENGLISH))
               .thenReturn("Invalid password");
 
       assertAll(
@@ -410,6 +413,8 @@ public class AuthControllerTest {
                               .with(csrf()))
                       .andExpect(status().isBadRequest())
                       .andExpect(jsonPath("$.name").value("Name must not be empty")),
+              () -> Mockito.verify(accountService, Mockito.times(0))
+                      .changeName("", password, Locale.ENGLISH),
 
               () -> mockMvc.perform(put("/auth/secure/change-name")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
@@ -420,6 +425,8 @@ public class AuthControllerTest {
                               .with(csrf()))
                       .andExpect(status().isOk())
                       .andExpect(jsonPath("$.result").value("Name changed successfully")),
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .changeName("newName", password, Locale.ENGLISH),
 
               () -> mockMvc.perform(put("/auth/secure/change-name")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
@@ -429,7 +436,9 @@ public class AuthControllerTest {
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isBadRequest())
-                      .andExpect(jsonPath("$.newPassword").value("Invalid password"))
+                      .andExpect(jsonPath("$.newPassword").value("Invalid password")),
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .changeName("newError", passwordError, Locale.ENGLISH)
       );
    }
 
@@ -462,10 +471,10 @@ public class AuthControllerTest {
       objectMapper.registerModule(new JavaTimeModule());
       objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-      Mockito.when(accountService.changePassword(password, Locale.getDefault()))
+      Mockito.when(accountService.changePassword(password, Locale.ENGLISH))
               .thenReturn("Password changed successfully");
 
-      Mockito.when(accountService.changePassword(passwordError, Locale.getDefault()))
+      Mockito.when(accountService.changePassword(passwordError, Locale.ENGLISH))
               .thenReturn("Invalid old password");
 
       assertAll(
@@ -477,6 +486,8 @@ public class AuthControllerTest {
                               .with(csrf()))
                       .andExpect(status().isOk())
                       .andExpect(jsonPath("$.result").value("Password changed successfully")),
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .changePassword(password, Locale.ENGLISH),
 
               () -> mockMvc.perform(put("/auth/secure/change-password")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
@@ -485,7 +496,9 @@ public class AuthControllerTest {
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isBadRequest())
-                      .andExpect(jsonPath("$.oldPassword").value("Invalid old password"))
+                      .andExpect(jsonPath("$.oldPassword").value("Invalid old password")),
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .changePassword(passwordError, Locale.ENGLISH)
       );
    }
 
@@ -502,7 +515,7 @@ public class AuthControllerTest {
       PasswordDto password = new PasswordDto(
               1,
               "user@user.com",
-              "123456",
+              "1234567",
               "1234"
       );
 
@@ -518,10 +531,14 @@ public class AuthControllerTest {
       objectMapper.registerModule(new JavaTimeModule());
       objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-      Mockito.when(accountService.changeEmail(password, Locale.getDefault()))
-              .thenReturn("Email changed successfully");
+      Mockito.when(accountService.changeEmail(password, Locale.ENGLISH))
+              .thenReturn("""
+                        Email changed successfully
+                        Check your email to verify your account.
+                        If it doesn't arrive, be sure to check your spam folder.
+                        """);
 
-      Mockito.when(accountService.changeEmail(passwordError, Locale.getDefault()))
+      Mockito.when(accountService.changeEmail(passwordError, Locale.ENGLISH))
               .thenReturn("Invalid password");
 
       assertAll(
@@ -532,7 +549,13 @@ public class AuthControllerTest {
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isOk())
-                      .andExpect(jsonPath("$.result").value("Email changed successfully")),
+                      .andExpect(jsonPath("$.result").value("""
+                        Email changed successfully
+                        Check your email to verify your account.
+                        If it doesn't arrive, be sure to check your spam folder.
+                        """)),
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .changeEmail(password, Locale.ENGLISH),
 
               () -> mockMvc.perform(put("/auth/secure/change-email")
                               .header(HttpHeaders.ACCEPT_LANGUAGE, "en")
@@ -541,7 +564,9 @@ public class AuthControllerTest {
                               .with(user("user").roles(USER))
                               .with(csrf()))
                       .andExpect(status().isBadRequest())
-                      .andExpect(jsonPath("$.newPassword").value("Invalid password"))
+                      .andExpect(jsonPath("$.newPassword").value("Invalid password")),
+              () -> Mockito.verify(accountService, Mockito.times(1))
+                      .changeEmail(password, Locale.ENGLISH)
       );
    }
 }

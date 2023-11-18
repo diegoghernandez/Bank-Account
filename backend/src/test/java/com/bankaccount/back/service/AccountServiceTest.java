@@ -203,7 +203,10 @@ public class AccountServiceTest {
               accountService.changeEmail(new PasswordDto(1, "error@test.com", "s", "t"), Locale.getDefault()));
 
       assertAll(
-              () -> assertThat(accept).isEqualTo("Email changed successfully"),
+              () -> assertThat(accept).isEqualTo("""
+                      Email changed successfully
+                      Check your email to verify your account.
+                      If it doesn't arrive, be sure to check your spam folder."""),
               () -> assertThat(reject).isEqualTo("Invalid password"),
               () -> Mockito.verify(accountRepository, Mockito.times(1)).updateStatus(false, 1),
               () -> Mockito.verify(accountRepository, Mockito.times(1)).updateEmail("newTest@test.com", 1),

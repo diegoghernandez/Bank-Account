@@ -24,8 +24,8 @@ services:
     networks:
       - bankaccount
     environment:
-      - POSTGRES_PASSWORD=root
       - POSTGRES_DB=bankaccount
+      - POSTGRES_PASSWORD=root
     ports:
       - "5432:5432"
 

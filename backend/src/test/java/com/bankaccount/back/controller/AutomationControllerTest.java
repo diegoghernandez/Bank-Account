@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("dev")
@@ -266,7 +265,7 @@ public class AutomationControllerTest {
    @Test
    @DisplayName("Should delete one automationEntity by id using the service if authorized")
    void deleteById() throws Exception {
-      Mockito.doNothing().when(automationService).deleteById(324L, Locale.getDefault());
+      Mockito.doNothing().when(automationService).deleteById(324L, Locale.ENGLISH);
 
       assertAll(
               () -> mockMvc.perform(MockMvcRequestBuilders.delete("/automations/delete")
@@ -278,7 +277,7 @@ public class AutomationControllerTest {
                       .andExpect(status().isOk())
                       .andExpect(content().string("Automation deleted successfully")),
               () -> Mockito.verify(automationService, Mockito.times(1))
-                      .deleteById(324L, Locale.getDefault()),
+                      .deleteById(324L, Locale.ENGLISH),
 
               () -> mockMvc.perform(MockMvcRequestBuilders.delete("/automations/delete")
                               .contentType(MediaType.APPLICATION_JSON)
