@@ -65,7 +65,7 @@ function App() {
       <>
          <Routes>
             <Route element={<Suspense fallback={<LoadPage />}><Outlet/></Suspense>}>
-               <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>}/>
+               <Route path="*" element={<ProtectedRoute><Home /></ProtectedRoute>}/>
                <Route path="/transaction" element={<ProtectedRoute><Transaction /></ProtectedRoute>}/>
                <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>}/>
                <Route path="/automations" element={<ProtectedRoute><Automations /></ProtectedRoute>}/>
