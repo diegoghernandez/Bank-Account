@@ -3,7 +3,6 @@ import { Outline } from ".";
 export default {
    title: "Buttons/Outline",
    component: Outline,
-   tags: ['autodocs'],
    args: { label: "Button", isDisable: false }
 };
 

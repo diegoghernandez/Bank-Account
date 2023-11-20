@@ -9,7 +9,6 @@ import { rest } from "msw";
 export default {
    title: "Pages/SignUp",
    component: SignUp,
-   tags: ["autodocs"],
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",

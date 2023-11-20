@@ -9,7 +9,6 @@ import { expect } from "@storybook/jest";
 export default {
    title: "Pages/Transaction",
    component: Transaction,
-   tags: ["autodocs"],
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",

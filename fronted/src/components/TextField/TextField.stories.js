@@ -6,7 +6,6 @@ import { TextFieldStyles } from "../../constants/TextFieldStyles";
 export default {
    title: "TextField",
    component: TextField,
-   tags: ["autodocs"],
    argTypes: {
       isError: { control: "boolean" },
       isDisable: { control: "boolean" },

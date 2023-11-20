@@ -10,7 +10,6 @@ export default {
    title: "Pages/SignIn",
    component: SignIn,
    decorators: [withRouter],
-   tags: ["autodocs"],
    parameters: {
       layout: "fullscreen",
       backgrounds: {

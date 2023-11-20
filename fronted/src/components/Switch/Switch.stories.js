@@ -3,7 +3,6 @@ import { Switch } from ".";
 export default {
    title: "Switch",
    component: Switch,
-   tags: ['autodocs']
 };
 
 export const DefaultFalse = {

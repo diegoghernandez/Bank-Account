@@ -5,7 +5,6 @@ import { TextFieldTypes } from "../../constants/TextFieldType";
 export default {
    title: "Modal",
    component: Modal,
-   tags: ["autodocs"],
    parameters: {
       layout: "fullscreen",
    },

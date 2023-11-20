@@ -10,7 +10,6 @@ import { Traduction } from "../../constants/Traduction";
 export default {
    title: "Pages/Automations",
    component: Automations,
-   tags: ["autodocs"],
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",

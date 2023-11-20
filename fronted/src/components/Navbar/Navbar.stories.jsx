@@ -6,7 +6,6 @@ import { Fab } from "../Buttons/FAB";
 export default {
    title: "Navbar",
    component: Navbar,
-   tags: ["autodocs"],
    decorators: [withRouter],
    argTypes: {
       page: {

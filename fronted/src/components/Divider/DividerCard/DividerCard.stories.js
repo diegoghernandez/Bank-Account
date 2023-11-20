@@ -3,7 +3,6 @@ import { DividerCard } from ".";
 export default {
    title: "Divider/DividerCard",
    component: DividerCard,
-   tags: ['autodocs']
 };
 
 export const Default = {

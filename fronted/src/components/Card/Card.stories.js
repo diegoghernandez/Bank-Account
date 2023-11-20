@@ -3,7 +3,6 @@ import { Card } from ".";
 export default {
    title: "Card",
    component: Card,
-   tags: ['autodocs'],
    args: {
       name: "Name",
       money: "43254.00",

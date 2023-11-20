@@ -9,7 +9,6 @@ import { Traduction } from "../../constants/Traduction";
 export default {
    title: "Pages/Save Password",
    component: SavePassword,
-   tags: ["autodocs"],
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",

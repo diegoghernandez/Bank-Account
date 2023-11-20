@@ -9,7 +9,6 @@ import { rest } from "msw";
 export default {
    title: "Pages/Automation",
    component: Automation,
-   tags: ["autodocs"],
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",

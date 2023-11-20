@@ -9,7 +9,6 @@ import { getTraduction } from "../../utils/getTraduction";
 export default {
    title: "Pages/Token",
    render: Token,
-   tags: ["autodocs"],
    decorators: [withRouter],
    parameters: {
       layout: "fullscreen",

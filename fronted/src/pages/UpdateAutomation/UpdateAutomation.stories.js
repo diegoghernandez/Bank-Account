@@ -10,7 +10,6 @@ export default {
    title: "Pages/UpdateAutomation",
    component: UpdateAutomation,
    decorators: [withRouter],
-   tags: ["autodocs"],
    parameters: {
       layout: "fullscreen",
       backgrounds: {
