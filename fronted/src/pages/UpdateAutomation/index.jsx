@@ -1,18 +1,18 @@
 import { useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled";
+import { Outline } from "../../components/Buttons/Outline";
 import { Bar } from "../../components/Loader/Bar";
+import { Modal } from "../../components/Modal";
+import { Switch } from "../../components/Switch";
 import { TextField } from "../../components/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
 import { Traduction } from "../../constants/Traduction";
 import { SEO } from "../../utils/SEO";
 import { getTraduction } from "../../utils/getTraduction";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Outline } from "../../components/Buttons/Outline";
-import { Switch } from "../../components/Switch";
-import { deleteAutomation, updateAutomation } from "../_services/automation";
-import { Modal } from "../../components/Modal";
 import { validInputElement } from "../../utils/validInputElement";
+import { deleteAutomation, updateAutomation } from "../_services/automation";
 
 export const UpdateAutomation = () => {
    /** @type {[object, import("react").Dispatch<import("react").SetStateAction<object>>]} */
@@ -130,10 +130,12 @@ export const UpdateAutomation = () => {
                </div>
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
-
-            <Link className={`w-full group/outline outline-none ${(isLoading) ? "cursor-default" : ""}`} to={"-1"}>
-               <Outline label={t.cancel} isDisable={isLoading} />
-            </Link>
+            
+            <Outline 
+               label={t.cancel} 
+               isDisable={isLoading} 
+               handleClick={() => navigate(-1)}
+            />
 
             <button 
                disabled={isLoading}

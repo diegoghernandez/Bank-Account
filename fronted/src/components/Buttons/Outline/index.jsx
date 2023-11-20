@@ -6,11 +6,13 @@ const BASE_BUTTON_CLASSES =
  * @param {object} props
  * @param {string} props.label The text to be displayed by the component
  * @param {boolean} [props.isDisable] The value to disable the component
+ * @param {() => void} [props.handleClick] The function to be executed
  * @returns 
  */
 export const Outline = ({ 
       label,
-      isDisable
+      isDisable,
+      handleClick
    }) => {
 
    const colorStyles = (isDisable) ? "border-onSurface/12 text-onSurface/38 dark:border-onSurface-dark/12 dark:text-onSurface-dark/38" : 
@@ -18,10 +20,12 @@ export const Outline = ({
       "dark:group-hover/outline:bg-primary-dark/8 dark:text-primary-dark dark:border-onSurface-dark dark:group-focus/outline:bg-primary-dark/12 dark:group-focus/outline:border-primary-dark";
 
    return (
-      <span 
-         aria-disabled={isDisable}
-         className={`${BASE_BUTTON_CLASSES} ${colorStyles} transition px-3 text-sm text-center font-medium border`}>
+      <button 
+         disabled={isDisable}
+         className={`${BASE_BUTTON_CLASSES} ${colorStyles} transition px-3 text-sm text-center font-medium border`}
+         onClick={handleClick}
+      >
          {label}
-      </span>
+      </button>
    );
 };

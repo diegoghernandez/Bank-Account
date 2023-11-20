@@ -1,18 +1,18 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled";
 import { Outline } from "../../components/Buttons/Outline";
+import { Bar } from "../../components/Loader/Bar";
+import { Modal } from "../../components/Modal";
 import { TextField } from "../../components/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { saveTransaction } from "../_services/transactions";
-import { useRef, useState } from "react";
-import { TransactionType } from "../../constants/TransactionType";
-import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
-import { Bar } from "../../components/Loader/Bar";
+import { TransactionType } from "../../constants/TransactionType";
 import { SEO } from "../../utils/SEO";
-import { Modal } from "../../components/Modal";
+import { getTraduction } from "../../utils/getTraduction";
 import { validInputElement } from "../../utils/validInputElement";
+import { saveTransaction } from "../_services/transactions";
 
 /**
  * Page containing the logic for create a new Transaction
@@ -133,10 +133,12 @@ export const Transaction = () => {
                />
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
-
-            <Link className={`w-full group/outline outline-none ${(isLoading) ? "cursor-default" : ""}`} to="/transactions">
-               <Outline label={t.cancel} isDisable={isLoading} />
-            </Link>
+            
+            <Outline 
+               label={t.cancel} 
+               isDisable={isLoading} 
+               handleClick={() => navigate("/transactions")}
+            />
 
             {isLoading && <Bar />}
 

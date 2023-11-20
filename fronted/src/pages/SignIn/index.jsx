@@ -123,12 +123,10 @@ export const SignIn = () => {
             }
 
             {(isReset) &&
-               <button 
-                  className="w-full"
-                  onClick={() => setIsReset(false)}
-               >
-                  <Outline label={t.resetPassword.cancel} />
-               </button>
+               <Outline 
+                  label={t.resetPassword.cancel} 
+                  handleClick={() => setIsReset(false)}
+               />
             }
 
             <Modal

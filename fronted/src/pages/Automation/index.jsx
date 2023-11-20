@@ -1,17 +1,17 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Filled } from "../../components/Buttons/Filled";
 import { Outline } from "../../components/Buttons/Outline";
+import { Bar } from "../../components/Loader/Bar";
+import { Modal } from "../../components/Modal";
 import { TextField } from "../../components/TextField";
 import { InputTypes } from "../../constants/InputType";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { saveAutomation } from "../_services/automation";
-import { useRef, useState } from "react";
-import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
-import { Bar } from "../../components/Loader/Bar";
 import { SEO } from "../../utils/SEO";
-import { Modal } from "../../components/Modal";
+import { getTraduction } from "../../utils/getTraduction";
 import { validInputElement } from "../../utils/validInputElement";
+import { saveAutomation } from "../_services/automation";
 
 /**
  * Page containing the logic for create a new Automation
@@ -125,9 +125,11 @@ export const Automation = () => {
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
 
-            <Link className={`w-full group/outline outline-none ${(isLoading) ? "cursor-default" : ""}`} to="/automations">
-               <Outline label={t.cancel} isDisable={isLoading} />
-            </Link>
+            <Outline 
+               label={t.cancel} 
+               isDisable={isLoading} 
+               handleClick={() => navigate("/automations")}
+            />
 
             {isLoading && <Bar />}
 
