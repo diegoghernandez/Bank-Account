@@ -94,10 +94,10 @@ const getElements = () => {
    const nameInput = page.getByLabelText("Name");
    const amountInput = page.getByLabelText("Amount");
    const transferInput = page.getByLabelText("Account to transfer");
-   const supportiveTransfer = page.getByText("Add the nine account numbers");
+   const supportiveTransfer = page.getByText(/Add the nine account numbers./);
    const timeInput = page.getByLabelText("Period of time");
    const makeButton = page.getByRole("button", { name: "Make automation" });
-   const cancelButton = page.getByRole("link", { name: "Cancel" });
+   const cancelButton = page.getByRole("button", { name: "Cancel" });
 
    return {
       page,

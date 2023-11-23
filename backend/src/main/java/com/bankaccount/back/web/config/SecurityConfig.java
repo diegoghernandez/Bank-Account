@@ -4,6 +4,7 @@ import com.bankaccount.back.constants.AccountRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,6 +26,7 @@ public class SecurityConfig {
 
    private static final String ADMIN = AccountRoles.ADMIN.toString();
    private static final String USER = AccountRoles.USER.toString();
+   private static final String DEMO = AccountRoles.DEMO.toString();
 
    /**
     * Constructor for {@link SecurityConfig}.
@@ -50,18 +52,20 @@ public class SecurityConfig {
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
               .authorizeHttpRequests(requests -> requests
                       .antMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                      .antMatchers("/auth/secure/**").hasAnyRole(ADMIN, USER)
                       .antMatchers("/auth/secure/**").access(customAuthorizationManager)
-                      .antMatchers("/auth/secure/**").hasAnyRole(USER, ADMIN)
                       .antMatchers("/auth/**").permitAll()
+                      .antMatchers("/transactions/**").hasAnyRole(ADMIN, USER, DEMO)
+                      .antMatchers("/transactions/{id}").hasRole(ADMIN)
                       .antMatchers("/transactions/**").access(customAuthorizationManager)
-                      .antMatchers("/transactions/**").hasAnyRole(USER, ADMIN)
-                      .antMatchers("/transactions/{id}").hasAnyRole(ADMIN)
+                      .antMatchers(HttpMethod.GET, "/automations/**").hasRole(DEMO)
+                      .antMatchers(HttpMethod.PUT, "/automations/**").hasRole(DEMO)
+                      .antMatchers("/automations/{id}").hasRole(ADMIN)
+                      .antMatchers("/automations/**").hasAnyRole(ADMIN, USER)
                       .antMatchers("/automations/**").access(customAuthorizationManager)
-                      .antMatchers("/automations/**").hasAnyRole(USER, ADMIN)
-                      .antMatchers("/automations/{id}").hasAnyRole(ADMIN)
-                      .antMatchers("/accounts/email/{email}").access(customAuthorizationManager)
-                      .antMatchers("/accounts/email/{email}").hasAnyRole(USER, ADMIN)
                       .antMatchers("/accounts/id/**").hasRole(ADMIN)
+                      .antMatchers("/accounts/email/{email}").hasAnyRole(ADMIN, USER, DEMO)
+                      .antMatchers("/accounts/email/{email}").access(customAuthorizationManager)
                       .anyRequest()
                       .authenticated()
               )

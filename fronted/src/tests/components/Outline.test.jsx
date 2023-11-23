@@ -9,13 +9,13 @@ describe("Outline component tests", () => {
       render(<Default />);
 
       expect(screen.getByText("Button")).toBeInTheDocument();
-      expect(screen.getByText("Button")).toHaveAttribute("aria-disabled", "false");
+      expect(screen.getByText("Button")).not.toBeDisabled();
    });
 
    it("Should render correctly the Disable state", () =>{
       render(<Disable />);
 
       expect(screen.getByText("Button")).toBeInTheDocument();
-      expect(screen.getByText("Button")).toHaveAttribute("aria-disabled", "true");
+      expect(screen.getByText("Button")).toBeDisabled();
    });
 });

@@ -7,6 +7,8 @@
       "title": "Sign In",
       "labels": ["Email", "Password"],
       "accept": "Sign In",
+      "useDemo": "Use demo account",
+      "demo": "You will have certain limitations:\n- Unable to create and delete automations beyond those already created.\n- Unable to change account values.",
       "links": ["Reset password", ["No account?", "Create one"]],
       "resetPassword": {
          "title": "Enter your email to reset password",
@@ -23,6 +25,8 @@
       "title": "Iniciar sesión",
       "labels": ["Email", "Contraseña"],
       "accept": "Iniciar sesión",
+      "useDemo": "Usa una cuenta demo",
+      "demo": "Tendrás ciertas limitaciones:\n- No podrás crear y borrar automatizaciones mas haya de las creadas.\n- No podrás cambiar valores de la cuenta.",
       "links": ["Restablecer contraseña", ["¿Sin cuenta?", "Crea una"]],
       "resetPassword": {
          "title": "Ingresa tu email para restablecer tu contraseña",

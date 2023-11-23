@@ -16,8 +16,8 @@ export const Outline = ({
    }) => {
 
    const colorStyles = (isDisable) ? "border-onSurface/12 text-onSurface/38 dark:border-onSurface-dark/12 dark:text-onSurface-dark/38" : 
-   "group-hover/outline:bg-primary/8 text-primary border-onSurface group-focus/outline:bg-primary/12 group-focus/outline:border-primary" + 
-      "dark:group-hover/outline:bg-primary-dark/8 dark:text-primary-dark dark:border-onSurface-dark dark:group-focus/outline:bg-primary-dark/12 dark:group-focus/outline:border-primary-dark";
+   "hover:bg-primary/8 text-primary border-onSurface focus:bg-primary/12 focus:border-primary" + 
+      "dark:hover:bg-primary-dark/8 dark:text-primary-dark dark:border-onSurface-dark dark:focus:bg-primary-dark/12 dark:focus:border-primary-dark";
 
    return (
       <button 

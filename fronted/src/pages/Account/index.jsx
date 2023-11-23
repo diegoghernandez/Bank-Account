@@ -48,7 +48,16 @@ export const Account = () => {
          } catch (e) {
             const message = JSON.parse(e.message);
             setIsLoading(false);
-            setError(message);
+            if (e.status === 403) {
+               setError({
+                  name: t.forbidden,
+                  newPassword: t.forbidden,
+                  oldPassword: t.forbidden,
+                  email: t.forbidden
+               });
+            } else {
+               setError(message);
+            }
          }
       }, 1000);
    };

@@ -33,15 +33,24 @@ export const SignIn = () => {
    const dialogRef = useRef();
    const t = getTraduction(Traduction.SIGN_IN_PAGE);
 
-   /** @param {import("react").FormEvent<HTMLFormElement>} event */
-   const handleSubmit = (event) => {
-      event.preventDefault();
-
-      const { elements } = event.currentTarget;
-      const inputArray = (!isReset) ? validInputElement([elements[0], elements[1]]) : validInputElement([elements[0]]);
-      const email = inputArray?.[0].value;
-      const password = inputArray?.[1]?.value;
-
+   /** 
+    * @param {import("react").FormEvent<HTMLFormElement>} [event] 
+    * @param {{ email: String, password: String }} [demoAccount]
+    * */
+   const handleSubmit = (event, demoAccount) => {
+      let email;
+      let password;
+      if (event !== null) {
+         event.preventDefault();
+   
+         const { elements } = event.currentTarget;
+         const inputArray = (!isReset) ? validInputElement([elements[0], elements[1]]) : validInputElement([elements[0]]);
+         email = inputArray?.[0].value;
+         password =  inputArray?.[1]?.value;
+      } else {
+         email = demoAccount.email;
+         password =  demoAccount.password;
+      }
       
       if (!isReset) {
          setIsLoading(true);
@@ -100,10 +109,17 @@ export const SignIn = () => {
                }
                <Filled label={(!isReset) ? t.accept : t.resetPassword.accept} isDisable={isLoading} />
             </form>
-            {isLoading && <Bar />}
 
             {(!isReset) &&
-               <div className="flex flex-col gap-2">
+               <div className="flex flex-col gap-2 w-full items-center">
+                  <Outline 
+                     label={t.useDemo}  
+                     isDisable={isLoading}
+                     handleClick={() => dialogRef.current?.showModal?.()}
+                  />
+                  
+                  {isLoading && <Bar />}
+
                   <button 
                      className="text-sm font-normal font-sans text-primary dark:text-primary-dark"
                      onClick={() => {
@@ -132,8 +148,17 @@ export const SignIn = () => {
             <Modal
                dialogRef={dialogRef}
                messageUtils={{
-                  message: t.resetPassword.success,
-                  function: () => setIsReset(false),
+                  message: (isReset) ? t.resetPassword.success : t.demo,
+                  function: (isReset) ? 
+                     () => setIsReset(false) : 
+                     () => {
+                        const demoAccounts = [
+                           { email: "demo1@example.names.example", password: "123456" },
+                           { email: "demo2@example.names.example", password: "123456" }
+                        ];
+                        handleSubmit(null, demoAccounts[Math.round(Math.random())]);
+                     },
+                  cancel: !isReset,
                   accept: true
                }}
             />

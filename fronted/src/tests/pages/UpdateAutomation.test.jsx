@@ -60,7 +60,7 @@ describe("Update Automation page tests", () => {
          await user.clear(nameInput);
          await user.type(nameInput, "Name");
 
-         await user.clear(amountInput, "124124");
+         await user.clear(amountInput);
          await user.type(amountInput, "124124");
 
          await user.clear(transferInput);
@@ -100,7 +100,7 @@ describe("Update Automation page tests", () => {
          await user.clear(nameInput);
          await user.type(nameInput, "Name");
 
-         await user.clear(amountInput, "124124");
+         await user.clear(amountInput);
          await user.type(amountInput, "124124");
 
          await user.clear(transferInput);
@@ -207,7 +207,7 @@ const getElements = (value = {
    const supportiveTransfer = page.getByText(t.description);
    const timeInput = page.getByLabelText(t.labels[3]);
    const statusSwitch = page.getByLabelText(t.labels[4]);
-   const cancelButton = page.getByRole("link", { name: t.cancel });
+   const cancelButton = page.getByRole("button", { name: t.cancel });
    const makeButton = page.getByRole("button", { name: t.accept });
    const deleteButton = page.getByRole("button", { name: t.delete.button });
 

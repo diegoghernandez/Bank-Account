@@ -4,10 +4,13 @@
          "title": "Automation",
          "description": "Name. Amount. Account to transfer. Add the nine account numbers. Period of time. Cancel. Make automation."
       },
-      "errorMessage": "Must not be empty",
+      "errorMessage": {
+         "empty": "Must not be empty",
+         "forbidden": "No tienes permisos"
+      },
       "title": "Automation",
       "labels": ["Name", "Amount", "Account to transfer", "Period of time"],
-      "description": "Add the nine account numbers",
+      "description": "Add the nine account numbers.\nExample of demo accounts: 111222333 or 222111333",
       "modalParameters": ["weeks", "days", "hours"],
       "cancel": "Cancel",
       "accept": "Make automation"
@@ -17,10 +20,13 @@
          "title": "Automatización",
          "description": "Nombre. Monto. Cuenta a transferir. Agrega los nueve números de la cuenta. Periodo de tiempo. Cancelar. Crear automatización."
       },
-      "errorMessage": "No debe estar vació",
+      "errorMessage": {
+         "empty": "No debe estar vació",
+         "forbidden": "You don't have permissions"
+      },
       "title": "Automatización",
       "labels": ["Nombre", "Monto", "Cuenta a transferir", "Periodo de tiempo"],
-      "description": "Agrega los nueve números de la cuenta",
+      "description": "Agrega los nueve números de la cuenta.\nEjemplo de las cuentas demo: 111222333 o 222111333",
       "modalParameters": ["semanas", "días", "horas"],
       "cancel": "Cancelar",
       "accept": "Crear automatización"

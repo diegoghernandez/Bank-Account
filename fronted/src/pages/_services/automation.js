@@ -58,7 +58,11 @@ export const saveAutomation = async (automation) => {
    if (response.ok) {
       return await response.text();
    } else {
-      throw new StatusError(JSON.stringify(await response.json()), response.status);
+      if (response.status !== 403) {
+         throw new StatusError(JSON.stringify(await response.json()), response.status);
+      } else {
+         throw new StatusError(null, response.status);
+      }
    }
 };
 

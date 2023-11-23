@@ -280,7 +280,7 @@ export const TextField = ({
          </div>
          {(supportiveText) && <span 
             id={textFieldId + "-describe"} 
-            className={`ml-4 mt-1 text-sm ${supportiveColor}`}
+            className={`ml-4 mt-1 text-sm whitespace-pre ${supportiveColor}`}
             aria-disabled={isDisable}
          >{supportiveText}</span>}
          

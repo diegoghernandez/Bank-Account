@@ -12,6 +12,7 @@ import { SEO } from "../../utils/SEO";
 import { getTraduction } from "../../utils/getTraduction";
 import { validInputElement } from "../../utils/validInputElement";
 import { saveAutomation } from "../_services/automation";
+import { StatusError } from "../../errors/StatusError";
 
 /**
  * Page containing the logic for create a new Automation
@@ -58,9 +59,20 @@ export const Automation = () => {
                navigate("/automations");
             }, 1000);
          }).catch((e) => {
-            const message = JSON.parse(e.message);
-            setIsLoading(false);
-            setError(message);
+            if (e instanceof StatusError) {
+               const message = JSON.parse(e.message);
+               setIsLoading(false);
+               if (e.status === 403) {
+                  setError({
+                     name: t.errorMessage.forbidden,
+                     amount: t.errorMessage.forbidden,
+                     desc: t.errorMessage.forbidden,
+                     hoursToNextExecution: t.errorMessage.forbidden
+                  });
+               } else {
+                  setError(message);
+               }
+            }
          });
       }, 1000);      
    };

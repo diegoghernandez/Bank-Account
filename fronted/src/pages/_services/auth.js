@@ -205,14 +205,19 @@ export const changeName = async (newName, password) => {
       })
    });
 
-   const data = await response.json();
-
-   if (response.ok) {
-      getAccountData(email);
-      return data.result;
+   if (response.status === 403) {
+      throw new StatusError(null, response.status);
    } else {
-      throw new StatusError(JSON.stringify(data), response.status);
+      const data = await response.json();
+   
+      if (response.ok) {
+         getAccountData(email);
+         return data.result;
+      } else {
+         throw new StatusError(JSON.stringify(data), response.status);
+      }
    }
+
 };
 
 /**
@@ -240,13 +245,17 @@ export const changePassword = async (oldPassword, newPassword) => {
       })
    });
 
-   const data = await response.json();
-
-   if (response.ok) {
-      getAccountData(email);
-      return data.result;
+   if (response.status === 403) {
+      throw new StatusError(null, response.status);
    } else {
-      throw new StatusError(JSON.stringify(data), response.status);
+      const data = await response.json();
+   
+      if (response.ok) {
+         getAccountData(email);
+         return data.result;
+      } else {
+         throw new StatusError(JSON.stringify(data), response.status);
+      }
    }
 };
 
@@ -275,11 +284,15 @@ export const changeEmail = async (newEmail, password) => {
       })
    });
 
-   const data = await response.json();
-
-   if (response.ok) {
-      return data.result;
+   if (response.status === 403) {
+      throw new StatusError(null, response.status);
    } else {
-      throw new StatusError(JSON.stringify(data), response.status);
+      const data = await response.json();
+   
+      if (response.ok) {
+         return data.result;
+      } else {
+         throw new StatusError(JSON.stringify(data), response.status);
+      }
    }
 };

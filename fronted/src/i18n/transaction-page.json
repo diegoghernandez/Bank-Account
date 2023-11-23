@@ -7,6 +7,7 @@
       "errorMessages": ["You must choose one", "Must not be empty", "You can not choose an account to transfer in deposit"],
       "title": "Transaction",
       "labels": ["Transaction Type", "Amount", "Account to transfer"],
+      "supportText": "Example of demo accounts: 111222333 or 222111333",
       "cancel": "Cancel",
       "accept": "Make transaction"
    },
@@ -18,6 +19,7 @@
       "errorMessages": ["Debes escoger una", "No debe estar vació", "No puedes escoger una cuenta a transferir en deposito"],
       "title": "Transacción",
       "labels": ["Tipo de transacción", "Monto", "Cuenta a transferir"],
+      "supportText": "Ejemplo de las cuentas demo: 111222333 o 222111333",
       "cancel": "Cancelar",
       "accept": "Hacer transacción"
    }

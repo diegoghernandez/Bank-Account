@@ -6,6 +6,7 @@
       },
       "accountNumber": "Account Number",
       "dark": "Dark Mode",
+      "forbidden": "You don't have permissions",
       "change": {
          "language": {
             "label": "Change language",
@@ -40,6 +41,7 @@
       },
       "accountNumber": "Número de cuenta",
       "dark": "Modo oscuro",
+      "forbidden": "No tienes permisos",
       "change": {
          "language": {
             "label": "Cambiar idioma",

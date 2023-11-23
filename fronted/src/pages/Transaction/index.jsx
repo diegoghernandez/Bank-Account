@@ -127,7 +127,7 @@ export const Transaction = () => {
                   label={t.labels[2]}
                   type={TextFieldTypes.DEFAULT}
                   initialInputType={InputTypes.NUMBER}
-                  supportiveText={error.desc}
+                  supportiveText={error.desc ?? t.supportText}
                   isError={error.desc}
                   isDisable={(isLoading) ? isLoading : !isActive}
                />
