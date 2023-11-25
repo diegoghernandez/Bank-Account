@@ -4,6 +4,7 @@ on:
    push:
       paths:
          - fronted/**
+         - .github/workflows/deploy_to_chromatic.yml
       branches:
          - main 
 jobs:

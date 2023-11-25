@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - fronted/**
+      - .github/workflows/azure-static-web-apps-jolly-pond-019ae8010.yml
     branches:
       - main
   pull_request:
