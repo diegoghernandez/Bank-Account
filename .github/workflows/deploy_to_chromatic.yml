@@ -7,6 +7,11 @@ on:
          - .github/workflows/deploy_to_chromatic.yml
       branches:
          - main 
+
+concurrency:
+   group: ${{ github.workflow }}-${{ github.ref }}
+   cancel-in-progress: true
+
 jobs:
    test_and_deploy:
       runs-on: ubuntu-22.04
@@ -20,7 +25,7 @@ jobs:
             fetch-depth: 0
          - uses: actions/setup-node@v4
            with:
-            node-version: 18
+            node-version: 16
             cache: 'npm'
             cache-dependency-path: fronted/package-lock.json
          - name: Install dependencies
