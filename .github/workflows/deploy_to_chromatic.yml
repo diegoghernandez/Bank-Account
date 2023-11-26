@@ -61,6 +61,11 @@ jobs:
            with:
             sparse-checkout: fronted
             fetch-depth: 0
+         - uses: actions/setup-node@v4
+           with:
+            node-version: 18
+            cache: 'npm'
+            cache-dependency-path: fronted/package-lock.json
          - uses: chromaui/action@v1
            # Options required for Chromatic's GitHub Action
            with:
