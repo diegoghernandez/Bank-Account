@@ -10,14 +10,15 @@ on:
 jobs:
    test_and_deploy:
       runs-on: ubuntu-22.04
+      defaults:
+         run:
+            working-directory: fronted
       steps:
          - uses: actions/checkout@v4
          - uses: actions/setup-node@v4
            with:
             node-version: 18
             cache: 'npm'
-            cache-dependency-path: fronted/package-lock.json
-         - run: cd fronted/
          - name: Install dependencies
            run: npm ci
          - name: Test project
