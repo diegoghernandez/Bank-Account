@@ -5,7 +5,7 @@
       "amount": 2000.00,
       "idTransferAccount": 419670285,
       "hoursToNextExecution": 6,
-      "executionTime": "2023-07-15T17:51:36.986827",
+      "executionTime": "2024-07-15T17:51:36.986827",
       "status": true
    }, {
       "idAutomation": 2,
@@ -13,7 +13,7 @@
       "amount": 2000.00,
       "idTransferAccount": 419670285,
       "hoursToNextExecution": 4, 
-      "executionTime": "2023-07-15T17:51:36.986827",
+      "executionTime": "2024-07-15T17:51:36.986827",
       "status": false
    }, {
       "idAutomation": 3,
@@ -21,7 +21,7 @@
       "amount": 2000.00,
       "idTransferAccount": 419670285,
       "hoursToNextExecution": 5,
-      "executionTime": "2023-07-15T17:51:36.986827",
+      "executionTime": "2024-07-15T17:51:36.986827",
       "status": true
    }
 ]

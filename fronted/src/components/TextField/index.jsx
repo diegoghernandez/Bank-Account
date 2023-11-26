@@ -184,7 +184,7 @@ export const TextField = ({
                id={textFieldId}
                value={value}
                className={`w-full h-14 bg-transparent outline-none text-start text text-onSurface disabled:text-onSurface/38 
-                  dark:text-onSurface-dark dark:disabled:text-onSurface-dark/38 
+                  dark:text-onSurface-dark dark:disabled:text-onSurface-dark/38
                   ${(styles === TextFieldStyles.FILLED) ? "px-4 pt-[1.5rem] pb-2" : "p-4"}`}
                type={inputType}
                min={min}

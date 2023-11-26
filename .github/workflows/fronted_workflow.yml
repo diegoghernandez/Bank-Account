@@ -1,4 +1,4 @@
-name: Deploy to Chromatic
+name: Deploy to Chromatic and Azure
 
 on:
    push:

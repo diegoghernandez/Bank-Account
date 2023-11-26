@@ -18,7 +18,7 @@ module.exports = {
   rules: {
     "react/prop-types": "off",
     "react-refresh/only-export-components": "warn",
-    "no-console": "warn",
+    "no-console": "error",
     semi: ["error", "always"]
   }
 };
