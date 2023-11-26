@@ -5,7 +5,6 @@ import { getAccountData } from "./account";
 const URL = import.meta.env.VITE_API_URL ?? "http://localhost:8090";
 /** @type {string} */
 const API = URL + "/transactions";
-console.log(import.meta.env.VITE_API_URL);
 /** @type {string} */
 const TOKEN = localStorage.getItem("token");
 /** @type {string} */
