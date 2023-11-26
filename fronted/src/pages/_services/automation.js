@@ -2,7 +2,9 @@ import { StatusError } from "../../errors/StatusError";
 import { getAccountData } from "./account";
 
 /** @type {string} */
-const API = import.meta.env.VITE_API_URL + "/automations";
+const URL = import.meta.env.VITE_API_URL ?? "http://localhost:8090";
+/** @type {string} */
+const API = URL + "/automations";
 
 /** @type {string} */
 const TOKEN = localStorage.getItem("token");

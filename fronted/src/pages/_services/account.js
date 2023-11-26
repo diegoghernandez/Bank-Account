@@ -1,5 +1,7 @@
 /** @type {string} */
-const API = import.meta.env.VITE_API_URL +  "/accounts";
+const URL = import.meta.env.VITE_API_URL ?? "http://localhost:8090";
+/** @type {string} */
+const API = URL +  "/accounts";
 
 /**
  * Recover the necessary account data and set in the local storage
