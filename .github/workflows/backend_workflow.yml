@@ -2,9 +2,7 @@ name: Register container and deploy
 
 on:
    push:
-      paths:
-         - backend/**
-         - .github/workflows/backend_workflow.yml
+      paths: [backend/**, .github/workflows/backend_workflow.yml]
       branches:
          - main 
 
