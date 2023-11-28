@@ -26,8 +26,8 @@ jobs:
          password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
          docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/bank:latest \
-            --build-arg CLIENT=${{ secrets.CLIENT }} --build-arg EMAIL=${{ secrets.EMAIL }} --build-arg PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
-            --build-arg KEY=${{ secrets.JWT_KEY }} --build-arg ISSUER=${{ secrets.JWT_ISSUER }} --build-arg DB_URL=${{ secrets.DB_URL }} \ 
-            --build-arg DB_NAME=${{ secrets.DB_NAME }} --build-arg DB_PASS=${{ secrets.DB_PASS }} \
-            backend/
+            --build-arg CLIENT=${{ secrets.CLIENT }} --build-arg EMAIL=${{ secrets.EMAIL }} --build-arg PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
+            --build-arg KEY=${{ secrets.JWT_KEY }} --build-arg ISSUER=${{ secrets.JWT_ISSUER }} --build-arg DB_URL=${{ secrets.DB_URL }} \
+            --build-arg DB_NAME=${{ secrets.DB_NAME }} --build-arg DB_PASS=${{ secrets.DB_PASS }} backend/
+            
          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/bank:latest
