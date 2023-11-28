@@ -1,5 +1,6 @@
 FROM eclipse-temurin:17-jdk-alpine as build
 WORKDIR /workspace/app
+ENV LANG en_US.UTF-8
 
 COPY . /workspace/app
 RUN chmod +x gradlew

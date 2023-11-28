@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.7.16"
+    id("org.springframework.boot") version "2.7.18"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
     id("org.springdoc.openapi-gradle-plugin") version "1.8.0"
 }
