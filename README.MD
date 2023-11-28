@@ -1,7 +1,9 @@
 # Bank account
-This project simulates a bank system. With the capability to make transactions 
-to yourself as other people, and also the option to make an automation for 
-these transactions. Multiple security options. Search systems.
+This project simulates a bank system deployed in Azure.
+With the capability to make transactions to yourself as other people, 
+and also the option to make an automation for these transactions.
+Multiple security options.
+Search systems.
 And some visual characteristics for the commodity of the user.
 
 ![Example of the transactions page](/imgs/example.jpg "Transactions page")
@@ -15,6 +17,7 @@ And some visual characteristics for the commodity of the user.
 - JWT for login.
 - Token system for verification.
 - System for email sending. 
+- CI / CD
 
 ## Extra information
 

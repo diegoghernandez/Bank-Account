@@ -51,6 +51,9 @@ To see the stories, you need to run the following command:
     npm run storybook 
 ```
 
+> 👉 how it's supposed to look like 
+> [here.](https://main--655be6596e99394a8927c77d.chromatic.com/)
+
 In the stories, you can see all components with their possible states, and
 styles, and all pages with interaction tests to see the correct behavior.
 
