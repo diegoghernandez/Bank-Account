@@ -32,6 +32,18 @@ spring:
     init:
       mode: ALWAYS
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: example@example.name.example
+    password: 1234
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 ---
 
 spring:
@@ -54,3 +66,15 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL81Dialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${USERNAME_EMAIL}
+    password: ${USERNAME_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
