@@ -4,7 +4,7 @@ on:
    push:
       paths:
          - fronted/**
-         - .github/workflows/fronted_workflow.yml
+         # - .github/workflows/fronted_workflow.yml
       branches:
          - main 
 
