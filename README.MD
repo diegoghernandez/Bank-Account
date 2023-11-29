@@ -17,7 +17,7 @@ And some visual characteristics for the commodity of the user.
 - JWT for login.
 - Token system for verification.
 - System for email sending. 
-- CI / CD
+- CI / CD with Github Actions
 
 ## Extra information
 
