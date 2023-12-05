@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Fab } from "../../components/Buttons/FAB";
 import { Card } from "../../components/Card";
+import { Spin } from "../../components/Loader/Spin";
 import { Navbar } from "../../components/Navbar";
 import { TextField } from "../../components/TextField";
 import { Page } from "../../constants/Page";
 import { TextFieldTypes } from "../../constants/TextFieldType";
-import { Link, useNavigate } from "react-router-dom";
-import { getAutomations } from "../_services/automation";
-import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
-import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
+import { getTraduction } from "../../utils/getTraduction";
+import { getAutomations } from "../_services/automation";
 
 /**
  * Return a formatted text to show the period of time of automation from the hoursToNextExecution
