@@ -14,7 +14,7 @@ describe("Transactions page tests", () => {
       page.getByLabelText("Name");
       page.getByLabelText("Date");
       page.getByRole("heading", { name: "Transactions", level: 2});
-      page.getByRole("link", { name: "Transaction"});
+      page.getByRole("link", { name: /Transac-\ntion/});
 
       await waitForElementToBeRemoved(() => page.getAllByRole("progressbar"));
       

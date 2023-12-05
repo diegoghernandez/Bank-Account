@@ -91,7 +91,7 @@ const getElements = () => {
 
    const statusInput = page.getByLabelText("Automation Status");
    const nameInput = page.getByLabelText("Name");
-   const automationLink = page.getByRole("link", { name: "Automation"});
+   const automationLink = page.getByRole("link", { name: /Automa-\ntion/});
 
    return {
       spyAutomation,

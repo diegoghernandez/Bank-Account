@@ -9,7 +9,7 @@ import { TransactionType } from "../../constants/TransactionType";
 import { StatusError } from "../../errors/StatusError";
 import { getTraduction } from "../../utils/getTraduction";
 import { Traduction } from "../../constants/Traduction";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Fab } from "../../components/Buttons/FAB";
 import { Spin } from "../../components/Loader/Spin";
 import { SEO } from "../../utils/SEO";
@@ -124,6 +124,7 @@ export const Transactions = () => {
    const dateReference = useRef();
    /** @type {import("react").MutableRefObject<HTMLFormElement>} */
    const formToDialogReference = useRef(); 
+   const navigate = useNavigate();
 
    /** @type {{ idAccount: number }} */
    const { idAccount } = JSON.parse(localStorage.getItem("account"));
@@ -165,13 +166,9 @@ export const Transactions = () => {
    };
 
    useEffect(() => {
-      if (!globalThis.matchMedia?.("(min-width: 768px)").matches) {
-         document.addEventListener("scroll", handleScroll);
-   
-         return () => {
-            document.removeEventListener("scroll", handleScroll);
-         };
-      }
+      document.addEventListener("scroll", handleScroll);
+
+      return () => document.removeEventListener("scroll", handleScroll);
    }, []);
 
 
@@ -397,9 +394,10 @@ export const Transactions = () => {
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">
             <Navbar page={Page.TRANSACTIONS} >
-               <Link className="group/fab outline-none" to="/transaction">
-                  <Fab label={(globalThis.matchMedia?.("(min-width: 768px)").matches) ? t.fab.large : t.fab.small} />
-               </Link>
+               <Fab 
+                  label={(globalThis.matchMedia?.("(min-width: 768px)").matches) ? t.fab.large : t.fab.small} 
+                  handleClick={() => navigate("/transaction")}
+               />
             </Navbar>
          </div>
       </section>

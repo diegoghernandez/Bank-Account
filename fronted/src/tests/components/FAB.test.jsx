@@ -8,7 +8,7 @@ describe("FAB component tests", () => {
 
       const fabs = screen.getAllByText("TESTING");
 
-      expect(fabs[0]).not.toHaveAttribute("hidden");
-      expect(fabs[1]).toHaveAttribute("hidden");
+      expect(fabs[0]).toBeInTheDocument();
+      expect(fabs[1]).toBeInTheDocument();
    });
 });

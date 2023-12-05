@@ -141,9 +141,10 @@ export const Automations = () => {
          </div>
          <div className="w-full h-20 md:w-fit md:h-fit">
             <Navbar page={Page.AUTOMATIONS} >
-               <Link className="group/fab outline-none" to="/automation">
-                  <Fab label={ (globalThis.matchMedia?.("(min-width: 768px)").matches) ? t.fab.large : t.fab.small } />
-               </Link>
+               <Fab 
+                  label={ (globalThis.matchMedia?.("(min-width: 768px)").matches) ? t.fab.large : t.fab.small } 
+                  handleClick={() => navigate("/automation")}
+               />
             </Navbar>
          </div>
       </section>
