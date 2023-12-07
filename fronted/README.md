@@ -28,14 +28,16 @@ following the [**.env.example**](/fronted/.env.example) configuration.
 
 ## Installation
 
-> ❗ You need node 18 installed before continuing.
+> [!WARNING]
+> You need node 18 installed before continuing.
 
 As a first step, you need to install the dependencies with the following command:
 ```bash
     npm install 
 ```
 
-> ❗ You need an account already registered or create one, and the backend 
+> [!IMPORTANT]
+> You need an account already registered or create one, and the backend 
 > running to see all functionality, or you can see an example in 
 > the [stories](#storybook)
 
@@ -51,6 +53,7 @@ To see the stories, you need to run the following command:
     npm run storybook 
 ```
 
+> [!NOTE]
 > 👉 how it's supposed to look like 
 > [here.](https://main--655be6596e99394a8927c77d.chromatic.com/)
 
@@ -59,9 +62,11 @@ styles, and all pages with interaction tests to see the correct behavior.
 
 Also, you can check if the components are accessible from the accessibility tab. 
 
-> ❗ Sometimes the interaction tests don't work if that happen, reload the page
+> [!IMPORTANT]
+> Sometimes the interaction tests don't work if that happen, reload the page
 
-> ❗ To change the component theme and language, 
+> [!IMPORTANT]
+> To change the component theme and language, 
 > you must do it from the account page
 
 ## Test
