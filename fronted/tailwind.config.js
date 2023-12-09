@@ -61,7 +61,11 @@ export default {
       "error-dark": "#F2B8B5",
       "on-error-container-dark": "#F9DEDC"
     },
-    extend: {},
+    extend: {
+      height: {
+        screen: '100dvh'
+      }
+    },
   },
   plugins: [],
 };

@@ -93,9 +93,9 @@ export const SignUp = () => {
                   isError={error.confirmation}
                   isDisable={isLoading}
                   />
+               {isLoading && <Bar />}
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
-            {isLoading && <Bar />}
             <div className="text-sm font-normal font-sans">
                   <span className="text-onSurface-variant dark:text-onSurface-variant-dark">{t.link[0]} </span>
                   <Link to="/sign-in" className="text-primary dark:text-primary-dark hover:underline">

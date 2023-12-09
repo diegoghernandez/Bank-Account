@@ -131,6 +131,7 @@ export const Transaction = () => {
                   isError={error.desc}
                   isDisable={(isLoading) ? isLoading : !isActive}
                />
+               {isLoading && <Bar />}
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
             
@@ -139,8 +140,6 @@ export const Transaction = () => {
                isDisable={isLoading} 
                handleClick={() => navigate("/transactions")}
             />
-
-            {isLoading && <Bar />}
 
             <Modal 
                dialogRef={dialogRef}

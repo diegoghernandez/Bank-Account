@@ -107,6 +107,7 @@ export const SignIn = () => {
                      autoComplete="current-password"
                   />
                }
+               {isLoading && <Bar />}
                <Filled label={(!isReset) ? t.accept : t.resetPassword.accept} isDisable={isLoading} />
             </form>
 
@@ -118,8 +119,6 @@ export const SignIn = () => {
                      handleClick={() => dialogRef.current?.showModal?.()}
                   />
                   
-                  {isLoading && <Bar />}
-
                   <button 
                      className="text-sm font-normal font-sans text-primary dark:text-primary-dark"
                      onClick={() => {

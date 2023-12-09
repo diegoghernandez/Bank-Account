@@ -135,6 +135,7 @@ export const Automation = () => {
                   }]}
                   isDisable={isLoading}
                />
+               {isLoading && <Bar />}
                <Filled label={t.accept} isDisable={isLoading} />
             </form>
 
@@ -143,8 +144,6 @@ export const Automation = () => {
                isDisable={isLoading} 
                handleClick={() => navigate("/automations")}
             />
-
-            {isLoading && <Bar />}
 
             <Modal 
                dialogRef={dialogRef}
