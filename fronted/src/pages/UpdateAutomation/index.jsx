@@ -62,7 +62,7 @@ export const UpdateAutomation = () => {
    };
 
    return (
-      <section className="flex justify-center items-center h-screen">
+      <section className="flex justify-center items-center min-h-screen">
          <div className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-full px-4 py-4 mx-auto border border-outline-variant
          bg-white md:rounded-2xl md:px-6 md:py-8 md:h-fit dark:border-outline-variant dark:bg-black">
             <SEO title={t.seo.title} description={t.seo.description} />
