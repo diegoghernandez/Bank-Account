@@ -6,7 +6,7 @@
       },
       "errorMessage": {
          "empty": "Must not be empty",
-         "forbidden": "No tienes permisos"
+         "forbidden": "You don't have permissions"
       },
       "title": "Automation",
       "labels": ["Name", "Amount", "Account to transfer", "Period of time"],
@@ -22,7 +22,7 @@
       },
       "errorMessage": {
          "empty": "No debe estar vació",
-         "forbidden": "You don't have permissions"
+         "forbidden": "No tienes permisos"
       },
       "title": "Automatización",
       "labels": ["Nombre", "Monto", "Cuenta a transferir", "Periodo de tiempo"],
