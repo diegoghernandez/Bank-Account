@@ -60,7 +60,7 @@ public class SecurityConfig {
                       .antMatchers("/transactions/**").access(customAuthorizationManager)
                       .antMatchers(HttpMethod.GET, "/automations/**").hasAnyRole(ADMIN, USER, DEMO)
                       .antMatchers(HttpMethod.PUT, "/automations/**").hasAnyRole(ADMIN, USER, DEMO)
-                      .antMatchers(HttpMethod.POST, "/automations/**").hasAnyRole(ADMIN, USER)
+                      .antMatchers("/automations/**").hasAnyRole(ADMIN, USER)
                       .antMatchers("/automations/{id}").hasRole(ADMIN)
                       .antMatchers("/automations/**").access(customAuthorizationManager)
                       .antMatchers("/accounts/id/**").hasRole(ADMIN)
