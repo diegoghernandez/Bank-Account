@@ -79,7 +79,7 @@ export const SignIn = () => {
 
    return (
       <section className="flex justify-center items-center h-screen">
-         <div className="flex flex-col justify-center items-center gap-4 w-full max-w-[75ch] h-full px-4 mx-auto border border-outline-variant
+         <div className="flex flex-col justify-center items-center gap-4 w-full md:max-w-[75ch] h-full px-4 mx-auto border border-outline-variant
          bg-white md:rounded-2xl md:px-6 md:py-8 md:h-fit dark:border-outline-variant-dark dark:bg-black">
             <SEO title={t.seo.title} description={t.seo.description} />
             <h1 className="text-4xl font-bold font-sans text-center text-onSurface dark:text-onSurface-dark">{

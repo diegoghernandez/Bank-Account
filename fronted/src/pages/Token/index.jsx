@@ -52,7 +52,7 @@ export const Token = () => {
 
    return (
       <section className="flex justify-center items-center h-screen">
-         <div className="flex flex-col justify-center items-center gap-2 w-full max-w-[75ch] h-full px-4 mx-auto border border-outline-variant
+         <div className="flex flex-col justify-center items-center gap-2 w-full md:max-w-[75ch] h-full px-4 mx-auto border border-outline-variant
          bg-white md:rounded-2xl md:px-6 md:py-8 md:h-fit dark:border-outline-variant dark:bg-black">
             <SEO title={t.seo.title} />
             <h1 className="text-4xl text-center font-bold font-sans text-onSurface dark:text-onSurface-dark">{t.title}</h1>
