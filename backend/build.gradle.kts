@@ -44,15 +44,13 @@ dependencies {
 
 tasks.named<BootBuildImage>("bootBuildImage") {
     environment = mapOf("BP_JVM_VERSION" to "17")
+    imageName = "diegoj4v/bank-backend:latest"
     isPublish = true
     docker {
         publishRegistry {
             username = "diegoj4v"
             password = project.property("DOCKER_PASS").toString()
-            tags = listOf(
-                    "diegoj4v/bank-backend:latest",
-                    "diegoj4v/bank-backend:${project.property("DOCKER_TAG").toString()}"
-            )
+            tags = listOf("diegoj4v/bank-backend:${project.property("DOCKER_TAG").toString()}")
         }
     }
 }
