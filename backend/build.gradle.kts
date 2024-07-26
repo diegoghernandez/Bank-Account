@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+
 plugins {
     java
     id("org.springframework.boot") version "2.7.18"
@@ -38,6 +40,19 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.awaitility:awaitility")
+}
+
+tasks.named<BootBuildImage>("bootBuildImage") {
+    environment = mapOf("BP_JVM_VERSION" to "17")
+    imageName = ("diegoj4v/bank-backend:latest")
+    isPublish = true
+    docker {
+        publishRegistry {
+            username = "diegoj4v"
+            tags = listOf("latest", project.property("DOCKER_TAG").toString())
+            password = project.property("DOCKER_PASS").toString()
+        }
+    }
 }
 
 tasks.withType<Test> {
