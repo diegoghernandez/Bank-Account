@@ -51,6 +51,7 @@ public class SecurityConfig {
               .sessionManagement()
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
               .authorizeHttpRequests(requests -> requests
+                      .antMatchers("/actuator/health/**").permitAll()
                       .antMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                       .antMatchers("/auth/secure/**").hasAnyRole(ADMIN, USER)
                       .antMatchers("/auth/secure/**").access(customAuthorizationManager)
