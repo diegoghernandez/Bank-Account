@@ -11,25 +11,7 @@ concurrency:
    cancel-in-progress: true
 
 jobs:
-   test__code:
-      runs-on: ubuntu-22.04
-      defaults:
-         run:
-            working-directory: backend
-      steps:
-         - uses: actions/checkout@v4
-           with:
-            sparse-checkout: backend
-            fetch-depth: 0
-         - uses: actions/setup-java@v4
-           with:
-            distribution: 'temurin'
-            java-version: '17'
-         - name: Initialize test
-           run: ./gradlew clean test
-
-   build__and__push__image:
-      needs: [test__code]
+   test__build__and__push__image:
       runs-on: ubuntu-22.04
       permissions:
          contents: write
@@ -45,6 +27,8 @@ jobs:
            with:
             distribution: 'temurin'
             java-version: '17'
+         - name: Initialize test
+           run: ./gradlew clean test
          - name: Build and push image
            run: ./gradlew bootBuildImage -PDOCKER_PASS="${{ secrets.DOCKER_PASS }}" -PDOCKER_TAG=$(git rev-parse --short ${{ github.sha }})
 
