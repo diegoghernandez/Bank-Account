@@ -1,4 +1,4 @@
-name: Deploy to Chromatic and Azure
+name: Deploy to Chromatic and Cloudflare
 
 on:
    push:
@@ -90,8 +90,13 @@ jobs:
            with:
             sparse-checkout: fronted
             fetch-depth: 0
+         - uses: actions/setup-node@v4
+           with:
+            node-version: 18
+            cache: 'npm'
+            cache-dependency-path: fronted/package-lock.json
          - name: Build And Deploy
-           run: npm run build 
+           run: npm ci && npm run build 
            env:
             VITE_API_URL: ${{ secrets.VITE_API_URL }}
          -  uses: cloudflare/pages-action@v1
