@@ -104,5 +104,5 @@ jobs:
               apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
               accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
               projectName: bank-account
-              directory: dist
+              directory: fronted/dist
               gitHubToken: ${{ secrets.GITHUB_TOKEN }}
