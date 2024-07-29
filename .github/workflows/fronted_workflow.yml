@@ -76,26 +76,28 @@ jobs:
             exitZeroOnChanges: true
             workingDir: fronted
 
-   build_and_deploy_to_Azure:
+   build_and_deploy_to_Cloudflare:
       needs: [lint, test]
       runs-on: ubuntu-22.04
+      permissions:
+         contents: read
+         deployments: write
+      defaults:
+         run:
+            working-directory: fronted
       steps:
          - uses: actions/checkout@v4
            with:
             sparse-checkout: fronted
             fetch-depth: 0
          - name: Build And Deploy
-           id: builddeploy
-           uses: Azure/static-web-apps-deploy@v1
-           with:
-            azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_JOLLY_POND_019AE8010 }}
-            repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
-            action: "upload"
-            ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-            # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-            app_location: "/fronted" # App source code path
-            api_location: "" # Api source code path - optional
-            output_location: "dist" # Built app content directory - optional
-            ###### End of Repository/Build Configurations ######
+           run: npm run build 
            env:
             VITE_API_URL: ${{ secrets.VITE_API_URL }}
+         -  uses: cloudflare/pages-action@v1
+            with:
+              apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+              accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+              projectName: bank-account
+              directory: dist
+              gitHubToken: ${{ secrets.GITHUB_TOKEN }}

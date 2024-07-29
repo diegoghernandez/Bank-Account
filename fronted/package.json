@@ -64,7 +64,5 @@
   },
   "msw": {
     "workerDirectory": "public"
-  },
-  "readme": "ERROR: No README data found!",
-  "_id": "fronted@0.0.0"
+  }
 }
