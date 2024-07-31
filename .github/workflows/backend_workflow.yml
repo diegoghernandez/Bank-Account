@@ -13,6 +13,8 @@ concurrency:
 jobs:
    test__build__and__push__image:
       runs-on: ubuntu-22.04
+      outputs:
+         image: ${{ steps.build.outputs.image }}
       permissions:
          contents: write
       defaults:
@@ -30,7 +32,10 @@ jobs:
          - name: Initialize test
            run: ./gradlew clean test
          - name: Build and push image
-           run: ./gradlew bootBuildImage -PDOCKER_PASS="${{ secrets.DOCKER_PASS }}" -PDOCKER_TAG=$(git rev-parse --short ${{ github.sha }})
+           id: build
+           run: |
+            echo "image=diegoj4v/bank-backend:$(git rev-parse --short ${{ github.sha }})" >> "$GITHUB_OUTPUT"
+            ./gradlew bootBuildImage -PDOCKER_PASS="${{ secrets.DOCKER_PASS }}" -PDOCKER_TAG=$(git rev-parse --short ${{ github.sha }})
 
    deploy__to_ecs:
       needs: [test__build__and__push__image]
@@ -54,7 +59,7 @@ jobs:
         with:
          task-definition: task-definition.json
          container-name: backend
-         image: diegoj4v/bank-backend:$(git rev-parse --short ${{ github.sha }})
+         image: ${{ needs.test__build__and__push__image.outputs.image }}
          environment-variables: "LOG_LEVEL=info"
 
       - name: Deploy to Amazon ECS service
