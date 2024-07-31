@@ -46,7 +46,7 @@ jobs:
          role-to-assume: ${{ secrets.AWS_ROLE }}
       - name: Download task definition
         run: |
-         aws ecs describe-task-definition --task-definition bank-account-service --query taskDefinition > taskdefinition.json
+         aws ecs describe-task-definition --task-definition bank-account-service --query taskDefinition > task-definition.json
       - name: Render Amazon ECS task definition
         id: render-web-container
         uses: aws-actions/amazon-ecs-render-task-definition@v1
