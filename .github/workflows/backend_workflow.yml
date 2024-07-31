@@ -52,7 +52,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
          task-definition: task-definition.json
-         container-name: web
+         container-name: backend
          image: diegoj4v/bank-backend:$(git rev-parse --short ${{ github.sha }})
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
