@@ -47,6 +47,7 @@ jobs:
       - name: Download task definition
         run: |
          aws ecs describe-task-definition --task-definition bank-account-service --query taskDefinition > task-definition.json
+
       - name: Render Amazon ECS task definition
         id: render-web-container
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -54,9 +55,11 @@ jobs:
          task-definition: task-definition.json
          container-name: backend
          image: diegoj4v/bank-backend:$(git rev-parse --short ${{ github.sha }})
+         environment-variables: "LOG_LEVEL=info"
+
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
          task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-         service: bank-api
          cluster: bank-cluster
+         service: bank-api
