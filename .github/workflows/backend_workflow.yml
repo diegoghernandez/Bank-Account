@@ -32,23 +32,31 @@ jobs:
          - name: Build and push image
            run: ./gradlew bootBuildImage -PDOCKER_PASS="${{ secrets.DOCKER_PASS }}" -PDOCKER_TAG=$(git rev-parse --short ${{ github.sha }})
 
-   #build-and-deploy:
-   #   runs-on: ubuntu-latest
-   #   steps:
-   #   - uses: actions/checkout@main
-   #     with:
-   #      sparse-checkout: backend
-   #      fetch-depth: 0
-   #   - name: 'Build and push image'
-   #     uses: azure/docker-login@v1
-   #     with:
-   #      login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-   #      username: ${{ secrets.REGISTRY_USERNAME }}
-   #      password: ${{ secrets.REGISTRY_PASSWORD }}
-   #   - run: |
-   #      docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/bank:latest \
-   #         --build-arg CLIENT=${{ secrets.CLIENT }} --build-arg EMAIL=${{ secrets.EMAIL }} --build-arg PASSWORD="${{ secrets.EMAIL_PASSWORD }}" \
-   #         --build-arg KEY=${{ secrets.JWT_KEY }} --build-arg ISSUER=${{ secrets.JWT_ISSUER }} --build-arg DB_URL=${{ secrets.DB_URL }} \
-   #         --build-arg DB_NAME=${{ secrets.DB_NAME }} --build-arg DB_PASS=${{ secrets.DB_PASS }} backend/
-   #         
-   #      docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/bank:latest
+   deploy__to_ecs:
+      needs: [test__build__and__push__image]
+      runs-on: ubuntu-22.04
+      permissions:
+         id-token: write
+         contents: read
+      steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+         aws-region: us-west-2
+         role-to-assume: ${{ secrets.AWS_ROLE }}
+      - name: Download task definition
+        run: |
+         aws ecs describe-task-definition --task-definition bank-account-service --query taskDefinition > taskdefinition.json
+      - name: Render Amazon ECS task definition
+        id: render-web-container
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+         task-definition: task-definition.json
+         container-name: web
+         image: diegoj4v/bank-backend:$(git rev-parse --short ${{ github.sha }})
+      - name: Deploy to Amazon ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+         task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+         service: bank-api
+         cluster: bank-cluster
