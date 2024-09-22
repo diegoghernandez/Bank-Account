@@ -2,9 +2,15 @@ name: Register container and deploy
 
 on:
    push:
-      paths: [backend/**, .github/workflows/backend_workflow.yml, '!**.md', '!**.MD']
+      paths:
+         [
+            backend/**,
+            .github/workflows/backend_workflow.yml,
+            '!**.md',
+            '!**.MD',
+         ]
       branches:
-         - main 
+         - main
 
 concurrency:
    group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,48 +29,48 @@ jobs:
       steps:
          - uses: actions/checkout@v4
            with:
-            sparse-checkout: backend
-            fetch-depth: 0
+              sparse-checkout: backend
+              fetch-depth: 0
          - uses: actions/setup-java@v4
            with:
-            distribution: 'temurin'
-            java-version: '17'
+              distribution: 'temurin'
+              java-version: '17'
          - name: Initialize test
            run: ./gradlew clean test
          - name: Build and push image
            id: build
            run: |
-            echo "image=diegoj4v/bank-backend:$(git rev-parse --short ${{ github.sha }})" >> "$GITHUB_OUTPUT"
-            ./gradlew bootBuildImage -PDOCKER_PASS="${{ secrets.DOCKER_PASS }}" -PDOCKER_TAG=$(git rev-parse --short ${{ github.sha }})
+              echo "image=diegoj4v/bank-backend:$(git rev-parse --short ${{ github.sha }})" >> "$GITHUB_OUTPUT"
+              ./gradlew bootBuildImage -PDOCKER_PASS="${{ secrets.DOCKER_PASS }}" -PDOCKER_TAG=$(git rev-parse --short ${{ github.sha }})
 
-   deploy__to_ecs:
+   deploy__to_render:
       needs: [test__build__and__push__image]
       runs-on: ubuntu-22.04
-      permissions:
-         id-token: write
-         contents: read
       steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-         aws-region: us-west-2
-         role-to-assume: ${{ secrets.AWS_ROLE }}
-      - name: Download task definition
-        run: |
-         aws ecs describe-task-definition --task-definition bank-account-service --query taskDefinition > task-definition.json
+         - name: Deploy image to render
+           run: curl ${{ secrets.RENDER_HOOK }}&imgURL=docker.io%2Fdiegoj4v%2Fbank-backend%40$(git rev-parse --short ${{ github.sha }})
+      #steps:
+      #   - name: Configure AWS Credentials
+      #     uses: aws-actions/configure-aws-credentials@v4
+      #     with:
+      #        aws-region: us-west-2
+      #        role-to-assume: ${{ secrets.AWS_ROLE }}
+      #   - name: Download task definition
+      #     run: |
+      #        aws ecs describe-task-definition --task-definition bank-account-service --query taskDefinition > task-definition.json
 
-      - name: Render Amazon ECS task definition
-        id: render-web-container
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-         task-definition: task-definition.json
-         container-name: backend
-         image: ${{ needs.test__build__and__push__image.outputs.image }}
-         environment-variables: "LOG_LEVEL=info"
+      #   - name: Render Amazon ECS task definition
+      #     id: render-web-container
+      #     uses: aws-actions/amazon-ecs-render-task-definition@v1
+      #     with:
+      #        task-definition: task-definition.json
+      #        container-name: backend
+      #        image: ${{ needs.test__build__and__push__image.outputs.image }}
+      #        environment-variables: 'LOG_LEVEL=info'
 
-      - name: Deploy to Amazon ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-         task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-         cluster: bank-cluster
-         service: bank-api
+      #   - name: Deploy to Amazon ECS service
+      #     uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #     with:
+      #        task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+      #        cluster: bank-cluster
+      #        service: bank-api
